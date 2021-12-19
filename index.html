@@ -299,7 +299,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-29 16:10:53" itemprop="dateModified" datetime="2021-09-29T16:10:53+08:00">2021-09-29</time>
+                <time title="修改时间：2021-12-19 19:45:06" itemprop="dateModified" datetime="2021-12-19T19:45:06+08:00">2021-12-19</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -329,15 +329,23 @@
           <h1 id="电机位置反馈"><a href="#电机位置反馈" class="headerlink" title="电机位置反馈"></a>电机位置反馈</h1><h2 id="霍尔传感器"><a href="#霍尔传感器" class="headerlink" title="霍尔传感器"></a>霍尔传感器</h2><ul>
 <li>马达轴上连有磁体，传感器为三个间隔60°的开关霍尔，霍尔会按照【001 - 101 - 100 - 110 - 010 - 011】六个状态变换，根据三相霍尔信号可以检测出电机转子位置所处的扇区，然后控制MOS或IGBT实现六步换向控制。</li>
 <li>三路霍尔信号图<br><img src="/2021/09/24/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86-1.jpg" alt="210924-电机控制部分-1.JPG"></li>
-<li>120°霍尔换相真值表<br><img src="/2021/09/24/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86-2.jpg" alt="210924-电机控制部分-2.JPG"><h2 id="无霍尔传感器"><a href="#无霍尔传感器" class="headerlink" title="无霍尔传感器"></a>无霍尔传感器</h2></li>
-<li>传感器很有用，但会增加成本，增加复杂性（由于需要附加绕组），并降低了可靠性（部分原因是传感器连接更容易受到灰尘和潮湿环境的污染），无传感器控制方式解决了这些不足。</li>
-<li>无传感器利用电机反电动势确定转子角度，下图为三相反电动势波形和霍尔波形比较图<br><img src="/2021/09/24/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86-3.jpg" alt="210924-电机控制部分-3.JPG"><br>可见，传统BLDC电机中单个霍尔传感器变化输出，与无传感器电机中单个线圈的反电动势零交叉点之间有一个30度的相位差。因此，在检测到零交叉点之后，我们会在无传感器电机电路的固件中内置一个30度相位延迟，然后再激活激励序列中的下一个动作。<h2 id="检测反电动势方法"><a href="#检测反电动势方法" class="headerlink" title="检测反电动势方法"></a>检测反电动势方法</h2></li>
+<li>120°霍尔换相真值表<br><img src="/2021/09/24/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86-2.jpg" alt="210924-电机控制部分-2.JPG">  </li>
 </ul>
-<ol>
+<h2 id="无霍尔传感器"><a href="#无霍尔传感器" class="headerlink" title="无霍尔传感器"></a>无霍尔传感器</h2><ul>
+<li>传感器很有用，但会增加成本，增加复杂性（由于需要附加绕组），并降低了可靠性（部分原因是传感器连接更容易受到灰尘和潮湿环境的污染），无传感器控制方式解决了这些不足。</li>
+<li>无传感器利用电机反电动势确定转子角度，下图为三相反电动势波形和霍尔波形比较图<br><img src="/2021/09/24/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86-3.jpg" alt="210924-电机控制部分-3.JPG"><br>可见，传统BLDC电机中单个霍尔传感器变化输出，与无传感器电机中单个线圈的反电动势零交叉点之间有一个30度的相位差。因此，在检测到零交叉点之后，我们会在无传感器电机电路的固件中内置一个30度相位延迟，然后再激活激励序列中的下一个动作。  </li>
+</ul>
+<h2 id="检测反电动势方法"><a href="#检测反电动势方法" class="headerlink" title="检测反电动势方法"></a>检测反电动势方法</h2><ol>
 <li>最简单的方法就是用比较器将反电动势与一半的直流总线电压比较<br><img src="/2021/09/24/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86-4.jpg" alt="210924-电机控制部分-4.JPG"><br>在此图中，线圈A正向激励，线圈C反向激励，而线圈B则开路。当实现此相位的激励序列时，反电动势就会上升和下降。这一简单比较器方法主要缺点就是三个绕组可能没有相同的特征，造成实际零交叉点的正负相移。电机仍可能在运转，但可能消耗过多电流。</li>
 <li>上面问题解决方法就是通过使用与电机绕组并接的三个电阻网络来产生一个虚拟中性点，反电动势然后就会与虚拟中性点进行比较。<br><img src="/2021/09/24/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86-5.jpg" alt="210924-电机控制部分-5.JPG"></li>
-<li>第三种方法是采用模数转换器 (ADC)。为BLDC电机控制提供的许多MCU包括适合作此用途的高速ADC。采用这种方法后，反电动势就会衰减，以便可以直接馈送给MCU。信号被ADC采样后就会同与零点对应的数字值比较。当这两个值匹配时，线圈激励序列就会变址到下一步。这种技术具有一定优势，如允许使用数字滤波器来清除反电动势信号中的高频切换成份。<br><img src="/2021/09/24/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86-6.jpg" alt="210924-电机控制部分-6.JPG"><h2 id="无感缺点"><a href="#无感缺点" class="headerlink" title="无感缺点"></a>无感缺点</h2>无传感器BLDC电机控制有一大不足，就是当电机静止时，不会产生反电动势，这样MCU就无法知道定子和转子位置信息。<br>解决方法就是通过以预定序列激励线圈来启动处于开环配置的电机。当电机看似运转效率不高时，就会开始循环该序列。最终，速度将足以产生足够的反电动势，供控制系统切换到正常闭环运行状态（有效状态）。<br>由于反电机势与旋转速度成正比，因此在需要较低速度的应用中，无传感器BLDC电机可能不是一个好的选择。此时带有霍尔效应传感器的BLDC电机可能是更好的选择。<h2 id="FOC"><a href="#FOC" class="headerlink" title="FOC"></a>FOC</h2><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/147659820">【自制FOC驱动器】深入浅出讲解FOC算法与SVPWM技术</a></li>
+<li>第三种方法是采用模数转换器 (ADC)。为BLDC电机控制提供的许多MCU包括适合作此用途的高速ADC。采用这种方法后，反电动势就会衰减，以便可以直接馈送给MCU。信号被ADC采样后就会同与零点对应的数字值比较。当这两个值匹配时，线圈激励序列就会变址到下一步。这种技术具有一定优势，如允许使用数字滤波器来清除反电动势信号中的高频切换成份。<br><img src="/2021/09/24/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86-6.jpg" alt="210924-电机控制部分-6.JPG">  </li>
 </ol>
+<h2 id="无感缺点"><a href="#无感缺点" class="headerlink" title="无感缺点"></a>无感缺点</h2><pre><code>无传感器BLDC电机控制有一大不足，就是当电机静止时，不会产生反电动势，这样MCU就无法知道定子和转子位置信息。  
+解决方法就是通过以预定序列激励线圈来启动处于开环配置的电机。当电机看似运转效率不高时，就会开始循环该序列。最终，速度将足以产生足够的反电动势，供控制系统切换到正常闭环运行状态（有效状态）。  
+由于反电机势与旋转速度成正比，因此在需要较低速度的应用中，无传感器BLDC电机可能不是一个好的选择。此时带有霍尔效应传感器的BLDC电机可能是更好的选择。  
+</code></pre>
+<h2 id="示波器测霍尔角"><a href="#示波器测霍尔角" class="headerlink" title="示波器测霍尔角"></a>示波器测霍尔角</h2><h2 id="FOC"><a href="#FOC" class="headerlink" title="FOC"></a>FOC</h2><p>​    <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/147659820">【自制FOC驱动器】深入浅出讲解FOC算法与SVPWM技术</a></p>
+<h1 id="MCU外围电路设计"><a href="#MCU外围电路设计" class="headerlink" title="MCU外围电路设计"></a>MCU外围电路设计</h1><h2 id="复位电路二极管"><a href="#复位电路二极管" class="headerlink" title="复位电路二极管"></a>复位电路二极管</h2><p>​    <a target="_blank" rel="noopener" href="https://blog.csdn.net/cs_ing/article/details/9839661">复位电路为什么要加二极管</a>,断电后瞬间放掉电容的电荷，复位，使断电瞬间RC充分放电。</p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
     </div>
@@ -492,7 +500,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-29 10:13:53" itemprop="dateModified" datetime="2021-09-29T10:13:53+08:00">2021-09-29</time>
+                <time title="修改时间：2021-10-09 08:46:14" itemprop="dateModified" datetime="2021-10-09T08:46:14+08:00">2021-10-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -547,6 +555,8 @@
 <h2 id="电流采样与过压保护"><a href="#电流采样与过压保护" class="headerlink" title="电流采样与过压保护"></a>电流采样与过压保护</h2><p><img src="/2021/09/13/210913-%E7%94%B5%E6%BA%90%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1/210913-%E7%94%B5%E6%BA%90%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1-5.jpg" alt="210913-电源部分设计-5.JPG"></p>
 <ol>
 <li>差分放大，迟滞比较器，电平反转，三极管自锁</li>
+<li>在差分运放中电容并电阻微分作用，电容串电阻积分作用</li>
+<li>对于电子电路：电阻的两端并联一个电容,为了减小对高频信号的阻抗，相当于微分，这样信号上升速度加快，用于提高响应速度；电容一端接电阻，一端接地，则相反，滤去高频，相当于积分，用于滤波。最典型的应用就是放大电路中的高低音频控制。<br>对于电力电路：不管RC串联还是并联，电容的作用都是一样的，电容的作用就是防止电压突变，吸收尖峰状态的过电压，串联的电阻起阻尼作用，电阻消耗过电压的能量，从而抑制电路的振荡。并联的电阻吸收电容的电能，防止电容的放电电流过大，避免对与之并联的器件（如晶闸管）造成损坏。最典型的应用就是防止操作过电压。</li>
 </ol>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
