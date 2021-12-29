@@ -20,19 +20,23 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="多线程什么是多线程所谓多线程，就是系统可以同时运行多个任务，在操作系统中，每个任务就是一个线程。 Python 多线程可以成倍提高程序的运行速度。 进程是资源分配的最小单位，线程是程序执行的最小单位。 python3多线程参考：Python3 多线程 异步什么是异步同步是指完成事务的逻辑，先执行第一个事务，如果阻塞了，会一直等待，直到这个事务完成，再执行第二个事务，顺序执行。 异步是和同步相对的，">
+  <meta name="description" content="学习资料 阿里云物联网平台-产品文档  需求 在博世实习，同事想要远程调试，打印log到终端功能（代替出差去现场调试），于是我就决定用LTE Cat.1模块，配合阿里云物联网平台，使用MQTT传输日志文件。  阿里云物联网平台使用 打开阿里云物联网平台，使用公共实例，创建产品，数据格式选择（透传&#x2F;自定义），以便将上行的自定义格式的数据转换为Alink JSON格式，连网方式这里选择蜂窝（2G&#x2F;3G">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Python异步与线程">
-<meta property="og:url" content="http://example.com/2021/06/11/210611-python%E5%BC%82%E6%AD%A5%E4%B8%8E%E7%BA%BF%E7%A8%8B/index.html">
+<meta property="og:title" content="LTE Cat.1模块和阿里云物联网平台使用">
+<meta property="og:url" content="http://example.com/2021/12/17/211217-ltecat1/index.html">
 <meta property="og:site_name" content="永恆博客网">
-<meta property="og:description" content="多线程什么是多线程所谓多线程，就是系统可以同时运行多个任务，在操作系统中，每个任务就是一个线程。 Python 多线程可以成倍提高程序的运行速度。 进程是资源分配的最小单位，线程是程序执行的最小单位。 python3多线程参考：Python3 多线程 异步什么是异步同步是指完成事务的逻辑，先执行第一个事务，如果阻塞了，会一直等待，直到这个事务完成，再执行第二个事务，顺序执行。 异步是和同步相对的，">
+<meta property="og:description" content="学习资料 阿里云物联网平台-产品文档  需求 在博世实习，同事想要远程调试，打印log到终端功能（代替出差去现场调试），于是我就决定用LTE Cat.1模块，配合阿里云物联网平台，使用MQTT传输日志文件。  阿里云物联网平台使用 打开阿里云物联网平台，使用公共实例，创建产品，数据格式选择（透传&#x2F;自定义），以便将上行的自定义格式的数据转换为Alink JSON格式，连网方式这里选择蜂窝（2G&#x2F;3G">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-06-11T12:00:00.000Z">
-<meta property="article:modified_time" content="2021-06-19T12:59:57.282Z">
+<meta property="og:image" content="http://example.com/2021/12/17/211217-ltecat1/211217-ltecat1-1.jpg">
+<meta property="og:image" content="http://example.com/2021/12/17/211217-ltecat1/211217-ltecat1-2.jpg">
+<meta property="og:image" content="http://example.com/2021/12/17/211217-ltecat1/211217-ltecat1-3.jpg">
+<meta property="article:published_time" content="2021-12-17T00:00:00.000Z">
+<meta property="article:modified_time" content="2021-12-29T11:42:44.898Z">
 <meta property="article:author" content="Hao">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/12/17/211217-ltecat1/211217-ltecat1-1.jpg">
 
-<link rel="canonical" href="http://example.com/2021/06/11/210611-python%E5%BC%82%E6%AD%A5%E4%B8%8E%E7%BA%BF%E7%A8%8B/">
+<link rel="canonical" href="http://example.com/2021/12/17/211217-ltecat1/">
 
 
 <script id="page-configurations">
@@ -45,7 +49,7 @@
   };
 </script>
 
-  <title>Python异步与线程 | 永恆博客网</title>
+  <title>LTE Cat.1模块和阿里云物联网平台使用 | 永恆博客网</title>
   
 
 
@@ -160,7 +164,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/11/210611-python%E5%BC%82%E6%AD%A5%E4%B8%8E%E7%BA%BF%E7%A8%8B/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/17/211217-ltecat1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -173,7 +177,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Python异步与线程
+          LTE Cat.1模块和阿里云物联网平台使用
         </h1>
 
         <div class="post-meta">
@@ -183,14 +187,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-06-11 20:00:00" itemprop="dateCreated datePublished" datetime="2021-06-11T20:00:00+08:00">2021-06-11</time>
+              <time title="创建时间：2021-12-17 08:00:00" itemprop="dateCreated datePublished" datetime="2021-12-17T08:00:00+08:00">2021-12-17</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-06-19 20:59:57" itemprop="dateModified" datetime="2021-06-19T20:59:57+08:00">2021-06-19</time>
+                <time title="修改时间：2021-12-29 19:42:44" itemprop="dateModified" datetime="2021-12-29T19:42:44+08:00">2021-12-29</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -202,7 +206,7 @@
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
                 </span>
             </span>
 
@@ -217,13 +221,34 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h2><h3 id="什么是多线程"><a href="#什么是多线程" class="headerlink" title="什么是多线程"></a>什么是多线程</h3><p>所谓多线程，就是系统可以同时运行多个任务，在操作系统中，每个任务就是一个线程。</p>
-<p>Python 多线程可以成倍提高程序的运行速度。</p>
-<p>进程是资源分配的最小单位，线程是程序执行的最小单位。</p>
-<h3 id="python3多线程"><a href="#python3多线程" class="headerlink" title="python3多线程"></a>python3多线程</h3><p>参考：<a target="_blank" rel="noopener" href="https://www.runoob.com/python3/python3-multithreading.html">Python3 多线程</a></p>
-<h2 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h2><h3 id="什么是异步"><a href="#什么是异步" class="headerlink" title="什么是异步"></a>什么是异步</h3><p><strong>同步</strong>是指完成事务的逻辑，先执行第一个事务，如果阻塞了，会一直等待，直到这个事务完成，再执行第二个事务，顺序执行。</p>
-<p><strong>异步</strong>是和同步相对的，异步是指在处理调用这个事务的之后，不会等待这个事务的处理结果，直接处理第二个事务去了，通过状态、通知、回调来通知调用者处理结果。</p>
-<h3 id="python3异步"><a href="#python3异步" class="headerlink" title="python3异步"></a>python3异步</h3><p>参考：<a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/asyncio.html?highlight=asyncio#module-asyncio">asyncio — 异步 I/O</a></p>
+        <h3 id="学习资料"><a href="#学习资料" class="headerlink" title="学习资料"></a>学习资料</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://help.aliyun.com/product/30520.html">阿里云物联网平台-产品文档</a></li>
+</ul>
+<h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3><ul>
+<li>在博世实习，同事想要远程调试，打印log到终端功能（代替出差去现场调试），于是我就决定用LTE Cat.1模块，配合阿里云物联网平台，使用MQTT传输日志文件。</li>
+</ul>
+<h3 id="阿里云物联网平台使用"><a href="#阿里云物联网平台使用" class="headerlink" title="阿里云物联网平台使用"></a>阿里云物联网平台使用</h3><ol>
+<li><p>打开<a target="_blank" rel="noopener" href="https://iot.console.aliyun.com/lk/summary/new">阿里云物联网平台</a>，使用公共实例，<a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/73728.html">创建产品</a>，数据格式选择<strong>（透传/自定义）</strong>，以便将上行的自定义格式的数据转换为Alink JSON格式，连网方式这里选择<strong>蜂窝（2G/3G/4G/5G）</strong>，所属品类选择<strong>自定义品类</strong>，其它配置默认即可。配置完在产品详情界面图如下：<img src="/2021/12/17/211217-ltecat1/211217-ltecat1-1.jpg" alt="211217-ltecat1-1.jpg"></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/89271.html">创建设备</a>，创建设备成功后，将自动弹出<strong>添加完成</strong>对话框。您可以查看、复制设备证书信息。设备证书由设备的ProductKey、DeviceName和DeviceSecret组成，是设备与物联网平台进行通信的重要身份认证，建议您妥善保管。配置完在设备详情界面图如下：<img src="/2021/12/17/211217-ltecat1/211217-ltecat1-2.jpg" alt="211217-ltecat1-2.jpg"></p>
+</li>
+<li><p>接下来就是在产品详情界面中的功能定义，可以查看<a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/213906.html">物模型概述</a>，设置MQTT需要上传的变量。我设置了一些调试时用到的变量，如下图：<img src="/2021/12/17/211217-ltecat1/211217-ltecat1-3.jpg" alt="211217-ltecat1-3.jpg"></p>
+</li>
+<li><p>在产品详情界面中的数据解析可以设置<a target="_blank" rel="noopener" href="https://iot.console.aliyun.com/product/productDetail/gecgSxxbl6Q?current=4">物模型数据解析</a>，通过物模型数据解析我们可以将自定义帧结构的数据解析成Alink JSON格式，注意：产品的<strong>数据格式</strong>选择为<strong>透传/自定义</strong>（这个坑我一天，最后找阿里云客服解决）。写完数据解析后，选择模拟类型为<strong>设备上报数据</strong>，执行与提交。</p>
+</li>
+<li><p>接下来就是mcu使用LTE Cat.1模块给阿里云平台发数据了！在设备详情的物模型数据中可以看见，通过物模型数据上报的topic发送来的调试变量。我们也可以通过设备详情中的日志服务看见，阿里云上的数据收发记录和解析记录。</p>
+</li>
+<li><p>阿里云平台上还有很多其他功能，比如说把平台收到的数据再MQTT发给自己服务器做个数据处理与显示等，本次我没有用到，可以查看<a target="_blank" rel="noopener" href="https://help.aliyun.com/product/30520.html">阿里云物联网平台-产品文档</a>了解更多功能。</p>
+</li>
+</ol>
+<h3 id="LTE-Cat-1模块介绍"><a href="#LTE-Cat-1模块介绍" class="headerlink" title="LTE Cat.1模块介绍"></a>LTE Cat.1模块介绍</h3><ol>
+<li><p>Luat Air724UG LTE Cat.1 模块，淘宝链接：<a target="_blank" rel="noopener" href="https://item.taobao.com/item.htm?spm=a1z0d.6639537.1997196601.315.6b537484HESeeA&id=620804223790">Air724UG DTU透传4G模块Cat.1全网通TTL转LTE FS704UM阿里云MQTT</a></p>
+</li>
+<li><p>模块是串口输入，走4G网发送数据。模块可以一键配置阿里云MQTT服务，然后就能实现透传的功能。MCU也可以使用AT指令控制模块，可以有更丰富的操作。</p>
+</li>
+<li><p>连接阿里云流程可以看模块资料《Air724UG_软件设计手册V1.5》，连阿里云首先HTTP获取MQTT密码，然后连接MQTT，阿里云物联网会比较安全。</p>
+</li>
+</ol>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
     </div>
 
@@ -239,12 +264,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/06/07/210607-%E6%AF%8F%E6%97%A5%E4%B8%80%E7%BB%83/" rel="prev" title="牛客网每日一练">
-      <i class="fa fa-chevron-left"></i> 牛客网每日一练
+    <a href="/2021/10/07/211007-clashForLinux/" rel="prev" title="Ubuntu使用Clash">
+      <i class="fa fa-chevron-left"></i> Ubuntu使用Clash
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/06/12/210612-RAM/" rel="next" title="SRAM与DRAM">
-      SRAM与DRAM <i class="fa fa-chevron-right"></i>
+    <a href="/2021/12/19/211219-fpga%E4%B9%8Bsdram/" rel="next" title="FPGA之SDRAM学习">
+      FPGA之SDRAM学习 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -304,7 +329,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">多线程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%A4%9A%E7%BA%BF%E7%A8%8B"><span class="nav-number">1.1.</span> <span class="nav-text">什么是多线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#python3%E5%A4%9A%E7%BA%BF%E7%A8%8B"><span class="nav-number">1.2.</span> <span class="nav-text">python3多线程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5"><span class="nav-number">2.</span> <span class="nav-text">异步</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%BC%82%E6%AD%A5"><span class="nav-number">2.1.</span> <span class="nav-text">什么是异步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#python3%E5%BC%82%E6%AD%A5"><span class="nav-number">2.2.</span> <span class="nav-text">python3异步</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99"><span class="nav-number">1.</span> <span class="nav-text">学习资料</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9C%80%E6%B1%82"><span class="nav-number">2.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%BF%E9%87%8C%E4%BA%91%E7%89%A9%E8%81%94%E7%BD%91%E5%B9%B3%E5%8F%B0%E4%BD%BF%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">阿里云物联网平台使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LTE-Cat-1%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D"><span class="nav-number">4.</span> <span class="nav-text">LTE Cat.1模块介绍</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
