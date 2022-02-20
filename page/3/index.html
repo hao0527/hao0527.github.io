@@ -157,6 +157,124 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/07/210607-%E6%AF%8F%E6%97%A5%E4%B8%80%E7%BB%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/06/07/210607-%E6%AF%8F%E6%97%A5%E4%B8%80%E7%BB%83/" class="post-title-link" itemprop="url">牛客网每日一练</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-06-07 18:00:00" itemprop="dateCreated datePublished" datetime="2021-06-07T18:00:00+08:00">2021-06-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-06-23 20:20:10" itemprop="dateModified" datetime="2021-06-23T20:20:10+08:00">2021-06-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ol>
+<li><p>（判断题）指针就是地址，因此一个变量的指针就是该变量的地址。<br>答案：错误；解释：指针是个变量，指针的值是个地址，地址是个常量。</p>
+</li>
+<li><p>char* s=”AAA”;<br>s[0]=’B’;    //错误，初始化指针时所创建的字符串常量被定义为只读，修改违法</p>
+</li>
+<li><p><code>char ch;int i;float f;double d;</code><br>表达式：<code>ch/i+(f*d-i)</code>的结果类型为<u>double</u></p>
+</li>
+<li><pre><code class="c++"> int main()
+ &#123;
+int a = 5, b = 0;
+int c = MAX(++a, b);
+int d = MAX(++a, b + 10);
+printf(&quot;%d %d %d %d\n&quot;, a, b, c, d);
+return 0;
+ &#125;
+</code></pre>
+<p>Output： 8 0 7 10<br>解释：注意define，第一次调用MAX时，++a先执行了一次，此时a为6，由于满足宏定义中(a)&gt;(b)的条件，所以执行a，这个a就对应++a，所以a又自增了一次，变为7，由此得出c为7。 第二个MAX时a又自增了一次，此时为8，由于不满足条件，所以执行的是宏定义中的b，没有执行++a，所以a最终为8</p>
+</li>
+<li><p>关于fseek()    参考：<a target="_blank" rel="noopener" href="https://www.runoob.com/cprogramming/c-function-fseek.html">C库函数 - fseek()</a></p>
+</li>
+<li><p>转义字符分三种，一般转义字符，八进制转义字符和十六进制转义字符 </p>
+<p> <strong>一般转义字符</strong>，如‘\b’，由两个字符表示，其实代表一个字符，这个代表退格字符 </p>
+<p> <strong>八进制转义字符</strong>，如‘\007’,三位数字是八进制的，ASCII码为7的表示响铃 </p>
+<p> <strong>十六进制转义字符</strong>，如’\xfe’，同样后面数字是所表示意思的Ascii码的十六进制表示，注意一定要有x，大小写都行</p>
+</li>
+<li><p>在C程序中逗号运算符的优先级最低，赋值运算符其次；j++是属于赋值语句；sizeof()属于一元运算符；</p>
+</li>
+<li><p>C中&amp;&amp;（逻辑与）和&amp;（按位与）</p>
+<ul>
+<li>按位与运用二进制进行计算，逻辑与比较符号两边的真假输出逻辑值。</li>
+<li>按位与对所有的表达式都要判断，逻辑与运算符第一个表达式不成立的话，后面的表达式不运算，直接返回。</li>
+<li>按位与&amp;输出运算结果为不同的数值，逻辑与 &amp;&amp; 输出逻辑值true或者 false。</li>
+</ul>
+</li>
+<li><p>两个指针变量不可以相加，因为指针变量相加没有意义。</p>
+</li>
+<li><p>scanf函数不能指定输入精度，可以指定长度，比如%m.nf是不允许的，但是可以%mf(m为整数)。<code>scanf(&quot;%7.2f&quot;,&amp;a);</code>不合法</p>
+</li>
+<li><p>对类的编译，内存分布不太了解。多态类中的虚函数表建立在编译阶段。</p>
+</li>
+</ol>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/23/210523-%E7%94%B5%E5%AE%B9%E9%80%89%E5%9E%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1226,122 +1344,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/27/210427-lte/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/27/210427-lte/" class="post-title-link" itemprop="url">LTE网络规划思维导图</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-27 22:38:07" itemprop="dateCreated datePublished" datetime="2021-04-27T22:38:07+08:00">2021-04-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-28 09:21:33" itemprop="dateModified" datetime="2021-04-28T09:21:33+08:00">2021-04-28</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%95%B0%E5%AD%97%E7%A7%BB%E5%8A%A8%E9%80%9A%E4%BF%A1/" itemprop="url" rel="index"><span itemprop="name">数字移动通信</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <ul>
-<li>覆盖规划<ul>
-<li>计算小区边缘吞吐率对应的小区边缘SINR</li>
-<li>根据小区边缘接收电平和SINR的要求，通过链路预算获得最大路径损耗<ul>
-<li>发射功率</li>
-<li>各种增益<ul>
-<li>基站单无线增益</li>
-<li>MIMO分集增益</li>
-</ul>
-</li>
-<li>干扰余量</li>
-<li>阴影衰落余量</li>
-<li>各种损耗<ul>
-<li>馈线损耗</li>
-<li>人体损耗</li>
-<li>穿透损耗</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>根据得到的最大路径，通过传输模型，得到小区覆盖半径和对小区站点覆盖面积</li>
-<li>根据结点覆盖面积和总覆盖区域的面积计算结点数量</li>
-</ul>
-</li>
-<li>容量规划<ul>
-<li>网络吞吐量，得出区域内的总容量需求</li>
-<li>计算小区平均吞吐率</li>
-<li>计算获得小区数</li>
-</ul>
-</li>
-<li>传输规划<ul>
-<li>计算空口吞吐率</li>
-<li>计算出空口净荷</li>
-<li>得出传输层的吞吐率</li>
-<li>传输带宽</li>
-<li>传输余量不同的配置</li>
-</ul>
-</li>
-</ul>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1411,14 +1413,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-count">31</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">14</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
