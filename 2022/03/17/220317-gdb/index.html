@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/heng32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/heng16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="GDB介绍GDB是什么GDB: The GNU Project Debugger，GDB是GNU开源组织发布的一个强大的Linux下的程序调试工具，GDB主要帮助你完成下面四个方面的功能：  启动你的程序，可以按照你的自定义的要求随心所欲的运行程序。 可让被调试的程序在你所指定的调置的断点处停住。（断点可以是条件表达式） 当程序被停住时，可以检查此时你的程序中所发生的事。 你可以改变你的程序，将一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用GDB调试C&#x2F;C++程序">
+<meta property="og:url" content="http://example.com/2022/03/17/220317-gdb/index.html">
+<meta property="og:site_name" content="永恆博客网">
+<meta property="og:description" content="GDB介绍GDB是什么GDB: The GNU Project Debugger，GDB是GNU开源组织发布的一个强大的Linux下的程序调试工具，GDB主要帮助你完成下面四个方面的功能：  启动你的程序，可以按照你的自定义的要求随心所欲的运行程序。 可让被调试的程序在你所指定的调置的断点处停住。（断点可以是条件表达式） 当程序被停住时，可以检查此时你的程序中所发生的事。 你可以改变你的程序，将一">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-03-17T11:00:00.000Z">
+<meta property="article:modified_time" content="2022-03-17T13:58:04.075Z">
+<meta property="article:author" content="Hao">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2022/03/17/220317-gdb/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>使用GDB调试C/C++程序 | 永恆博客网</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">永恆博客网</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/17/220317-gdb/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用GDB调试C/C++程序
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-03-17 19:00:00 / 修改时间：21:58:04" itemprop="dateCreated datePublished" datetime="2022-03-17T19:00:00+08:00">2022-03-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="GDB介绍"><a href="#GDB介绍" class="headerlink" title="GDB介绍"></a>GDB介绍</h2><h3 id="GDB是什么"><a href="#GDB是什么" class="headerlink" title="GDB是什么"></a>GDB是什么</h3><p><a target="_blank" rel="noopener" href="http://www.sourceware.org/gdb/">GDB: The GNU Project Debugger</a>，GDB是GNU开源组织发布的一个强大的Linux下的程序调试工具，GDB主要帮助你完成下面四个方面的功能：</p>
+<ul>
+<li>启动你的程序，可以按照你的自定义的要求随心所欲的运行程序。</li>
+<li>可让被调试的程序在你所指定的调置的断点处停住。（断点可以是条件表达式）</li>
+<li>当程序被停住时，可以检查此时你的程序中所发生的事。</li>
+<li>你可以改变你的程序，将一个BUG产生的影响修正从而测试其他BUG。</li>
+</ul>
+<h3 id="GDB支持哪些语言"><a href="#GDB支持哪些语言" class="headerlink" title="GDB支持哪些语言"></a>GDB支持哪些语言</h3><p>GDB主要来调试C/C++语言写的程序，当然也就可以调试其他语言程序，另外的语言没了解过。</p>
+<h2 id="GDB使用"><a href="#GDB使用" class="headerlink" title="GDB使用"></a>GDB使用</h2><h3 id="在Ubuntu中安装GDB"><a href="#在Ubuntu中安装GDB" class="headerlink" title="在Ubuntu中安装GDB"></a>在Ubuntu中安装GDB</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt install gdb</span><br></pre></td></tr></table></figure>
+
+<h3 id="补一下GCC的知识"><a href="#补一下GCC的知识" class="headerlink" title="补一下GCC的知识"></a>补一下GCC的知识</h3><p><a target="_blank" rel="noopener" href="https://www.runoob.com/w3cnote/gcc-parameter-detail.html">GCC参数详解</a>，gcc 与 g++ 分别是 gnu 的 c &amp; c++ 编译器 gcc/g++ 在执行编译工作的时候，总共需要4步：</p>
+<ul>
+<li><p>预处理,生成 .i 的文件[预处理器cpp]，指令：-E</p>
+</li>
+<li><p>将预处理后的文件转换成汇编语言, 生成文件 .s [编译器egcs]，指令：-S</p>
+</li>
+<li><p>由汇编变为目标代码(机器代码)生成 .o 的文件[汇编器as]，指令：-c</p>
+</li>
+<li><p>连接目标代码, 生成可执行程序 [链接器ld]，指令：-o FILE</p>
+</li>
+</ul>
+<p>在配合GDB时，gcc的指令选项有：</p>
+<ul>
+<li>-g（生成调试信息，GNU 调试器可利用该信息）</li>
+<li>-ggdb（此选项将尽可能的生成 gdb 的可以使用的调试信息）</li>
+</ul>
+<h3 id="GDB中的基本调试命令"><a href="#GDB中的基本调试命令" class="headerlink" title="GDB中的基本调试命令"></a>GDB中的基本调试命令</h3><table>
+<thead>
+<tr>
+<th><strong>命令</strong></th>
+<th><strong>命令缩写</strong></th>
+<th><strong>命令说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>set args</td>
+<td></td>
+<td>设置主程序的参数。例如：./test 1 2设置参数的方法是：gdb test(gdb) set args 1 2</td>
+</tr>
+<tr>
+<td>break</td>
+<td>b</td>
+<td>设置断点，b 20 表示在第20行设置断点，可以设置多个断点。</td>
+</tr>
+<tr>
+<td>run</td>
+<td>r</td>
+<td>开始运行程序, 程序运行到断点的位置会停下来，如果没有遇到断点，程序一直运行下去。</td>
+</tr>
+<tr>
+<td>next</td>
+<td>n</td>
+<td>执行当前行语句，如果该语句为函数调用，不会进入函数内部执行。</td>
+</tr>
+<tr>
+<td>step</td>
+<td>s</td>
+<td>执行当前行语句，如果该语句为函数调用，则进入函数执行其中的第一条语句。注意了，如果函数是库函数或第三方提供的函数，用s也是进不去的，因为没有源代码，如果是您自定义的函数，只要有源码就可以进去。</td>
+</tr>
+<tr>
+<td>print</td>
+<td>p</td>
+<td>显示变量值，例如：p name表示显示变量name的值，print可以做运算。</td>
+</tr>
+<tr>
+<td>continue</td>
+<td>c</td>
+<td>继续程序的运行，直到遇到下一个断点。</td>
+</tr>
+<tr>
+<td>set var name=value</td>
+<td></td>
+<td>设置变量的值，假设程序有两个变量：int ii; char name[21];set var ii=10 把ii的值设置为10；set var name=”abc” 把name的值设置为”abc”，注意，不是strcpy。</td>
+</tr>
+<tr>
+<td>quit</td>
+<td>q</td>
+<td>退出gdb环境。</td>
+</tr>
+</tbody></table>
+<h3 id="进入GDB调试"><a href="#进入GDB调试" class="headerlink" title="进入GDB调试"></a>进入GDB调试</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gcc test.c -g -o test</span><br><span class="line">gdb test # 进入gdb，指定test为可执行文件</span><br><span class="line"><span class="meta">#</span><span class="bash"> 也可以只执行gdb，在gdb中用file命令指定可执行文件</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 接下来就可以使用GDB的基本调试命令调试程序了</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="调试正在运行的程序"><a href="#调试正在运行的程序" class="headerlink" title="调试正在运行的程序"></a>调试正在运行的程序</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 通过ps获取程序进程号</span></span><br><span class="line">gdb test -p [进程号]</span><br><span class="line"><span class="meta">#</span><span class="bash"> 进入gdb后，程序会被暂停</span></span><br><span class="line">(gdb)bt # 使用bt查看程序的调用栈</span><br><span class="line"><span class="meta">#</span><span class="bash"> Print backtrace of all stack frames, or innermost COUNT frames.</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 退出后，程序继续执行</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="调试多进程程序"><a href="#调试多进程程序" class="headerlink" title="调试多进程程序"></a>调试多进程程序</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(gdb)set follow-fork-mode [parent|child]</span><br><span class="line"><span class="meta">#</span><span class="bash"> （缺省是parent）调试父|子进程，父|子进程不受影响</span></span><br><span class="line">(gdb)set datach-on-fork [on|off]</span><br><span class="line"><span class="meta">#</span><span class="bash"> （缺省是on）on表示调试当前进程时，其他进程继续运行，off表示调试当前进程时，其他进程被GDB挂起</span></span><br><span class="line">(gdb)info inferiors # 查看调试的进程</span><br><span class="line">(gdb)inferior # 切换当前调试的进程，进程id是查看调试的进程返回的Num值</span><br></pre></td></tr></table></figure>
+
+<h3 id="调试多线程程序"><a href="#调试多线程程序" class="headerlink" title="调试多线程程序"></a>调试多线程程序</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ps aux|grep test # 查看当前运行的进程，查找符合&quot;test&quot;的字符串</span><br><span class="line">ps -aL|grep test # 查看当前运行的轻量级进程</span><br><span class="line"><span class="meta">#</span><span class="bash"> 轻量级进程(LWP)是建立在内核之上并由内核支持的用户线程，它是内核线程的高度抽象，每一个轻量级进程都与一个特定的内核线程关联。</span></span><br><span class="line">pstree -p [主线程ID] # 查看主线程和新线程的关系</span><br><span class="line">(gdb)info threads # 查看线程</span><br><span class="line">(gdb)thread [线程ID] # 切换线程，线程ID是查看线程返回的Num值</span><br><span class="line">(gdb)set scheduler-locking [on|off] # on：只运行当前线程，off：运行全部的线程</span><br><span class="line">(gdb)thread apply [线程ID|all] [cmd] # 让某个|全部线程执行某GDB命令</span><br></pre></td></tr></table></figure>
+
+<h3 id="服务程序运行日志"><a href="#服务程序运行日志" class="headerlink" title="服务程序运行日志"></a>服务程序运行日志</h3><p>设置断点或单步跟踪可能会严重干扰多进程、多线程之间的竞争状态，导致我们看到一个假象。一旦我们在某个线程设置了断点，该线程在断点处挺住了，只剩下另一个线程在跑。这时候，并发的场景已经完全被破坏了，通过调试器看到的只是一个和谐的场景（理想状态）。<strong>输出Log日志</strong>可以避免断点和单步跟踪所导致的副作用。</p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/02/25/220225-asmInC/" rel="prev" title="C语言内嵌汇编">
+      <i class="fa fa-chevron-left"></i> C语言内嵌汇编
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#GDB%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">GDB介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GDB%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.1.</span> <span class="nav-text">GDB是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GDB%E6%94%AF%E6%8C%81%E5%93%AA%E4%BA%9B%E8%AF%AD%E8%A8%80"><span class="nav-number">1.2.</span> <span class="nav-text">GDB支持哪些语言</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GDB%E4%BD%BF%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">GDB使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8Ubuntu%E4%B8%AD%E5%AE%89%E8%A3%85GDB"><span class="nav-number">2.1.</span> <span class="nav-text">在Ubuntu中安装GDB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A5%E4%B8%80%E4%B8%8BGCC%E7%9A%84%E7%9F%A5%E8%AF%86"><span class="nav-number">2.2.</span> <span class="nav-text">补一下GCC的知识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GDB%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E8%B0%83%E8%AF%95%E5%91%BD%E4%BB%A4"><span class="nav-number">2.3.</span> <span class="nav-text">GDB中的基本调试命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E5%85%A5GDB%E8%B0%83%E8%AF%95"><span class="nav-number">2.4.</span> <span class="nav-text">进入GDB调试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E8%AF%95%E6%AD%A3%E5%9C%A8%E8%BF%90%E8%A1%8C%E7%9A%84%E7%A8%8B%E5%BA%8F"><span class="nav-number">2.5.</span> <span class="nav-text">调试正在运行的程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E8%AF%95%E5%A4%9A%E8%BF%9B%E7%A8%8B%E7%A8%8B%E5%BA%8F"><span class="nav-number">2.6.</span> <span class="nav-text">调试多进程程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E8%AF%95%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%A8%8B%E5%BA%8F"><span class="nav-number">2.7.</span> <span class="nav-text">调试多线程程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E6%97%A5%E5%BF%97"><span class="nav-number">2.8.</span> <span class="nav-text">服务程序运行日志</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Hao</p>
+  <div class="site-description" itemprop="description">保持热爱，奔赴山海。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hao</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
