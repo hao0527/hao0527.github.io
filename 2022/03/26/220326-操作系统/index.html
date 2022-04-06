@@ -39,8 +39,13 @@
 <meta property="og:image" content="http://example.com/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-10.jpg">
 <meta property="og:image" content="http://example.com/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-11.jpg">
 <meta property="og:image" content="http://example.com/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-12.jpg">
+<meta property="og:image" content="http://example.com/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-13.jpg">
+<meta property="og:image" content="http://example.com/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-14.jpg">
+<meta property="og:image" content="http://example.com/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-15.jpg">
+<meta property="og:image" content="http://example.com/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-16.jpg">
+<meta property="og:image" content="http://example.com/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-17.jpg">
 <meta property="article:published_time" content="2022-03-26T07:00:00.000Z">
-<meta property="article:modified_time" content="2022-04-04T10:14:45.567Z">
+<meta property="article:modified_time" content="2022-04-06T12:25:48.734Z">
 <meta property="article:author" content="Hao">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-1.jpg">
@@ -203,7 +208,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-04-04 18:14:45" itemprop="dateModified" datetime="2022-04-04T18:14:45+08:00">2022-04-04</time>
+                <time title="修改时间：2022-04-06 20:25:48" itemprop="dateModified" datetime="2022-04-06T20:25:48+08:00">2022-04-06</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -312,6 +317,21 @@
 <li><p>给进程分配多少页框？分配多了，请求调页导致的内存高效利用就没有了。分配少了，会频繁请求调页导致系统低效。系统低效解释：系统内进程增多多，每个进程的缺页率增大大，缺页率增大到一定程度，进程总等待调页完成，CPU利用率降低低，进程进一步增多，缺页率更大，称这一现象为颠簸(thrashing)；</p>
 </li>
 </ol>
+<h3 id="L26-L32"><a href="#L26-L32" class="headerlink" title="L26~L32"></a>L26~L32</h3><ol>
+<li><p>IO设备、显示器、键盘，让这些外设工作的基本思想就是往外设硬件寄存器写值，外设处理完再产生中断，CPU处理。在Linux中无论什么设备都用文件接口open、read、write、close，例如<code>int fd = open(&quot;/dev/xxx&quot;);</code>到最后是通过out写对应寄存器；</p>
+</li>
+<li><p>生磁盘的使用：磁盘驱动负责从盘块号（block）计算出柱面（cgl）、磁头（head）、扇区号（sec）。从CHS到扇区号，从扇区到盘块（第一层抽象）：<strong>扇区号 = C×H×S+H×S+S</strong> 。<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-13.jpg" alt="220326-操作系统-13.jpg"></p>
+</li>
+<li><p>多个进程通过<strong>请求队列</strong>使用磁盘（第二层抽象）；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-14.jpg" alt="220326-操作系统-14.jpg"></p>
+</li>
+<li><p><strong>访问磁盘时间 = 写入控制器时间 + 寻道时间（8~12ms）+ 旋转时间（7200rmp，半周4ms）+ 传输时间（50MB/s，约0.3ms）</strong>。可见访问磁盘主要时间花在寻道，block相邻的盘块可以快速读出，因此需要考虑寻道算法。寻道调度算法有FCFS（先来先服务）、SSTF（短寻道优先算法，可能有磁道长时间访问不到）、SCAN（SSTF+中途不折回）、C-SCAN（SCAN+直接移动到另一端，电梯算法）；</p>
+</li>
+<li><p>引入文件（第三层抽象），文件是建立字符流在磁盘块集合的映射关系，每个文件都对应一个文件控制块（FCB），连续结构存储FCB包含文件名、起始块、块数的信息，链式结构存储FCB包含文件名、起始块的信息，链式结构存储顺序访问慢、可靠性差，<strong>索引结构</strong>存储文件是连续和链式的有效折中，FCB包含文件名、索引块的信息。在实际系统中采用的是<strong>多级索引结构</strong>，根据不同大小文件分成不同级索引通过<strong>inode</strong>一级级查询访问，因此可以标识很大的文件，很小的文件可以高效访问，中等大小的文件访问速度也不慢；</p>
+</li>
+<li><p>引入文件系统（第四层抽象），文件系统引入目录树，文件目录也是个文件，存放目录下其他文件名和对应文件的FCB指针。inode位图：哪些inode空闲，哪些被占用。盘块位图：哪些盘块是空闲的，硬盘大小不同这个位图的大小也不同。超级块：存放i节点位图和盘块位图的大小，因此可以计算出i节点起始地址；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-15.jpg" alt="220326-操作系统-15.jpg"><img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-16.jpg" alt="220326-操作系统-16.jpg"><img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-17.jpg" alt="220326-操作系统-17.jpg"></p>
+</li>
+</ol>
+<h2 id="课程总结"><a href="#课程总结" class="headerlink" title="课程总结"></a>课程总结</h2><p>通过本次操作系统的学习，了解了操作系统全图（CPU、内存、文件设备），学习了多进程视图、文件视图。哈工大的几个实验非常的难，Study OS by coding !!!</p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
     </div>
 
@@ -392,7 +412,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BE%E7%A8%8B%E9%93%BE%E6%8E%A5"><span class="nav-number">1.</span> <span class="nav-text">课程链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0"><span class="nav-number">2.</span> <span class="nav-text">课程笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#L1-L3"><span class="nav-number">2.1.</span> <span class="nav-text">L1~L3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#L4-L7"><span class="nav-number">2.2.</span> <span class="nav-text">L4~L7</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#L8-L19"><span class="nav-number">2.3.</span> <span class="nav-text">L8~L19</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#L20-L25"><span class="nav-number">2.4.</span> <span class="nav-text">L20~L25</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BE%E7%A8%8B%E9%93%BE%E6%8E%A5"><span class="nav-number">1.</span> <span class="nav-text">课程链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0"><span class="nav-number">2.</span> <span class="nav-text">课程笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#L1-L3"><span class="nav-number">2.1.</span> <span class="nav-text">L1~L3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#L4-L7"><span class="nav-number">2.2.</span> <span class="nav-text">L4~L7</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#L8-L19"><span class="nav-number">2.3.</span> <span class="nav-text">L8~L19</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#L20-L25"><span class="nav-number">2.4.</span> <span class="nav-text">L20~L25</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#L26-L32"><span class="nav-number">2.5.</span> <span class="nav-text">L26~L32</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BE%E7%A8%8B%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">课程总结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
