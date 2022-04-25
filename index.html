@@ -188,7 +188,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-04-05 12:37:32" itemprop="dateModified" datetime="2022-04-05T12:37:32+08:00">2022-04-05</time>
+                <time title="修改时间：2022-04-25 23:09:17" itemprop="dateModified" datetime="2022-04-25T23:09:17+08:00">2022-04-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -233,11 +233,17 @@
 <p>*p是个常量，p的类型是int*，所以*p的值不能改变，但是p的值可以改变。利用这个特性，在函数传参时使用常量指针可以防止函数对变量值的误修改。</p>
 <h3 id="常量指针常量"><a href="#常量指针常量" class="headerlink" title="常量指针常量"></a>常量指针常量</h3><p>定义<code>const int * const p = &amp;a;</code></p>
 <p>p是个常量，*p也是个常量，p的类型是int*，所以*p的值不能改变，p的值也不能改变。</p>
-<h2 id="引用和常量引用"><a href="#引用和常量引用" class="headerlink" title="引用和常量引用"></a>引用和常量引用</h2><h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><p>定义<code>int&amp; r = a;</code></p>
+<h2 id="引用-amp-常量引用"><a href="#引用-amp-常量引用" class="headerlink" title="引用&amp;常量引用"></a>引用&amp;常量引用</h2><h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><p>定义<code>int&amp; r = a;</code></p>
 <p><a target="_blank" rel="noopener" href="https://www.runoob.com/cplusplus/cpp-references.html">C++ 引用</a>，引用变量是一个别名，也就是说，它是某个已存在变量的另一个名字。</p>
 <p>函数可以通过引用传参，<code>void foo(int &amp;a)&#123;a = 1;&#125;</code>修改引用形参可以改变实参。</p>
 <h3 id="常量引用"><a href="#常量引用" class="headerlink" title="常量引用"></a>常量引用</h3><p>定义<code>const int&amp; r = a;</code></p>
-<p>函数可以通过常量引用传参，<code>void foo(const int &amp;a);&#123;;&#125;</code>只能读取a，不能修改a。利用这个特性，在函数传参时使用常量指针可以防止函数对变量值的误修改。</p>
+<p>函数可以通过常量引用传参，<code>void foo(const int &amp;a) &#123;;&#125;</code>只能读取a，不能修改a。利用这个特性，在函数传参时使用常量指针可以防止函数对变量值的误修改。</p>
+<h2 id="函数指针-amp-指针函数"><a href="#函数指针-amp-指针函数" class="headerlink" title="函数指针&amp;指针函数"></a>函数指针&amp;指针函数</h2><h3 id="函数指针"><a href="#函数指针" class="headerlink" title="函数指针"></a>函数指针</h3><p>定义函数指针<code>void (*pFun)(int a, int b);</code></p>
+<p>定义函数<code>void Fun(int a, int b) &#123;;&#125;</code></p>
+<p>将Fun函数的首地址赋给指针变量pFun<code>pFun = Fun;</code>也可以是<code>pFun = &amp;Fun;</code></p>
+<p>通过指针函数调用<code>pFun(1, 2);</code>也可以是<code>(*pFun)(1, 2);</code></p>
+<p>函数指针定义时返回值，参数类型，个数都必须与要指向的函数相同。</p>
+<h3 id="指针函数"><a href="#指针函数" class="headerlink" title="指针函数"></a>指针函数</h3><p>指针函数是返回类型为指针的函数。</p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
     </div>
