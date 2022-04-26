@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/heng32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/heng16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="声明此文章是搬运来的，原地址点击此处，写的真好，能看的非常懂，原作者有个地方可能笔误写错了，做了改正。 输入IO这里所说的输入IO，指的是只作为输入，不具有输出功能。此时对于input引脚的要求就是高阻（高阻与三态是同一个概念）。基本输入电路的类型大致可以分为3类：基本输入IO电路、施密特触发输入电路以及弱上拉输入电路。 先从最基本的基本输入IO电路说起，其电路如图 1所示。  其中的缓冲器U1是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GPIO输入输出各种模式（推挽、开漏、准双向端口）详解">
+<meta property="og:url" content="http://example.com/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:site_name" content="永恆博客网">
+<meta property="og:description" content="声明此文章是搬运来的，原地址点击此处，写的真好，能看的非常懂，原作者有个地方可能笔误写错了，做了改正。 输入IO这里所说的输入IO，指的是只作为输入，不具有输出功能。此时对于input引脚的要求就是高阻（高阻与三态是同一个概念）。基本输入电路的类型大致可以分为3类：基本输入IO电路、施密特触发输入电路以及弱上拉输入电路。 先从最基本的基本输入IO电路说起，其电路如图 1所示。  其中的缓冲器U1是">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-1.jpg">
+<meta property="og:image" content="http://example.com/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-2.jpg">
+<meta property="og:image" content="http://example.com/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-3.jpg">
+<meta property="og:image" content="http://example.com/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-4.jpg">
+<meta property="og:image" content="http://example.com/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-5.jpg">
+<meta property="og:image" content="http://example.com/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-6.jpg">
+<meta property="og:image" content="http://example.com/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-7.jpg">
+<meta property="og:image" content="http://example.com/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-8.jpg">
+<meta property="og:image" content="http://example.com/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-9.jpg">
+<meta property="og:image" content="http://example.com/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-10.jpg">
+<meta property="og:image" content="http://example.com/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-11.jpg">
+<meta property="og:image" content="http://example.com/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-12.jpg">
+<meta property="og:image" content="http://example.com/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-13.jpg">
+<meta property="og:image" content="http://example.com/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-14.jpg">
+<meta property="og:image" content="http://example.com/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-15.jpg">
+<meta property="og:image" content="http://example.com/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-16.jpg">
+<meta property="og:image" content="http://example.com/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-17.jpg">
+<meta property="og:image" content="http://example.com/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-18.jpg">
+<meta property="og:image" content="http://example.com/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-19.jpg">
+<meta property="og:image" content="http://example.com/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-20.jpg">
+<meta property="og:image" content="http://example.com/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-21.jpg">
+<meta property="og:image" content="http://example.com/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-22.jpg">
+<meta property="og:image" content="http://example.com/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-23.jpg">
+<meta property="article:published_time" content="2022-04-26T12:00:00.000Z">
+<meta property="article:modified_time" content="2022-04-26T13:56:10.456Z">
+<meta property="article:author" content="Hao">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-1.jpg">
+
+<link rel="canonical" href="http://example.com/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>GPIO输入输出各种模式（推挽、开漏、准双向端口）详解 | 永恆博客网</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">永恆博客网</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          GPIO输入输出各种模式（推挽、开漏、准双向端口）详解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-04-26 20:00:00 / 修改时间：21:56:10" itemprop="dateCreated datePublished" datetime="2022-04-26T20:00:00+08:00">2022-04-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>此文章是搬运来的，<a target="_blank" rel="noopener" href="https://blog.csdn.net/techexchangeischeap/article/details/72569999">原地址点击此处</a>，写的真好，能看的非常懂，原作者有个地方可能笔误写错了，做了改正。</p>
+<h2 id="输入IO"><a href="#输入IO" class="headerlink" title="输入IO"></a>输入IO</h2><p>这里所说的输入IO，指的是只作为输入，不具有输出功能。此时对于input引脚的要求就是高阻（高阻与三态是同一个概念）。基本输入电路的类型大致可以分为3类：基本输入IO电路、施密特触发输入电路以及弱上拉输入电路。</p>
+<p>先从最基本的基本输入IO电路说起，其电路如图 1所示。</p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-1.jpg" alt="220426-GPIO输入输出各种模式-1.jpg"></p>
+<p>其中的缓冲器U1是具有控制输入端，且具有高阻抗特性的三态缓冲器。通俗地说就是这个缓冲器对外来说是高阻的，相当于在控制输入端不使能的情况下，物理引脚与内部总线之间是完全隔离的，完全不会影响内部电路。而控制输入端的作用就是可以发出读Pin状态的操作指令。其过程如图 2所示。</p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-2.jpg" alt="220426-GPIO输入输出各种模式-2.jpg"></p>
+<p>这种基本电路的一个缺点是在读取外部信号的跳变沿时会出现抖动，如下图所示。</p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-3.jpg" alt="220426-GPIO输入输出各种模式-3.jpg"></p>
+<p>于是施密特触发输入电路就是解决了上述这种抖动的问题，其经过施密特触发器后的信号如图 4所示。</p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-4.jpg" alt="220426-GPIO输入输出各种模式-4.jpg"></p>
+<p>对于输入电路还存在另外一个问题，就是当输入引脚悬空的时候，输入端检测到的电平是高还是低？当输入信号没有被驱动，即悬空(Floating)时，输入引脚上任何的噪声都会改变输入端检测到的电平，如图 5所示。</p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-5.jpg" alt="220426-GPIO输入输出各种模式-5.jpg"></p>
+<p>为了解决这个问题，可以在输入引脚处加一个弱上拉电阻，如图 6所示。</p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-6.jpg" alt="220426-GPIO输入输出各种模式-6.jpg"></p>
+<p>这样，当输入引脚悬空时，会被RP上拉到高电平，在内部总线上就有确定的状态了。</p>
+<p>但是这种结构是有一定问题的。首先很明显的一点是，当输入引脚悬空时读到的是1，当输入引脚被高电平驱动时读到的也是1，只有当输入引脚被低电平驱动时读到的才是0。也就是对于读1采取的方式是”读取非零”的方式。</p>
+<p>另一个问题是该电路对外呈现的不是高阻，某种意义上说也在向外输出，当外部驱动电路不同时可能出现错误的检测结果。例如外部驱动电路是如图 7所示的结构，该电路结构中通过K打到不同端可以输出高电平或者低电平。</p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-7.jpg" alt="220426-GPIO输入输出各种模式-7.jpg"></p>
+<p>如果将如图 7所示的电路输出低电平，连接到带有弱上拉电阻的输入引脚，其结构如下所示。</p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-8.jpg" alt="220426-GPIO输入输出各种模式-8.jpg"></p>
+<p>由欧姆定律知，测试点处的电平是4.545V，于是CPU测得的输入信号为高，而外部驱动电路希望输出的电平为低。这种错误的原因就在于这种结构的输入电路并不是真正的高阻，或者说这个输入IO其实也在输出，而且影响了外部输入电路。</p>
+<p>这种情况的发生也说明了：信号前后两级传递，为什么需要输出阻抗小，输入阻抗大的原因。在这个例子中，外围驱动电路的输出阻抗很大，达到了100Kohm;而输入端的阻抗又不够大，只有10Kohm，于是就出现了问题。如果输入端的输入阻抗真正做到高阻（无穷大），如下所示，就不会出现问题。</p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-9.jpg" alt="220426-GPIO输入输出各种模式-9.jpg"></p>
+<p>上面提到的这个带弱上拉的输入电路，也就是在后续章节会提到的准双向端口的情况。</p>
+<h2 id="输出IO"><a href="#输出IO" class="headerlink" title="输出IO"></a>输出IO</h2><p>IO输出电路最主要的两种模式分别是推挽输出（Push-Pull Output）和开漏输出（Open Drain Output）。</p>
+<h3 id="推挽输出（Push-Pull-Output）"><a href="#推挽输出（Push-Pull-Output）" class="headerlink" title="推挽输出（Push-Pull Output）"></a>推挽输出（Push-Pull Output）</h3><p>推挽输出的结构是由两个三极管或者MOS管受到互补信号的控制，两个管子始终保持一个处于截止，另一个处于导通的状态。如图 10所示。</p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-10.jpg" alt="220426-GPIO输入输出各种模式-10.jpg"></p>
+<p>推挽输出的最大特点是可以真正能真正的输出高电平和低电平，在两种电平下都具有驱动能力。</p>
+<p><em><strong>补充说明</strong></em>：所谓的驱动能力，就是指输出电流的能力。对于驱动大负载（即负载内阻越小，负载越大）时，例如IO输出为5V，驱动的负载内阻为10ohm，于是根据欧姆定律可以正常情况下负载上的电流为0.5A（推算出功率为2.5W）。显然一般的IO不可能有这么大的驱动能力，也就是没有办法输出这么大的电流。于是造成的结果就是输出电压会被拉下来，达不到标称的5V。</p>
+<p>当然如果只是数字信号的传递，下一级的输入阻抗理论上最好是高阻，也就是只需要传电压，基本没有电流，也就没有功率，于是就不需要很大的驱动能力。</p>
+<p>对于推挽输出，输出高、低电平时电流的流向如图 11所示。所以相比于后面介绍的开漏输出，输出高电平时的驱动能力强很多。</p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-11.jpg" alt="220426-GPIO输入输出各种模式-11.jpg"></p>
+<p>但推挽输出的一个缺点是，如果当两个推挽输出结构相连在一起，一个输出高电平，即上面的MOS导通，下面的MOS闭合时；同时另一个输出低电平，即上面的MOS闭合，下面的MOS导通时。电流会从第一个引脚的VCC通过上端MOS再经过第二个引脚的下端MOS直接流向GND。整个通路上电阻很小，会发生短路，进而可能造成端口的损害。这也是为什么推挽输出不能实现” 线与”的原因。</p>
+<h3 id="开漏输出（Open-Drain-Output）"><a href="#开漏输出（Open-Drain-Output）" class="headerlink" title="开漏输出（Open Drain Output）"></a>开漏输出（Open Drain Output）</h3><p>常说的与推挽输出相对的就是开漏输出，对于开漏输出和推挽输出的区别最普遍的说法就是开漏输出无法真正输出高电平，即高电平时没有驱动能力，需要借助外部上拉电阻完成对外驱动。下面就从内部结构和原理上说明为什么开漏输出输出高电平时没有驱动能力，以及进一步比较与推挽输出的区别。</p>
+<p>首先需要介绍一些开漏输出和开集输出。这两种输出的原理和特性基本是类似的，区别在于一个是使用MOS管，其中的”漏”指的就是MOS管的漏极；另一个使用三极管，其中的”集”指的就是MOS三极管的集电极。这两者其实都是和推挽输出相对应的输出模式，由于使用MOS管的情况较多，很多时候就用”开漏输出”这个词代替了开漏输出和开集输出。</p>
+<p>介绍就先从开集输出开始，其原理电路结如图 12所示。</p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-12.jpg" alt="220426-GPIO输入输出各种模式-12.jpg"></p>
+<p>图 12左边的电路是开集（OC）输出最基本的电路，当输入为高电平时，NPN三极管导通，Output被拉到GND，输出为低电平；当输入为低电平时，NPN三极管闭合，Output相当于开路（输出高阻）。高电平时输出高阻（高阻、三态以及floating说的都是一个意思），此时对外没有任何的驱动能力。这就是开漏和开集输出最大的特点，如何利用该特点完成各种功能稍后介绍。这个电路虽然完成了开集输出的功能，但是会出现input为高，输出为低；input为低，输出为高的情况。</p>
+<p>图 12右边的电路中多使用了一个三极管完成了”反相”。当输入为高电平时，第一个三极管导通，此时第二个三极管的输入端会被拉到GND，于是第二个三极管闭合，输出高阻；当输入为低电平时，第一个三极管闭合，此时第二个三极管的输入端会被上拉电阻拉到高电平，于是第二个三极管导通，输出被拉到GND。这样，这个电路的输入与输出是同相的了。</p>
+<p>接下来介绍开漏输出的电路，如图 13所示。原理与开集输出基本相同，只是将三极管换成了MOS而已。</p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-13.jpg" alt="220426-GPIO输入输出各种模式-13.jpg"></p>
+<p>接着说说开漏、开集输出的特点以及应用，由于两者相似，后文中若无特殊说明，则用开漏表示开漏和开集输出电路。</p>
+<ol>
+<li><p>开漏输出最主要的特性就是高电平没有驱动能力，需要借助外部上拉电阻才能真正输出高电平，其电路如图 14所示。</p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-14.jpg" alt="220426-GPIO输入输出各种模式-14.jpg"></p>
+</li>
+</ol>
+<p>当MOS管<em><strong>断开</strong></em>时，开漏输出电路输出高电平，且连接着负载时，电流流向是从外部电源，流经上来电阻RPU，流进负载，最后进入GND。</p>
+<ol>
+<li>开漏输出的这一特性一个明显的优势就是可以很方便的调节输出的电平，因为输出电平完全由上拉电阻连接的电源电平决定。所以在需要进行电平转换的地方，非常适合使用开漏输出。</li>
+<li>开漏输出的这一特性另一个好处在于可以实现”线与”功能，所谓的”线与”指的是多个信号线直接连接在一起，只有当所有信号全部为高电平时，合在一起的总线为高电平；只要有任意一个或者多个信号为低电平，则总线为低电平。而推挽输出就不行，如果高电平和低电平连在一起，会出现电流倒灌，损坏器件。</li>
+</ol>
+<h3 id="推挽与开漏输出的区别"><a href="#推挽与开漏输出的区别" class="headerlink" title="推挽与开漏输出的区别"></a>推挽与开漏输出的区别</h3><p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-15.jpg" alt="220426-GPIO输入输出各种模式-15.jpg"></p>
+<h2 id="双向IO"><a href="#双向IO" class="headerlink" title="双向IO"></a>双向IO</h2><p>很多处理器的引脚可以设置为双向端口，双向端口的要求就是既可以输出信号，又可以读回外部信号输入。要同时做到这两点从原理上来说有点困难，首先从处理器的开漏输出IO口的内部结构说起，如图 16所示。</p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-16.jpg" alt="220426-GPIO输入输出各种模式-16.jpg"></p>
+<p>该结构是在图 13的基础上，在三极管之前加入了一个FF，目的是用于控制输出信号的时间。比较常见的一个应用场合是多个IO作为一个总线时，需要总线上的各个引脚同时将数据输出。</p>
+<p>对于开漏输出结构，会将FF的输出Q端连接会输入驱动缓冲器，这样的话执行读操作是读的并不是外部引脚的状态，而是自己输出的状态。</p>
+<h3 id="双向开漏IO"><a href="#双向开漏IO" class="headerlink" title="双向开漏IO"></a>双向开漏IO</h3><p>但是对图 16的结构稍作修改，如图 17所示时，该结构称为双向开漏IO的结构。所做的改动是将输入驱动缓冲器连接到了PIN上。</p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-17.jpg" alt="220426-GPIO输入输出各种模式-17.jpg"></p>
+<p>该结构输出为”1”时，T1断开，此时pin对外呈现高阻，作为输入引脚没有任何问题。但是如果该结构输出”0”时，T1导通，此时pin对外短路到地，即无论外部输入什么信号，U2读回的全部是低。所以对于这样的结构，如果需要作为输入引脚使用时，必须给U1输出”1”后才能读取外部引脚数据。</p>
+<h3 id="准双向开漏IO"><a href="#准双向开漏IO" class="headerlink" title="准双向开漏IO"></a>准双向开漏IO</h3><p>很多文献中还提到了准双向端口，其实准双向端口就是图 17的结构中加了一个上拉电阻，如图 18所示。</p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-18.jpg" alt="220426-GPIO输入输出各种模式-18.jpg"></p>
+<p>这个结构与图 17相比有以下相同与不同之处：</p>
+<ol>
+<li>作为输入引脚使用时，也必须先向U1中写”1”，以达到断开T1的目的。所以是否需要提前写”1”并不是双向IO与准双向IO的区别。两者做输入端口时都需要提前写”1”。</li>
+<li>双向端口作为输入时是真正的高阻态，而准双向IO作为输入端口时，输入阻抗不为高阻，于是有可能出现如本文图 8所示的问题。</li>
+<li>准双向端口读取输入状态，默认为高。也就是判断外部输入信号的方法是”非低则为高”。即该结构只能准确的识别外部的低电平，无法区分悬空和真正的高。于是只要读到的不是0，都认为外部为1。</li>
+</ol>
+<h3 id="推挽输出作为双向IO"><a href="#推挽输出作为双向IO" class="headerlink" title="推挽输出作为双向IO"></a>推挽输出作为双向IO</h3><p>如果双向端口中的输出部分采用的是推挽输出结构，那么作为输入时必须将上下两个管子全部端口才能成为高阻，作为输入。</p>
+<h3 id="51单片机的P0端口"><a href="#51单片机的P0端口" class="headerlink" title="51单片机的P0端口"></a>51单片机的P0端口</h3><p>在双向端口的讨论中，比较复杂的就是51单片机的P0端口了。这里就详细讨论一下51单片机的P0端口结构和工作原理。</p>
+<p>P0端口的内部结构如图 19所示。</p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-19.jpg" alt="220426-GPIO输入输出各种模式-19.jpg"></p>
+<p>内部结构比较复杂，包括以下这些器件：</p>
+<ol>
+<li>U1：与门。一个输入连着控制线，另一个输入连接这地址/数据信号。由于与门的特性，当控制线为1时，与门输出与地址/数据信号的电平保持一致；如果控制线为0，则输出恒为。于是控制信号线相当于与门的使能信号。</li>
+<li>U2：反相器，输出信号为地址/数据信号的反相信号。</li>
+<li>U3和U6都是具有控制输入端且具有高阻抗特性的三态缓冲器，作用是对于外部呈现高阻态。当控制端使能时可以将外部信号的电平读进数据总线。</li>
+<li>U4：为锁存器，目的就是控制引脚输出信号的时间。</li>
+<li>U5：模拟开关，可以控制V2的输入信号是来自锁存器U4的Q非输出还是来自于反相器U2的输出。</li>
+<li>V1和V2分别是两个MOS管。</li>
+</ol>
+<p>了解了各个独立器件之后就开始介绍工作在各个模式下的工作原理：</p>
+<p><strong>P0用于地址/数据线时：</strong></p>
+<p>在P0作为地址/数据线时，是地址、数据复用总线，P0需要输出地址，同时需要读回数据信号。</p>
+<p>当P0需要输出地址信息时，U1的控制信号为0，模拟开关U5接到U2反相器的输出。于是当地址信号线传来的信号为1，与控制线”1”相与之后输出到V1的输入信号为”0”，V1截止。地址信号”1”经反相之后，通过模拟开关输出到V2的输入端为”1”，V2导通，于是情况如图 20所示，pin输出”0”。</p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-20.jpg" alt="220426-GPIO输入输出各种模式-20.jpg"></p>
+<p>当地址信号线传来的信号为1，与控制线”1”相与之后输出到V1的输入信号为”1”，V1导通。地址信号”0”经反相之后，通过模拟开关输出到V2的输入端为”0”，V2截止，于是情况如图 21所示，pin输出”1”。</p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-21.jpg" alt="220426-GPIO输入输出各种模式-21.jpg"></p>
+<p>于是在作为地址线输出时，V1、V2两个MOS管均使用了，是推挽输出。</p>
+<p>当P0在输出低8位地址信息后，将变为数据总线，此时CPU的操作是控制端输出0，模拟开关打到锁存器的Q非端，且向锁存器中打入”1”。于是Q非输出为0，V2截止。同时控制线为0使得与门输出为0，V1截止。由于V1和V2都截止，所以此时pin对外完全呈现高阻，作为输入端口，外部数据通过U6进入内部总线，情况如图 22所示。（相当于将推挽输出的两个MOS管全部断开了）此时由于对外呈现高阻，所以是真正的输入引脚。这就解释了为什么说P0是真正的双线端口。</p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-22.jpg" alt="220426-GPIO输入输出各种模式-22.jpg"></p>
+<p><strong>P0用于普通IO时：</strong></p>
+<p>在P0作为普通IO并作为输出时，控制信号为0，使V1始终处于截止状态。模拟开关连接到Q非输出，当作为输出时，锁存器的输入端直接输入0或者1，Q非将反相信号输入到V2的输入端。即当输出”0”时，V2输入端为”1”，V2导通，pin输出”0”；当输出”1”时，V2输入端为”0”，V2截止，pin输出高阻的0。即当P0工作在普通IO模式下，输出为开漏输出，且内部没有上拉电阻。</p>
+<p>在P0作为普通IO并作为输入时，控制信号为0，使V1始终处于截止状态。模拟开关连接到Q非输出，且CPU自动向锁存器输入端写1，则V2输入端为0，V2截止。与之前在作为地址/数据线，作为输入时一样，也是两个MOS管全部断开，pin直接连接到U6，对外呈现高阻。于是也是真正的输入引脚。</p>
+<p>综上P0无论工作在哪种模式下都是真正的双端口IO。</p>
+<h3 id="51单片机的P1～P3端口"><a href="#51单片机的P1～P3端口" class="headerlink" title="51单片机的P1～P3端口"></a>51单片机的P1～P3端口</h3><p>51单片机的其他三个端口的内部结构如图 23所示，与P0相比简单了很多，没有了顶部的MOS管，也没有了地址/数据信号的选项。作为输出时是带有上拉电阻的的开漏输出，作为输入时是有上拉电阻存在的，于是输入端口对外不是高阻。这就解释了为什么P1～P3只能是准双向端口。</p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-23.jpg" alt="220426-GPIO输入输出各种模式-23.jpg"></p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/04/04/220404-C%E7%9A%84%E7%96%91%E6%83%91/" rel="prev" title="C/C++中几个易混淆的点">
+      <i class="fa fa-chevron-left"></i> C/C++中几个易混淆的点
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A3%B0%E6%98%8E"><span class="nav-number">1.</span> <span class="nav-text">声明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%85%A5IO"><span class="nav-number">2.</span> <span class="nav-text">输入IO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%87%BAIO"><span class="nav-number">3.</span> <span class="nav-text">输出IO</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A8%E6%8C%BD%E8%BE%93%E5%87%BA%EF%BC%88Push-Pull-Output%EF%BC%89"><span class="nav-number">3.1.</span> <span class="nav-text">推挽输出（Push-Pull Output）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%80%E6%BC%8F%E8%BE%93%E5%87%BA%EF%BC%88Open-Drain-Output%EF%BC%89"><span class="nav-number">3.2.</span> <span class="nav-text">开漏输出（Open Drain Output）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A8%E6%8C%BD%E4%B8%8E%E5%BC%80%E6%BC%8F%E8%BE%93%E5%87%BA%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">3.3.</span> <span class="nav-text">推挽与开漏输出的区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8C%E5%90%91IO"><span class="nav-number">4.</span> <span class="nav-text">双向IO</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8C%E5%90%91%E5%BC%80%E6%BC%8FIO"><span class="nav-number">4.1.</span> <span class="nav-text">双向开漏IO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%86%E5%8F%8C%E5%90%91%E5%BC%80%E6%BC%8FIO"><span class="nav-number">4.2.</span> <span class="nav-text">准双向开漏IO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A8%E6%8C%BD%E8%BE%93%E5%87%BA%E4%BD%9C%E4%B8%BA%E5%8F%8C%E5%90%91IO"><span class="nav-number">4.3.</span> <span class="nav-text">推挽输出作为双向IO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#51%E5%8D%95%E7%89%87%E6%9C%BA%E7%9A%84P0%E7%AB%AF%E5%8F%A3"><span class="nav-number">4.4.</span> <span class="nav-text">51单片机的P0端口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#51%E5%8D%95%E7%89%87%E6%9C%BA%E7%9A%84P1%EF%BD%9EP3%E7%AB%AF%E5%8F%A3"><span class="nav-number">4.5.</span> <span class="nav-text">51单片机的P1～P3端口</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Hao</p>
+  <div class="site-description" itemprop="description">保持热爱，奔赴山海。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hao</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
