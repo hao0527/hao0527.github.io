@@ -157,6 +157,231 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/12/220512-Git%E5%92%8CSVN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/12/220512-Git%E5%92%8CSVN/" class="post-title-link" itemprop="url">Git和SVN</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-12 21:00:00" itemprop="dateCreated datePublished" datetime="2022-05-12T21:00:00+08:00">2022-05-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-05-13 00:12:20" itemprop="dateModified" datetime="2022-05-13T00:12:20+08:00">2022-05-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="Git和SVN"><a href="#Git和SVN" class="headerlink" title="Git和SVN"></a>Git和SVN</h3><p>公司里常用的两种版本控制工具：Git和SVN，两者最大的区别就是Git是分布式，SVN是集中式。<strong>集中式</strong>的版本控制系统都有一个单一的集中管理的服务器，保存所有文件的修订版本，而协同工作的人们都通过客户端连到这台服务器，取出最新的文件或者提交更新。 <strong>分布式</strong>的版本控制系统都有一个单一的集中管理的服务器，保存所有文件的修订版本，而协同工作的人们在自己本地也会创建一个库，用于保存自己的修改与提交，之后再将自己库提交至服务器库进行更新。</p>
+<p><strong>Subversion的特点概括起来主要由以下几条：</strong></p>
+<ul>
+<li>每个版本库有唯一的URL（官方地址），每个用户都从这个地址获取代码和数据；</li>
+<li>获取代码的更新，也只能连接到这个唯一的版本库，同步以取得最新数据；</li>
+<li>提交必须有网络连接（非本地版本库）；</li>
+<li>提交需要授权，如果没有写权限，提交会失败；</li>
+<li>提交并非每次都能够成功。如果有其他人先于你提交，会提示“改动基于过时的版本，先更新再提交”… 诸如此类；</li>
+<li>冲突解决是一个提交速度的竞赛：手快者，先提交，平安无事；手慢者，后提交，可能遇到麻烦的冲突解决；</li>
+</ul>
+<p><strong>Git具有以下特点：</strong></p>
+<ul>
+<li>Git中每个克隆(clone)的版本库都是平等的。你可以从任何一个版本库的克隆来创建属于你自己的版本库，同时你的版本库也可以作为源提供给他人，只要你愿意；</li>
+<li>Git的每一次提取操作，实际上都是一次对代码仓库的完整备份；</li>
+<li>提交完全在本地完成，无须别人给你授权，你的版本库你作主，并且提交总是会成功；</li>
+<li>甚至基于旧版本的改动也可以成功提交，提交会基于旧的版本创建一个新的分支；</li>
+<li>Git的提交不会被打断，直到你的工作完全满意了，PUSH给他人或者他人PULL你的版本库，合并会发生在PULL和PUSH过程中，不能自动解决的冲突会提示您手工完成；</li>
+<li>冲突解决不再像是SVN一样的提交竞赛，而是在需要的时候才进行合并和冲突解决；</li>
+<li>Git 也可以模拟集中式的工作模式，Git版本库统一放在服务器中，Git 的集中式工作模式非常灵活；</li>
+<li>可以为 Git 版本库进行授权：谁能创建版本库，谁能向版本库PUSH，谁能够读取（克隆）版本库;</li>
+<li>团队的成员先将服务器的版本库克隆到本地；并经常的从服务器的版本库拉（PULL）最新的更新；</li>
+<li>团队的成员将自己的改动推（PUSH）到服务器的版本库中，当其他人和版本库同步（PULL）时，会自动获取改变；</li>
+<li>你完全可以在脱离Git服务器所在网络的情况下，如移动办公或出差时，照常使用代码库；</li>
+<li>你只需要在能够接入Git服务器所在网络时，PULL和PUSH即可完成和服务器同步以及提交；</li>
+<li>Git提供 rebase 命令，可以让你的改动看起来是基于最新的代码实现的改动；</li>
+<li>Git 有更多的工作模式可以选择，远非 Subversion可比；</li>
+<li>Git 分支是指针指向某次提交，而 SVN 分支是拷贝的目录，这个特性使 Git 的分支切换非常迅速，且创建成本非常低；</li>
+</ul>
+<h3 id="Git基本概念和常用命令"><a href="#Git基本概念和常用命令" class="headerlink" title="Git基本概念和常用命令"></a>Git基本概念和常用命令</h3><ul>
+<li><strong>工作区：</strong>就是你在电脑里能看到的目录。</li>
+<li><strong>暂存区：</strong>英文叫 stage 或 index。一般存放在 <strong>.git</strong> 目录下的 index 文件（.git/index）中，所以我们把暂存区有时也叫作索引（index）。</li>
+<li><strong>版本库：</strong>工作区有一个隐藏目录 <strong>.git</strong>，这个不算工作区，而是 Git 的版本库，版本库可分为远程仓库和本地仓库。<br><img src="/2022/05/12/220512-Git%E5%92%8CSVN/220512-Git%E5%92%8CSVN-1.jpg" alt="220512-Git和SVN-1.jpg"></li>
+</ul>
+<p>Git 常用的是以下 6 个命令：<strong>git clone</strong>、<strong>git push</strong>、<strong>git add</strong> 、<strong>git commit</strong>、<strong>git checkout</strong>、<strong>git pull</strong><br><img src="/2022/05/12/220512-Git%E5%92%8CSVN/220512-Git%E5%92%8CSVN-2.jpg" alt="220512-Git和SVN-2.jpg"></p>
+<p> git 创建仓库的命令：</p>
+<table>
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>git init</code></td>
+<td align="left">初始化仓库</td>
+</tr>
+<tr>
+<td align="left"><code>git clone</code></td>
+<td align="left">拷贝一份远程仓库，也就是下载一个项目。</td>
+</tr>
+</tbody></table>
+<p>提交与修改的命令：</p>
+<table>
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>git add</code></td>
+<td align="left">添加文件到暂存区</td>
+</tr>
+<tr>
+<td align="left"><code>git status</code></td>
+<td align="left">查看仓库当前的状态，显示有变更的文件。</td>
+</tr>
+<tr>
+<td align="left"><code>git diff</code></td>
+<td align="left">比较文件的不同，即暂存区和工作区的差异。</td>
+</tr>
+<tr>
+<td align="left"><code>git commit</code></td>
+<td align="left">提交暂存区到本地仓库。</td>
+</tr>
+<tr>
+<td align="left"><code>git reset</code></td>
+<td align="left">回退版本。</td>
+</tr>
+<tr>
+<td align="left"><code>git rm</code></td>
+<td align="left">删除工作区文件。</td>
+</tr>
+<tr>
+<td align="left"><code>git mv</code></td>
+<td align="left">移动或重命名工作区文件。</td>
+</tr>
+</tbody></table>
+<p>提交日志的命令：</p>
+<table>
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>git log</code></td>
+<td align="left">查看历史提交记录</td>
+</tr>
+<tr>
+<td align="left"><code>git blame </code></td>
+<td align="left">以列表形式查看指定文件的历史修改记录</td>
+</tr>
+</tbody></table>
+<p>远程操作的命令：</p>
+<table>
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>git remote</code></td>
+<td align="left">远程仓库操作</td>
+</tr>
+<tr>
+<td align="left"><code>git fetch</code></td>
+<td align="left">从远程获取代码库</td>
+</tr>
+<tr>
+<td align="left"><code>git pull</code></td>
+<td align="left">下载远程代码并合并</td>
+</tr>
+<tr>
+<td align="left"><code>git push</code></td>
+<td align="left">上传远程代码并合并</td>
+</tr>
+</tbody></table>
+<p>Git 分支管理：<a target="_blank" rel="noopener" href="https://www.runoob.com/git/git-branch.html">https://www.runoob.com/git/git-branch.html</a><br>Git 查看提交历史：<a target="_blank" rel="noopener" href="https://www.runoob.com/git/git-commit-history.html">https://www.runoob.com/git/git-commit-history.html</a><br>Git 标签：<a target="_blank" rel="noopener" href="https://www.runoob.com/git/git-tag.html">https://www.runoob.com/git/git-tag.html</a><br>更多命令查看Git完整命令手册地址：<a target="_blank" rel="noopener" href="http://git-scm.com/docs">http://git-scm.com/docs</a></p>
+<h3 id="Tortoise-SVN"><a href="#Tortoise-SVN" class="headerlink" title="Tortoise SVN"></a>Tortoise SVN</h3><p>SVN教程：<a target="_blank" rel="noopener" href="https://www.runoob.com/svn/svn-tutorial.html">https://www.runoob.com/svn/svn-tutorial.html</a></p>
+<p>TortoiseSVN 是 SVN(Subversion) 版本控制系统的一个免费开源客户端，可以超越时间的管理文件和目录。TortoiseSVN 使用教程：<a target="_blank" rel="noopener" href="https://www.runoob.com/svn/tortoisesvn-intro.html">https://www.runoob.com/svn/tortoisesvn-intro.html</a></p>
+<p>企业通常是使用TortoiseSVN提供的图像化界面操作，使用较简单。Windows的Git提供了GitGUI，也可以使用TortoiseGit，配置参数也有图形化界面，之前实习的一家公司就是 TortoiseGit 和 TortoiseSVN 。</p>
+<h3 id="版本管控工具分支管理"><a href="#版本管控工具分支管理" class="headerlink" title="版本管控工具分支管理"></a>版本管控工具分支管理</h3><h4 id="SVN分支管理策略"><a href="#SVN分支管理策略" class="headerlink" title="SVN分支管理策略"></a>SVN分支管理策略</h4><ul>
+<li>truck (主干|主线|主分支)：是用来做主方向开发的，新功能的开发应放在主线中，当模块开发完成后，需要修改，就用branch。</li>
+<li>branches(分支)：分支开发和主线开发是可以同时进行的，也就是并行开发，分支通常用于修复bug时使用。</li>
+<li>tags (标记)：用于标记某个可用的版本，可以标记已经上线发布的版本，也可以标记正在测试的版本，通常是只读的。</li>
+</ul>
+<p>branch是用来做并行开发的，这里的并行是指和trunk进行比较。比如，3.0开发完成，这个时候要做一个tag，tag_release_3_0，然后基于这个tag做release，比如安装程序等。trunk进入3.1的开发，但是3.0发现了bug，那么就需要基于tag_release_3_0做一个branch，branch_bugfix_3_0，基于这个branch进行bugfix，等到bugfix结束，做一个tag，tag_release_3_0_1，然后，根据需要决定branch_bugfix_3_0是否并入trunk。</p>
+<h4 id="Git分支管理策略"><a href="#Git分支管理策略" class="headerlink" title="Git分支管理策略"></a>Git分支管理策略</h4><p><strong>Git Flow模型</strong>中定义了主分支和辅助分支两类分支。其中主分支用于组织与软件开发、部署相关的活动，辅助分支组织用于解决特定的问题而进行的各种开发活动。Git Flow开发模型从源代码管理角度对通常意义上的软件开发活动进行了约束，为软件开发提供了一个可供参考的管理模型。Git Flow开发模型让代码仓库保持整洁，让小组各个成员之间的开发相互隔离，能够有效避免处于开发状态中的代码相互影响而导致的效率低下和混乱。</p>
+<p>Git Flow模型的特点是只有2个主干分支，Master和Develop分支：Master分支上只有稳定的生产版本，Develop分支用于集成。其中还涉及到HotFix分支。而其他还有三类分支：Feature分支用于开发人员各自开发；Release用于代码合并和集成；HotFix用于产品版本代码的紧急修订。</p>
+<p><strong>master分支</strong>通常只能从其它分支合并，不能在master分支直接修改。master分支上存放的是随时可供在生产环境中部署的代码（Production Ready state）。当开发活动到一定阶段，产生一份新的可供部署的代码时，master分支上的代码会被更新。同时，每一次更新，最好添加对应的版本号标签（TAG），所有在Master分支上的Commit应该打Tag。</p>
+<p><strong>develop分支</strong>是保持当前开发最新成果的分支，一般会在此分支上进行晚间构建（Nightly Build）并执行自动化测试。develop分支产生于master分支, 并长期存在。当一个版本功能开发完毕且通过测试功能稳定时，就会合并到master分支上，并打好带有相应版本号的tag。develop分支是主开发分支，包含所有要发布到下一个Release的代码，主要合并其它分支，比如Feature分支。</p>
+<p><strong>辅助分支</strong>是用于组织解决特定问题的各种软件开发活动的分支。辅助分支主要用于组织软件新功能的并行开发、简化新功能开发代码的跟踪、辅助完成版本发布工作以及对生产代码的缺陷进行紧急修复工作。辅助分支通常只会在有限的时间范围内存在。辅助分支包括用于开发新功能时所使用的feature分支，用于辅助版本发布的release分支，用于修正生产代码中的缺陷的hotfix分支。辅助分支都有固定的使用目的和分支操作限制。通过对分支的命名，定义了使用辅助分支的方法。</p>
+<p><strong>feature分支</strong>可以从develop分支派生。feature分支的命名可以使用除master，develop，release-*，hotfix-*之外的任何名称。feature分支（topic分支）通常在开发一项新的软件功能的时候使用，分支上的代码变更最终合并回develop分支或者干脆被抛弃掉（例如实验性且效果不好的代码变更）。一般而言，feature分支代码可以保存在开发者自己的代码库中而不强制提交到主代码库里。Feature分支开发完成后，必须合并回Develop分支，合并完分支后一般会删feature分支，但也可以保留。</p>
+<p><strong>release分支</strong>可以从develop分支派生。release分支是为发布新的产品版本而设计的。在release分支上的代码允许做测试、bug修改、准备发布版本所需的各项说明信息（版本号、发布时间、编译时间等）。通过在release分支上进行发布相关工作可以让develop分支空闲出来以接受新的feature分支上的代码提交，进入新的软件开发迭代周期。当develop分支上的代码已经包含了所有即将发布的版本中所计划包含的软件功能，并且已通过所有测试时，可以考虑准备创建release分支。而所有在当前即将发布的版本外的业务需求一定要确保不能混到release分支内（避免由此引入一些不可控的系统缺陷）。成功的派生release分支并被赋予版本号后，develop分支就可以为下一个版本服务。版本号的命名可以依据项目定义的版本号命名规则进行。发布Release分支时，合并Release到Master和Develop， 同时在Master分支上打个Tag记住Release版本号，然后就可以删除Release分支。</p>
+<p><strong>hotfix分支</strong>可以从master分支派生。hotfix分支是计划外创建的，可以产生一个新的可供在生产环境部署的软件版本。当生产环境中的软件遇到异常情况或者发现了严重到必须立即修复的软件缺陷时，就需要从master分支上指定的TAG版本派生hotfix分支来组织代码的紧急修复工作。优点是不会打断正在进行的develop分支的开发工作，能够让团队中负责新功能开发的人与负责代码紧急修复的人并行的开展工作。hotfix分支基于Master分支创建，开发完后需要合并回Master和Develop分支，同时在Master上打一个tag。</p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/11/220511-C%E8%AF%AD%E8%A8%80%E9%A2%84%E5%A4%84%E7%90%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1453,116 +1678,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/13/220113-fpga%E4%B9%8Beth/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/13/220113-fpga%E4%B9%8Beth/" class="post-title-link" itemprop="url">FPGA之以太网学习</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-01-13 20:00:00 / 修改时间：20:51:58" itemprop="dateCreated datePublished" datetime="2022-01-13T20:00:00+08:00">2022-01-13</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E7%A1%AC%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">硬件</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="学习视频"><a href="#学习视频" class="headerlink" title="学习视频"></a>学习视频</h3><ul>
-<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV194411f7GD?p=80">【正点原子】手把手教你学FPGA系列视频——以太网通信实验</a></li>
-</ul>
-<h3 id="以太网的介绍"><a href="#以太网的介绍" class="headerlink" title="以太网的介绍"></a>以太网的介绍</h3><h4 id="网络体系结构"><a href="#网络体系结构" class="headerlink" title="网络体系结构"></a>网络体系结构</h4><p><img src="/2022/01/13/220113-fpga%E4%B9%8Beth/220113-fpga%E4%B9%8Beth-1.jpg" alt="220113-fpga之eth-1.jpg"></p>
-<ul>
-<li>物理层：在物理层上所传数据的单位是比特。发送方发送1(或0)时，接收方应当收到1(或0)而不是0 (或1)，因此物理层要考虑用多大的电压代表”1”或”0”，以及接收方如何识别出发送方所发送的比特。物理层还要确定连接电缆的插头应当有多少根引脚以及各引脚应如何连接。当然，解释比特代表的意思，就不是物理层的任务。请注意，传递信息所利用的-些物理媒体，如双绞线、同轴电缆、光缆、无线信道等，并不在物理层协议之内而是在物理层协议的下面。</li>
-<li>数据链路层：数据链路层常简称为链路层。我们知道，两台主机之间的数据传输，总是在一段一段的链路上传送的，这就需要使用专门的链路层的协议。在两个相邻结点之间传送数据时，数据链路层将网络层交下来的IP数据报组装成帧(framing)，在两个相邻结点间的链路上传送帧(frame)，每一帧包括数据和必要的控制信息(如同步信息、地址信息、差错控制等)。在接收数据时，控制信息使接收端能够知道一个帧从哪个比特开始和到哪个比特结·束。这样，数据链路层在收到一个帧后，就可从中提取出数据部分，上交给网络层。控制信息还使接收端能够检测到所收到的帧中有无差错。如发现有差错，数据链路层就简单地丢弃这个出了差错的帧，以免继续在网络中传送下去白白浪费网络资源。如果需要改正数据在数据链路层传输时出现的差错(这就是说，数据链路层不仅要检错，而且要纠错)，那么就要采用可靠传输协议来纠正出现的差错。这种方法会使数据链路层的协议复杂些。</li>
-<li>网络层、运输层、应用层见《计算机网络》书籍；fpga跑eth主要用到了phy层、数据链路mac层、网络层、udp传输层；</li>
-</ul>
-<h4 id="FPGA数据包内容"><a href="#FPGA数据包内容" class="headerlink" title="FPGA数据包内容"></a>FPGA数据包内容</h4><p>下面放出fpga发送的以太网数据包的组层图，图片来自《开拓者FPGA 开发指南V1.3》，相关介绍也可以查看PDF。</p>
-<h5 id="以太网数据包格式"><a href="#以太网数据包格式" class="headerlink" title="以太网数据包格式"></a>以太网数据包格式</h5><p><img src="/2022/01/13/220113-fpga%E4%B9%8Beth/220113-fpga%E4%B9%8Beth-2.jpg" alt="220113-fpga之eth-2.jpg"></p>
-<h5 id="以太网帧格式"><a href="#以太网帧格式" class="headerlink" title="以太网帧格式"></a>以太网帧格式</h5><p><img src="/2022/01/13/220113-fpga%E4%B9%8Beth/220113-fpga%E4%B9%8Beth-3.jpg" alt="220113-fpga之eth-3.jpg"></p>
-<h5 id="IP数据包格式"><a href="#IP数据包格式" class="headerlink" title="IP数据包格式"></a>IP数据包格式</h5><p><img src="/2022/01/13/220113-fpga%E4%B9%8Beth/220113-fpga%E4%B9%8Beth-4.jpg" alt="220113-fpga之eth-4.jpg"></p>
-<h5 id="UDP数据格式"><a href="#UDP数据格式" class="headerlink" title="UDP数据格式"></a>UDP数据格式</h5><p><img src="/2022/01/13/220113-fpga%E4%B9%8Beth/220113-fpga%E4%B9%8Beth-5.jpg" alt="220113-fpga之eth-5.jpg"></p>
-<h4 id="千兆以太网物理层"><a href="#千兆以太网物理层" class="headerlink" title="千兆以太网物理层"></a>千兆以太网物理层</h4><ul>
-<li>下面这个是我开发板图和板上的千兆以太网原理图，设计的非常好，板子上的IO基本上都是等长线。  </li>
-</ul>
-<p><img src="/2022/01/13/220113-fpga%E4%B9%8Beth/220113-fpga%E4%B9%8Beth-6.jpg" alt="220113-fpga之eth-6.jpg"></p>
-<p><img src="/2022/01/13/220113-fpga%E4%B9%8Beth/220113-fpga%E4%B9%8Beth-7.jpg" alt="220113-fpga之eth-7.jpg"></p>
-<ul>
-<li>物理层的设计和学习还有个非常重要的学习资料就是《RTL8211数据手册》，这个手册上竟然写着不对外公布。</li>
-</ul>
-<h3 id="调试过程"><a href="#调试过程" class="headerlink" title="调试过程"></a>调试过程</h3><h4 id="例程修改"><a href="#例程修改" class="headerlink" title="例程修改"></a>例程修改</h4><ul>
-<li>简易的修改了下例程，让udp每次数据包发送1472个字节数据，其中前4字节是包序列号，用于接收端检测是否掉包，其他的1468个字节数据为0x00-0xFF循环，从而更为精确的模仿正常传输时的内容。再通过每次发完控制idle时间来控制传输速率。</li>
-</ul>
-<h4 id="上位机编写"><a href="#上位机编写" class="headerlink" title="上位机编写"></a>上位机编写</h4><ul>
-<li>上位机才用Python编写，在JupyterNotebook里实现。实现原理主要就是一直读udp，再去比较这次的包序列号是不是上一次+1，如果不是的话打印出来。</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line">BUFSIZE = <span class="number">1472</span> * <span class="number">100</span></span><br><span class="line">ip_port = (<span class="string">&#x27;192.168.0.3&#x27;</span>, <span class="number">8080</span>)</span><br><span class="line">server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  <span class="comment"># udp协议</span></span><br><span class="line">server.bind(ip_port)</span><br><span class="line">error = <span class="number">0</span></span><br><span class="line">recv_data_a = server.recvfrom(BUFSIZE)[<span class="number">0</span>][:<span class="number">4</span>]</span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    recv_data_b = server.recvfrom(BUFSIZE)[<span class="number">0</span>][:<span class="number">4</span>]</span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">int</span>.from_bytes(recv_data_b,byteorder=<span class="string">&#x27;big&#x27;</span>,signed=<span class="literal">False</span>) != \</span><br><span class="line">       <span class="built_in">int</span>.from_bytes(recv_data_a,byteorder=<span class="string">&#x27;big&#x27;</span>,signed=<span class="literal">False</span>) + <span class="number">1</span>):</span><br><span class="line">        error += <span class="number">1</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;error:%u, recv_data_a = %u, recv_data_b = %u&quot;</span> \</span><br><span class="line">              %(error, <span class="built_in">int</span>.from_bytes(recv_data_a,byteorder=<span class="string">&#x27;big&#x27;</span>,signed=<span class="literal">False</span>), \</span><br><span class="line">                <span class="built_in">int</span>.from_bytes(recv_data_b,byteorder=<span class="string">&#x27;big&#x27;</span>,signed=<span class="literal">False</span>)))</span><br><span class="line">    recv_data_a = server.recvfrom(BUFSIZE)[<span class="number">0</span>][:<span class="number">4</span>]</span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">int</span>.from_bytes(recv_data_a,byteorder=<span class="string">&#x27;big&#x27;</span>,signed=<span class="literal">False</span>) != \</span><br><span class="line">       <span class="built_in">int</span>.from_bytes(recv_data_b,byteorder=<span class="string">&#x27;big&#x27;</span>,signed=<span class="literal">False</span>) + <span class="number">1</span>):</span><br><span class="line">        error += <span class="number">1</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;error:%u, recv_data_b = %u, recv_data_a = %u&quot;</span> \</span><br><span class="line">              %(error, <span class="built_in">int</span>.from_bytes(recv_data_b,byteorder=<span class="string">&#x27;big&#x27;</span>,signed=<span class="literal">False</span>), \</span><br><span class="line">                <span class="built_in">int</span>.from_bytes(recv_data_a,byteorder=<span class="string">&#x27;big&#x27;</span>,signed=<span class="literal">False</span>)))</span><br><span class="line">server.close()</span><br></pre></td></tr></table></figure>
-
-<h4 id="掉包处理"><a href="#掉包处理" class="headerlink" title="掉包处理"></a>掉包处理</h4><ul>
-<li>在100Mbps速率传输的时候，每65536帧传输后都会出现2帧的掉包，通过WireShark查看，能找到那2帧包，也就是说数据包被网卡接收但是在上位机处没有接收。通过WireShark查看整个以太网数据包内容后发现规律：只有在IP数据包的首部校验和为0xFFFF的时候才会出现掉包，百度上也有这样的案例，于是修改FPGA代码，让IP包首部标识位不每次+1，这样校验和就不会出现0XFFFF。</li>
-</ul>
-<h4 id="调试结果"><a href="#调试结果" class="headerlink" title="调试结果"></a>调试结果</h4><ul>
-<li>经过简易测试，当传输速率为200Mbps的时候，不掉包；当传输速率为300Mbps的时候，出现掉包。</li>
-</ul>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
-<li>本次调试，学习了网络5层模型的物理层和MAC层，通过亲自实践解决出现的问题，对网络的底层实现有了更清楚的认识，对日后学习Linux驱动开发的网络部分会有极大的帮助，以及我的毕设，udp传输图像只是其中的一小部分，如果有时间，我会做个更复杂题目，学习更多的网络知识（大学只学了物联网和网络相关，计网没学）。</li>
-</ul>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1632,7 +1747,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-count">39</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

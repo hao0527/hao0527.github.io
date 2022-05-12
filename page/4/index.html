@@ -157,6 +157,105 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/" class="post-title-link" itemprop="url">十六届智能车基础四轮方案</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-05-17 20:00:00" itemprop="dateCreated datePublished" datetime="2021-05-17T20:00:00+08:00">2021-05-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-06-11 14:59:39" itemprop="dateModified" datetime="2021-06-11T14:59:39+08:00">2021-06-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%99%BA%E8%83%BD%E8%BD%A6/" itemprop="url" rel="index"><span itemprop="name">智能车</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>不会吧，不会吧，我又参加飞卡了？</p>
+<h3 id="基础四轮组规则"><a href="#基础四轮组规则" class="headerlink" title="基础四轮组规则"></a>基础四轮组规则</h3><ul>
+<li><p>车模：B车模，车模宽度不超过25厘米，高度不超过20厘米，长度没有限制，如果安装摄像头传感器，摄像头镜片中心的高度距离地面不超过10厘米</p>
+</li>
+<li><p>MCU：指定使用 Infineon系列单片机，允许使用各类电磁、红外光电、摄像头、激光、超声传感器</p>
+</li>
+<li><p>赛道元素：进出库、三岔路口（进出口120°，路口间直线距离&lt;3m）、环岛（R&lt;0.5m）、坡道（坡度&lt;=20°）、十字路口（需直行）、弯道（曲率半径&lt;0.5m）</p>
+</li>
+</ul>
+<h3 id="电机驱动"><a href="#电机驱动" class="headerlink" title="电机驱动"></a>电机驱动</h3><p>IR2184老方案，B车电机比较猛，可能有11.7A，试一下加RDC释放电路来提高刹车性能</p>
+<p><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-%E9%A3%9E%E5%8D%A1-1.jpg" alt="210517-飞卡-1.jpg"></p>
+<p><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-%E9%A3%9E%E5%8D%A1-2.jpg" alt="210517-飞卡-2.jpg"></p>
+<ul>
+<li><input checked disabled type="checkbox"> 电机驱动加上ina240测电机电流(21.6.11前)</li>
+</ul>
+<p><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-%E9%A3%9E%E5%8D%A1-7.jpg" alt="210517-飞卡-7.jpg"></p>
+<p><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-%E9%A3%9E%E5%8D%A1-8.jpg" alt="210517-飞卡-8.jpg"></p>
+<p>（21.6.11）程序员通过电机反转来刹车，未加驱动死区时间，导致锂电池保护板保护。</p>
+<h3 id="电磁运放"><a href="#电磁运放" class="headerlink" title="电磁运放"></a>电磁运放</h3><p>采用逐飞方案，opa4377，单端放大，检波，二极管使用了压降小的肖特基二极管</p>
+<p><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-%E9%A3%9E%E5%8D%A1-3.jpg" alt="210517-飞卡-3.jpg"></p>
+<p><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-%E9%A3%9E%E5%8D%A1-4.jpg" alt="210517-飞卡-4.jpg"></p>
+<h3 id="tc377主控"><a href="#tc377主控" class="headerlink" title="tc377主控"></a>tc377主控</h3><p>考虑到DC-DC负载响应速率不如LDO，继续使用LM1084-ADJ给舵机供6.3v电<br><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-%E9%A3%9E%E5%8D%A1-5.jpg" alt="210517-飞卡-5.jpg"><br><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-%E9%A3%9E%E5%8D%A1-6.jpg" alt="210517-飞卡-6.jpg"></p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/14/210514-stack/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1049,7 +1148,7 @@
 <h3 id="Hexo-Github部署"><a href="#Hexo-Github部署" class="headerlink" title="Hexo Github部署"></a>Hexo Github部署</h3><ol>
 <li>安装hexo-deployer-git插件 ‘cnpm install –save hexo-deployer-git’</li>
 <li>git添加SSHKey</li>
-<li>blog文件夹中_config.yml配置hexo-deployer-git插件<br> type: git<br> repo: <a href="mailto:&#x67;&#105;&#116;&#x40;&#103;&#x69;&#x74;&#x68;&#117;&#98;&#x2e;&#x63;&#111;&#x6d;">&#x67;&#105;&#116;&#x40;&#103;&#x69;&#x74;&#x68;&#117;&#98;&#x2e;&#x63;&#111;&#x6d;</a>:hao0527/hao0527.github.io.git<br> branch: main</li>
+<li>blog文件夹中_config.yml配置hexo-deployer-git插件<br> type: git<br> repo: <a href="mailto:&#x67;&#105;&#x74;&#x40;&#x67;&#105;&#116;&#x68;&#x75;&#x62;&#x2e;&#99;&#111;&#109;">&#x67;&#105;&#x74;&#x40;&#x67;&#105;&#116;&#x68;&#x75;&#x62;&#x2e;&#99;&#111;&#109;</a>:hao0527/hao0527.github.io.git<br> branch: main</li>
 <li>hexo g 编译<br> hexo d 发布到Github</li>
 <li>每次发布会GithubPages的Custom domain都会被删除，在本地source文件夹中添加CNAME文件，内容写自定义域名就行</li>
 </ol>
@@ -1138,7 +1237,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-count">39</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
