@@ -20,19 +20,22 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="遇到问题今天用STM32CubeMX生成了代码，使用printf函数后单片机程序运行异常，查出是STM32CubeMX生成的代码没有printf的重定向，百度查了两个方法后两个都行不通，最后参考正点原子例程解决。 参考 错误参考：一知半解学CubeMX——UART：Printf实现  正确参考：正点原子例程SYSTEM文件夹下的usart.c 123456789101112131415161718">
+  <meta name="description" content="交叉编译简介交叉编译，是一个和本地编译相对应的概念，交叉编译通俗地讲就是一种平台上编译出的程序能够运行在不同体系结构的平台上，比如在PC平台（X86 CPU）上编译出能运行在ARM CPU的程序。 使用交叉编译的原因主要原因是：嵌入式系统中的资源太少。具体的解释就是：所要运行的目标环境中，各种资源，都相对有限，所以很难进行直接的本地编译。嵌入式开发板的CPU、RAM、Falsh等硬件资源相对比较紧">
 <meta property="og:type" content="article">
-<meta property="og:title" content="在Keil中重定向printf">
-<meta property="og:url" content="http://example.com/2021/08/21/210821-%E9%87%8D%E5%AE%9A%E5%90%91printf/index.html">
+<meta property="og:title" content="交叉编译工具链的使用">
+<meta property="og:url" content="http://example.com/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/index.html">
 <meta property="og:site_name" content="永恆博客网">
-<meta property="og:description" content="遇到问题今天用STM32CubeMX生成了代码，使用printf函数后单片机程序运行异常，查出是STM32CubeMX生成的代码没有printf的重定向，百度查了两个方法后两个都行不通，最后参考正点原子例程解决。 参考 错误参考：一知半解学CubeMX——UART：Printf实现  正确参考：正点原子例程SYSTEM文件夹下的usart.c 123456789101112131415161718">
+<meta property="og:description" content="交叉编译简介交叉编译，是一个和本地编译相对应的概念，交叉编译通俗地讲就是一种平台上编译出的程序能够运行在不同体系结构的平台上，比如在PC平台（X86 CPU）上编译出能运行在ARM CPU的程序。 使用交叉编译的原因主要原因是：嵌入式系统中的资源太少。具体的解释就是：所要运行的目标环境中，各种资源，都相对有限，所以很难进行直接的本地编译。嵌入式开发板的CPU、RAM、Falsh等硬件资源相对比较紧">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-08-21T07:00:00.000Z">
-<meta property="article:modified_time" content="2021-08-21T11:32:10.239Z">
+<meta property="og:image" content="http://example.com/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-1.jpg">
+<meta property="og:image" content="http://example.com/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-2.jpg">
+<meta property="article:published_time" content="2022-05-21T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-05-22T15:35:24.533Z">
 <meta property="article:author" content="Hao">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-1.jpg">
 
-<link rel="canonical" href="http://example.com/2021/08/21/210821-%E9%87%8D%E5%AE%9A%E5%90%91printf/">
+<link rel="canonical" href="http://example.com/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/">
 
 
 <script id="page-configurations">
@@ -45,7 +48,7 @@
   };
 </script>
 
-  <title>在Keil中重定向printf | 永恆博客网</title>
+  <title>交叉编译工具链的使用 | 永恆博客网</title>
   
 
 
@@ -160,7 +163,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/21/210821-%E9%87%8D%E5%AE%9A%E5%90%91printf/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -173,7 +176,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          在Keil中重定向printf
+          交叉编译工具链的使用
         </h1>
 
         <div class="post-meta">
@@ -184,7 +187,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-08-21 15:00:00 / 修改时间：19:32:10" itemprop="dateCreated datePublished" datetime="2021-08-21T15:00:00+08:00">2021-08-21</time>
+              <time title="创建时间：2022-05-22 00:00:00 / 修改时间：23:35:24" itemprop="dateCreated datePublished" datetime="2022-05-22T00:00:00+08:00">2022-05-22</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -211,27 +214,21 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h3 id="遇到问题"><a href="#遇到问题" class="headerlink" title="遇到问题"></a>遇到问题</h3><p>今天用STM32CubeMX生成了代码，使用printf函数后单片机程序运行异常，查出是STM32CubeMX生成的代码没有printf的重定向，百度查了两个方法后两个都行不通，最后参考正点原子例程解决。</p>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
-<li><p>错误参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/xukao5671927/article/details/78485537">一知半解学CubeMX——UART：Printf实现</a></p>
-</li>
-<li><p>正确参考：正点原子例程SYSTEM文件夹下的usart.c</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//加入以下代码,支持printf函数,而不需要选择use MicroLIB</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> 1</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> import(__use_no_semihosting)</span></span><br><span class="line"><span class="comment">//标准库需要的支持函数</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> __<span class="title">FILE</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="keyword">int</span> handle;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">FILE __stdout;</span><br><span class="line"><span class="comment">//定义_sys_exit()以避免使用半主机模式</span></span><br><span class="line"><span class="keyword">void</span> _sys_exit(<span class="keyword">int</span> x)</span><br><span class="line">&#123;</span><br><span class="line">	x = x;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//重定义fputc函数</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fputc</span><span class="params">(<span class="keyword">int</span> ch, FILE *f)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">while</span>((USART1-&gt;SR&amp;<span class="number">0X40</span>)==<span class="number">0</span>);<span class="comment">//循环发送,直到发送完毕</span></span><br><span class="line">	USART1-&gt;DR = (u8) ch;</span><br><span class="line">	<span class="keyword">return</span> ch;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ol>
-<li>要注意重定向的函数名是<code>int __io_putchar(int ch)</code>还是<code>int fputc(int ch, FILE *f)</code></li>
-</ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __GNUC__</span></span><br><span class="line">  <span class="comment">/* With GCC/RAISONANCE, small printf (option LD Linker-&gt;Libraries-&gt;Small printf set to &#x27;Yes&#x27;) calls __io_putchar() */</span></span><br><span class="line">  <span class="meta">#<span class="meta-keyword">define</span> PUTCHAR_PROTOTYPE int __io_putchar(int ch)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line">  <span class="meta">#<span class="meta-keyword">define</span> PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">/* __GNUC__ */</span></span></span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li><p>CubeMX生成的代码没有勾选Use MicroLib，可能需要勾选，可以看<a target="_blank" rel="noopener" href="https://www.cnblogs.com/zyqgold/p/6114637.html">Keil中的USE MicroLib说明</a>，MicroLib不支持操作系统函数。</p>
-</li>
-<li><p>Unix系统里，每行结尾只有“&lt;换行&gt;”，即”\n”；</p>
-<p>Windows系统里面，每行结尾是“&lt;回车&gt;&lt;换行&gt;”，即“\r\n”；</p>
-<p>Mac系统里，每行结尾是“&lt;回车&gt;”，即”\r”；</p>
-<p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/liewen_/article/details/89673402">\r,\n,\r\n的区别：回车与换行</a></p>
-</li>
-</ol>
+        <h2 id="交叉编译简介"><a href="#交叉编译简介" class="headerlink" title="交叉编译简介"></a>交叉编译简介</h2><p>交叉编译，是一个和本地编译相对应的概念，交叉编译通俗地讲就是一种平台上编译出的程序能够运行在不同体系结构的平台上，比如在PC平台（X86 CPU）上编译出能运行在ARM CPU的程序。</p>
+<h2 id="使用交叉编译的原因"><a href="#使用交叉编译的原因" class="headerlink" title="使用交叉编译的原因"></a>使用交叉编译的原因</h2><p>主要原因是：嵌入式系统中的资源太少。具体的解释就是：所要运行的目标环境中，各种资源，都相对有限，所以很难进行直接的本地编译。嵌入式开发板的CPU、RAM、Falsh等硬件资源相对比较紧张，在已经运行了嵌入式Linux的前提下，没法方便的进行本地编译。因为编译，开发，都需要相对比较多的CPU，内存，硬盘等资源，而嵌入式开发上的资源，只够嵌入式（Linux）系统运行的，没太多剩余的资源，供你本地编译。</p>
+<h2 id="交叉编译工具链组成"><a href="#交叉编译工具链组成" class="headerlink" title="交叉编译工具链组成"></a>交叉编译工具链组成</h2><p>常用交叉编译工具有交叉编译器、交叉连接器、交叉解释器还有交叉ELF文件工具、交叉反汇编器等工具。交叉编译工具链主要由binutils、gcc和glibc三个部分组成。有时出于减小 libc 库大小的考虑，也可以用别的 c 库来代替 glibc，例如 uClibc、dietlibc 和 newlib。</p>
+<p>编译器能将我们编写的语言转成计算机可以识别的机器语言，解释器能够执行用其他计算机语言编写的程序的系统软件，它是一种翻译程序，转换一行，运行一行，再转换一行，再运行一行。<strong>解释性</strong>语言：Python，JavaScript，<strong>编译性</strong>语言：Java，c，c++。</p>
+<h2 id="交叉工具链命名规则"><a href="#交叉工具链命名规则" class="headerlink" title="交叉工具链命名规则"></a>交叉工具链命名规则</h2><p>交叉编译工具链的命名规则为：arch - vendor - os - (gnu)eabi</p>
+<p>arch – 体系架构，如ARM，MIPS，表示该编译器用于编译哪个目标平台的程序<br>vendor – 工具链提供商，通常是把vendor写成体系架构的值，比如cortex_a8<br>os – 运行编译产生的程序的目标操作系统，一般用linux表示有操作系统，none表示裸系统，uboot编译无os<br>eabi – 嵌入式应用二进制接口（Embedded Application Binary Interface），abi是计算机上的</p>
+<h2 id="编译工具使用（持续更新）"><a href="#编译工具使用（持续更新）" class="headerlink" title="编译工具使用（持续更新）"></a>编译工具使用（持续更新）</h2><p>交叉编译工具使用方法与本地编译工具链基本一样，只是命名不同。</p>
+<h3 id="gcc"><a href="#gcc" class="headerlink" title="gcc"></a>gcc</h3><p>Linux系统下的GCC编译器实际上是GNU编译工具链中的一款软件，可以用它来调用其他不同的工具进行诸如预处理、编译、汇编和链接这样的工作。gcc编译器从拿到一个c源文件到生成一个可执行程序，中间一共经历了四个步骤：</p>
+<p><img src="/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-1.jpg" alt="220522-交叉编译工具链-1.jpg"></p>
+<h3 id="ld"><a href="#ld" class="headerlink" title="ld"></a>ld</h3><p>ld是GNU操作系统上的连接器，把二进制文件连接成可执行文件。<strong>ELF文件</strong>可用于程序的链接，重定位目标文件。用于链接的ELF文件格式：</p>
+<p><img src="/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-2.jpg" alt="220522-交叉编译工具链-2.jpg"></p>
+<p>从编译和链接角度看ELF文件<strong>ELF头</strong>，每个ELF文件都必须存在一个ELF_Header，这里存放了很多重要的信息用来<strong>描述整个文件的组织</strong>，如：版本信息、入口信息、偏移信息等，程序执行也必须依靠其提供的信息。</p>
+<p><strong>段头表</strong>，存放的是所有<strong>不同段将在内存中的位置</strong>。代码段.text section，存放已编译程序的机器代码，一般是只读的。只读数据段.rodata section，此段的数据不可修改，存放常量。数据段.data section，存放已初始化的全局变量。.bss section，未初始化全局变量，仅是占位符，不占据任何实际磁盘空间，目标文件格式区分初始化和非初始化是为了空间效率。</p>
+<p>符号表.symtab section，它存放在程序中定义和引用的函数和全局变量的信息。.text节的重定位信息.rel.txt section，用于重新修改代码段的指令中的地址信息。.data节的重定位信息.rel.data section，用于对被模块使用或定义的全局变量进行重定位的信息。调试用的符号表.debug section。.strtab section，包含symtab和debug节中符号及节名。.line section，存储调试的行号信息，描述源代码和机器码之间的对应关系。</p>
+<p>ELF(Executable and Linkable Format)的完整描述，可以参考这个文档 - <a target="_blank" rel="noopener" href="http://www.uclibc.org/docs/elf-64-gen.pdf">这里</a></p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
     </div>
 
@@ -247,13 +244,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/08/09/210809-%E4%BF%A1%E5%8F%B7%E5%AE%8C%E6%95%B4%E6%80%A7%E4%B8%8E%E7%94%B5%E6%BA%90%E5%AE%8C%E6%95%B4%E6%80%A7%E5%88%86%E6%9E%90/" rel="prev" title="《信号完整性与电源完整性分析》">
-      <i class="fa fa-chevron-left"></i> 《信号完整性与电源完整性分析》
+    <a href="/2022/05/12/220512-Git%E5%92%8CSVN/" rel="prev" title="Git和SVN">
+      <i class="fa fa-chevron-left"></i> Git和SVN
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/08/31/210831-esp32%E4%BC%A0%E8%BE%93%E6%B5%8B%E8%AF%95/" rel="next" title="esp32开发板传输速率测试">
-      esp32开发板传输速率测试 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -312,7 +306,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%87%E5%88%B0%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">遇到问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">2.</span> <span class="nav-text">参考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">3.</span> <span class="nav-text">注意事项</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">交叉编译简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="nav-number">2.</span> <span class="nav-text">使用交叉编译的原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE%E7%BB%84%E6%88%90"><span class="nav-number">3.</span> <span class="nav-text">交叉编译工具链组成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%A4%E5%8F%89%E5%B7%A5%E5%85%B7%E9%93%BE%E5%91%BD%E5%90%8D%E8%A7%84%E5%88%99"><span class="nav-number">4.</span> <span class="nav-text">交叉工具链命名规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8%EF%BC%88%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%EF%BC%89"><span class="nav-number">5.</span> <span class="nav-text">编译工具使用（持续更新）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gcc"><span class="nav-number">5.1.</span> <span class="nav-text">gcc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ld"><span class="nav-number">5.2.</span> <span class="nav-text">ld</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
