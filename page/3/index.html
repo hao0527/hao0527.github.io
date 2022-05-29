@@ -157,6 +157,108 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/31/210831-esp32%E4%BC%A0%E8%BE%93%E6%B5%8B%E8%AF%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/08/31/210831-esp32%E4%BC%A0%E8%BE%93%E6%B5%8B%E8%AF%95/" class="post-title-link" itemprop="url">esp32开发板传输速率测试</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-31 16:00:00" itemprop="dateCreated datePublished" datetime="2021-08-31T16:00:00+08:00">2021-08-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-09-28 19:47:28" itemprop="dateModified" datetime="2021-09-28T19:47:28+08:00">2021-09-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/esp32/" itemprop="url" rel="index"><span itemprop="name">esp32</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="程序框架和环境"><a href="#程序框架和环境" class="headerlink" title="程序框架和环境"></a>程序框架和环境</h3><ul>
+<li>esp32的程序是通过esp-idf框架开发</li>
+<li>esp32做Server，电脑做Client，手机热点AP</li>
+<li>esp32使用外置天线更加稳定，但速率没有明显提升</li>
+</ul>
+<h3 id="TCP-Server"><a href="#TCP-Server" class="headerlink" title="TCP-Server"></a>TCP-Server</h3><ul>
+<li>编译优化-O2，速率可从最高500KB/s提升到800KB/s</li>
+<li>TCP传输错误会重传，有问题的时候速率会下降到100KB/s以下</li>
+<li>应用在640*320分辨率的25帧JPEG图传不稳定</li>
+</ul>
+<h3 id="UDP-Server"><a href="#UDP-Server" class="headerlink" title="UDP-Server"></a>UDP-Server</h3><ul>
+<li><p>速度可以达到1MB/s~2MB/s</p>
+</li>
+<li><p>UDP是个不稳定的传输，会有传输错误</p>
+</li>
+<li><p>不适合应用在JPEG图传</p>
+</li>
+</ul>
+<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p><img src="/2021/08/31/210831-esp32%E4%BC%A0%E8%BE%93%E6%B5%8B%E8%AF%95/210831-esp32%E4%BC%A0%E8%BE%93%E6%B5%8B%E8%AF%95-1.jpg" alt="210831-esp32传输测试-1.jpg"></p>
+<ul>
+<li><p>由于本人技术原因，无法达到官方测试的速率，大家使用需要亲自测试后才能做结论，可以参考iperf例程后再进行测试</p>
+</li>
+<li><p>参考：<a target="_blank" rel="noopener" href="https://docs.espressif.com/projects/esp-idf/zh_CN/latest/esp32/index.html">ESP-IDF编程指南</a></p>
+</li>
+</ul>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/21/210821-%E9%87%8D%E5%AE%9A%E5%90%91printf/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -997,141 +1099,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/07/210607-%E6%AF%8F%E6%97%A5%E4%B8%80%E7%BB%83/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/06/07/210607-%E6%AF%8F%E6%97%A5%E4%B8%80%E7%BB%83/" class="post-title-link" itemprop="url">牛客网每日一练</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-06-07 18:00:00" itemprop="dateCreated datePublished" datetime="2021-06-07T18:00:00+08:00">2021-06-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-04-16 14:39:54" itemprop="dateModified" datetime="2022-04-16T14:39:54+08:00">2022-04-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <ol>
-<li><p>（判断题）指针就是地址，因此一个变量的指针就是该变量的地址。<br>答案：错误；解释：指针是个变量，指针的值是个地址，地址是个常量。</p>
-</li>
-<li><p>char* s=”AAA”;<br>s[0]=’B’;    //错误，初始化指针时所创建的字符串常量被定义为只读，修改违法</p>
-</li>
-<li><p><code>char ch;int i;float f;double d;</code><br>表达式：<code>ch/i+(f*d-i)</code>的结果类型为<u>double</u></p>
-</li>
-<li><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">5</span>, b = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> c = <span class="built_in">MAX</span>(++a, b);</span><br><span class="line">    <span class="keyword">int</span> d = <span class="built_in">MAX</span>(++a, b + <span class="number">10</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d %d %d %d\n&quot;</span>, a, b, c, d);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Output： 8 0 7 10<br>解释：注意define，第一次调用MAX时，++a先执行了一次，此时a为6，由于满足宏定义中(a)&gt;(b)的条件，所以执行a，这个a就对应++a，所以a又自增了一次，变为7，由此得出c为7。 第二个MAX时a又自增了一次，此时为8，由于不满足条件，所以执行的是宏定义中的b，没有执行++a，所以a最终为8</p>
-</li>
-<li><p>关于fseek()    参考：<a target="_blank" rel="noopener" href="https://www.runoob.com/cprogramming/c-function-fseek.html">C库函数 - fseek()</a></p>
-</li>
-<li><p>转义字符分三种，一般转义字符，八进制转义字符和十六进制转义字符 </p>
-<p> <strong>一般转义字符</strong>，如‘\b’，由两个字符表示，其实代表一个字符，这个代表退格字符 </p>
-<p> <strong>八进制转义字符</strong>，如‘\007’,三位数字是八进制的，ASCII码为7的表示响铃 </p>
-<p> <strong>十六进制转义字符</strong>，如’\xfe’，同样后面数字是所表示意思的Ascii码的十六进制表示，注意一定要有x，大小写都行</p>
-</li>
-<li><p>在C程序中逗号运算符的优先级最低，赋值运算符其次；j++是属于赋值语句；sizeof()属于一元运算符；</p>
-</li>
-<li><p>C中&amp;&amp;（逻辑与）和&amp;（按位与）</p>
-<ul>
-<li>按位与运用二进制进行计算，逻辑与比较符号两边的真假输出逻辑值。</li>
-<li>按位与对所有的表达式都要判断，逻辑与运算符第一个表达式不成立的话，后面的表达式不运算，直接返回。</li>
-<li>按位与&amp;输出运算结果为不同的数值，逻辑与 &amp;&amp; 输出逻辑值true或者 false。</li>
-</ul>
-</li>
-<li><p>两个指针变量不可以相加，因为指针变量相加没有意义。</p>
-</li>
-<li><p>scanf函数不能指定输入精度，可以指定长度，比如%m.nf是不允许的，但是可以%mf(m为整数)。<code>scanf(&quot;%7.2f&quot;,&amp;a);</code>不合法</p>
-</li>
-<li><p>多态类中的虚函数表建立在编译阶段。对类的编译，内存分布不太了解。</p>
-</li>
-<li><p><code>const int* p</code>是常量指针，<strong>p可以改变，*p不能改变</strong>；<code>int* const p = &amp;a</code>是指针常量，<strong>p不可以改变，*p能改变</strong>；记忆方法：const后面是p，p不能改变，const后面是*p，*p不能改变；还有一种<code>const int* const p = &amp;a</code>，p和*p都不能改变。</p>
-</li>
-<li><p>C++程序执行时，内存划分4个区域。不同区域存放的数据，赋予不同的生命周期，给我们更大的灵活编程。代码区和全局区是在程序运行前划分，堆栈是在程序运行后划分。</p>
-<ul>
-<li>代码区：存放函数体和二进制代码，由操作系统负责管理（共享、只读）</li>
-<li>全局区：存放全局变量和静态变量以及字符串，全局常量（程序结束后，由系统自动回收）</li>
-<li>栈区：由编译器自动分配释放，存放函数的参数值，局部变量，局部常量等</li>
-<li>堆区：由程序员分配释放，若程序员不释放，程序结束时，由系统自动回收</li>
-</ul>
-</li>
-<li><p>C++用new关键字请求内存，用delete释放内存，参考：<a target="_blank" rel="noopener" href="https://www.runoob.com/cplusplus/cpp-dynamic-memory.html">C++ 动态内存</a></p>
-</li>
-<li><p>C没有引用，C++引用变量是一个别名，参考：<a target="_blank" rel="noopener" href="https://www.runoob.com/cplusplus/cpp-references.htmlv">C++引用</a>；使用<a target="_blank" rel="noopener" href="https://www.runoob.com/cplusplus/passing-parameters-by-references.html">引用传参</a>；使用<a target="_blank" rel="noopener" href="https://www.runoob.com/cplusplus/returning-values-by-reference.html">引用作为函数返回值</a>；<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1et411b73Z?p=93&spm_id_from=pageDriver">引用的本质</a>是指针常量；</p>
-</li>
-<li><p>浅拷贝只复制指向某个对象的指针，而不复制对象本身，新旧对象还是共享同一块内存。但深拷贝会另外创造一个一模一样的对象，新对象跟原对象不共享内存，修改新对象不会改到原对象。<strong>如果属性有在堆区开辟的，一定要自己提供拷贝构造函数，防止浅拷贝析构时重复释放堆带来的问题</strong>。</p>
-</li>
-<li><p>类成员中有其他类对象，构造时先构造成员中的类对象，再构造自身；析构时相反。</p>
-</li>
-<li><p>静态成员变量：所有对象共享同一份数据；在编译阶段分配内存；类内声明，类外初始化；静态成员函数：所有对象共享同一个函数；静态成员函数只能访问静态成员变量；</p>
-</li>
-<li><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ostream&amp; <span class="keyword">operator</span>&lt;&lt;(ostream&amp; cout, Class &amp;c)</span><br><span class="line">&#123;	<span class="comment">// c++重载&lt;&lt;运算符</span></span><br><span class="line">    cout &lt;&lt; c.m_A;	<span class="comment">// 打印成员变量</span></span><br><span class="line">    <span class="keyword">return</span> cout;	<span class="comment">// 链式编程</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ol>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1197,7 +1168,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">40</span>
+          <span class="site-state-item-count">41</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
