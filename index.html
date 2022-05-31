@@ -499,7 +499,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-12 00:25:54" itemprop="dateModified" datetime="2022-05-12T00:25:54+08:00">2022-05-12</time>
+                <time title="修改时间：2022-05-31 23:20:29" itemprop="dateModified" datetime="2022-05-31T23:20:29+08:00">2022-05-31</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -616,6 +616,8 @@
 <h3 id="和…"><a href="#和…" class="headerlink" title="##和…"></a><a target="_blank" rel="noopener" href="https://blog.csdn.net/ysds20211402/article/details/122300354">##和…</a></h3><p><code>##</code> 起连接字符串的作用，用于把参数宏中的“形参”与其它没有天然分割的内容粘连在一起。<br>例如：<code>#define def_u32_array(__name, __size)    uint32_t array_##__name[__size];</code><br><code>def_u32_array(sample_buffer, 64)</code>，宏展开后为：<code>uint32_t array_sample_buffer[64];</code></p>
 <p><code>...</code> 是ANSI-C99标准引入的另外一个参数宏扩展，“可变参数宏”，其实就是将__VA_ARGS__替换为…中的值。<br>例如：<code>#define log_info(__STRING, ...)    printf(__STRING, __VA_ARGS__)</code><br><code>log_info(&quot;Count:%d&quot;, total_cycle_cnt);</code>，宏展开后：<code>printf(&quot;Count:%d&quot;, total_cycle_cnt);</code><br><code>log_info(&quot;-----------------\r\n&quot;);</code>，宏展开后：<code>printf(&quot;-----------------\r\n&quot;,);</code>，…无参数，__VA_ARGS__为空，但是宏展开后仍有逗号。</p>
 <p>逗号后无内容可能会产生个warning，想解决逗号问题，可以##和…一起使用。<br>例如：<code>\#define log_info(__STRING, ...)    printf(__STRING,##__VA_ARGS__)</code><br><code>log_info(&quot;-----------------\r\n&quot;);</code>，宏展开后：<code>printf(&quot;-----------------\r\n&quot;);</code></p>
+<h3 id="…初始化数组"><a href="#…初始化数组" class="headerlink" title="…初始化数组"></a>…初始化数组</h3><p><code>int a[5] = &#123;[0...2] = 1, [3...4] = 2&#125;;</code>使数组a[0]~a[2] = 1, a[3]和a[4] = 2。</p>
+<p>这种写法只可以在gcc编译C的情况下使用，gcc编译c++也不行。</p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
     </div>

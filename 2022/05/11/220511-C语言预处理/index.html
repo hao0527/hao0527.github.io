@@ -28,7 +28,7 @@
 <meta property="og:description" content="ANSI C标准ANSI C是美国国家标准协会（ANSI）对C语言发布的标准。使用C的软件开发者被鼓励遵循ANSI C文档的要求，因为它鼓励使用跨平台的代码。 发展过程中产生了C89、C90、C99、C11四套标准，最早的C89在1983年创立，C90是1990年创立的ANSI C标准（带有一些小改动），C99在2000年3月创立，C11在2011年12月创立。 C预处理器   指令 描述">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-05-11T15:00:00.000Z">
-<meta property="article:modified_time" content="2022-05-11T16:25:54.727Z">
+<meta property="article:modified_time" content="2022-05-31T15:20:29.235Z">
 <meta property="article:author" content="Hao">
 <meta name="twitter:card" content="summary">
 
@@ -190,7 +190,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-12 00:25:54" itemprop="dateModified" datetime="2022-05-12T00:25:54+08:00">2022-05-12</time>
+                <time title="修改时间：2022-05-31 23:20:29" itemprop="dateModified" datetime="2022-05-31T23:20:29+08:00">2022-05-31</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -307,6 +307,8 @@
 <h3 id="和…"><a href="#和…" class="headerlink" title="##和…"></a><a target="_blank" rel="noopener" href="https://blog.csdn.net/ysds20211402/article/details/122300354">##和…</a></h3><p><code>##</code> 起连接字符串的作用，用于把参数宏中的“形参”与其它没有天然分割的内容粘连在一起。<br>例如：<code>#define def_u32_array(__name, __size)    uint32_t array_##__name[__size];</code><br><code>def_u32_array(sample_buffer, 64)</code>，宏展开后为：<code>uint32_t array_sample_buffer[64];</code></p>
 <p><code>...</code> 是ANSI-C99标准引入的另外一个参数宏扩展，“可变参数宏”，其实就是将__VA_ARGS__替换为…中的值。<br>例如：<code>#define log_info(__STRING, ...)    printf(__STRING, __VA_ARGS__)</code><br><code>log_info(&quot;Count:%d&quot;, total_cycle_cnt);</code>，宏展开后：<code>printf(&quot;Count:%d&quot;, total_cycle_cnt);</code><br><code>log_info(&quot;-----------------\r\n&quot;);</code>，宏展开后：<code>printf(&quot;-----------------\r\n&quot;,);</code>，…无参数，__VA_ARGS__为空，但是宏展开后仍有逗号。</p>
 <p>逗号后无内容可能会产生个warning，想解决逗号问题，可以##和…一起使用。<br>例如：<code>\#define log_info(__STRING, ...)    printf(__STRING,##__VA_ARGS__)</code><br><code>log_info(&quot;-----------------\r\n&quot;);</code>，宏展开后：<code>printf(&quot;-----------------\r\n&quot;);</code></p>
+<h3 id="…初始化数组"><a href="#…初始化数组" class="headerlink" title="…初始化数组"></a>…初始化数组</h3><p><code>int a[5] = &#123;[0...2] = 1, [3...4] = 2&#125;;</code>使数组a[0]~a[2] = 1, a[3]和a[4] = 2。</p>
+<p>这种写法只可以在gcc编译C的情况下使用，gcc编译c++也不行。</p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
     </div>
 
@@ -387,7 +389,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#ANSI-C%E6%A0%87%E5%87%86"><span class="nav-number">1.</span> <span class="nav-text">ANSI C标准</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C%E9%A2%84%E5%A4%84%E7%90%86%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text">C预处理器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%84%E5%AE%9A%E4%B9%89%E5%AE%8F"><span class="nav-number">3.</span> <span class="nav-text">预定义宏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pragma"><span class="nav-number">4.</span> <span class="nav-text">#pragma</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%92%8C%E2%80%A6"><span class="nav-number">5.</span> <span class="nav-text">##和…</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#ANSI-C%E6%A0%87%E5%87%86"><span class="nav-number">1.</span> <span class="nav-text">ANSI C标准</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C%E9%A2%84%E5%A4%84%E7%90%86%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text">C预处理器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%84%E5%AE%9A%E4%B9%89%E5%AE%8F"><span class="nav-number">3.</span> <span class="nav-text">预定义宏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pragma"><span class="nav-number">4.</span> <span class="nav-text">#pragma</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%92%8C%E2%80%A6"><span class="nav-number">5.</span> <span class="nav-text">##和…</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%80%A6%E5%88%9D%E5%A7%8B%E5%8C%96%E6%95%B0%E7%BB%84"><span class="nav-number">6.</span> <span class="nav-text">…初始化数组</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
