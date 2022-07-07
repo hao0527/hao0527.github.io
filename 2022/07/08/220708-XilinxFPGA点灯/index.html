@@ -20,19 +20,19 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="环境 FPGA采用的是高云小蜜蜂家族的GW1N-LV4QN88C6&#x2F;I5 摄像头使用OV2640，可以配置数据为JPEG压缩后输出 采用DC-DC降压到3.6V再LDO降至3.3V与2.8V，OV内核和FPGA内核采用DC-DC降到1.2V使用  FPGA部分编程流程图 I2C驱动 FIFO配置 通过I2C配置OV2640寄存器 获取DCMI接口数据 JPEG找出帧头帧尾 把有效数据存入FIFO">
+  <meta name="description" content="好久不见，甚是想念。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="FPGA驱动OV2640用SPI转发JPEG数据">
-<meta property="og:url" content="http://example.com/2021/06/23/210623-fpgaOV/index.html">
+<meta property="og:title" content="Xilinx FPGA 点灯">
+<meta property="og:url" content="http://example.com/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/index.html">
 <meta property="og:site_name" content="永恆博客网">
-<meta property="og:description" content="环境 FPGA采用的是高云小蜜蜂家族的GW1N-LV4QN88C6&#x2F;I5 摄像头使用OV2640，可以配置数据为JPEG压缩后输出 采用DC-DC降压到3.6V再LDO降至3.3V与2.8V，OV内核和FPGA内核采用DC-DC降到1.2V使用  FPGA部分编程流程图 I2C驱动 FIFO配置 通过I2C配置OV2640寄存器 获取DCMI接口数据 JPEG找出帧头帧尾 把有效数据存入FIFO">
+<meta property="og:description" content="好久不见，甚是想念。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-06-23T12:00:00.000Z">
-<meta property="article:modified_time" content="2021-07-03T06:00:08.805Z">
+<meta property="article:published_time" content="2022-07-07T16:01:00.000Z">
+<meta property="article:modified_time" content="2022-07-07T16:20:37.689Z">
 <meta property="article:author" content="Hao">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/2021/06/23/210623-fpgaOV/">
+<link rel="canonical" href="http://example.com/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/">
 
 
 <script id="page-configurations">
@@ -45,7 +45,7 @@
   };
 </script>
 
-  <title>FPGA驱动OV2640用SPI转发JPEG数据 | 永恆博客网</title>
+  <title>Xilinx FPGA 点灯 | 永恆博客网</title>
   
 
 
@@ -160,7 +160,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/23/210623-fpgaOV/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -173,7 +173,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          FPGA驱动OV2640用SPI转发JPEG数据
+          Xilinx FPGA 点灯
         </h1>
 
         <div class="post-meta">
@@ -182,16 +182,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2021-06-23 20:00:00" itemprop="dateCreated datePublished" datetime="2021-06-23T20:00:00+08:00">2021-06-23</time>
+              <time title="创建时间：2022-07-08 00:01:00 / 修改时间：00:20:37" itemprop="dateCreated datePublished" datetime="2022-07-08T00:01:00+08:00">2022-07-08</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-07-03 14:00:08" itemprop="dateModified" datetime="2021-07-03T14:00:08+08:00">2021-07-03</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -202,7 +196,7 @@
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E7%A1%AC%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">硬件</span></a>
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
                 </span>
             </span>
 
@@ -217,26 +211,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><ul>
-<li>FPGA采用的是<a target="_blank" rel="noopener" href="http://www.gowinsemi.com.cn/prod_view.aspx?TypeId=10&FId=t3:10:3&Id=168">高云小蜜蜂家族</a>的GW1N-LV4QN88C6/I5</li>
-<li>摄像头使用OV2640，可以配置数据为JPEG压缩后输出</li>
-<li>采用DC-DC降压到3.6V再LDO降至3.3V与2.8V，OV内核和FPGA内核采用DC-DC降到1.2V使用</li>
-</ul>
-<h2 id="FPGA部分"><a href="#FPGA部分" class="headerlink" title="FPGA部分"></a>FPGA部分</h2><h3 id="编程流程图"><a href="#编程流程图" class="headerlink" title="编程流程图"></a>编程流程图</h3><ol>
-<li>I2C驱动</li>
-<li>FIFO配置</li>
-<li>通过I2C配置OV2640寄存器</li>
-<li>获取DCMI接口数据</li>
-<li>JPEG找出帧头帧尾</li>
-<li>把有效数据存入FIFO</li>
-<li>SPI读FIFO数据输出</li>
-</ol>
-<h3 id="I2C驱动"><a href="#I2C驱动" class="headerlink" title="I2C驱动"></a>I2C驱动</h3><p>参考：正点原子OV5640驱动程序</p>
-<h3 id="FIFO配置"><a href="#FIFO配置" class="headerlink" title="FIFO配置"></a>FIFO配置</h3><p>通过FIFO SC HS IP核向导生成（SC是同步的意思），在使用的时候需要查看IP核用户指南，重点要看时序部分</p>
-<h3 id="SPI驱动"><a href="#SPI驱动" class="headerlink" title="SPI驱动"></a>SPI驱动</h3><p>参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/liujinggang/p/9609739.html">SPI总线的原理与Verilog实现</a></p>
-<h2 id="经验总结"><a href="#经验总结" class="headerlink" title="经验总结"></a>经验总结</h2><p>本次FPGA实现读取OV2640并SPI发出来的小功能，解决了低端MCU没有DCMI外设，遇到了IP核不会使用的问题，要多看手册里的时序部分。还有就是有些数据处理的时候要缓冲，加延时，否则会造成信号的错位。后面我要加强流水线结构的设计，多用并行的思想发挥FPGA的优势。</p>
-<h2 id="项目GitHub链接"><a href="#项目GitHub链接" class="headerlink" title="项目GitHub链接"></a>项目GitHub链接</h2><p><a target="_blank" rel="noopener" href="https://github.com/hao0527/fpga-ov2640_fifo_spi">https://github.com/hao0527/fpga-ov2640_fifo_spi</a></p>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+        <h2 id="好久不见，甚是想念。"><a href="#好久不见，甚是想念。" class="headerlink" title="好久不见，甚是想念。"></a>好久不见，甚是想念。</h2><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
     </div>
 
     
@@ -251,13 +226,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/06/12/210612-RAM/" rel="prev" title="SRAM与DRAM">
-      <i class="fa fa-chevron-left"></i> SRAM与DRAM
+    <a href="/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/" rel="prev" title="交叉编译工具链的使用">
+      <i class="fa fa-chevron-left"></i> 交叉编译工具链的使用
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/06/28/210628-GND%E4%B9%8B%E9%97%B4%E7%9A%84%E8%BF%9E%E6%8E%A5/" rel="next" title="电路设计中各种GND之间的连接">
-      电路设计中各种GND之间的连接 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -316,7 +288,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FPGA%E9%83%A8%E5%88%86"><span class="nav-number">2.</span> <span class="nav-text">FPGA部分</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E7%A8%8B%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="nav-number">2.1.</span> <span class="nav-text">编程流程图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#I2C%E9%A9%B1%E5%8A%A8"><span class="nav-number">2.2.</span> <span class="nav-text">I2C驱动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FIFO%E9%85%8D%E7%BD%AE"><span class="nav-number">2.3.</span> <span class="nav-text">FIFO配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SPI%E9%A9%B1%E5%8A%A8"><span class="nav-number">2.4.</span> <span class="nav-text">SPI驱动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%8F%E9%AA%8C%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">经验总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AEGitHub%E9%93%BE%E6%8E%A5"><span class="nav-number">4.</span> <span class="nav-text">项目GitHub链接</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A5%BD%E4%B9%85%E4%B8%8D%E8%A7%81%EF%BC%8C%E7%94%9A%E6%98%AF%E6%83%B3%E5%BF%B5%E3%80%82"><span class="nav-number">1.</span> <span class="nav-text">好久不见，甚是想念。</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

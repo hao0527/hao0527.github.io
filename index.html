@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/heng32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/heng16x16.png">
@@ -153,6 +153,77 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/" class="post-title-link" itemprop="url">Xilinx FPGA 点灯</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-07-08 00:01:00 / 修改时间：00:20:37" itemprop="dateCreated datePublished" datetime="2022-07-08T00:01:00+08:00">2022-07-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="好久不见，甚是想念。"><a href="#好久不见，甚是想念。" class="headerlink" title="好久不见，甚是想念。"></a>好久不见，甚是想念。</h2><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1006,12 +1077,12 @@
 <h3 id="数组指针"><a href="#数组指针" class="headerlink" title="数组指针"></a>数组指针</h3><p>定义<code>int (*p)[n];</code></p>
 <p>()优先级比[]高，首先说明p是一个指针，指向一个整型的一维数组，这个一维数组的长度是n，也可以说是p的步长。</p>
 <p>如要将二维数组赋给一指针，应这样赋值：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">3</span>][<span class="number">4</span>];</span><br><span class="line"><span class="keyword">int</span> (*p)[<span class="number">4</span>];   <span class="comment">//该语句是定义一个数组指针，指向含4个元素的一维数组。</span></span><br><span class="line">p = a;     <span class="comment">//将该二维数组的首地址赋给p，也就是a[0]或&amp;a[0][0]</span></span><br><span class="line">p++;       <span class="comment">//该语句执行过后，也就是p=p+1;p跨过行a[0][]指向了行a[1][]</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a[<span class="number">3</span>][<span class="number">4</span>];</span><br><span class="line"><span class="type">int</span> (*p)[<span class="number">4</span>];   <span class="comment">//该语句是定义一个数组指针，指向含4个元素的一维数组。</span></span><br><span class="line">p = a;     <span class="comment">//将该二维数组的首地址赋给p，也就是a[0]或&amp;a[0][0]</span></span><br><span class="line">p++;       <span class="comment">//该语句执行过后，也就是p=p+1;p跨过行a[0][]指向了行a[1][]</span></span><br></pre></td></tr></table></figure>
 
 <p>所以数组指针也称指向一维数组的指针，亦称行指针。</p>
 <h3 id="指针数组"><a href="#指针数组" class="headerlink" title="指针数组"></a>指针数组</h3><p>定义<code>int *p[n];</code></p>
 <p>[]优先级比*高，先与p结合成为一个数组，再由int*说明这是一个整型指针数组，它有n个指针类型的数组元素。这里执行p+1时，则p指向下一个数组元素，这样赋值是错误的：p=a；因为p是个不可知的表示，只存在p[0]、p[1]、p[2]…p[n-1],而且它们分别是指针变量可以用来存放变量地址。但可以这样 <em>p=a; 这里</em>p表示指针数组第一个元素的值，a的首地址的值。<br>如要将二维数组赋给一指针数组：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> *p[<span class="number">3</span>];</span><br><span class="line"><span class="keyword">int</span> a[<span class="number">3</span>][<span class="number">4</span>];</span><br><span class="line">p++;  <span class="comment">//该语句表示p数组指向下一个数组元素。注：此数组每一个元素都是一个指针</span></span><br><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">3</span>;i++)</span><br><span class="line">    p[i] = a[i];</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> *p[<span class="number">3</span>];</span><br><span class="line"><span class="type">int</span> a[<span class="number">3</span>][<span class="number">4</span>];</span><br><span class="line">p++;  <span class="comment">//该语句表示p数组指向下一个数组元素。注：此数组每一个元素都是一个指针</span></span><br><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">3</span>;i++)</span><br><span class="line">    p[i] = a[i];</span><br></pre></td></tr></table></figure>
 
 <p>这里int *p[3] 表示一个一维数组内存放着三个指针变量，分别是p[0]、p[1]、p[2]，所以要分别赋值。</p>
 <h2 id="常量指针-amp-指针常量"><a href="#常量指针-amp-指针常量" class="headerlink" title="常量指针&amp;指针常量"></a>常量指针&amp;指针常量</h2><h3 id="指针常量"><a href="#指针常量" class="headerlink" title="指针常量"></a>指针常量</h3><p>定义<code>int * const p = &amp;a;</code></p>
@@ -1129,7 +1200,7 @@
 <p>do_move:中将system模块移动到0地址，<code>jmpi 0, 8</code>，跳转到system模块，system模块开始是head.s；</p>
 <p>通过设置cr0最后一位，PE=1由16位实模式转到32位保护模式，在保护模式下，CS表示选择子，查GDT表得到；</p>
 <p>在head.s中初始化GDT表和IDT表，setup_paging执行ret后，会执行函数main()，进入main()后的栈为0，0，0，L6，三个0表示main函数的参数，L6表示main函数返回时进入死循环；</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">after_page_tables:</span><br><span class="line">    pushl $0 # These are the parameters to main :-)</span><br><span class="line">    pushl $0 # 这些是调用 main 程序的参数（指 init&#x2F;main.c）。</span><br><span class="line">    pushl $0 # 其中的&#39;$&#39;符号表示这是一个立即操作数。</span><br><span class="line">    pushl $L6 # return address for main, if it decides to.</span><br><span class="line">    pushl $_main # &#39;_main&#39;是编译程序对 main 的内部表示方法。</span><br><span class="line">    jmp setup_paging # 跳转至第 198 行。</span><br><span class="line">L6:</span><br><span class="line">    jmp L6 # main should never return here, but</span><br><span class="line">    # just in case, we know what happens.</span><br><span class="line">    # main 程序绝对不应该返回到这里。不过为了以防万一，</span><br><span class="line">    # 所以添加了该语句。这样我们就知道发生什么问题了。</span><br><span class="line">setup_paging:</span><br><span class="line">    设置页表...</span><br><span class="line">    ret</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">after_page_tables:</span><br><span class="line">    pushl $0 # These are the parameters to main :-)</span><br><span class="line">    pushl $0 # 这些是调用 main 程序的参数（指 init/main.c）。</span><br><span class="line">    pushl $0 # 其中的&#x27;$&#x27;符号表示这是一个立即操作数。</span><br><span class="line">    pushl $L6 # return address for main, if it decides to.</span><br><span class="line">    pushl $_main # &#x27;_main&#x27;是编译程序对 main 的内部表示方法。</span><br><span class="line">    jmp setup_paging # 跳转至第 198 行。</span><br><span class="line">L6:</span><br><span class="line">    jmp L6 # main should never return here, but</span><br><span class="line">    # just in case, we know what happens.</span><br><span class="line">    # main 程序绝对不应该返回到这里。不过为了以防万一，</span><br><span class="line">    # 所以添加了该语句。这样我们就知道发生什么问题了。</span><br><span class="line">setup_paging:</span><br><span class="line">    设置页表...</span><br><span class="line">    ret</span><br></pre></td></tr></table></figure></li>
 </ol>
 <h3 id="L4-L7"><a href="#L4-L7" class="headerlink" title="L4~L7"></a>L4~L7</h3><ol>
 <li>操作系统接口：接口表现为函数调用，又由系统提供，所以称为系统调用，可移植操作系统接口(Portable Operating System Interface of uniX, POSIX)</li>
@@ -1156,7 +1227,7 @@
 <li><p>CPU调度策略：FIFO、Priority；CPU调度算法：先来先服务（First come, first served），短作业优先（SJF）这个算法周转时间最小，按时间片来轮转调度（RR），优先级调度（前台&gt;后台）；</p>
 </li>
 <li><p>linux0.11中的调度函数既考虑了优先级又考虑了时间片：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Schedule</span><span class="params">(<span class="keyword">void</span>)</span> <span class="comment">// 在 kernel/sched.c 中</span></span></span><br><span class="line"><span class="function"></span>&#123; <span class="keyword">while</span>(<span class="number">1</span>)&#123; c=<span class="number">-1</span>; next=<span class="number">0</span>; i=NR_TASKS; p=&amp;task[NR_TASKS];</span><br><span class="line">    <span class="keyword">while</span>(--i)&#123; <span class="keyword">if</span>((*p-&gt;state == TASK_RUNNING&amp;&amp;(*p)-&gt;counter&gt;c)</span><br><span class="line">        c=(*p)-&gt;counter, next=i; &#125;</span><br><span class="line">    <span class="keyword">if</span>(c) <span class="keyword">break</span>; <span class="comment">// 找到了最大的counter,跳出，执行switch_to()</span></span><br><span class="line">    <span class="keyword">for</span>(p=&amp;LAST_TASK;p&gt;&amp;FIRST_TASK;--p)</span><br><span class="line">        (*p)-&gt;counter=((*p)-&gt;counter&gt;&gt;<span class="number">1</span>)+(*p)-&gt;priority; </span><br><span class="line">    &#125;</span><br><span class="line">switch_to(next);&#125;</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">Schedule</span><span class="params">(<span class="type">void</span>)</span> <span class="comment">// 在 kernel/sched.c 中</span></span><br><span class="line">&#123; <span class="keyword">while</span>(<span class="number">1</span>)&#123; c=<span class="number">-1</span>; next=<span class="number">0</span>; i=NR_TASKS; p=&amp;task[NR_TASKS];</span><br><span class="line">    <span class="keyword">while</span>(--i)&#123; <span class="keyword">if</span>((*p-&gt;state == TASK_RUNNING&amp;&amp;(*p)-&gt;counter&gt;c)</span><br><span class="line">        c=(*p)-&gt;counter, next=i; &#125;</span><br><span class="line">    <span class="keyword">if</span>(c) <span class="keyword">break</span>; <span class="comment">// 找到了最大的counter,跳出，执行switch_to()</span></span><br><span class="line">    <span class="keyword">for</span>(p=&amp;LAST_TASK;p&gt;&amp;FIRST_TASK;--p)</span><br><span class="line">        (*p)-&gt;counter=((*p)-&gt;counter&gt;&gt;<span class="number">1</span>)+(*p)-&gt;priority; </span><br><span class="line">    &#125;</span><br><span class="line">switch_to(next);&#125;</span><br></pre></td></tr></table></figure></li>
 <li><p>进程间同步看信号量（Semaphore），可使多个进程合理有序运行。<strong>读写信号量的代码一定在临界区</strong>，或者原子操作。临界区：一次只允许一个进程进入该进程的那段代码。原子操作：不会被线程调度机制打断的操作;</p>
 </li>
 <li><p>保护临界区的方法：关闭中断<code>cli();</code>，临界区，开中断<code>sti();</code>，剩余区。这种方法只适用于小系统，不适用于多核CPU。还可以采取硬件原子指令法，硬件一条指令修改mutex变量；</p>
@@ -1362,13 +1433,13 @@
 <td>退出gdb环境。</td>
 </tr>
 </tbody></table>
-<h3 id="进入GDB调试"><a href="#进入GDB调试" class="headerlink" title="进入GDB调试"></a>进入GDB调试</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gcc test.c -g -o test</span><br><span class="line">gdb test # 进入gdb，指定test为可执行文件</span><br><span class="line"><span class="meta">#</span><span class="bash"> 也可以只执行gdb，在gdb中用file命令指定可执行文件</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 接下来就可以使用GDB的基本调试命令调试程序了</span></span><br></pre></td></tr></table></figure>
+<h3 id="进入GDB调试"><a href="#进入GDB调试" class="headerlink" title="进入GDB调试"></a>进入GDB调试</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gcc test.c -g -o test</span><br><span class="line">gdb test # 进入gdb，指定test为可执行文件</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">也可以只执行gdb，在gdb中用file命令指定可执行文件</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">接下来就可以使用GDB的基本调试命令调试程序了</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="调试正在运行的程序"><a href="#调试正在运行的程序" class="headerlink" title="调试正在运行的程序"></a>调试正在运行的程序</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 通过ps获取程序进程号</span></span><br><span class="line">gdb test -p [进程号]</span><br><span class="line"><span class="meta">#</span><span class="bash"> 进入gdb后，程序会被暂停</span></span><br><span class="line">(gdb)bt # 使用bt查看程序的调用栈</span><br><span class="line"><span class="meta">#</span><span class="bash"> Print backtrace of all stack frames, or innermost COUNT frames.</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 退出后，程序继续执行</span></span><br></pre></td></tr></table></figure>
+<h3 id="调试正在运行的程序"><a href="#调试正在运行的程序" class="headerlink" title="调试正在运行的程序"></a>调试正在运行的程序</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">通过ps获取程序进程号</span></span><br><span class="line">gdb test -p [进程号]</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">进入gdb后，程序会被暂停</span></span><br><span class="line">(gdb)bt # 使用bt查看程序的调用栈</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Print backtrace of all stack frames, or innermost COUNT frames.</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">退出后，程序继续执行</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="调试多进程程序"><a href="#调试多进程程序" class="headerlink" title="调试多进程程序"></a>调试多进程程序</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(gdb)set follow-fork-mode [parent|child]</span><br><span class="line"><span class="meta">#</span><span class="bash"> （缺省是parent）调试父|子进程，父|子进程不受影响</span></span><br><span class="line">(gdb)set datach-on-fork [on|off]</span><br><span class="line"><span class="meta">#</span><span class="bash"> （缺省是on）on表示调试当前进程时，其他进程继续运行，off表示调试当前进程时，其他进程被GDB挂起</span></span><br><span class="line">(gdb)info inferiors # 查看调试的进程</span><br><span class="line">(gdb)inferior # 切换当前调试的进程，进程id是查看调试的进程返回的Num值</span><br></pre></td></tr></table></figure>
+<h3 id="调试多进程程序"><a href="#调试多进程程序" class="headerlink" title="调试多进程程序"></a>调试多进程程序</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(gdb)set follow-fork-mode [parent|child]</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">（缺省是parent）调试父|子进程，父|子进程不受影响</span></span><br><span class="line">(gdb)set datach-on-fork [on|off]</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">（缺省是on）on表示调试当前进程时，其他进程继续运行，off表示调试当前进程时，其他进程被GDB挂起</span></span><br><span class="line">(gdb)info inferiors # 查看调试的进程</span><br><span class="line">(gdb)inferior # 切换当前调试的进程，进程id是查看调试的进程返回的Num值</span><br></pre></td></tr></table></figure>
 
-<h3 id="调试多线程程序"><a href="#调试多线程程序" class="headerlink" title="调试多线程程序"></a>调试多线程程序</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ps aux|grep test # 查看当前运行的进程，查找符合&quot;test&quot;的字符串</span><br><span class="line">ps -aL|grep test # 查看当前运行的轻量级进程</span><br><span class="line"><span class="meta">#</span><span class="bash"> 轻量级进程(LWP)是建立在内核之上并由内核支持的用户线程，它是内核线程的高度抽象，每一个轻量级进程都与一个特定的内核线程关联。</span></span><br><span class="line">pstree -p [主线程ID] # 查看主线程和新线程的关系</span><br><span class="line">(gdb)info threads # 查看线程</span><br><span class="line">(gdb)thread [线程ID] # 切换线程，线程ID是查看线程返回的Num值</span><br><span class="line">(gdb)set scheduler-locking [on|off] # on：只运行当前线程，off：运行全部的线程</span><br><span class="line">(gdb)thread apply [线程ID|all] [cmd] # 让某个|全部线程执行某GDB命令</span><br></pre></td></tr></table></figure>
+<h3 id="调试多线程程序"><a href="#调试多线程程序" class="headerlink" title="调试多线程程序"></a>调试多线程程序</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ps aux|grep test # 查看当前运行的进程，查找符合&quot;test&quot;的字符串</span><br><span class="line">ps -aL|grep test # 查看当前运行的轻量级进程</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">轻量级进程(LWP)是建立在内核之上并由内核支持的用户线程，它是内核线程的高度抽象，每一个轻量级进程都与一个特定的内核线程关联。</span></span><br><span class="line">pstree -p [主线程ID] # 查看主线程和新线程的关系</span><br><span class="line">(gdb)info threads # 查看线程</span><br><span class="line">(gdb)thread [线程ID] # 切换线程，线程ID是查看线程返回的Num值</span><br><span class="line">(gdb)set scheduler-locking [on|off] # on：只运行当前线程，off：运行全部的线程</span><br><span class="line">(gdb)thread apply [线程ID|all] [cmd] # 让某个|全部线程执行某GDB命令</span><br></pre></td></tr></table></figure>
 
 <h3 id="服务程序运行日志"><a href="#服务程序运行日志" class="headerlink" title="服务程序运行日志"></a>服务程序运行日志</h3><p>设置断点或单步跟踪可能会严重干扰多进程、多线程之间的竞争状态，导致我们看到一个假象。一旦我们在某个线程设置了断点，该线程在断点处挺住了，只剩下另一个线程在跑。这时候，并发的场景已经完全被破坏了，通过调试器看到的只是一个和谐的场景（理想状态）。<strong>输出Log日志</strong>可以避免断点和单步跟踪所导致的副作用。</p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
@@ -1448,7 +1519,7 @@
 <p>完整的内嵌汇编格式：<code>__asm__ __volatile__(&quot;Instruction List&quot; : Output : Input : Clobber/Modify);</code></p>
 <p>__asm__ 是GCC关键字asm的宏定义，asm用于声明这行代码是一个内嵌汇编表达式，任何内嵌的汇编表达式都以此关键字作为开头。</p>
 <p>一个最简单的内嵌汇编：<code>__asm__(&quot;nop&quot;);</code> 括号里的是汇编指令，表示运行空指令，一个机器周期。Instruction List 是汇编指令序列，它可以是空的。可以有多条汇编指令，需要将所有指令放在多对引号中，两条指令必须用换行或分号分开。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">printk</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *fmt, ...)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="comment">//    ……</span></span><br><span class="line">    __asm__(<span class="string">&quot;push %%fs\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;push %%ds\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;pop %%fs\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;pushl %0\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;pushl $buf\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;pushl $0\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;call tty_write\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;addl $8,%%esp\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;popl %0\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;pop %%fs&quot;</span></span><br><span class="line">            ::<span class="string">&quot;r&quot;</span> (i):<span class="string">&quot;ax&quot;</span>,<span class="string">&quot;cx&quot;</span>,<span class="string">&quot;dx&quot;</span>);</span><br><span class="line"><span class="comment">//    ……</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">printk</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *fmt, ...)</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="comment">//    ……</span></span><br><span class="line">    __asm__(<span class="string">&quot;push %%fs\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;push %%ds\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;pop %%fs\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;pushl %0\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;pushl $buf\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;pushl $0\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;call tty_write\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;addl $8,%%esp\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;popl %0\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;pop %%fs&quot;</span></span><br><span class="line">            ::<span class="string">&quot;r&quot;</span> (i):<span class="string">&quot;ax&quot;</span>,<span class="string">&quot;cx&quot;</span>,<span class="string">&quot;dx&quot;</span>);</span><br><span class="line"><span class="comment">//    ……</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>可以看上面<code>printk()</code>的例子，首先<code>push %fs</code>保存这个指向用户段的寄存器，在最后<code>pop %fs</code>将其恢复，<code>printk()</code>的核心是调用<code>tty_write()</code>。</p>
 <p>Output Input 用来指定当前内联汇编语句的输出与输入，格式为形如“constraint”(variable)的列表（逗号分隔)，constraint是限制字符，下面表中列出几个常用限制字符作用，更多用法见：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_15974389/article/details/76416668">GCC内嵌汇编一些限制字符串</a>。</p>
@@ -1484,215 +1555,10 @@
 <p>因为你在Input/Output操作表达式所指定的寄存器，或当你为一些Input/Output操作表达式使用”r”约束，让GCC为你选择一个寄存器时，GCC对这些寄存器是非常清楚的——它知道这些寄存器是被修改的，你根本不需要在Clobber/Modify域再声明它们。但除此之外， GCC对剩下的寄存器中哪些会被当前的内联汇编修改一无所知。所以如果你真的在当前内联汇编指令中修改了它们，那么就最好在Clobber/Modify 中声明它们，让GCC针对这些寄存器做相应的处理。否则有可能会造成寄存器的不一致，从而造成程序执行错误。</p>
 <p>如果一个内联汇编语句的Clobber/Modify域存在”memory”，那么GCC会保证在此内联汇编之前，如果某个内存的内容被装入了寄存器，那么在这个内联汇编之后，如果需要使用这个内存处的内容，就会直接到这个内存处重新读取，而不是使用被存放在寄存器中的拷贝。因为这个 时候寄存器中的拷贝已经很可能和内存处的内容不一致了。</p>
 <p>这只是使用”memory”时，GCC会保证做到的一点，但这并不是全部。因为使用”memory”是向GCC声明内存发生了变化，而内存发生变化带来的影响并不止这一点。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> __argc, <span class="keyword">char</span>* __argv[])</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">    <span class="keyword">int</span>* __p = (<span class="keyword">int</span>*)__argc; </span><br><span class="line">    (*__p) = <span class="number">9999</span>; </span><br><span class="line">    __asm__(<span class="string">&quot;&quot;</span>:::<span class="string">&quot;memory&quot;</span>); </span><br><span class="line">    <span class="keyword">if</span>((*__p) == <span class="number">9999</span>) </span><br><span class="line">        <span class="keyword">return</span> <span class="number">5</span>; </span><br><span class="line">    <span class="keyword">return</span> (*__p); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> __argc, <span class="type">char</span>* __argv[])</span> </span><br><span class="line">&#123; </span><br><span class="line">    <span class="type">int</span>* __p = (<span class="type">int</span>*)__argc; </span><br><span class="line">    (*__p) = <span class="number">9999</span>; </span><br><span class="line">    __asm__(<span class="string">&quot;&quot;</span>:::<span class="string">&quot;memory&quot;</span>); </span><br><span class="line">    <span class="keyword">if</span>((*__p) == <span class="number">9999</span>) </span><br><span class="line">        <span class="keyword">return</span> <span class="number">5</span>; </span><br><span class="line">    <span class="keyword">return</span> (*__p); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>上面例子中，如果没有那条内联汇编语句，那个if语句的判断条件就完全是一句废话。GCC在优化时会意识到这一点，而直接只生成return 5的汇编代码，而不会再生成if语句的相关代码，而不会生成return (*__p)的相关代码。但你加上了这条内联汇编语句，它除了声明内存变化之外，什么都没有做。但GCC此时就不能简单的认为它不需要判断都知道 (*__p)一定与9999相等，它只有老老实实生成这条if语句的汇编代码，一起相关的两个return语句相关代码。</p>
 <p>linux内核中内存屏障也是基于它实现，<code>#define barrier() _asm__volatile_(&quot;&quot; : : : &quot;memory&quot;)</code>，主要是保证程序的执行遵循顺序一致性。</p>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/24/220224-Linux%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/02/24/220224-Linux%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7/" class="post-title-link" itemprop="url">Linux实用工具</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-02-24 11:00:00" itemprop="dateCreated datePublished" datetime="2022-02-24T11:00:00+08:00">2022-02-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-03-22 21:12:25" itemprop="dateModified" datetime="2022-03-22T21:12:25+08:00">2022-03-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="Linux-screen工具"><a href="#Linux-screen工具" class="headerlink" title="Linux screen工具"></a>Linux screen工具</h2><h3 id="功能介绍"><a href="#功能介绍" class="headerlink" title="功能介绍"></a>功能介绍</h3><p>Linux screen命令用于多重视窗管理程序。此处所谓的视窗，是指一个全屏幕的文字模式画面。通常只有在使用telnet登入主机或是使用老式的终端机时，才有可能用到screen程序。</p>
-<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">screen [-AmRvx -ls -wipe][-d &lt;作业名称&gt;][-h &lt;行数&gt;][-r &lt;作业名称&gt;][-s &lt;shell&gt;][-S &lt;作业名称&gt;]</span><br></pre></td></tr></table></figure>
-
-<h3 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明"></a>参数说明</h3><ul>
-<li>-A 　将所有的视窗都调整为目前终端机的大小。</li>
-<li>-d&lt;作业名称&gt; 　将指定的screen作业离线。</li>
-<li>-h&lt;行数&gt; 　指定视窗的缓冲区行数。</li>
-<li>-m 　即使目前已在作业中的screen作业，仍强制建立新的screen作业。</li>
-<li>-r&lt;作业名称&gt; 　恢复离线的screen作业。</li>
-<li>-R 　先试图恢复离线的作业。若找不到离线的作业，即建立新的screen作业。</li>
-<li>-s<shell> 　指定建立新视窗时，所要执行的shell。</shell></li>
-<li>-S&lt;作业名称&gt; 　指定screen作业的名称。</li>
-<li>-v 　显示版本信息。</li>
-<li>-x 　恢复之前离线的screen作业。</li>
-<li>-ls或–list 　显示目前所有的screen作业。</li>
-<li>-wipe 　检查目前所有的screen作业，并删除已经无法使用的screen作业。</li>
-</ul>
-<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">screen -ls  # 显示已创建的screen终端</span><br><span class="line">screen -S &lt;screen name&gt;  # 创建新的screen终端</span><br><span class="line">screen -r &lt;screen name&gt;  # 重连screen终端</span><br><span class="line">screen -d &lt;screen name&gt;  # 断开screen终端</span><br><span class="line">screen -S &lt;screen name&gt; -X quit  # 强制停止命令</span><br></pre></td></tr></table></figure>
-
-<h3 id="screen快捷键"><a href="#screen快捷键" class="headerlink" title="screen快捷键"></a>screen快捷键</h3><ul>
-<li>Ctrl -a c            创建新的视窗</li>
-<li>Ctrl -a d            断开screen终端，任务还在运行</li>
-<li>Ctrl -a k            删除当前视窗</li>
-<li>Ctrl -a 空格      视窗切换</li>
-<li>Ctrl -a ?           快捷键帮助</li>
-<li>Ctrl -a :            命令模式，类似vi</li>
-<li>Ctrl -a [            复制模式，可以移光标上去看上面的打印</li>
-</ul>
-<h3 id="screen配置"><a href="#screen配置" class="headerlink" title="screen配置"></a>screen配置</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/hao0527/hao0527.github.io/blob/main/others/screencfg -O ~/.screenrc  # 一个好用的screen配置文件</span><br></pre></td></tr></table></figure>
-
-<p>上面这个配置指令有些问题，wget下载下来的是html，所以就手动复制下内容到~/.screenrc文件吧。</p>
-<h2 id="Linux-vi-vim工具"><a href="#Linux-vi-vim工具" class="headerlink" title="Linux vi/vim工具"></a>Linux vi/vim工具</h2><h3 id="功能介绍-1"><a href="#功能介绍-1" class="headerlink" title="功能介绍"></a>功能介绍</h3><p>所有的 Unix Like 系统都会内建 vi 文书编辑器，其他的文书编辑器则不一定会存在。vim 具有程序编辑的能力，可以主动的以字体颜色辨别语法的正确性，方便程序设计。</p>
-<h3 id="vi-vim使用"><a href="#vi-vim使用" class="headerlink" title="vi/vim使用"></a>vi/vim使用</h3><p>基本上 vi/vim 共分为三种模式，分别是<strong>命令模式（Command mode）</strong>，<strong>输入模式（Insert mode）</strong>和<strong>底线命令模式（Last line mode）</strong>。</p>
-<h4 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h4><p><img src="/2022/02/24/220224-Linux%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7/220224-Linux%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7-1.jpg" alt="220224-Linux实用工具-1.jpg"></p>
-<table>
-<thead>
-<tr>
-<th>输入</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>yy</td>
-<td>复制游标所在的那一行。(常用)</td>
-</tr>
-<tr>
-<td>dd</td>
-<td>剪切游标所在的那一整行(常用)，用 p/P 可以粘贴。</td>
-</tr>
-<tr>
-<td>p/P</td>
-<td>p粘贴在光标行下面，P粘贴在光标行上面。</td>
-</tr>
-<tr>
-<td>u</td>
-<td>复原前一个动作。(常用)</td>
-</tr>
-<tr>
-<td>[Ctrl]+r</td>
-<td>重做上一个动作。(常用)</td>
-</tr>
-<tr>
-<td>/word</td>
-<td>向光标之下寻找一个名称为 word 的字符串。 (常用)</td>
-</tr>
-<tr>
-<td>?word</td>
-<td>向光标之上寻找一个字符串名称为 word 的字符串。</td>
-</tr>
-<tr>
-<td>i, I</td>
-<td>进入输入模式(Insert mode)</td>
-</tr>
-<tr>
-<td>ZZ</td>
-<td>如果修改过，保存当前文件，然后退出！效果等同于保存并退出</td>
-</tr>
-</tbody></table>
-<p>常用的还有替换功能：</p>
-<ul>
-<li><code>:1,$s/word1/word2/g</code> 或 <code>:%s/word1/word2/g</code>，从第一行到最后一行寻找 word1 字符串，并将该字符串取代为 word2 ！(常用)</li>
-<li><code>:1,$s/word1/word2/gc</code> 或 <code>:%s/word1/word2/gc</code>，从第一行到最后一行寻找 word1 字符串，并将该字符串取代为 word2 ，加了c表示取代前显示提示字符给用户确认 (confirm) 是否需要取代。</li>
-</ul>
-<h4 id="输入模式"><a href="#输入模式" class="headerlink" title="输入模式"></a>输入模式</h4><p>输入模式比较简单，可以使用键盘上的Home、End等功能键，按Esc退出输入模式到命令模式</p>
-<h4 id="底线命令模式"><a href="#底线命令模式" class="headerlink" title="底线命令模式"></a>底线命令模式</h4><table>
-<thead>
-<tr>
-<th>输入</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>:w</td>
-<td>将编辑的数据写入硬盘档案中(常用)</td>
-</tr>
-<tr>
-<td>:q</td>
-<td>离开 vi (常用)</td>
-</tr>
-<tr>
-<td>:q!</td>
-<td>若曾修改过档案，又不想储存，使用 ! 为『强制』离开不储存档案。</td>
-</tr>
-<tr>
-<td>:wq</td>
-<td>储存后离开，若为 :wq! 则为强制储存后离开 (常用)</td>
-</tr>
-<tr>
-<td>:w [filename]</td>
-<td>将编辑的数据储存成另一个档案（类似另存新档）</td>
-</tr>
-<tr>
-<td>:r [filename]</td>
-<td>在编辑的数据中，读入另一个档案的数据。亦即将 『filename』 这个档案内容加到游标所在行后面</td>
-</tr>
-<tr>
-<td>:n1,n2 w [filename]</td>
-<td>将 n1 到 n2 的内容储存成 filename 这个档案。</td>
-</tr>
-<tr>
-<td>:! command</td>
-<td>暂时离开 vi 到指令行模式下执行 command 的显示结果！例如<br>『:! ls /home』即可在 vi 当中察看 /home 底下以 ls 输出的档案信息！</td>
-</tr>
-<tr>
-<td>:set nu/nonu</td>
-<td>显示/取消行号</td>
-</tr>
-</tbody></table>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
     </div>
@@ -1777,7 +1643,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">41</span>
+          <span class="site-state-item-count">42</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

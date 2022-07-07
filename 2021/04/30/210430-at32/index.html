@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/heng32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/heng16x16.png">
@@ -241,7 +241,7 @@
 <h3 id="驱动LCD问题"><a href="#驱动LCD问题" class="headerlink" title="驱动LCD问题"></a>驱动LCD问题</h3><ul>
 <li>LCD用到了SPI和另外几个IO，写入命令过程中，要将DC拉低，0X2A、0X2B、0X2C是命令，但是DC拉低没有对上，通过程序加delay解决，当SPI速率上升后，可以不用delay就能使用LCD</li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">LCD_WR_REG</span><span class="params">(<span class="keyword">uint8_t</span> dat)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="comment">//  Delay_us(5);</span></span><br><span class="line">  <span class="keyword">while</span> (SPI_I2S_GetFlagStatus(SPI2, SPI_I2S_FLAG_TE) == RESET);</span><br><span class="line">  LCD_DC_Clr();<span class="comment">//写命令</span></span><br><span class="line">  LCD_Writ_Bus(dat);</span><br><span class="line">  <span class="keyword">while</span> (SPI_I2S_GetFlagStatus(SPI2, SPI_I2S_FLAG_TE) == RESET);</span><br><span class="line"><span class="comment">//  Delay_us(5);</span></span><br><span class="line">  LCD_DC_Set();<span class="comment">//写数据</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">LCD_WR_REG</span><span class="params">(<span class="type">uint8_t</span> dat)</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="comment">//  Delay_us(5);</span></span><br><span class="line">  <span class="keyword">while</span> (SPI_I2S_GetFlagStatus(SPI2, SPI_I2S_FLAG_TE) == RESET);</span><br><span class="line">  LCD_DC_Clr();<span class="comment">//写命令</span></span><br><span class="line">  LCD_Writ_Bus(dat);</span><br><span class="line">  <span class="keyword">while</span> (SPI_I2S_GetFlagStatus(SPI2, SPI_I2S_FLAG_TE) == RESET);</span><br><span class="line"><span class="comment">//  Delay_us(5);</span></span><br><span class="line">  LCD_DC_Set();<span class="comment">//写数据</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>AT32在读写SPI前要等待上一次读写操作完成，否则会出现发送数据缺少，接收卡死</li>
@@ -374,7 +374,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">41</span>
+          <span class="site-state-item-count">42</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
