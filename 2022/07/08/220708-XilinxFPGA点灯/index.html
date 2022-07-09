@@ -20,17 +20,22 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="好久不见，甚是想念。">
+  <meta name="description" content="好久不见，甚是想念一个多月没写博客了，毕业后学习时间少了，白天忙公司的项目，偶尔晚上有空看看自己想学的资料，自己还在做个地质分析仪的项目，每周日会花一天的时间做。为自己加油，2022年我还要完成这块FPGA的学习，感谢那位支持我学这块开发板的人。 安装Vivado 下载vivado安装包，资料链接B盘：https:&#x2F;&#x2F;pan.baidu.com&#x2F;s&#x2F;1eM7Sx-RmeYFE1ht_RPqxhw">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Xilinx FPGA 点灯">
 <meta property="og:url" content="http://example.com/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/index.html">
 <meta property="og:site_name" content="永恆博客网">
-<meta property="og:description" content="好久不见，甚是想念。">
+<meta property="og:description" content="好久不见，甚是想念一个多月没写博客了，毕业后学习时间少了，白天忙公司的项目，偶尔晚上有空看看自己想学的资料，自己还在做个地质分析仪的项目，每周日会花一天的时间做。为自己加油，2022年我还要完成这块FPGA的学习，感谢那位支持我学这块开发板的人。 安装Vivado 下载vivado安装包，资料链接B盘：https:&#x2F;&#x2F;pan.baidu.com&#x2F;s&#x2F;1eM7Sx-RmeYFE1ht_RPqxhw">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-2.jpg">
+<meta property="og:image" content="http://example.com/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-1.jpg">
+<meta property="og:image" content="http://example.com/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-5.jpg">
+<meta property="og:image" content="http://example.com/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-4.jpg">
 <meta property="article:published_time" content="2022-07-07T16:01:00.000Z">
-<meta property="article:modified_time" content="2022-07-07T16:20:37.689Z">
+<meta property="article:modified_time" content="2022-07-09T15:35:14.661Z">
 <meta property="article:author" content="Hao">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-2.jpg">
 
 <link rel="canonical" href="http://example.com/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/">
 
@@ -182,10 +187,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-07-08 00:01:00 / 修改时间：00:20:37" itemprop="dateCreated datePublished" datetime="2022-07-08T00:01:00+08:00">2022-07-08</time>
+              <time title="创建时间：2022-07-08 00:01:00" itemprop="dateCreated datePublished" datetime="2022-07-08T00:01:00+08:00">2022-07-08</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-07-09 23:35:14" itemprop="dateModified" datetime="2022-07-09T23:35:14+08:00">2022-07-09</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -211,7 +222,26 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="好久不见，甚是想念。"><a href="#好久不见，甚是想念。" class="headerlink" title="好久不见，甚是想念。"></a>好久不见，甚是想念。</h2><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+        <h2 id="好久不见，甚是想念"><a href="#好久不见，甚是想念" class="headerlink" title="好久不见，甚是想念"></a>好久不见，甚是想念</h2><p>一个多月没写博客了，毕业后学习时间少了，白天忙公司的项目，偶尔晚上有空看看自己想学的资料，自己还在做个地质分析仪的项目，每周日会花一天的时间做。为自己加油，2022年我还要完成这块FPGA的学习，感谢那位支持我学这块开发板的人。</p>
+<h2 id="安装Vivado"><a href="#安装Vivado" class="headerlink" title="安装Vivado"></a>安装Vivado</h2><ol>
+<li>下载vivado安装包，资料链接B盘：<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1eM7Sx-RmeYFE1ht_RPqxhw">https://pan.baidu.com/s/1eM7Sx-RmeYFE1ht_RPqxhw</a> 提取码：a8vu</li>
+<li>解压安装包到<strong>无中文路径的目录</strong>下，否则会出现安装包无法打开的情况。打开安装包，我在安装选件的页面取消了K系列、V系列和Soc Zynq的选件，安装空间要70GB左右，因此我还买了个1T的固态。</li>
+<li>激活只需要网上下载对应版本的激活licences，在激活页面load a licences即可。</li>
+</ol>
+<h2 id="软件操作"><a href="#软件操作" class="headerlink" title="软件操作"></a>软件操作</h2><ol>
+<li>Tools -&gt; Settings -&gt; Text Editor中选择编辑器，我选择的是notepad++，需要将编辑器路径加到系统环境变量。</li>
+<li>创建PLL IP核：<img src="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-2.jpg" alt="220708-XilinxFPGA点灯-2.jpg"></li>
+<li>功能仿真，RTL分析，综合，约束输入，设计实现都在左侧的Flow Navigator中。</li>
+</ol>
+<h2 id="流水灯"><a href="#流水灯" class="headerlink" title="流水灯"></a>流水灯</h2><ol>
+<li>New Project，芯片选择xc7a35tfgg484-2。<img src="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-1.jpg" alt="220708-XilinxFPGA点灯-1.jpg"></li>
+<li>Add Sources -&gt; Create File，创建led_top.v文件。</li>
+<li>Vivado中打开文件会调用Notepad++编辑器，编写流水灯代码：<img src="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-5.jpg" alt="220708-XilinxFPGA点灯-5.jpg"></li>
+<li>再功能仿真（可选），再综合、约束输入。</li>
+<li>最后生成bit流下载到开发板：<img src="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-4.jpg" alt="220708-XilinxFPGA点灯-4.jpg"></li>
+<li>Xilinx的集成开发环境要比Altera的好用不少，就是编译速度较慢。</li>
+</ol>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
     </div>
 
     
@@ -288,7 +318,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A5%BD%E4%B9%85%E4%B8%8D%E8%A7%81%EF%BC%8C%E7%94%9A%E6%98%AF%E6%83%B3%E5%BF%B5%E3%80%82"><span class="nav-number">1.</span> <span class="nav-text">好久不见，甚是想念。</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A5%BD%E4%B9%85%E4%B8%8D%E8%A7%81%EF%BC%8C%E7%94%9A%E6%98%AF%E6%83%B3%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">好久不见，甚是想念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Vivado"><span class="nav-number">2.</span> <span class="nav-text">安装Vivado</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AF%E4%BB%B6%E6%93%8D%E4%BD%9C"><span class="nav-number">3.</span> <span class="nav-text">软件操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E6%B0%B4%E7%81%AF"><span class="nav-number">4.</span> <span class="nav-text">流水灯</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
