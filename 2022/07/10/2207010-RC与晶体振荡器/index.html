@@ -20,19 +20,24 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="参考视频 正点原子FreeRTOS手把手教学-基于STM32  思考与心得 本书结构为：编码风格、系统移植、系统配置、任务函数、中断配置、临界区保护、多任务、列表结构、系统任务调度器、任务切换、时间管理、队列结构、信号量、软件定时器、事件标志组、任务通知、Tickless模式、空闲任务、内存管理。  跟今年2月份学的rtThread差不多，rtThread是参考官方文档学习的，学习了内核的一部分，">
+  <meta name="description" content="RC振荡器在振荡电路中的频率选择部分可以只用电阻和电容构成，这种只用电阻和电容构成的振荡器称为RC振荡器。RC振荡器需要起振电路，常用的正弦波荡电路有文氏桥振荡电路，要起振所以电路是正反馈，RC构成选频网络，两个二极管和R3构成稳幅电路。  RC振荡器容易封装到芯片中，MCU内部的时钟一般就是RC振荡器。成本低、功耗小、电路板上无需外部晶振，这些都是RC振荡器的优点。 缺点：MCU的内部振荡电路对">
 <meta property="og:type" content="article">
-<meta property="og:title" content="《FreeRTOS源码详解与应用开发——基于STM32》">
-<meta property="og:url" content="http://example.com/2021/07/29/210729-FreeRTOS%E6%BA%90%E7%A0%81%E8%AF%A6%E8%A7%A3%E4%B8%8E%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91/index.html">
+<meta property="og:title" content="RC振荡器 晶体振荡器">
+<meta property="og:url" content="http://example.com/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/index.html">
 <meta property="og:site_name" content="永恆博客网">
-<meta property="og:description" content="参考视频 正点原子FreeRTOS手把手教学-基于STM32  思考与心得 本书结构为：编码风格、系统移植、系统配置、任务函数、中断配置、临界区保护、多任务、列表结构、系统任务调度器、任务切换、时间管理、队列结构、信号量、软件定时器、事件标志组、任务通知、Tickless模式、空闲任务、内存管理。  跟今年2月份学的rtThread差不多，rtThread是参考官方文档学习的，学习了内核的一部分，">
+<meta property="og:description" content="RC振荡器在振荡电路中的频率选择部分可以只用电阻和电容构成，这种只用电阻和电容构成的振荡器称为RC振荡器。RC振荡器需要起振电路，常用的正弦波荡电路有文氏桥振荡电路，要起振所以电路是正反馈，RC构成选频网络，两个二极管和R3构成稳幅电路。  RC振荡器容易封装到芯片中，MCU内部的时钟一般就是RC振荡器。成本低、功耗小、电路板上无需外部晶振，这些都是RC振荡器的优点。 缺点：MCU的内部振荡电路对">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-07-29T06:00:00.000Z">
-<meta property="article:modified_time" content="2021-08-13T06:15:20.161Z">
+<meta property="og:image" content="http://example.com/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-1.jpg">
+<meta property="og:image" content="http://example.com/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-2.jpg">
+<meta property="og:image" content="http://example.com/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-3.jpg">
+<meta property="og:image" content="http://example.com/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-4.jpg">
+<meta property="article:published_time" content="2022-07-10T07:00:00.000Z">
+<meta property="article:modified_time" content="2022-07-10T08:10:52.056Z">
 <meta property="article:author" content="Hao">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-1.jpg">
 
-<link rel="canonical" href="http://example.com/2021/07/29/210729-FreeRTOS%E6%BA%90%E7%A0%81%E8%AF%A6%E8%A7%A3%E4%B8%8E%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91/">
+<link rel="canonical" href="http://example.com/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/">
 
 
 <script id="page-configurations">
@@ -45,7 +50,7 @@
   };
 </script>
 
-  <title>《FreeRTOS源码详解与应用开发——基于STM32》 | 永恆博客网</title>
+  <title>RC振荡器 晶体振荡器 | 永恆博客网</title>
   
 
 
@@ -160,7 +165,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/29/210729-FreeRTOS%E6%BA%90%E7%A0%81%E8%AF%A6%E8%A7%A3%E4%B8%8E%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -173,7 +178,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          《FreeRTOS源码详解与应用开发——基于STM32》
+          RC振荡器 晶体振荡器
         </h1>
 
         <div class="post-meta">
@@ -182,16 +187,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2021-07-29 14:00:00" itemprop="dateCreated datePublished" datetime="2021-07-29T14:00:00+08:00">2021-07-29</time>
+              <time title="创建时间：2022-07-10 15:00:00 / 修改时间：16:10:52" itemprop="dateCreated datePublished" datetime="2022-07-10T15:00:00+08:00">2022-07-10</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-13 14:15:20" itemprop="dateModified" datetime="2021-08-13T14:15:20+08:00">2021-08-13</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -202,7 +201,7 @@
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E7%A1%AC%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">硬件</span></a>
                 </span>
             </span>
 
@@ -217,19 +216,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h3 id="参考视频"><a href="#参考视频" class="headerlink" title="参考视频"></a>参考视频</h3><ul>
-<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1a4411Q7X1">正点原子FreeRTOS手把手教学-基于STM32</a></li>
-</ul>
-<h3 id="思考与心得"><a href="#思考与心得" class="headerlink" title="思考与心得"></a>思考与心得</h3><ol>
-<li><p>本书结构为：编码风格、<strong>系统移植</strong>、<strong>系统配置</strong>、任务函数、中断配置、临界区保护、多任务、列表结构、<strong>系统任务调度器</strong>、任务切换、时间管理、队列结构、信号量、<strong>软件定时器</strong>、事件标志组、任务通知、<strong>Tickless模式</strong>、空闲任务、<strong>内存管理</strong>。</p>
-</li>
-<li><p>跟今年2月份学的rtThread差不多，rtThread是参考<a target="_blank" rel="noopener" href="https://www.rt-thread.org/document/site/#/rt-thread-version/rt-thread-standard/programming-manual/basic/basic">官方文档</a>学习的，学习了内核的一部分，和本次学习《FreeRTOS源码详解与应用开发》的内容差不多，也是借本书回忆一下之前学的实时系统。比较关心对接口的使用，本书的源码详解有一部分没有细看，日后需要的时候再啃源码，也可以自己手写一个实时系统来理解内核中核心的部分。</p>
-</li>
-<li><p>有些公司可能不想用实时系统，理由是影响速度，那么问题来了，<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/342441430">什么情况下需要采用嵌入式操作系统呢？</a>看过这个知乎的回答就知道，大型项目中裸奔会造成资源的浪费，特别是处理GUI、lwip、fatfs等，里面有大量的delay。在需要并行这些就需要用到rtos，使用os还可以实现应用层与底层硬件的隔离，可以方便分块开发、移植等。另外在资源数较少的mcu上不很适合使用rtos。</p>
-</li>
-<li><p>光看书没有用，我欠缺rtos的实践，最好是拿个项目练练手。</p>
-</li>
-</ol>
+        <h2 id="RC振荡器"><a href="#RC振荡器" class="headerlink" title="RC振荡器"></a>RC振荡器</h2><p>在振荡电路中的频率选择部分可以只用电阻和电容构成，这种只用电阻和电容构成的振荡器称为RC振荡器。RC振荡器需要起振电路，常用的正弦波荡电路有文氏桥振荡电路，要起振所以电路是正反馈，RC构成选频网络，两个二极管和R3构成稳幅电路。</p>
+<p><img src="/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-1.jpg" alt="2207010-RC与晶体振荡器-1.jpg"></p>
+<p>RC振荡器容易封装到芯片中，MCU内部的时钟一般就是RC振荡器。成本低、功耗小、电路板上无需外部晶振，这些都是RC振荡器的优点。</p>
+<p>缺点：MCU的内部振荡电路对外界干扰很敏感，非常容易受到外界环境温度的影响。同时精度也低，下图是用F767内部和外部振荡器生成1Hz方波的区别。</p>
+<p><img src="/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-2.jpg" alt="2207010-RC与晶体振荡器-2.jpg"></p>
+<h2 id="晶体振荡器"><a href="#晶体振荡器" class="headerlink" title="晶体振荡器"></a>晶体振荡器</h2><p>只要在晶体板级上施加交变电压，就会是晶片产生机械变形振动，此现象即所谓逆压电效应。当外加电压频率等于晶体谐振器的固有频率时，就会发生压电谐振，从而导致机械变形的振幅突然增大。一般而言，晶振的振荡频率比较稳定。但是价格稍微高点，还有用晶体振荡器一般还要接两个15-33pF起振电容。</p>
+<p>有源晶振（Oscillator，晶振）只需要供电自身就能起振，无源晶振（Crystal，晶体）最高精度为5ppm，而有源晶振的精度则可以达到0.1ppm。有源晶振的信号电平是固定，所以需要选择好合适输出电平，灵活性较差。无源晶振单片机可以配置振荡输出电压。</p>
+<p><img src="/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-3.jpg" alt="有源晶振"><img src="/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-4.jpg" alt="无源晶振"></p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
     </div>
 
@@ -245,13 +239,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/07/10/210710-%E7%AC%AC%E4%B8%80%E5%9D%97%E5%9B%9B%E5%B1%82%E6%9D%BF/" rel="prev" title="我画的第一块四层板">
-      <i class="fa fa-chevron-left"></i> 我画的第一块四层板
+    <a href="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/" rel="prev" title="Xilinx FPGA 点灯">
+      <i class="fa fa-chevron-left"></i> Xilinx FPGA 点灯
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/08/05/210805-fpga%E9%A2%91%E7%8E%87%E8%AE%A1/" rel="next" title="fpga频率计设计">
-      fpga频率计设计 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -310,7 +301,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%A7%86%E9%A2%91"><span class="nav-number">1.</span> <span class="nav-text">参考视频</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%9D%E8%80%83%E4%B8%8E%E5%BF%83%E5%BE%97"><span class="nav-number">2.</span> <span class="nav-text">思考与心得</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#RC%E6%8C%AF%E8%8D%A1%E5%99%A8"><span class="nav-number">1.</span> <span class="nav-text">RC振荡器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text">晶体振荡器</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

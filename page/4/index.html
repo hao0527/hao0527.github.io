@@ -157,6 +157,87 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/12/210612-RAM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/06/12/210612-RAM/" class="post-title-link" itemprop="url">SRAM与DRAM</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-06-12 09:00:00 / 修改时间：09:12:56" itemprop="dateCreated datePublished" datetime="2021-06-12T09:00:00+08:00">2021-06-12</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E7%A1%AC%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">硬件</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_21435127/article/details/79617714">浅谈关于SRAM与DRAM的区别</a></li>
+</ul>
+<h3 id="SRAM与DRAM的区别"><a href="#SRAM与DRAM的区别" class="headerlink" title="SRAM与DRAM的区别"></a>SRAM与DRAM的区别</h3><p>​        SRAM(Static RAM)与DRAM(Dynamic RAM)，从名字上看，SRAM与DRAM的区别只在于一个是静态一个是动态。由于SRAM不需要刷新电路就能够保存数据，所以具有静止存取数据的作用。而DRAM则需要不停地刷新电路，否则内部的数据将会消失。而且不停刷新电路的功耗是很高的，在我们的PC待机时消耗的电量有很大一部分都来自于对内存的刷新。那么为什么我们不用SRAM来作为内存呢？</p>
+<p><strong>SRAM的基本单元结构图</strong> 和 <strong>DRAM的基本单元结构图</strong></p>
+<p><img src="/2021/06/12/210612-RAM/210612-RAM-1.jpg" alt="210612-RAM-1.jpg"></p>
+<p>​        SRAM存储一位需要花6个晶体管，而DRAM只需要花一个电容和一个晶体管。cache（高速缓冲存储器）追求的是速度所以选择SRAM，而内存则追求容量所以选择能够在相同空间中存放更多内容并且造价相对低廉的DRAM。</p>
+<p>​        我们姑且不去讨论关于SRAM是如何静态存储数据（触发器）的。为什么DRAM需要不断刷新呢？</p>
+<p>​        DRAM的数据实际上是存在电容里的。而电容放久了，内部的电荷就会越来越少，对外就形成不了电位的变化。而且当对DRAM进行读操作的时候需要将电容与外界形成回路，通过检查是否有电荷流进或流出来判断该bit是1还是0。所以无论怎样，在读操作中我们都破坏了原来的数据。所以在读操作结束后需要将数据写回DRAM中。在整个读或者写操作的周期中，计算机都会进行DRAM的刷新，通常是刷新的周期是4ms-64ms。</p>
+<p>​        关于SRAM和DRAM的寻址方式也有所不同。虽然通常我们都认为内存像一个长长的数组呈一维排列，但实际上内存是以一个二维数组的形式排列的，每个单元都有其行地址和列地址，当然cache也一样。而这两者的不同在于对于容量较小的SRAM，我们可以将行地址和列地址一次性传入到SRAM中，而如果我们对DRAM也这样做的话，则需要很多很多根地址线（容量越大，地址越长，地址位数越多）。所以我们选择分别传送行地址和列地址到DRAM中。先选中一整行，然后将整行数据存到一个锁存器中，等待列地址的传送然后选中所需要的数据。这也是为什么SRAM比DRAM快的原因之一。</p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/11/210611-python%E5%BC%82%E6%AD%A5%E4%B8%8E%E7%BA%BF%E7%A8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1195,117 +1276,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/03/210503-ov2640/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/05/03/210503-ov2640/" class="post-title-link" itemprop="url">OV2640初步调试记录</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-05-03 19:00:00" itemprop="dateCreated datePublished" datetime="2021-05-03T19:00:00+08:00">2021-05-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-17 10:32:06" itemprop="dateModified" datetime="2021-08-17T10:32:06+08:00">2021-08-17</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%B7%A5%E4%BD%9C%E6%97%A5%E5%BF%97/" itemprop="url" rel="index"><span itemprop="name">工作日志</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%B7%A5%E4%BD%9C%E6%97%A5%E5%BF%97/%E5%8D%A1%E7%89%87%E6%9C%BA/" itemprop="url" rel="index"><span itemprop="name">卡片机</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%B7%A5%E4%BD%9C%E6%97%A5%E5%BF%97/%E5%8D%A1%E7%89%87%E6%9C%BA/OV2640/" itemprop="url" rel="index"><span itemprop="name">OV2640</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="OV2640硬件"><a href="#OV2640硬件" class="headerlink" title="OV2640硬件"></a>OV2640硬件</h2><h3 id="原理图"><a href="#原理图" class="headerlink" title="原理图"></a>原理图</h3><p>参考：OV2640硬件开发手册</p>
-<p>设计：Hao</p>
-<p><img src="/2021/05/03/210503-ov2640/210503-ov2640-1.jpg" alt="210503-ov2640-1.jpg"></p>
-<h3 id="PCB"><a href="#PCB" class="headerlink" title="PCB"></a>PCB</h3><p>layout：小张</p>
-<h2 id="OV2640软件"><a href="#OV2640软件" class="headerlink" title="OV2640软件"></a>OV2640软件</h2><h3 id="软件需求"><a href="#软件需求" class="headerlink" title="软件需求"></a>软件需求</h3><ul>
-<li>jpeg读取，24l01发送</li>
-<li>光线暗打开闪光（未完成），通过读取曝光时间来判断光线强弱，决定是否打开闪光灯</li>
-</ul>
-<h3 id="程序开发"><a href="#程序开发" class="headerlink" title="程序开发"></a>程序开发</h3><ul>
-<li><p>参考：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Rx411R75t?p=79">正点原子ov2640实验视频</a>、OV2640数据手册、OV2640软件开发手册</p>
-</li>
-<li><p>接口：SCCB（类I2C）、DCMI（8bit并口）</p>
-</li>
-<li><p>传感器、传感器窗口、图像尺寸、图像窗口之间的关系如下图：<img src="/2021/05/03/210503-ov2640/210503-ov2640-3.jpg" alt="210503-ov2640-3.jpg"></p>
-</li>
-<li><p>程序开发按照正点原子给的库很容易进行，但部分功能库里没有需要查阅软件开发手册和数据手册，对寄存器进行读写。</p>
-</li>
-</ul>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
-<li><p>DOVDD是IO的电平，给了3.3V，因为和它通讯的单片机使用的电压也是3.3V，如果这里用2.8V可以也是可以，会产生电流倒灌，增加了产品不稳定的因素</p>
-</li>
-<li><p>ov2640模组在上电的时候比较烫手，温度有55℃上下，不使用的时候将PWDN拉高，停止给电</p>
-</li>
-<li><p>为了节约成本，24Mhz时钟可以由单片机输出，代替有源晶振</p>
-</li>
-<li><p>如果单片机没有DCMI接口，软件模拟速度跟不上，需要使用带FIFO的摄像头（ov7550），才可以由软件模拟读取并口数据，模拟的还没有尝试过，可以参考原子哥M3例程，F103使用0V7550</p>
-</li>
-<li><p>由于大多数低成本国产单片机不带DCMI接口，可以由高云FPGA驱动ov2640，通过SPI发送给单片机，这是本人五一节后要做的事情</p>
-</li>
-</ul>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1375,7 +1345,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-count">43</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
