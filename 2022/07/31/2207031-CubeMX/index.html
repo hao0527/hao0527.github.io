@@ -20,17 +20,21 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="保持热爱，奔赴山海。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="永恆博客网">
-<meta property="og:url" content="http://example.com/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/index.html">
+  <meta name="description" content="使用DMA发送串口数据问题 CubeMX生成的代码初始化DMA和UART顺序问题，应该先初始化DMA再UART，可以在CubeMX中调整生成初始化代码的顺序。 CubeMX生成的代码使用HAL_UART_Transmit_DMA()后需要手动将串口状态配置成空闲状态，可以在DMA传输完成中断中加(&amp;huart1)-&gt;gState &#x3D; HAL_UART_STATE_READY;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="STM32CubeMX使用上遇到的一些问题">
+<meta property="og:url" content="http://example.com/2022/07/31/2207031-CubeMX/index.html">
 <meta property="og:site_name" content="永恆博客网">
-<meta property="og:description" content="保持热爱，奔赴山海。">
+<meta property="og:description" content="使用DMA发送串口数据问题 CubeMX生成的代码初始化DMA和UART顺序问题，应该先初始化DMA再UART，可以在CubeMX中调整生成初始化代码的顺序。 CubeMX生成的代码使用HAL_UART_Transmit_DMA()后需要手动将串口状态配置成空闲状态，可以在DMA传输完成中断中加(&amp;huart1)-&gt;gState &#x3D; HAL_UART_STATE_READY;">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/07/31/2207031-CubeMX/2207031-CubeMX-1.jpg">
+<meta property="article:published_time" content="2022-07-31T06:00:00.000Z">
+<meta property="article:modified_time" content="2022-07-31T06:53:38.775Z">
 <meta property="article:author" content="Hao">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/07/31/2207031-CubeMX/2207031-CubeMX-1.jpg">
 
-<link rel="canonical" href="http://example.com/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/">
+<link rel="canonical" href="http://example.com/2022/07/31/2207031-CubeMX/">
 
 
 <script id="page-configurations">
@@ -38,12 +42,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>分类: 嵌入式 | 永恆博客网</title>
+  <title>STM32CubeMX使用上遇到的一些问题 | 永恆博客网</title>
   
 
 
@@ -151,194 +155,96 @@
         <div class="content-wrap">
           
 
-          <div class="content category">
+          <div class="content post posts-expand">
             
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h2 class="collection-header">嵌入式
-          <small>分类</small>
-        </h2>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/31/2207031-CubeMX/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          STM32CubeMX使用上遇到的一些问题
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-07-31 14:00:00 / 修改时间：14:53:38" itemprop="dateCreated datePublished" datetime="2022-07-31T14:00:00+08:00">2022-07-31</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2022</span>
+        <h2 id="使用DMA发送串口数据问题"><a href="#使用DMA发送串口数据问题" class="headerlink" title="使用DMA发送串口数据问题"></a>使用DMA发送串口数据问题</h2><ol>
+<li>CubeMX生成的代码初始化DMA和UART顺序问题，应该先初始化DMA再UART，可以在CubeMX中调整生成初始化代码的顺序。<img src="/2022/07/31/2207031-CubeMX/2207031-CubeMX-1.jpg" alt="2207031-CubeMX-1.jpg"></li>
+<li>CubeMX生成的代码使用<code>HAL_UART_Transmit_DMA()</code>后需要手动将串口状态配置成空闲状态，可以在DMA传输完成中断中加<code>(&amp;huart1)-&gt;gState = HAL_UART_STATE_READY;</code></li>
+</ol>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
+    
+    
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-07-31T14:00:00+08:00"
-              content="2022-07-31">
-          07-31
-        </time>
-      </div>
+      <footer class="post-footer">
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/07/31/2207031-CubeMX/" itemprop="url">
-            <span itemprop="name">STM32CubeMX使用上遇到的一些问题</span>
-          </a>
-      </div>
+        
 
-    </header>
-  </article>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-07-08T00:01:00+08:00"
-              content="2022-07-08">
-          07-08
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/" itemprop="url">
-            <span itemprop="name">Xilinx FPGA 点灯</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-05-22T00:00:00+08:00"
-              content="2022-05-22">
-          05-22
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/" itemprop="url">
-            <span itemprop="name">交叉编译工具链的使用</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-05-01T13:00:00+08:00"
-              content="2022-05-01">
-          05-01
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/" itemprop="url">
-            <span itemprop="name">基于Altera FPGA的网络摄像机设计与实现</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-04-26T20:00:00+08:00"
-              content="2022-04-26">
-          04-26
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/" itemprop="url">
-            <span itemprop="name">GPIO输入输出各种模式（推挽、开漏、准双向端口）详解</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-    <div class="collection-year">
-      <span class="collection-header">2021</span>
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/07/24/2207024-python%E8%B4%A6%E6%9C%AC%E5%A4%84%E7%90%86/" rel="prev" title="用Python统计花费">
+      <i class="fa fa-chevron-left"></i> 用Python统计花费
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/07/31/2207031-WindowsC%E7%BC%96%E7%A8%8B/" rel="next" title="Windows C/C++编程">
+      Windows C/C++编程 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2021-12-17T08:00:00+08:00"
-              content="2021-12-17">
-          12-17
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/12/17/211217-ltecat1/" itemprop="url">
-            <span itemprop="name">LTE Cat.1模块和阿里云物联网平台使用</span>
-          </a>
-      </div>
-
-    </header>
+      </footer>
+    
   </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2021-08-21T15:00:00+08:00"
-              content="2021-08-21">
-          08-21
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/08/21/210821-%E9%87%8D%E5%AE%9A%E5%90%91printf/" itemprop="url">
-            <span itemprop="name">在Keil中重定向printf</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2021-07-29T14:00:00+08:00"
-              content="2021-07-29">
-          07-29
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/07/29/210729-FreeRTOS%E6%BA%90%E7%A0%81%E8%AF%A6%E8%A7%A3%E4%B8%8E%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91/" itemprop="url">
-            <span itemprop="name">《FreeRTOS源码详解与应用开发——基于STM32》</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-    </div>
-  </div>
   
   
-  
-
   
 
 
@@ -391,6 +297,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8DMA%E5%8F%91%E9%80%81%E4%B8%B2%E5%8F%A3%E6%95%B0%E6%8D%AE%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">使用DMA发送串口数据问题</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

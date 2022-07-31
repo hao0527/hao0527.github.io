@@ -20,25 +20,19 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="RC振荡器在振荡电路中的频率选择部分可以只用电阻和电容构成，这种只用电阻和电容构成的振荡器称为RC振荡器。RC振荡器需要起振电路，常用的正弦波荡电路有文氏桥振荡电路，要起振所以电路是正反馈，RC构成选频网络，两个二极管和R3构成稳幅电路。  RC振荡器容易封装到芯片中，MCU内部的时钟一般就是RC振荡器。成本低、功耗小、电路板上无需外部晶振，这些都是RC振荡器的优点。 缺点：MCU的内部振荡电路对">
+  <meta name="description" content="Windows串口接收代码参考 windows串口通信函数API Win32API参考手册 使用CreateFile()打开COM10及以上串口的问题  实现1234567891011121314151617181920212223242526#include &lt;Windows.h&gt;void* serial_openSerial(void* lpFileName, unsigned i">
 <meta property="og:type" content="article">
-<meta property="og:title" content="RC振荡器 晶体振荡器">
-<meta property="og:url" content="http://example.com/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/index.html">
+<meta property="og:title" content="Windows C&#x2F;C++编程">
+<meta property="og:url" content="http://example.com/2022/07/31/2207031-WindowsC%E7%BC%96%E7%A8%8B/index.html">
 <meta property="og:site_name" content="永恆博客网">
-<meta property="og:description" content="RC振荡器在振荡电路中的频率选择部分可以只用电阻和电容构成，这种只用电阻和电容构成的振荡器称为RC振荡器。RC振荡器需要起振电路，常用的正弦波荡电路有文氏桥振荡电路，要起振所以电路是正反馈，RC构成选频网络，两个二极管和R3构成稳幅电路。  RC振荡器容易封装到芯片中，MCU内部的时钟一般就是RC振荡器。成本低、功耗小、电路板上无需外部晶振，这些都是RC振荡器的优点。 缺点：MCU的内部振荡电路对">
+<meta property="og:description" content="Windows串口接收代码参考 windows串口通信函数API Win32API参考手册 使用CreateFile()打开COM10及以上串口的问题  实现1234567891011121314151617181920212223242526#include &lt;Windows.h&gt;void* serial_openSerial(void* lpFileName, unsigned i">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-1.jpg">
-<meta property="og:image" content="http://example.com/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-2.jpg">
-<meta property="og:image" content="http://example.com/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-3.jpg">
-<meta property="og:image" content="http://example.com/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-4.jpg">
-<meta property="og:image" content="http://example.com/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-5.jpg">
-<meta property="article:published_time" content="2022-07-10T07:00:00.000Z">
-<meta property="article:modified_time" content="2022-07-24T03:13:56.319Z">
+<meta property="article:published_time" content="2022-07-31T10:00:00.000Z">
+<meta property="article:modified_time" content="2022-07-31T13:55:12.547Z">
 <meta property="article:author" content="Hao">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-1.jpg">
 
-<link rel="canonical" href="http://example.com/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/">
+<link rel="canonical" href="http://example.com/2022/07/31/2207031-WindowsC%E7%BC%96%E7%A8%8B/">
 
 
 <script id="page-configurations">
@@ -51,7 +45,7 @@
   };
 </script>
 
-  <title>RC振荡器 晶体振荡器 | 永恆博客网</title>
+  <title>Windows C/C++编程 | 永恆博客网</title>
   
 
 
@@ -166,7 +160,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/31/2207031-WindowsC%E7%BC%96%E7%A8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -179,7 +173,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          RC振荡器 晶体振荡器
+          Windows C/C++编程
         </h1>
 
         <div class="post-meta">
@@ -188,16 +182,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2022-07-10 15:00:00" itemprop="dateCreated datePublished" datetime="2022-07-10T15:00:00+08:00">2022-07-10</time>
+              <time title="创建时间：2022-07-31 18:00:00 / 修改时间：21:55:12" itemprop="dateCreated datePublished" datetime="2022-07-31T18:00:00+08:00">2022-07-31</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-07-24 11:13:56" itemprop="dateModified" datetime="2022-07-24T11:13:56+08:00">2022-07-24</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -208,7 +196,7 @@
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E7%A1%AC%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">硬件</span></a>
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
                 </span>
             </span>
 
@@ -223,17 +211,85 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="RC振荡器"><a href="#RC振荡器" class="headerlink" title="RC振荡器"></a>RC振荡器</h2><p>在振荡电路中的频率选择部分可以只用电阻和电容构成，这种只用电阻和电容构成的振荡器称为RC振荡器。RC振荡器需要起振电路，常用的正弦波荡电路有文氏桥振荡电路，要起振所以电路是正反馈，RC构成选频网络，两个二极管和R3构成稳幅电路。</p>
-<p><img src="/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-1.jpg" alt="2207010-RC与晶体振荡器-1.jpg"></p>
-<p>RC振荡器容易封装到芯片中，MCU内部的时钟一般就是RC振荡器。成本低、功耗小、电路板上无需外部晶振，这些都是RC振荡器的优点。</p>
-<p>缺点：MCU的内部振荡电路对外界干扰很敏感，非常容易受到外界环境温度的影响。同时精度也低，下图是用F767内部和外部振荡器生成1Hz方波的区别。</p>
-<p><img src="/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-2.jpg" alt="2207010-RC与晶体振荡器-2.jpg"></p>
-<h2 id="晶体振荡器"><a href="#晶体振荡器" class="headerlink" title="晶体振荡器"></a>晶体振荡器</h2><p>只要在晶体板级上施加交变电压，就会是晶片产生机械变形振动，此现象即所谓逆压电效应。当外加电压频率等于晶体谐振器的固有频率时，就会发生压电谐振，从而导致机械变形的振幅突然增大。一般而言，晶振的振荡频率比较稳定。但是价格稍微高点，还有用晶体振荡器一般还要接两个15-33pF起振电容。</p>
-<p>有源晶振（Oscillator，晶振）只需要供电自身就能起振，无源晶振（Crystal，晶体）最高精度为5ppm，而有源晶振的精度则可以达到0.1ppm。有源晶振的信号电平是固定，所以需要选择好合适输出电平，灵活性较差。无源晶振单片机可以配置振荡输出电压。</p>
-<p><img src="/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-3.jpg" alt="有源晶振"><img src="/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-4.jpg" alt="无源晶振"></p>
-<h2 id="STM32CubeMX中的时钟配置"><a href="#STM32CubeMX中的时钟配置" class="headerlink" title="STM32CubeMX中的时钟配置"></a>STM32CubeMX中的时钟配置</h2><p><img src="/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-5.jpg" alt="STM32中的时钟配置"></p>
-<p>BYPASS Clock Source：使用有源晶振的话，则只需要给它加上电源，即可输出时钟到MCU的时钟输入端，绕过MCU的OSC模块，时钟直接供MCU使用。</p>
-<p>Crystal/Ceramic Resonator：使用晶体的话，除了外部需要加上谐振电容（有些会加上MΩ的反馈电阻）之外，还需要<strong>MCU内部的OSC振荡电路辅助</strong>才能正常产生所需时钟。</p>
+        <h2 id="Windows串口接收代码"><a href="#Windows串口接收代码" class="headerlink" title="Windows串口接收代码"></a>Windows串口接收代码</h2><h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_39100510/article/details/124292893">windows串口通信函数API</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.yfvb.com/help/win32sdk/webhelplefth.htm">Win32API参考手册</a></li>
+<li><a target="_blank" rel="noopener" href="http://t.zoukankan.com/zhuguanhao-p-2887210.html">使用CreateFile()打开COM10及以上串口的问题</a></li>
+</ul>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;Windows.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span>* <span class="title function_">serial_openSerial</span><span class="params">(<span class="type">void</span>* lpFileName, <span class="type">unsigned</span> <span class="type">int</span> baudRate, <span class="type">unsigned</span> <span class="type">int</span> dwInQueue, <span class="type">unsigned</span> <span class="type">int</span> dwOutQueue)</span> &#123;</span><br><span class="line">	HANDLE hComm = <span class="literal">NULL</span>;</span><br><span class="line">	DCB dcb;</span><br><span class="line">	hComm = CreateFile(lpFileName,       <span class="comment">//串口名称</span></span><br><span class="line">						GENERIC_READ | GENERIC_WRITE, <span class="comment">//允许读和写</span></span><br><span class="line">						<span class="number">0</span>,             <span class="comment">//独占方式</span></span><br><span class="line">						<span class="literal">NULL</span>,          <span class="comment">// 无安全属性，不可被子程序继承</span></span><br><span class="line">						OPEN_EXISTING, <span class="comment">//创建文件的性质，打开而不是创建</span></span><br><span class="line">						<span class="number">0</span>,             <span class="comment">// Non Overlapped I/O</span></span><br><span class="line">						<span class="literal">NULL</span>);         <span class="comment">// Null for Comm Devices</span></span><br><span class="line">	SetupComm(hComm, dwInQueue, dwOutQueue);</span><br><span class="line">	GetCommState(hComm, &amp;dcb);</span><br><span class="line">	dcb.BaudRate = baudRate;</span><br><span class="line">	SetCommState(hComm, &amp;dcb);</span><br><span class="line">	<span class="keyword">return</span> hComm;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">serial_readLen</span><span class="params">(<span class="type">void</span>* hComm, <span class="type">unsigned</span> <span class="type">char</span>* pBuff, <span class="type">unsigned</span> <span class="type">int</span> len, <span class="type">unsigned</span> <span class="type">int</span>* pLenRead)</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> ReadFile(hComm, pBuff, len, pLenRead, <span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">serial_closeSerial</span><span class="params">(<span class="type">void</span>* hComm)</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> CloseHandle(hComm);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="不同系统编译各数据类型所占内存空间大小"><a href="#不同系统编译各数据类型所占内存空间大小" class="headerlink" title="不同系统编译各数据类型所占内存空间大小"></a>不同系统编译各数据类型所占内存空间大小</h2><h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>win32</th>
+<th>win64</th>
+<th>linux32</th>
+<th>linux64</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>char</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>short</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr>
+<td>int</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+</tr>
+<tr>
+<td>long</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>8</td>
+</tr>
+<tr>
+<td>long long</td>
+<td>8</td>
+<td>8</td>
+<td>8</td>
+<td>8</td>
+</tr>
+<tr>
+<td>float</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+</tr>
+<tr>
+<td>double</td>
+<td>8</td>
+<td>8</td>
+<td>8</td>
+<td>8</td>
+</tr>
+<tr>
+<td>void*</td>
+<td>4</td>
+<td>8</td>
+<td>4</td>
+<td>8</td>
+</tr>
+</tbody></table>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ol>
+<li>指针所占空间看系统是16位、32位还是64位。</li>
+<li>win64把long编成4字节，linux64把long编成8字节。</li>
+<li>在32位系统中，int和long都是4字节，取值范围相同。</li>
+</ol>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
     </div>
 
@@ -249,13 +305,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/" rel="prev" title="Xilinx FPGA 点灯">
-      <i class="fa fa-chevron-left"></i> Xilinx FPGA 点灯
+    <a href="/2022/07/31/2207031-CubeMX/" rel="prev" title="STM32CubeMX使用上遇到的一些问题">
+      <i class="fa fa-chevron-left"></i> STM32CubeMX使用上遇到的一些问题
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2022/07/24/2207024-python%E8%B4%A6%E6%9C%AC%E5%A4%84%E7%90%86/" rel="next" title="用Python统计花费">
-      用Python统计花费 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -314,7 +367,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#RC%E6%8C%AF%E8%8D%A1%E5%99%A8"><span class="nav-number">1.</span> <span class="nav-text">RC振荡器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text">晶体振荡器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STM32CubeMX%E4%B8%AD%E7%9A%84%E6%97%B6%E9%92%9F%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">STM32CubeMX中的时钟配置</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Windows%E4%B8%B2%E5%8F%A3%E6%8E%A5%E6%94%B6%E4%BB%A3%E7%A0%81"><span class="nav-number">1.</span> <span class="nav-text">Windows串口接收代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">1.1.</span> <span class="nav-text">参考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.2.</span> <span class="nav-text">实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E5%90%8C%E7%B3%BB%E7%BB%9F%E7%BC%96%E8%AF%91%E5%90%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%89%80%E5%8D%A0%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4%E5%A4%A7%E5%B0%8F"><span class="nav-number">2.</span> <span class="nav-text">不同系统编译各数据类型所占内存空间大小</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%BA%E5%88%AB"><span class="nav-number">2.1.</span> <span class="nav-text">区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">2.2.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

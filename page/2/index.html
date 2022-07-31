@@ -157,6 +157,286 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/04/220404-C%E7%9A%84%E7%96%91%E6%83%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/04/220404-C%E7%9A%84%E7%96%91%E6%83%91/" class="post-title-link" itemprop="url">C/C++中几个易混淆的点</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-04-04 19:00:00" itemprop="dateCreated datePublished" datetime="2022-04-04T19:00:00+08:00">2022-04-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-04-25 23:09:17" itemprop="dateModified" datetime="2022-04-25T23:09:17+08:00">2022-04-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="数组指针-amp-指针数组"><a href="#数组指针-amp-指针数组" class="headerlink" title="数组指针&amp;指针数组"></a>数组指针&amp;指针数组</h2><p>参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/mq0036/p/3382732.html%EF%BC%8C%E4%B8%A4%E8%80%85%E5%86%85%E5%AD%98%E5%88%86%E5%B8%83%E5%86%99%E7%9A%84%E5%BE%88%E8%AF%A6%E7%BB%86%E3%80%82">https://www.cnblogs.com/mq0036/p/3382732.html，两者内存分布写的很详细。</a></p>
+<h3 id="数组指针"><a href="#数组指针" class="headerlink" title="数组指针"></a>数组指针</h3><p>定义<code>int (*p)[n];</code></p>
+<p>()优先级比[]高，首先说明p是一个指针，指向一个整型的一维数组，这个一维数组的长度是n，也可以说是p的步长。</p>
+<p>如要将二维数组赋给一指针，应这样赋值：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a[<span class="number">3</span>][<span class="number">4</span>];</span><br><span class="line"><span class="type">int</span> (*p)[<span class="number">4</span>];   <span class="comment">//该语句是定义一个数组指针，指向含4个元素的一维数组。</span></span><br><span class="line">p = a;     <span class="comment">//将该二维数组的首地址赋给p，也就是a[0]或&amp;a[0][0]</span></span><br><span class="line">p++;       <span class="comment">//该语句执行过后，也就是p=p+1;p跨过行a[0][]指向了行a[1][]</span></span><br></pre></td></tr></table></figure>
+
+<p>所以数组指针也称指向一维数组的指针，亦称行指针。</p>
+<h3 id="指针数组"><a href="#指针数组" class="headerlink" title="指针数组"></a>指针数组</h3><p>定义<code>int *p[n];</code></p>
+<p>[]优先级比*高，先与p结合成为一个数组，再由int*说明这是一个整型指针数组，它有n个指针类型的数组元素。这里执行p+1时，则p指向下一个数组元素，这样赋值是错误的：p=a；因为p是个不可知的表示，只存在p[0]、p[1]、p[2]…p[n-1],而且它们分别是指针变量可以用来存放变量地址。但可以这样 <em>p=a; 这里</em>p表示指针数组第一个元素的值，a的首地址的值。<br>如要将二维数组赋给一指针数组：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> *p[<span class="number">3</span>];</span><br><span class="line"><span class="type">int</span> a[<span class="number">3</span>][<span class="number">4</span>];</span><br><span class="line">p++;  <span class="comment">//该语句表示p数组指向下一个数组元素。注：此数组每一个元素都是一个指针</span></span><br><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">3</span>;i++)</span><br><span class="line">    p[i] = a[i];</span><br></pre></td></tr></table></figure>
+
+<p>这里int *p[3] 表示一个一维数组内存放着三个指针变量，分别是p[0]、p[1]、p[2]，所以要分别赋值。</p>
+<h2 id="常量指针-amp-指针常量"><a href="#常量指针-amp-指针常量" class="headerlink" title="常量指针&amp;指针常量"></a>常量指针&amp;指针常量</h2><h3 id="指针常量"><a href="#指针常量" class="headerlink" title="指针常量"></a>指针常量</h3><p>定义<code>int * const p = &amp;a;</code></p>
+<p>p是个常量，p的类型是int*，所以p的值不能改变，但是*p的值可以改变。</p>
+<h3 id="常量指针"><a href="#常量指针" class="headerlink" title="常量指针"></a>常量指针</h3><p>定义<code>const int * p = NULL;</code></p>
+<p>*p是个常量，p的类型是int*，所以*p的值不能改变，但是p的值可以改变。利用这个特性，在函数传参时使用常量指针可以防止函数对变量值的误修改。</p>
+<h3 id="常量指针常量"><a href="#常量指针常量" class="headerlink" title="常量指针常量"></a>常量指针常量</h3><p>定义<code>const int * const p = &amp;a;</code></p>
+<p>p是个常量，*p也是个常量，p的类型是int*，所以*p的值不能改变，p的值也不能改变。</p>
+<h2 id="引用-amp-常量引用"><a href="#引用-amp-常量引用" class="headerlink" title="引用&amp;常量引用"></a>引用&amp;常量引用</h2><h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><p>定义<code>int&amp; r = a;</code></p>
+<p><a target="_blank" rel="noopener" href="https://www.runoob.com/cplusplus/cpp-references.html">C++ 引用</a>，引用变量是一个别名，也就是说，它是某个已存在变量的另一个名字。</p>
+<p>函数可以通过引用传参，<code>void foo(int &amp;a)&#123;a = 1;&#125;</code>修改引用形参可以改变实参。</p>
+<h3 id="常量引用"><a href="#常量引用" class="headerlink" title="常量引用"></a>常量引用</h3><p>定义<code>const int&amp; r = a;</code></p>
+<p>函数可以通过常量引用传参，<code>void foo(const int &amp;a) &#123;;&#125;</code>只能读取a，不能修改a。利用这个特性，在函数传参时使用常量指针可以防止函数对变量值的误修改。</p>
+<h2 id="函数指针-amp-指针函数"><a href="#函数指针-amp-指针函数" class="headerlink" title="函数指针&amp;指针函数"></a>函数指针&amp;指针函数</h2><h3 id="函数指针"><a href="#函数指针" class="headerlink" title="函数指针"></a>函数指针</h3><p>定义函数指针<code>void (*pFun)(int a, int b);</code></p>
+<p>定义函数<code>void Fun(int a, int b) &#123;;&#125;</code></p>
+<p>将Fun函数的首地址赋给指针变量pFun<code>pFun = Fun;</code>也可以是<code>pFun = &amp;Fun;</code></p>
+<p>通过指针函数调用<code>pFun(1, 2);</code>也可以是<code>(*pFun)(1, 2);</code></p>
+<p>函数指针定义时返回值，参数类型，个数都必须与要指向的函数相同。</p>
+<h3 id="指针函数"><a href="#指针函数" class="headerlink" title="指针函数"></a>指针函数</h3><p>指针函数是返回类型为指针的函数。</p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-title-link" itemprop="url">《操作系统》笔记</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-03-26 15:00:00" itemprop="dateCreated datePublished" datetime="2022-03-26T15:00:00+08:00">2022-03-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-04-06 20:25:48" itemprop="dateModified" datetime="2022-04-06T20:25:48+08:00">2022-04-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="课程链接"><a href="#课程链接" class="headerlink" title="课程链接"></a>课程链接</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1d4411v7u7?p=1">操作系统（哈工大李治军老师）32讲（全）超清</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.shiyanlou.com/courses/115">配套实验课</a></p>
+</li>
+</ul>
+<h2 id="课程笔记"><a href="#课程笔记" class="headerlink" title="课程笔记"></a>课程笔记</h2><h3 id="L1-L3"><a href="#L1-L3" class="headerlink" title="L1~L3"></a>L1~L3</h3><ol>
+<li><p>课程目标：进入操作系统，学习操作系统的运作。</p>
+</li>
+<li><p>计算机工作方式：取址执行，取CS和PC指针指向内存中的指令，在CPU执行</p>
+</li>
+<li><p>操作系统引导：启动引导时内核在内存中的位置和移动后的位置情况图<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-1.jpg" alt="220326-操作系统-1.jpg"></p>
+<p>开机时，CS=0xffff，IP=0x0000，CPU处于实模式。实模式寻址CS&lt;&lt;4+IP，CS存放段地址，IP存放4位段偏移量，共20位。0xffff0地址属于BIOS映射区，在BIOS里检查硬件（RAM，键盘，…）；</p>
+<p>将磁盘0磁道0扇区（引导扇区）读到内存0x7c00，引导扇区代码存放在bootsect.s；</p>
+<p>将引导扇区代码从内存0x7c00处移动到0x90000处；</p>
+<p><code>jmpi go, INITSEG</code>，INITSEG=0x9000，跳至bios的go标号处；</p>
+<p><code>jmpi 0, SETUPSEG</code>，SETUPSEG=0x9020，跳至setup.s；</p>
+<p>在setup.s  start:中读取扩展内存大小，读取显卡参数，…；</p>
+<p>do_move:中将system模块移动到0地址，<code>jmpi 0, 8</code>，跳转到system模块，system模块开始是head.s；</p>
+<p>通过设置cr0最后一位，PE=1由16位实模式转到32位保护模式，在保护模式下，CS表示选择子，查GDT表得到；</p>
+<p>在head.s中初始化GDT表和IDT表，setup_paging执行ret后，会执行函数main()，进入main()后的栈为0，0，0，L6，三个0表示main函数的参数，L6表示main函数返回时进入死循环；</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">after_page_tables:</span><br><span class="line">    pushl $0 # These are the parameters to main :-)</span><br><span class="line">    pushl $0 # 这些是调用 main 程序的参数（指 init/main.c）。</span><br><span class="line">    pushl $0 # 其中的&#x27;$&#x27;符号表示这是一个立即操作数。</span><br><span class="line">    pushl $L6 # return address for main, if it decides to.</span><br><span class="line">    pushl $_main # &#x27;_main&#x27;是编译程序对 main 的内部表示方法。</span><br><span class="line">    jmp setup_paging # 跳转至第 198 行。</span><br><span class="line">L6:</span><br><span class="line">    jmp L6 # main should never return here, but</span><br><span class="line">    # just in case, we know what happens.</span><br><span class="line">    # main 程序绝对不应该返回到这里。不过为了以防万一，</span><br><span class="line">    # 所以添加了该语句。这样我们就知道发生什么问题了。</span><br><span class="line">setup_paging:</span><br><span class="line">    设置页表...</span><br><span class="line">    ret</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="L4-L7"><a href="#L4-L7" class="headerlink" title="L4~L7"></a>L4~L7</h3><ol>
+<li>操作系统接口：接口表现为函数调用，又由系统提供，所以称为系统调用，可移植操作系统接口(Portable Operating System Interface of uniX, POSIX)</li>
+<li>系统调用的实现：应用层要通过接口访问内核，不能直接读内核内存，内核是受保护的。中断是进入内核的唯一方法；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-2.jpg" alt="220326-操作系统-2.jpg"><img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-3.jpg" alt="220326-操作系统-3.jpg"></li>
+<li>课程任务：操作系统要学习CPU管理、内存管理、文件管理；</li>
+</ol>
+<h3 id="L8-L19"><a href="#L8-L19" class="headerlink" title="L8~L19"></a>L8~L19</h3><ol>
+<li><p>CPU管理：多道程序，交替执行（并发）。运行的程序是进程，多进程切换时要保存现场。通过进程控制块(Process Control Block, PCB)来记录进程信息。操作系统要把这些进程记录好，要按照合理的次序分配资源、调度；</p>
+</li>
+<li><p>进程状态图：<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-4.jpg" alt="220326-操作系统-4.jpg"></p>
+</li>
+<li><p>通过进程内存映射表来实现内存分离，切换进程时要切换内存映射表；通过上锁，来保证共享内存的正确被读写；</p>
+</li>
+<li><p>用户级线程和核心级线程区别：用户级线程创建、切换无需进内核，一个线程阻塞进程会被切换；</p>
+</li>
+<li><p>线程的优点：线程切换无需切换内存映射表。<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-5.jpg" alt="220326-操作系统-5.jpg"></p>
+</li>
+<li><p>用户级线程切换通过Yield()，要先切换栈，栈会存在TCB（线程控制块）中，每个线程对应一个TCB；</p>
+</li>
+<li><p>核心级线程切换时除了用户栈还有内核栈也要一起切换。在内核阻塞时要进行TCB切换，使用<code>switch_to(cur, next);</code>TCB切换完后根据TCB完成内核栈切换，最后IRET返回用户态，切换用户栈；</p>
+</li>
+<li><p>前台任务需要响应时间小-&gt;导致切换次数多-&gt;导致系统内耗大-&gt;导致吞吐量（完成任务的量）小。后台任务更加关注周转时间。任务可分成IO约束型任务和CPU约束型任务；</p>
+</li>
+<li><p>CPU调度策略：FIFO、Priority；CPU调度算法：先来先服务（First come, first served），短作业优先（SJF）这个算法周转时间最小，按时间片来轮转调度（RR），优先级调度（前台&gt;后台）；</p>
+</li>
+<li><p>linux0.11中的调度函数既考虑了优先级又考虑了时间片：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">Schedule</span><span class="params">(<span class="type">void</span>)</span> <span class="comment">// 在 kernel/sched.c 中</span></span><br><span class="line">&#123; <span class="keyword">while</span>(<span class="number">1</span>)&#123; c=<span class="number">-1</span>; next=<span class="number">0</span>; i=NR_TASKS; p=&amp;task[NR_TASKS];</span><br><span class="line">    <span class="keyword">while</span>(--i)&#123; <span class="keyword">if</span>((*p-&gt;state == TASK_RUNNING&amp;&amp;(*p)-&gt;counter&gt;c)</span><br><span class="line">        c=(*p)-&gt;counter, next=i; &#125;</span><br><span class="line">    <span class="keyword">if</span>(c) <span class="keyword">break</span>; <span class="comment">// 找到了最大的counter,跳出，执行switch_to()</span></span><br><span class="line">    <span class="keyword">for</span>(p=&amp;LAST_TASK;p&gt;&amp;FIRST_TASK;--p)</span><br><span class="line">        (*p)-&gt;counter=((*p)-&gt;counter&gt;&gt;<span class="number">1</span>)+(*p)-&gt;priority; </span><br><span class="line">    &#125;</span><br><span class="line">switch_to(next);&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>进程间同步看信号量（Semaphore），可使多个进程合理有序运行。<strong>读写信号量的代码一定在临界区</strong>，或者原子操作。临界区：一次只允许一个进程进入该进程的那段代码。原子操作：不会被线程调度机制打断的操作;</p>
+</li>
+<li><p>保护临界区的方法：关闭中断<code>cli();</code>，临界区，开中断<code>sti();</code>，剩余区。这种方法只适用于小系统，不适用于多核CPU。还可以采取硬件原子指令法，硬件一条指令修改mutex变量；</p>
+</li>
+<li><p>信号量未互斥使用会造成死锁。死锁处理：死锁预防，死锁避免，死锁检测+恢复，死锁忽略；</p>
+</li>
+</ol>
+<h3 id="L20-L25"><a href="#L20-L25" class="headerlink" title="L20~L25"></a>L20~L25</h3><ol>
+<li><p>内存使用：将程序放到内存中，PC指向开始的地址。将程序从硬盘载入内存需要重定位，物理地址=基址+逻辑地址。重定位可以在编译时（静态系统）、载入时执行、<strong>运行时执行</strong>。编译时重定位的程序只能放在内存固定位，载入时重定位的程序一旦载入内存就不能动了；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-6.jpg" alt="220326-操作系统-6.jpg"></p>
+</li>
+<li><p>程序载入后还需要移动，引入<strong>交换</strong>（swap）概念，可以把暂时不用的内存搬到交换分区，充分利用内存。</p>
+</li>
+<li><p>引入分段，程序由若干部分(段)组成，每个段有各自的特点、用途：主程序（只读）、变量集（可写、不会动态增长）、函数集、动态数组（会动态增长）、栈。使用分段思想可以让用户分治每个段，可以让内存更高效使用。定位具体指令<code>mov [es:bx], ax</code>。地址组成：&lt;段号，段内偏移&gt;。进程段表存放在LDT表，系统段表存放在GDT表，LDT存放在PCB中；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-7.jpg" alt="220326-操作系统-7.jpg"></p>
+</li>
+<li><p><strong>内存分区</strong>可分为固定分区和可变分区。可变分区的管理：空闲分区表、已分配分区表。可变分区分配内存算法：首先适配（最快）、最佳适配和申请空间长度最接近（会导致内存碎片）、最差适配；</p>
+</li>
+<li><p>实际物理内存采用<strong>分页</strong>来管理，分区是对虚拟内存（交换分区）的管理方法。分区会造成内存碎片，分页会将物理内存分割（比如每4k分割），程序也会被分页，每段都会被分页，分页会使内存存储离散化。地址翻译有专门的硬件内存管理单元（MMU）执行；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-8.jpg" alt="220326-操作系统-8.jpg"></p>
+</li>
+<li><p>为了提高内存空间利用率，页应该小，但是页小了页表就大了。如果页表只存放用到的页，则需要顺序查找页表，速度慢。采用多级页表可兼顾速度和空间，即页目录表+页表，地址组成&lt;10bits页目录号，10bits页号，12bits偏移&gt;，12bits偏移刚好是4K。</p>
+</li>
+<li><p>多级页表增加了访存的次数，尤其是64位系统。硬件上引入转译后备缓冲区（Translation Look-aside Buffer，TLB，快表），快表能存放最近查过多级页表的逻辑页和物理页，可以根据页号直接查物理页号；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-9.jpg" alt="220326-操作系统-9.jpg"></p>
+</li>
+<li><p>段页结合：段面向用户，页面向硬件。实际的段页内存管理，程序如何载入内存，fork后内存做了什么可以看<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1d4411v7u7?p=23">L23 段页结合的实际内存管理</a>；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-10.jpg" alt="220326-操作系统-10.jpg"></p>
+</li>
+<li><p>用内存换入换出实现“大内存”，虚拟内存4G，物理内存可以只有1G。当程序运行缺页时， page fault中断请求do_no_page调页（读磁盘），这就是换入；</p>
+</li>
+<li><p>内存换出：将内存中不用的页换出到磁盘。如何找不用的页？换出算法：FIFO（先来的先被换出，不太行）、MIN（将未来最远要使用的页淘汰，是最优方案，但无法预测未来）、LRU（Least Recently Used，最近最少使用）；</p>
+</li>
+<li><p>LUR的准确实现：可以用时间戳，每次地址访问都需要修改时间戳，需维护一个全局时钟，实现代价较较大，可以用页码栈，选择栈底淘汰，代价也太大。在实际中内存换出算法采用LUR的近似实现：时钟算法（环形队列）<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-11.jpg" alt="220326-操作系统-11.jpg"><img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-12.jpg" alt="220326-操作系统-12.jpg"></p>
+</li>
+<li><p>给进程分配多少页框？分配多了，请求调页导致的内存高效利用就没有了。分配少了，会频繁请求调页导致系统低效。系统低效解释：系统内进程增多多，每个进程的缺页率增大大，缺页率增大到一定程度，进程总等待调页完成，CPU利用率降低低，进程进一步增多，缺页率更大，称这一现象为颠簸(thrashing)；</p>
+</li>
+</ol>
+<h3 id="L26-L32"><a href="#L26-L32" class="headerlink" title="L26~L32"></a>L26~L32</h3><ol>
+<li><p>IO设备、显示器、键盘，让这些外设工作的基本思想就是往外设硬件寄存器写值，外设处理完再产生中断，CPU处理。在Linux中无论什么设备都用文件接口open、read、write、close，例如<code>int fd = open(&quot;/dev/xxx&quot;);</code>到最后是通过out写对应寄存器；</p>
+</li>
+<li><p>生磁盘的使用：磁盘驱动负责从盘块号（block）计算出柱面（cgl）、磁头（head）、扇区号（sec）。从CHS到扇区号，从扇区到盘块（第一层抽象）：<strong>扇区号 = C×H×S+H×S+S</strong> 。<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-13.jpg" alt="220326-操作系统-13.jpg"></p>
+</li>
+<li><p>多个进程通过<strong>请求队列</strong>使用磁盘（第二层抽象）；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-14.jpg" alt="220326-操作系统-14.jpg"></p>
+</li>
+<li><p><strong>访问磁盘时间 = 写入控制器时间 + 寻道时间（8~12ms）+ 旋转时间（7200rmp，半周4ms）+ 传输时间（50MB/s，约0.3ms）</strong>。可见访问磁盘主要时间花在寻道，block相邻的盘块可以快速读出，因此需要考虑寻道算法。寻道调度算法有FCFS（先来先服务）、SSTF（短寻道优先算法，可能有磁道长时间访问不到）、SCAN（SSTF+中途不折回）、C-SCAN（SCAN+直接移动到另一端，电梯算法）；</p>
+</li>
+<li><p>引入文件（第三层抽象），文件是建立字符流在磁盘块集合的映射关系，每个文件都对应一个文件控制块（FCB），连续结构存储FCB包含文件名、起始块、块数的信息，链式结构存储FCB包含文件名、起始块的信息，链式结构存储顺序访问慢、可靠性差，<strong>索引结构</strong>存储文件是连续和链式的有效折中，FCB包含文件名、索引块的信息。在实际系统中采用的是<strong>多级索引结构</strong>，根据不同大小文件分成不同级索引通过<strong>inode</strong>一级级查询访问，因此可以标识很大的文件，很小的文件可以高效访问，中等大小的文件访问速度也不慢；</p>
+</li>
+<li><p>引入文件系统（第四层抽象），文件系统引入目录树，文件目录也是个文件，存放目录下其他文件名和对应文件的FCB指针。inode位图：哪些inode空闲，哪些被占用。盘块位图：哪些盘块是空闲的，硬盘大小不同这个位图的大小也不同。超级块：存放i节点位图和盘块位图的大小，因此可以计算出i节点起始地址；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-15.jpg" alt="220326-操作系统-15.jpg"><img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-16.jpg" alt="220326-操作系统-16.jpg"><img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-17.jpg" alt="220326-操作系统-17.jpg"></p>
+</li>
+</ol>
+<h2 id="课程总结"><a href="#课程总结" class="headerlink" title="课程总结"></a>课程总结</h2><p>通过本次操作系统的学习，了解了操作系统全图（CPU、内存、文件设备），学习了多进程视图、文件视图。哈工大的几个实验非常的难，Study OS by coding !!!</p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/17/220317-gdb/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1164,222 +1444,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/17/211217-ltecat1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/17/211217-ltecat1/" class="post-title-link" itemprop="url">LTE Cat.1模块和阿里云物联网平台使用</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-12-17 08:00:00" itemprop="dateCreated datePublished" datetime="2021-12-17T08:00:00+08:00">2021-12-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-29 19:42:44" itemprop="dateModified" datetime="2021-12-29T19:42:44+08:00">2021-12-29</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="学习资料"><a href="#学习资料" class="headerlink" title="学习资料"></a>学习资料</h3><ul>
-<li><a target="_blank" rel="noopener" href="https://help.aliyun.com/product/30520.html">阿里云物联网平台-产品文档</a></li>
-</ul>
-<h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3><ul>
-<li>在博世实习，同事想要远程调试，打印log到终端功能（代替出差去现场调试），于是我就决定用LTE Cat.1模块，配合阿里云物联网平台，使用MQTT传输日志文件。</li>
-</ul>
-<h3 id="阿里云物联网平台使用"><a href="#阿里云物联网平台使用" class="headerlink" title="阿里云物联网平台使用"></a>阿里云物联网平台使用</h3><ol>
-<li><p>打开<a target="_blank" rel="noopener" href="https://iot.console.aliyun.com/lk/summary/new">阿里云物联网平台</a>，使用公共实例，<a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/73728.html">创建产品</a>，数据格式选择<strong>（透传/自定义）</strong>，以便将上行的自定义格式的数据转换为Alink JSON格式，连网方式这里选择<strong>蜂窝（2G/3G/4G/5G）</strong>，所属品类选择<strong>自定义品类</strong>，其它配置默认即可。配置完在产品详情界面图如下：<img src="/2021/12/17/211217-ltecat1/211217-ltecat1-1.jpg" alt="211217-ltecat1-1.jpg"></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/89271.html">创建设备</a>，创建设备成功后，将自动弹出<strong>添加完成</strong>对话框。您可以查看、复制设备证书信息。设备证书由设备的ProductKey、DeviceName和DeviceSecret组成，是设备与物联网平台进行通信的重要身份认证，建议您妥善保管。配置完在设备详情界面图如下：<img src="/2021/12/17/211217-ltecat1/211217-ltecat1-2.jpg" alt="211217-ltecat1-2.jpg"></p>
-</li>
-<li><p>接下来就是在产品详情界面中的功能定义，可以查看<a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/213906.html">物模型概述</a>，设置MQTT需要上传的变量。我设置了一些调试时用到的变量，如下图：<img src="/2021/12/17/211217-ltecat1/211217-ltecat1-3.jpg" alt="211217-ltecat1-3.jpg"></p>
-</li>
-<li><p>在产品详情界面中的数据解析可以设置<a target="_blank" rel="noopener" href="https://iot.console.aliyun.com/product/productDetail/gecgSxxbl6Q?current=4">物模型数据解析</a>，通过物模型数据解析我们可以将自定义帧结构的数据解析成Alink JSON格式，注意：产品的<strong>数据格式</strong>选择为<strong>透传/自定义</strong>（这个坑我一天，最后找阿里云客服解决）。写完数据解析后，选择模拟类型为<strong>设备上报数据</strong>，执行与提交。</p>
-</li>
-<li><p>接下来就是mcu使用LTE Cat.1模块给阿里云平台发数据了！在设备详情的物模型数据中可以看见，通过物模型数据上报的topic发送来的调试变量。我们也可以通过设备详情中的日志服务看见，阿里云上的数据收发记录和解析记录。</p>
-</li>
-<li><p>阿里云平台上还有很多其他功能，比如说把平台收到的数据再MQTT发给自己服务器做个数据处理与显示等，本次我没有用到，可以查看<a target="_blank" rel="noopener" href="https://help.aliyun.com/product/30520.html">阿里云物联网平台-产品文档</a>了解更多功能。</p>
-</li>
-</ol>
-<h3 id="LTE-Cat-1模块介绍"><a href="#LTE-Cat-1模块介绍" class="headerlink" title="LTE Cat.1模块介绍"></a>LTE Cat.1模块介绍</h3><ol>
-<li><p>Luat Air724UG LTE Cat.1 模块，淘宝链接：<a target="_blank" rel="noopener" href="https://item.taobao.com/item.htm?spm=a1z0d.6639537.1997196601.315.6b537484HESeeA&id=620804223790">Air724UG DTU透传4G模块Cat.1全网通TTL转LTE FS704UM阿里云MQTT</a></p>
-</li>
-<li><p>模块是串口输入，走4G网发送数据。模块可以一键配置阿里云MQTT服务，然后就能实现透传的功能。MCU也可以使用AT指令控制模块，可以有更丰富的操作。</p>
-</li>
-<li><p>连接阿里云流程可以看模块资料《Air724UG_软件设计手册V1.5》，连阿里云首先HTTP获取MQTT密码，然后连接MQTT，阿里云物联网会比较安全。</p>
-</li>
-</ol>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/07/211007-clashForLinux/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/07/211007-clashForLinux/" class="post-title-link" itemprop="url">Ubuntu使用Clash</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-10-07 08:00:00 / 修改时间：09:46:52" itemprop="dateCreated datePublished" datetime="2021-10-07T08:00:00+08:00">2021-10-07</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="安装运行clash"><a href="#安装运行clash" class="headerlink" title="安装运行clash"></a>安装运行clash</h2><ol>
-<li><p>在<a target="_blank" rel="noopener" href="https://github.com/Dreamacro/clash/releases">clash发布网站</a>下载对应的版本，我下载的是<strong>clash-linux-amd64-v1.7.1.gz</strong></p>
-</li>
-<li><p>将压缩包里的文件解压至**/opt/clash**，改名为clash，下载订阅链接文件到同个目录</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo wget -O config.yaml [订阅链接]</span><br></pre></td></tr></table></figure></li>
-<li><p>Country.mmdb为全球IP库，可以实现各个国家的IP信息解析和地理定位，没有这个文件clash是无法运行的</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo wget -O Country.mmdb https://www.sub-speeder.com/client-download/Country.mmdb</span><br></pre></td></tr></table></figure></li>
-<li><p>把clash权限改为可执行应用</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x clash</span><br></pre></td></tr></table></figure></li>
-<li><p>执行clash，</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./clash -d .</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h2 id="修改系统代理"><a href="#修改系统代理" class="headerlink" title="修改系统代理"></a>修改系统代理</h2><ol>
-<li>我使用的是ubuntu18.4，在设置里面修改。打开系统设置，点击网络代理右边的 ⚙ 按钮，选择手动，填写 HTTP 和 HTTPS 代理为 127.0.0.1:7890，填写 Socks 主机为 127.0.0.1:7891，即可启用系统代理</li>
-</ol>
-<h2 id="配置clash"><a href="#配置clash" class="headerlink" title="配置clash"></a>配置clash</h2><ol>
-<li>在运行了clash后可以打开<a target="_blank" rel="noopener" href="http://clash.razord.top/#/proxies">clash配置页面</a>进行配置，基本上就和windows中的clash图形化差不多了</li>
-</ol>
-<h2 id="设置为开机启动"><a href="#设置为开机启动" class="headerlink" title="设置为开机启动"></a>设置为开机启动</h2><ol>
-<li><p>创建service文件</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">touch /etc/systemd/system/clash.service</span><br></pre></td></tr></table></figure></li>
-<li><p>编辑service文件，填入以下内容(注意修改clash文件夹路径)</p>
-<blockquote>
-<p>[Unit]<br>Description=clash daemon</p>
-<p>[Service]<br>Type=simple<br>User=root<br>ExecStart=/opt/clash/clash -d /opt/clash/<br>Restart=on-failure</p>
-<p>[Install]<br>WantedBy=multi-user.target</p>
-</blockquote>
-</li>
-<li><p>重新加载systemctl daemon，<strong>systemctl daemon-reload</strong></p>
-</li>
-<li><p>启动Clash，<strong>systemctl start clash.service</strong></p>
-</li>
-<li><p>设置Clash开机自启动，<strong>systemctl enable clash.service</strong></p>
-</li>
-<li><p>systemctl的其他命令参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/skh2015java/article/details/94012643">linux中systemctl详细理解及常用命令</a></p>
-</li>
-</ol>
-<h2 id="配置定时更新订阅"><a href="#配置定时更新订阅" class="headerlink" title="配置定时更新订阅"></a>配置定时更新订阅</h2><ol>
-<li>可以设置个定时执行的任务，去下载新的配置文件，并重启clash服务</li>
-</ol>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1449,7 +1513,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-count">46</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
