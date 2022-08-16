@@ -188,7 +188,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-05 00:36:39" itemprop="dateModified" datetime="2022-08-05T00:36:39+08:00">2022-08-05</time>
+                <time title="修改时间：2022-08-12 23:35:56" itemprop="dateModified" datetime="2022-08-12T23:35:56+08:00">2022-08-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -220,7 +220,7 @@
 <li><a target="_blank" rel="noopener" href="http://www.yfvb.com/help/win32sdk/webhelplefth.htm">Win32API参考手册</a></li>
 <li><a target="_blank" rel="noopener" href="http://t.zoukankan.com/zhuguanhao-p-2887210.html">使用CreateFile()打开COM10及以上串口的问题</a></li>
 </ul>
-<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;Windows.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span>* <span class="title function_">serial_openSerial</span><span class="params">(<span class="type">void</span>* lpFileName, <span class="type">unsigned</span> <span class="type">int</span> baudRate, <span class="type">unsigned</span> <span class="type">int</span> dwInQueue, <span class="type">unsigned</span> <span class="type">int</span> dwOutQueue)</span> &#123;</span><br><span class="line">    HANDLE hComm = <span class="literal">NULL</span>;</span><br><span class="line">    DCB dcb;</span><br><span class="line">    hComm = CreateFile(lpFileName,       <span class="comment">//串口名称</span></span><br><span class="line">                        GENERIC_READ | GENERIC_WRITE, <span class="comment">//允许读和写</span></span><br><span class="line">                        <span class="number">0</span>,             <span class="comment">//独占方式</span></span><br><span class="line">                        <span class="literal">NULL</span>,          <span class="comment">// 无安全属性，不可被子程序继承</span></span><br><span class="line">                        OPEN_EXISTING, <span class="comment">//创建文件的性质，打开而不是创建</span></span><br><span class="line">                        <span class="number">0</span>,             <span class="comment">// Non Overlapped I/O</span></span><br><span class="line">                        <span class="literal">NULL</span>);         <span class="comment">// Null for Comm Devices</span></span><br><span class="line">    SetupComm(hComm, dwInQueue, dwOutQueue);</span><br><span class="line">    GetCommState(hComm, &amp;dcb);</span><br><span class="line">    dcb.BaudRate = baudRate;</span><br><span class="line">    SetCommState(hComm, &amp;dcb);</span><br><span class="line">    <span class="keyword">return</span> hComm;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">serial_readLen</span><span class="params">(<span class="type">void</span>* hComm, <span class="type">unsigned</span> <span class="type">char</span>* pBuff, <span class="type">unsigned</span> <span class="type">int</span> len, <span class="type">unsigned</span> <span class="type">int</span>* pLenRead)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> ReadFile(hComm, pBuff, len, pLenRead, <span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">serial_closeSerial</span><span class="params">(<span class="type">void</span>* hComm)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> CloseHandle(hComm);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">serial_purgeSerial</span><span class="params">(<span class="type">void</span>* hComm)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> PurgeComm(hComm, PURGE_RXCLEAR | PURGE_TXCLEAR);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;Windows.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span>* <span class="title function_">serial_openSerial</span><span class="params">(<span class="type">void</span>* lpFileName, <span class="type">unsigned</span> <span class="type">int</span> baudRate, <span class="type">unsigned</span> <span class="type">int</span> dwInQueue, <span class="type">unsigned</span> <span class="type">int</span> dwOutQueue)</span> &#123;</span><br><span class="line">    HANDLE hComm = <span class="literal">NULL</span>;</span><br><span class="line">    DCB dcb;</span><br><span class="line">    COMMTIMEOUTS commTimeOuts;</span><br><span class="line">    hComm = CreateFile(lpFileName,       <span class="comment">//串口名称</span></span><br><span class="line">                        GENERIC_READ | GENERIC_WRITE, <span class="comment">//允许读和写</span></span><br><span class="line">                        <span class="number">0</span>,             <span class="comment">//独占方式</span></span><br><span class="line">                        <span class="literal">NULL</span>,          <span class="comment">// 无安全属性，不可被子程序继承</span></span><br><span class="line">                        OPEN_EXISTING, <span class="comment">//创建文件的性质，打开而不是创建</span></span><br><span class="line">                        <span class="number">0</span>,             <span class="comment">// Non Overlapped I/O</span></span><br><span class="line">                        <span class="literal">NULL</span>);         <span class="comment">// Null for Comm Devices</span></span><br><span class="line">    SetupComm(hComm, dwInQueue, dwOutQueue);</span><br><span class="line">    GetCommState(hComm, &amp;dcb);</span><br><span class="line">    dcb.BaudRate = baudRate;</span><br><span class="line">    SetCommState(hComm, &amp;dcb);</span><br><span class="line">    commTimeOuts.ReadIntervalTimeout = <span class="number">0</span>;</span><br><span class="line">    commTimeOuts.ReadTotalTimeoutMultiplier = <span class="number">0</span>;</span><br><span class="line">    commTimeOuts.ReadTotalTimeoutConstant = <span class="number">0</span>;</span><br><span class="line">    commTimeOuts.WriteTotalTimeoutMultiplier = <span class="number">0</span>;</span><br><span class="line">    commTimeOuts.WriteTotalTimeoutConstant = <span class="number">0</span>;</span><br><span class="line">    SetCommTimeouts(hComm, &amp;commTimeOuts);	<span class="comment">// 配置Timeout参数(ms)，0表示不Timeout</span></span><br><span class="line">    <span class="keyword">return</span> hComm;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">serial_readLen</span><span class="params">(<span class="type">void</span>* hComm, <span class="type">unsigned</span> <span class="type">char</span>* pBuff, <span class="type">unsigned</span> <span class="type">int</span> len, <span class="type">unsigned</span> <span class="type">int</span>* pLenRead)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> ReadFile(hComm, pBuff, len, pLenRead, <span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">serial_closeSerial</span><span class="params">(<span class="type">void</span>* hComm)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> CloseHandle(hComm);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">serial_purgeSerial</span><span class="params">(<span class="type">void</span>* hComm)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> PurgeComm(hComm, PURGE_RXCLEAR | PURGE_TXCLEAR);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><p>Windows.h的api是<strong>正确返回非0</strong></p>
 <h2 id="不同系统编译各数据类型所占内存空间大小"><a href="#不同系统编译各数据类型所占内存空间大小" class="headerlink" title="不同系统编译各数据类型所占内存空间大小"></a>不同系统编译各数据类型所占内存空间大小</h2><h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><table>
@@ -337,10 +337,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-07-31 14:00:00 / 修改时间：14:53:38" itemprop="dateCreated datePublished" datetime="2022-07-31T14:00:00+08:00">2022-07-31</time>
+              <time title="创建时间：2022-07-31 14:00:00" itemprop="dateCreated datePublished" datetime="2022-07-31T14:00:00+08:00">2022-07-31</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-16 23:23:32" itemprop="dateModified" datetime="2022-08-16T23:23:32+08:00">2022-08-16</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -369,6 +375,14 @@
           <h2 id="使用DMA发送串口数据问题"><a href="#使用DMA发送串口数据问题" class="headerlink" title="使用DMA发送串口数据问题"></a>使用DMA发送串口数据问题</h2><ol>
 <li>CubeMX生成的代码初始化DMA和UART顺序问题，应该先初始化DMA再UART，可以在CubeMX中调整生成初始化代码的顺序。<img src="/2022/07/31/2207031-CubeMX/2207031-CubeMX-1.jpg" alt="2207031-CubeMX-1.jpg"></li>
 <li>CubeMX生成的代码使用<code>HAL_UART_Transmit_DMA()</code>后需要手动将串口状态配置成空闲状态，可以在DMA传输完成中断中加<code>(&amp;huart1)-&gt;gState = HAL_UART_STATE_READY;</code></li>
+</ol>
+<h2 id="串口接收溢出后接收不到数据"><a href="#串口接收溢出后接收不到数据" class="headerlink" title="串口接收溢出后接收不到数据"></a>串口接收溢出后接收不到数据</h2><ol>
+<li>产生问题的原因：超出接收size、在没接收的时候接收超过1个字节的数据。</li>
+<li>解决方法参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/chengj_/article/details/122689442">stm32cube，HAL库 HAL_UART_Receive_IT中断接收多个字符，串口溢出卡死问题</a>。</li>
+<li>关闭检测Overrun功能，或者使用错误处理回调函数。</li>
+</ol>
+<h2 id="串口接收一帧不定长数据"><a href="#串口接收一帧不定长数据" class="headerlink" title="串口接收一帧不定长数据"></a>串口接收一帧不定长数据</h2><ol>
+<li>可使用<code>tm32f7xx_hal_uart_ex.h</code>中的<code>HAL_UARTEx_ReceiveToIdle()</code>函数。</li>
 </ol>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
@@ -783,7 +797,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-13 00:12:20" itemprop="dateModified" datetime="2022-05-13T00:12:20+08:00">2022-05-13</time>
+                <time title="修改时间：2022-08-16 23:51:43" itemprop="dateModified" datetime="2022-08-16T23:51:43+08:00">2022-08-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -810,7 +824,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h3 id="Git和SVN"><a href="#Git和SVN" class="headerlink" title="Git和SVN"></a>Git和SVN</h3><p>公司里常用的两种版本控制工具：Git和SVN，两者最大的区别就是Git是分布式，SVN是集中式。<strong>集中式</strong>的版本控制系统都有一个单一的集中管理的服务器，保存所有文件的修订版本，而协同工作的人们都通过客户端连到这台服务器，取出最新的文件或者提交更新。 <strong>分布式</strong>的版本控制系统都有一个单一的集中管理的服务器，保存所有文件的修订版本，而协同工作的人们在自己本地也会创建一个库，用于保存自己的修改与提交，之后再将自己库提交至服务器库进行更新。</p>
+          <h2 id="Git和SVN"><a href="#Git和SVN" class="headerlink" title="Git和SVN"></a>Git和SVN</h2><p>公司里常用的两种版本控制工具：Git和SVN，两者最大的区别就是Git是分布式，SVN是集中式。<strong>集中式</strong>的版本控制系统都有一个单一的集中管理的服务器，保存所有文件的修订版本，而协同工作的人们都通过客户端连到这台服务器，取出最新的文件或者提交更新。 <strong>分布式</strong>的版本控制系统都有一个单一的集中管理的服务器，保存所有文件的修订版本，而协同工作的人们在自己本地也会创建一个库，用于保存自己的修改与提交，之后再将自己库提交至服务器库进行更新。</p>
 <p><strong>Subversion的特点概括起来主要由以下几条：</strong></p>
 <ul>
 <li>每个版本库有唯一的URL（官方地址），每个用户都从这个地址获取代码和数据；</li>
@@ -838,7 +852,7 @@
 <li>Git 有更多的工作模式可以选择，远非 Subversion可比；</li>
 <li>Git 分支是指针指向某次提交，而 SVN 分支是拷贝的目录，这个特性使 Git 的分支切换非常迅速，且创建成本非常低；</li>
 </ul>
-<h3 id="Git基本概念和常用命令"><a href="#Git基本概念和常用命令" class="headerlink" title="Git基本概念和常用命令"></a>Git基本概念和常用命令</h3><ul>
+<h2 id="Git基本概念和常用命令"><a href="#Git基本概念和常用命令" class="headerlink" title="Git基本概念和常用命令"></a>Git基本概念和常用命令</h2><ul>
 <li><strong>工作区：</strong>就是你在电脑里能看到的目录。</li>
 <li><strong>暂存区：</strong>英文叫 stage 或 index。一般存放在 <strong>.git</strong> 目录下的 index 文件（.git/index）中，所以我们把暂存区有时也叫作索引（index）。</li>
 <li><strong>版本库：</strong>工作区有一个隐藏目录 <strong>.git</strong>，这个不算工作区，而是 Git 的版本库，版本库可分为远程仓库和本地仓库。<br><img src="/2022/05/12/220512-Git%E5%92%8CSVN/220512-Git%E5%92%8CSVN-1.jpg" alt="220512-Git和SVN-1.jpg"></li>
@@ -941,16 +955,16 @@
 </tr>
 </tbody></table>
 <p>Git 分支管理：<a target="_blank" rel="noopener" href="https://www.runoob.com/git/git-branch.html">https://www.runoob.com/git/git-branch.html</a><br>Git 查看提交历史：<a target="_blank" rel="noopener" href="https://www.runoob.com/git/git-commit-history.html">https://www.runoob.com/git/git-commit-history.html</a><br>Git 标签：<a target="_blank" rel="noopener" href="https://www.runoob.com/git/git-tag.html">https://www.runoob.com/git/git-tag.html</a><br>更多命令查看Git完整命令手册地址：<a target="_blank" rel="noopener" href="http://git-scm.com/docs">http://git-scm.com/docs</a></p>
-<h3 id="Tortoise-SVN"><a href="#Tortoise-SVN" class="headerlink" title="Tortoise SVN"></a>Tortoise SVN</h3><p>SVN教程：<a target="_blank" rel="noopener" href="https://www.runoob.com/svn/svn-tutorial.html">https://www.runoob.com/svn/svn-tutorial.html</a></p>
+<h2 id="Tortoise-SVN"><a href="#Tortoise-SVN" class="headerlink" title="Tortoise SVN"></a>Tortoise SVN</h2><p>SVN教程：<a target="_blank" rel="noopener" href="https://www.runoob.com/svn/svn-tutorial.html">https://www.runoob.com/svn/svn-tutorial.html</a></p>
 <p>TortoiseSVN 是 SVN(Subversion) 版本控制系统的一个免费开源客户端，可以超越时间的管理文件和目录。TortoiseSVN 使用教程：<a target="_blank" rel="noopener" href="https://www.runoob.com/svn/tortoisesvn-intro.html">https://www.runoob.com/svn/tortoisesvn-intro.html</a></p>
 <p>企业通常是使用TortoiseSVN提供的图像化界面操作，使用较简单。Windows的Git提供了GitGUI，也可以使用TortoiseGit，配置参数也有图形化界面，之前实习的一家公司就是 TortoiseGit 和 TortoiseSVN 。</p>
-<h3 id="版本管控工具分支管理"><a href="#版本管控工具分支管理" class="headerlink" title="版本管控工具分支管理"></a>版本管控工具分支管理</h3><h4 id="SVN分支管理策略"><a href="#SVN分支管理策略" class="headerlink" title="SVN分支管理策略"></a>SVN分支管理策略</h4><ul>
+<h2 id="版本管控工具分支管理"><a href="#版本管控工具分支管理" class="headerlink" title="版本管控工具分支管理"></a>版本管控工具分支管理</h2><h3 id="SVN分支管理策略"><a href="#SVN分支管理策略" class="headerlink" title="SVN分支管理策略"></a>SVN分支管理策略</h3><ul>
 <li>truck (主干|主线|主分支)：是用来做主方向开发的，新功能的开发应放在主线中，当模块开发完成后，需要修改，就用branch。</li>
 <li>branches(分支)：分支开发和主线开发是可以同时进行的，也就是并行开发，分支通常用于修复bug时使用。</li>
 <li>tags (标记)：用于标记某个可用的版本，可以标记已经上线发布的版本，也可以标记正在测试的版本，通常是只读的。</li>
 </ul>
 <p>branch是用来做并行开发的，这里的并行是指和trunk进行比较。比如，3.0开发完成，这个时候要做一个tag，tag_release_3_0，然后基于这个tag做release，比如安装程序等。trunk进入3.1的开发，但是3.0发现了bug，那么就需要基于tag_release_3_0做一个branch，branch_bugfix_3_0，基于这个branch进行bugfix，等到bugfix结束，做一个tag，tag_release_3_0_1，然后，根据需要决定branch_bugfix_3_0是否并入trunk。</p>
-<h4 id="Git分支管理策略"><a href="#Git分支管理策略" class="headerlink" title="Git分支管理策略"></a>Git分支管理策略</h4><p><strong>Git Flow模型</strong>中定义了主分支和辅助分支两类分支。其中主分支用于组织与软件开发、部署相关的活动，辅助分支组织用于解决特定的问题而进行的各种开发活动。Git Flow开发模型从源代码管理角度对通常意义上的软件开发活动进行了约束，为软件开发提供了一个可供参考的管理模型。Git Flow开发模型让代码仓库保持整洁，让小组各个成员之间的开发相互隔离，能够有效避免处于开发状态中的代码相互影响而导致的效率低下和混乱。</p>
+<h3 id="Git分支管理策略"><a href="#Git分支管理策略" class="headerlink" title="Git分支管理策略"></a>Git分支管理策略</h3><p><strong>Git Flow模型</strong>中定义了主分支和辅助分支两类分支。其中主分支用于组织与软件开发、部署相关的活动，辅助分支组织用于解决特定的问题而进行的各种开发活动。Git Flow开发模型从源代码管理角度对通常意义上的软件开发活动进行了约束，为软件开发提供了一个可供参考的管理模型。Git Flow开发模型让代码仓库保持整洁，让小组各个成员之间的开发相互隔离，能够有效避免处于开发状态中的代码相互影响而导致的效率低下和混乱。</p>
 <p>Git Flow模型的特点是只有2个主干分支，Master和Develop分支：Master分支上只有稳定的生产版本，Develop分支用于集成。其中还涉及到HotFix分支。而其他还有三类分支：Feature分支用于开发人员各自开发；Release用于代码合并和集成；HotFix用于产品版本代码的紧急修订。</p>
 <p><strong>master分支</strong>通常只能从其它分支合并，不能在master分支直接修改。master分支上存放的是随时可供在生产环境中部署的代码（Production Ready state）。当开发活动到一定阶段，产生一份新的可供部署的代码时，master分支上的代码会被更新。同时，每一次更新，最好添加对应的版本号标签（TAG），所有在Master分支上的Commit应该打Tag。</p>
 <p><strong>develop分支</strong>是保持当前开发最新成果的分支，一般会在此分支上进行晚间构建（Nightly Build）并执行自动化测试。develop分支产生于master分支, 并长期存在。当一个版本功能开发完毕且通过测试功能稳定时，就会合并到master分支上，并打好带有相应版本号的tag。develop分支是主开发分支，包含所有要发布到下一个Release的代码，主要合并其它分支，比如Feature分支。</p>
@@ -958,6 +972,15 @@
 <p><strong>feature分支</strong>可以从develop分支派生。feature分支的命名可以使用除master，develop，release-*，hotfix-*之外的任何名称。feature分支（topic分支）通常在开发一项新的软件功能的时候使用，分支上的代码变更最终合并回develop分支或者干脆被抛弃掉（例如实验性且效果不好的代码变更）。一般而言，feature分支代码可以保存在开发者自己的代码库中而不强制提交到主代码库里。Feature分支开发完成后，必须合并回Develop分支，合并完分支后一般会删feature分支，但也可以保留。</p>
 <p><strong>release分支</strong>可以从develop分支派生。release分支是为发布新的产品版本而设计的。在release分支上的代码允许做测试、bug修改、准备发布版本所需的各项说明信息（版本号、发布时间、编译时间等）。通过在release分支上进行发布相关工作可以让develop分支空闲出来以接受新的feature分支上的代码提交，进入新的软件开发迭代周期。当develop分支上的代码已经包含了所有即将发布的版本中所计划包含的软件功能，并且已通过所有测试时，可以考虑准备创建release分支。而所有在当前即将发布的版本外的业务需求一定要确保不能混到release分支内（避免由此引入一些不可控的系统缺陷）。成功的派生release分支并被赋予版本号后，develop分支就可以为下一个版本服务。版本号的命名可以依据项目定义的版本号命名规则进行。发布Release分支时，合并Release到Master和Develop， 同时在Master分支上打个Tag记住Release版本号，然后就可以删除Release分支。</p>
 <p><strong>hotfix分支</strong>可以从master分支派生。hotfix分支是计划外创建的，可以产生一个新的可供在生产环境部署的软件版本。当生产环境中的软件遇到异常情况或者发现了严重到必须立即修复的软件缺陷时，就需要从master分支上指定的TAG版本派生hotfix分支来组织代码的紧急修复工作。优点是不会打断正在进行的develop分支的开发工作，能够让团队中负责新功能开发的人与负责代码紧急修复的人并行的开展工作。hotfix分支基于Master分支创建，开发完后需要合并回Master和Develop分支，同时在Master上打一个tag。</p>
+<h2 id="使用Git遇到的问题"><a href="#使用Git遇到的问题" class="headerlink" title="使用Git遇到的问题"></a>使用Git遇到的问题</h2><h3 id="Git-tag"><a href="#Git-tag" class="headerlink" title="Git tag"></a>Git tag</h3><p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_21746331/article/details/1207767">GIT 中如何打标签（git tag）</a></p>
+<p><img src="/2022/05/12/220512-Git%E5%92%8CSVN/220512-Git%E5%92%8CSVN-3.jpg" alt="220512-Git和SVN-3.jpg"></p>
+<h3 id="Git-show"><a href="#Git-show" class="headerlink" title="Git show"></a>Git show</h3><p>给历史版本打标签时用的commit可以通过git show查看历史版本的hash。</p>
+<p><img src="/2022/05/12/220512-Git%E5%92%8CSVN/220512-Git%E5%92%8CSVN-4.jpg" alt="220512-Git和SVN-4.jpg"></p>
+<h3 id="Git-log"><a href="#Git-log" class="headerlink" title="Git log"></a>Git log</h3><p>查看提交日志，当你要修改历史提交前，你可以通过git log看看要修改第几次的提交。</p>
+<p><img src="/2022/05/12/220512-Git%E5%92%8CSVN/220512-Git%E5%92%8CSVN-5.jpg" alt="220512-Git和SVN-5.jpg"></p>
+<h3 id="Git-rebase"><a href="#Git-rebase" class="headerlink" title="Git rebase"></a>Git rebase</h3><p>通过git rebase可以修改历史的版本，参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_62277266/article/details/124260568">Git系列之修改历史提交信息</a>，使用rebase指令后会在vi编辑器中选择要修改哪次提交，然后通过vi编辑器修改提交的内容。</p>
+<p>注意：异常退出可能导致文件丢失，不要慌终端有提示如何恢复。</p>
+<p><img src="/2022/05/12/220512-Git%E5%92%8CSVN/220512-Git%E5%92%8CSVN-6.jpg" alt="220512-Git和SVN-6.jpg"></p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
     </div>
