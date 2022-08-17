@@ -157,6 +157,118 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/19/211219-fpga%E4%B9%8Bsdram/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/19/211219-fpga%E4%B9%8Bsdram/" class="post-title-link" itemprop="url">FPGA之SDRAM学习</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-12-19 20:00:00" itemprop="dateCreated datePublished" datetime="2021-12-19T20:00:00+08:00">2021-12-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-13 19:24:11" itemprop="dateModified" datetime="2022-01-13T19:24:11+08:00">2022-01-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E7%A1%AC%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">硬件</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="学习视频"><a href="#学习视频" class="headerlink" title="学习视频"></a>学习视频</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV194411f7GD?p=57">【正点原子】手把手教你学FPGA系列视频——SDRAM</a></li>
+</ul>
+<h3 id="SDRAM介绍"><a href="#SDRAM介绍" class="headerlink" title="SDRAM介绍"></a>SDRAM介绍</h3><ul>
+<li><p><strong>同步动态随机存取内存</strong>（synchronous dynamic random-access memory，简称SDRAM）是有一个<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%90%8C%E6%AD%A5%E6%8E%A5%E5%8F%A3">同步接口</a>的<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%8A%A8%E6%80%81%E9%9A%8F%E6%9C%BA%E5%AD%98%E5%8F%96%E5%86%85%E5%AD%98/1681939">动态随机存取内存</a>（<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/DRAM">DRAM</a>）。通常DRAM是有一个异步接口的，这样它可以随时响应控制输入的变化。而SDRAM有一个同步接口，在响应控制<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E8%BE%93%E5%85%A5">输入</a>前会等待一个<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%97%B6%E9%92%9F%E4%BF%A1%E5%8F%B7">时钟信号</a>，这样就能和计算机的<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%B3%BB%E7%BB%9F%E6%80%BB%E7%BA%BF">系统总线</a>同步。时钟被用来驱动一个<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/2081914">有限状态机</a>，对进入的指令进行<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%AE%A1%E7%BA%BF">管线</a>(Pipeline)操作。这使得SDRAM与没有同步接口的异步DRAM(asynchronous DRAM)相比，可以有一个更复杂的操作模式。</p>
+</li>
+<li><p>SDRAM从发展到现在已经经历了五代，分别是：第一代SDR SDRAM，第二代DDR SDRAM，第三代DDR2 SDRAM，第四代DDR3 SDRAM，第五代，DDR4 SDRAM。</p>
+</li>
+</ul>
+<h3 id="SDRAM操作时序"><a href="#SDRAM操作时序" class="headerlink" title="SDRAM操作时序"></a>SDRAM操作时序</h3><ul>
+<li>在对 SDRAM进行读写操作之前需要先对芯片进行初始化；SDRAM读写是一个较为复杂的控制流 程，其中包括行激活、列读写、预充电、刷新等一系列操作。</li>
+</ul>
+<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><ul>
+<li><p>初始化流程如下<br><img src="/2021/12/19/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-1.jpg" alt="211219-fpga之sdram-1.jpg"><br>SDRAM上电后要有200us的输入稳定期，在这个时间内不可以对SDRAM的接口做任何操作； 200us结束以后给所有L-Bank预充电，然后是连续8次刷新操作；最后设置模式寄存器。初始化 最关键的阶段就在于模式寄存器（MR，Mode Register）的设置，简称MRS（MR Set）。</p>
+</li>
+<li><p>模式寄存器如下<br><img src="/2021/12/19/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-2.jpg" alt="211219-fpga之sdram-2.jpg"><br>如上图所示，用于配置模式寄存器的参数由地址线提供，地址线不同的位分别用于表示不 同的参数。SDRAM通过配置模式寄存器来确定芯片的工作方式，包括突发长度（Burst Length）、 潜伏期（CAS Latency）以及操作模式等。<br>需要注意的是，在模式寄存器设置指令发出之后，需要等待一段时间才能够向SDRAM发送 新的指令，这个时间我们称之为模式寄存器设置周期tRSC（Register Set Cycle）。</p>
+</li>
+</ul>
+<h4 id="行激活"><a href="#行激活" class="headerlink" title="行激活"></a>行激活</h4><ul>
+<li>行激活时序图<br><img src="/2021/12/19/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-3.jpg" alt="211219-fpga之sdram-3.jpg"><br>初始化完成后，无论是读操作还是写操作，都要先激活（Active）SDRAM中的一行，使之 处于活动状态（又称行有效）。在此之前还要进行SDRAM芯片的片选和L-Bank的定址，不过它 们与行激活可以同时进行。<br>在片选CS#（#表示低电平有效）、L-Bank定址的同时，RAS（Row Address Strobe，行地址选通脉冲）也处于有效状态。此时An地址线则发送具体的行地址。如图中是A0-A11，共有12个地址线，由于是二进制表示法，所以共有4096个行（2^12=4096），A0-A11的不同数值就确定了具体的行地址。由于行激活的同时也是相应L-Bank有效，所以行激活也可称为L-Bank有效。</li>
+</ul>
+<h4 id="列读写"><a href="#列读写" class="headerlink" title="列读写"></a>列读写</h4><ul>
+<li>列选通与读操作时序图<br><img src="/2021/12/19/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-4.jpg" alt="211219-fpga之sdram-4.jpg"><br>由于在SDRAM中，地址线是行列共用的，因此列寻址时地址线仍然是A0-A11。在寻址时，利用RAS（Row Address Strobe，行地址选通脉冲）与CAS（Column Address Strobe，列地址选通脉冲）来区分行寻址与列寻址。</li>
+<li>在发送列读写命令时必须要与行激活命令有一个时间间隔，这个间隔被定义为tRCD， 即RAS to CAS Delay（RAS至CAS延迟）。这是因为在行激活命令发出之后，芯片存储阵列电子 元件响应需要一定的时间。tRCD是SDRAM的一个重要时序参数，广义的tRCD以时钟周期（tCK， Clock Time）数为单位，比如tRCD=3，就代表RAS至CAS延迟为三个时钟周期，如图 33.1.8所 示。具体到确切的时间，则要根据时钟频率而定。</li>
+</ul>
+<h4 id="数据输出（读）"><a href="#数据输出（读）" class="headerlink" title="数据输出（读）"></a>数据输出（读）</h4><ul>
+<li>在选定列地址后，就已经确定了具体的存储单元，剩下的事情就是数据通过数据I/O通道（DQ）输出到内存总线上了。但是在CAS发出之后，仍要经过一定的时间才能有数据输出，从CAS与读取命令发出到第一笔数据输出的这段时间，被定义为CL（CAS Latency，CAS潜伏期）。CL时间越短，读数据时SDRAM响应就越快。由于CL只在读取时出现，所以CL又被称为读取潜伏期（RL，Read Latency）。CL的单位与tRCD一样，为时钟周期数，具体耗时由时钟频率决定。</li>
+</ul>
+<h4 id="数据输出（写）"><a href="#数据输出（写）" class="headerlink" title="数据输出（写）"></a>数据输出（写）</h4><ul>
+<li>数据写入时序图<br><img src="/2021/12/19/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-5.jpg" alt="211219-fpga之sdram-5.jpg"><br>数据写入的操作也是在tRCD之后进行，但此时没有了CL（记住，CL只出现在读取操作中）， 行寻址与列寻址的时序图和上文一样，只是在列寻址时，WE#为有效状态。<br>数据与写指令同时发送。不过，数据并不是即时地写入存储单元，数据的 真正写入需要一定的周期。为了保证数据的可靠写入，都会留出足够的写入/校正时间（tWR， Write Recovery Time），这个操作也被称作写回（Write Back）。tWR至少占用一个时钟周期 或再多一点（时钟频率越高，tWR占用周期越多）。</li>
+</ul>
+<h4 id="此外"><a href="#此外" class="headerlink" title="此外"></a>此外</h4><ul>
+<li>除上述操作之外，还有突发长度、预充电、刷新、数据掩码常用操作，具体可以查阅《开拓者FPGA开发指南》SDRAM读写测试实验。</li>
+</ul>
+<h3 id="实验仿真"><a href="#实验仿真" class="headerlink" title="实验仿真"></a>实验仿真</h3><p><img src="/2021/12/19/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-6.jpg" alt="211219-fpga之sdram-6.jpg"><br><img src="/2021/12/19/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-7.jpg" alt="211219-fpga之sdram-7.jpg"><br><img src="/2021/12/19/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-8.jpg" alt="211219-fpga之sdram-8.jpg"><br><img src="/2021/12/19/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-9.jpg" alt="211219-fpga之sdram-9.jpg"></p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/17/211217-ltecat1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1076,96 +1188,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/29/210729-FreeRTOS%E6%BA%90%E7%A0%81%E8%AF%A6%E8%A7%A3%E4%B8%8E%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/07/29/210729-FreeRTOS%E6%BA%90%E7%A0%81%E8%AF%A6%E8%A7%A3%E4%B8%8E%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91/" class="post-title-link" itemprop="url">《FreeRTOS源码详解与应用开发——基于STM32》</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-07-29 14:00:00" itemprop="dateCreated datePublished" datetime="2021-07-29T14:00:00+08:00">2021-07-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-13 14:15:20" itemprop="dateModified" datetime="2021-08-13T14:15:20+08:00">2021-08-13</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="参考视频"><a href="#参考视频" class="headerlink" title="参考视频"></a>参考视频</h3><ul>
-<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1a4411Q7X1">正点原子FreeRTOS手把手教学-基于STM32</a></li>
-</ul>
-<h3 id="思考与心得"><a href="#思考与心得" class="headerlink" title="思考与心得"></a>思考与心得</h3><ol>
-<li><p>本书结构为：编码风格、<strong>系统移植</strong>、<strong>系统配置</strong>、任务函数、中断配置、临界区保护、多任务、列表结构、<strong>系统任务调度器</strong>、任务切换、时间管理、队列结构、信号量、<strong>软件定时器</strong>、事件标志组、任务通知、<strong>Tickless模式</strong>、空闲任务、<strong>内存管理</strong>。</p>
-</li>
-<li><p>跟今年2月份学的rtThread差不多，rtThread是参考<a target="_blank" rel="noopener" href="https://www.rt-thread.org/document/site/#/rt-thread-version/rt-thread-standard/programming-manual/basic/basic">官方文档</a>学习的，学习了内核的一部分，和本次学习《FreeRTOS源码详解与应用开发》的内容差不多，也是借本书回忆一下之前学的实时系统。比较关心对接口的使用，本书的源码详解有一部分没有细看，日后需要的时候再啃源码，也可以自己手写一个实时系统来理解内核中核心的部分。</p>
-</li>
-<li><p>有些公司可能不想用实时系统，理由是影响速度，那么问题来了，<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/342441430">什么情况下需要采用嵌入式操作系统呢？</a>看过这个知乎的回答就知道，大型项目中裸奔会造成资源的浪费，特别是处理GUI、lwip、fatfs等，里面有大量的delay。在需要并行这些就需要用到rtos，使用os还可以实现应用层与底层硬件的隔离，可以方便分块开发、移植等。另外在资源数较少的mcu上不很适合使用rtos。</p>
-</li>
-<li><p>光看书没有用，我欠缺rtos的实践，最好是拿个项目练练手。</p>
-</li>
-</ol>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1235,7 +1257,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-count">47</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

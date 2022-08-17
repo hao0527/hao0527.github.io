@@ -23,18 +23,18 @@
   <meta name="description" content="使用DMA发送串口数据问题 CubeMX生成的代码初始化DMA和UART顺序问题，应该先初始化DMA再UART，可以在CubeMX中调整生成初始化代码的顺序。 CubeMX生成的代码使用HAL_UART_Transmit_DMA()后需要手动将串口状态配置成空闲状态，可以在DMA传输完成中断中加(&amp;huart1)-&gt;gState &#x3D; HAL_UART_STATE_READY;  串口">
 <meta property="og:type" content="article">
 <meta property="og:title" content="STM32CubeMX使用上遇到的一些问题">
-<meta property="og:url" content="http://example.com/2022/07/31/2207031-CubeMX/index.html">
+<meta property="og:url" content="http://example.com/2022/07/31/220731-CubeMX/index.html">
 <meta property="og:site_name" content="永恆博客网">
 <meta property="og:description" content="使用DMA发送串口数据问题 CubeMX生成的代码初始化DMA和UART顺序问题，应该先初始化DMA再UART，可以在CubeMX中调整生成初始化代码的顺序。 CubeMX生成的代码使用HAL_UART_Transmit_DMA()后需要手动将串口状态配置成空闲状态，可以在DMA传输完成中断中加(&amp;huart1)-&gt;gState &#x3D; HAL_UART_STATE_READY;  串口">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2022/07/31/2207031-CubeMX/2207031-CubeMX-1.jpg">
+<meta property="og:image" content="http://example.com/2022/07/31/220731-CubeMX/2207031-CubeMX-1.jpg">
 <meta property="article:published_time" content="2022-07-31T06:00:00.000Z">
 <meta property="article:modified_time" content="2022-08-16T15:23:32.154Z">
 <meta property="article:author" content="Hao">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2022/07/31/2207031-CubeMX/2207031-CubeMX-1.jpg">
+<meta name="twitter:image" content="http://example.com/2022/07/31/220731-CubeMX/2207031-CubeMX-1.jpg">
 
-<link rel="canonical" href="http://example.com/2022/07/31/2207031-CubeMX/">
+<link rel="canonical" href="http://example.com/2022/07/31/220731-CubeMX/">
 
 
 <script id="page-configurations">
@@ -162,7 +162,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/31/2207031-CubeMX/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/31/220731-CubeMX/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -220,7 +220,7 @@
 
       
         <h2 id="使用DMA发送串口数据问题"><a href="#使用DMA发送串口数据问题" class="headerlink" title="使用DMA发送串口数据问题"></a>使用DMA发送串口数据问题</h2><ol>
-<li>CubeMX生成的代码初始化DMA和UART顺序问题，应该先初始化DMA再UART，可以在CubeMX中调整生成初始化代码的顺序。<img src="/2022/07/31/2207031-CubeMX/2207031-CubeMX-1.jpg" alt="2207031-CubeMX-1.jpg"></li>
+<li>CubeMX生成的代码初始化DMA和UART顺序问题，应该先初始化DMA再UART，可以在CubeMX中调整生成初始化代码的顺序。<img src="/2022/07/31/220731-CubeMX/2207031-CubeMX-1.jpg" alt="2207031-CubeMX-1.jpg"></li>
 <li>CubeMX生成的代码使用<code>HAL_UART_Transmit_DMA()</code>后需要手动将串口状态配置成空闲状态，可以在DMA传输完成中断中加<code>(&amp;huart1)-&gt;gState = HAL_UART_STATE_READY;</code></li>
 </ol>
 <h2 id="串口接收溢出后接收不到数据"><a href="#串口接收溢出后接收不到数据" class="headerlink" title="串口接收溢出后接收不到数据"></a>串口接收溢出后接收不到数据</h2><ol>
@@ -246,11 +246,11 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/07/24/2207024-python%E8%B4%A6%E6%9C%AC%E5%A4%84%E7%90%86/" rel="prev" title="用Python统计花费">
+    <a href="/2022/07/24/220724-python%E8%B4%A6%E6%9C%AC%E5%A4%84%E7%90%86/" rel="prev" title="用Python统计花费">
       <i class="fa fa-chevron-left"></i> 用Python统计花费
     </a></div>
       <div class="post-nav-item">
-    <a href="/2022/07/31/2207031-WindowsC%E7%BC%96%E7%A8%8B/" rel="next" title="Windows C/C++编程">
+    <a href="/2022/07/31/220731-WindowsC%E7%BC%96%E7%A8%8B/" rel="next" title="Windows C/C++编程">
       Windows C/C++编程 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
@@ -325,7 +325,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-count">47</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

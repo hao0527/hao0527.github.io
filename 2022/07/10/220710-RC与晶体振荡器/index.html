@@ -23,22 +23,22 @@
   <meta name="description" content="RC振荡器在振荡电路中的频率选择部分可以只用电阻和电容构成，这种只用电阻和电容构成的振荡器称为RC振荡器。RC振荡器需要起振电路，常用的正弦波荡电路有文氏桥振荡电路，要起振所以电路是正反馈，RC构成选频网络，两个二极管和R3构成稳幅电路。  RC振荡器容易封装到芯片中，MCU内部的时钟一般就是RC振荡器。成本低、功耗小、电路板上无需外部晶振，这些都是RC振荡器的优点。 缺点：MCU的内部振荡电路对">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RC振荡器 晶体振荡器">
-<meta property="og:url" content="http://example.com/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/index.html">
+<meta property="og:url" content="http://example.com/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/index.html">
 <meta property="og:site_name" content="永恆博客网">
 <meta property="og:description" content="RC振荡器在振荡电路中的频率选择部分可以只用电阻和电容构成，这种只用电阻和电容构成的振荡器称为RC振荡器。RC振荡器需要起振电路，常用的正弦波荡电路有文氏桥振荡电路，要起振所以电路是正反馈，RC构成选频网络，两个二极管和R3构成稳幅电路。  RC振荡器容易封装到芯片中，MCU内部的时钟一般就是RC振荡器。成本低、功耗小、电路板上无需外部晶振，这些都是RC振荡器的优点。 缺点：MCU的内部振荡电路对">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-1.jpg">
-<meta property="og:image" content="http://example.com/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-2.jpg">
-<meta property="og:image" content="http://example.com/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-3.jpg">
-<meta property="og:image" content="http://example.com/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-4.jpg">
-<meta property="og:image" content="http://example.com/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-5.jpg">
+<meta property="og:image" content="http://example.com/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-1.jpg">
+<meta property="og:image" content="http://example.com/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-2.jpg">
+<meta property="og:image" content="http://example.com/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-3.jpg">
+<meta property="og:image" content="http://example.com/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-4.jpg">
+<meta property="og:image" content="http://example.com/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-5.jpg">
 <meta property="article:published_time" content="2022-07-10T07:00:00.000Z">
 <meta property="article:modified_time" content="2022-07-24T03:13:56.319Z">
 <meta property="article:author" content="Hao">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-1.jpg">
+<meta name="twitter:image" content="http://example.com/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-1.jpg">
 
-<link rel="canonical" href="http://example.com/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/">
+<link rel="canonical" href="http://example.com/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/">
 
 
 <script id="page-configurations">
@@ -166,7 +166,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -224,14 +224,14 @@
 
       
         <h2 id="RC振荡器"><a href="#RC振荡器" class="headerlink" title="RC振荡器"></a>RC振荡器</h2><p>在振荡电路中的频率选择部分可以只用电阻和电容构成，这种只用电阻和电容构成的振荡器称为RC振荡器。RC振荡器需要起振电路，常用的正弦波荡电路有文氏桥振荡电路，要起振所以电路是正反馈，RC构成选频网络，两个二极管和R3构成稳幅电路。</p>
-<p><img src="/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-1.jpg" alt="2207010-RC与晶体振荡器-1.jpg"></p>
+<p><img src="/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-1.jpg" alt="2207010-RC与晶体振荡器-1.jpg"></p>
 <p>RC振荡器容易封装到芯片中，MCU内部的时钟一般就是RC振荡器。成本低、功耗小、电路板上无需外部晶振，这些都是RC振荡器的优点。</p>
 <p>缺点：MCU的内部振荡电路对外界干扰很敏感，非常容易受到外界环境温度的影响。同时精度也低，下图是用F767内部和外部振荡器生成1Hz方波的区别。</p>
-<p><img src="/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-2.jpg" alt="2207010-RC与晶体振荡器-2.jpg"></p>
+<p><img src="/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-2.jpg" alt="2207010-RC与晶体振荡器-2.jpg"></p>
 <h2 id="晶体振荡器"><a href="#晶体振荡器" class="headerlink" title="晶体振荡器"></a>晶体振荡器</h2><p>只要在晶体板级上施加交变电压，就会是晶片产生机械变形振动，此现象即所谓逆压电效应。当外加电压频率等于晶体谐振器的固有频率时，就会发生压电谐振，从而导致机械变形的振幅突然增大。一般而言，晶振的振荡频率比较稳定。但是价格稍微高点，还有用晶体振荡器一般还要接两个15-33pF起振电容。</p>
 <p>有源晶振（Oscillator，晶振）只需要供电自身就能起振，无源晶振（Crystal，晶体）最高精度为5ppm，而有源晶振的精度则可以达到0.1ppm。有源晶振的信号电平是固定，所以需要选择好合适输出电平，灵活性较差。无源晶振单片机可以配置振荡输出电压。</p>
-<p><img src="/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-3.jpg" alt="有源晶振"><img src="/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-4.jpg" alt="无源晶振"></p>
-<h2 id="STM32CubeMX中的时钟配置"><a href="#STM32CubeMX中的时钟配置" class="headerlink" title="STM32CubeMX中的时钟配置"></a>STM32CubeMX中的时钟配置</h2><p><img src="/2022/07/10/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-5.jpg" alt="STM32中的时钟配置"></p>
+<p><img src="/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-3.jpg" alt="有源晶振"><img src="/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-4.jpg" alt="无源晶振"></p>
+<h2 id="STM32CubeMX中的时钟配置"><a href="#STM32CubeMX中的时钟配置" class="headerlink" title="STM32CubeMX中的时钟配置"></a>STM32CubeMX中的时钟配置</h2><p><img src="/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-5.jpg" alt="STM32中的时钟配置"></p>
 <p>BYPASS Clock Source：使用有源晶振的话，则只需要给它加上电源，即可输出时钟到MCU的时钟输入端，绕过MCU的OSC模块，时钟直接供MCU使用。</p>
 <p>Crystal/Ceramic Resonator：使用晶体的话，除了外部需要加上谐振电容（有些会加上MΩ的反馈电阻）之外，还需要<strong>MCU内部的OSC振荡电路辅助</strong>才能正常产生所需时钟。</p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
@@ -253,7 +253,7 @@
       <i class="fa fa-chevron-left"></i> Xilinx FPGA 点灯
     </a></div>
       <div class="post-nav-item">
-    <a href="/2022/07/24/2207024-python%E8%B4%A6%E6%9C%AC%E5%A4%84%E7%90%86/" rel="next" title="用Python统计花费">
+    <a href="/2022/07/24/220724-python%E8%B4%A6%E6%9C%AC%E5%A4%84%E7%90%86/" rel="next" title="用Python统计花费">
       用Python统计花费 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
@@ -328,7 +328,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-count">47</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
