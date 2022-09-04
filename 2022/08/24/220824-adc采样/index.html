@@ -20,17 +20,19 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="保持热爱，奔赴山海。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="永恆博客网">
-<meta property="og:url" content="http://example.com/archives/2021/07/index.html">
+  <meta name="description" content="ADC过采样用过不少模块中有ADC采样，如陀螺仪、磁罗盘、气压计、AFE中，都有ADC过采样率的配置，这些模块配置过采样率，输出的ADC量化位数没变，ADC值静态偏移量减小（信噪比提高），所以可以理解为多次采样取平均值。使用ADC过采样能提升精度，但是由于输出ADC值为多次采样平均，并不是单次采样时刻的值，AFE采电池电压的同时采电流，电压的值不是采电流那一时刻的瞬时值，导致SOC估算不准确。使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ADC采样滤波算法">
+<meta property="og:url" content="http://example.com/2022/08/24/220824-adc%E9%87%87%E6%A0%B7/index.html">
 <meta property="og:site_name" content="永恆博客网">
-<meta property="og:description" content="保持热爱，奔赴山海。">
+<meta property="og:description" content="ADC过采样用过不少模块中有ADC采样，如陀螺仪、磁罗盘、气压计、AFE中，都有ADC过采样率的配置，这些模块配置过采样率，输出的ADC量化位数没变，ADC值静态偏移量减小（信噪比提高），所以可以理解为多次采样取平均值。使用ADC过采样能提升精度，但是由于输出ADC值为多次采样平均，并不是单次采样时刻的值，AFE采电池电压的同时采电流，电压的值不是采电流那一时刻的瞬时值，导致SOC估算不准确。使用">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-08-24T00:00:00.000Z">
+<meta property="article:modified_time" content="2022-09-04T15:23:34.961Z">
 <meta property="article:author" content="Hao">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/archives/2021/07/">
+<link rel="canonical" href="http://example.com/2022/08/24/220824-adc%E9%87%87%E6%A0%B7/">
 
 
 <script id="page-configurations">
@@ -38,12 +40,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>归档 | 永恆博客网</title>
+  <title>ADC采样滤波算法 | 永恆博客网</title>
   
 
 
@@ -151,71 +153,100 @@
         <div class="content-wrap">
           
 
-          <div class="content archive">
+          <div class="content post posts-expand">
             
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        
-        <span class="collection-header">还行! 目前共计 48 篇日志。 继续努力。</span>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/24/220824-adc%E9%87%87%E6%A0%B7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ADC采样滤波算法
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-08-24 08:00:00" itemprop="dateCreated datePublished" datetime="2022-08-24T08:00:00+08:00">2022-08-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-09-04 23:23:34" itemprop="dateModified" datetime="2022-09-04T23:23:34+08:00">2022-09-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E7%A1%AC%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">硬件</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2021</span>
+        <h2 id="ADC过采样"><a href="#ADC过采样" class="headerlink" title="ADC过采样"></a>ADC过采样</h2><p>用过不少模块中有ADC采样，如陀螺仪、磁罗盘、气压计、AFE中，都有ADC过采样率的配置，这些模块配置过采样率，输出的ADC量化位数没变，ADC值静态偏移量减小（信噪比提高），所以可以理解为多次采样取平均值。使用ADC过采样能提升精度，但是由于输出ADC值为多次采样平均，并不是单次采样时刻的值，AFE采电池电压的同时采电流，电压的值不是采电流那一时刻的瞬时值，导致SOC估算不准确。使用ADC过采样会提升采样次数，增大ADC的功耗。</p>
+<p>下面来说说书里介绍的过采样。首先是结论：<strong>过采样率每提高4倍，可以提高ADC 1bit的有效分辨率</strong>。</p>
+<p>假设ADC过采样率为4，ADC会采集4次将值相加，这其实增加了2bits的有效分辨率，这个过程还需要降低采样，或者下抽，下抽是将四次采样累计值&gt;&gt;1，这么做除了降低数据量外，就是可以提高分辨率。</p>
+<h2 id="ADC降采样-减采样-下采样-down-sampling"><a href="#ADC降采样-减采样-下采样-down-sampling" class="headerlink" title="ADC降采样(减采样/下采样/down sampling)"></a>ADC降采样(减采样/下采样/down sampling)</h2><p>降采样网上的资料比较少，一般是原有的采样率比实际信号的有效最高频率要高很多，就可以对采到的信号做低通滤波，除去高频干扰后向下抽样。</p>
+<p>采样这一块还得向香农和奈奎斯特学习，<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E9%A6%99%E5%86%9C%E9%87%87%E6%A0%B7%E5%AE%9A%E7%90%86/7259506">香农-奈奎斯特采样定理</a>，当一个信号被减采样时，必须满足采样定理以避免混叠。为了满足采样定理的要求，信号在进行减采样操作前，必须通过一个具有适当截止频率的低通滤波器。这个用于避免混叠的低通滤波器，称为抗混叠滤波器。</p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
+    
+    
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2021-07-29T14:00:00+08:00"
-              content="2021-07-29">
-          07-29
-        </time>
-      </div>
+      <footer class="post-footer">
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/07/29/210729-FreeRTOS%E6%BA%90%E7%A0%81%E8%AF%A6%E8%A7%A3%E4%B8%8E%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91/" itemprop="url">
-            <span itemprop="name">《FreeRTOS源码详解与应用开发——基于STM32》</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2021-07-10T18:00:00+08:00"
-              content="2021-07-10">
-          07-10
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/07/10/210710-%E7%AC%AC%E4%B8%80%E5%9D%97%E5%9B%9B%E5%B1%82%E6%9D%BF/" itemprop="url">
-            <span itemprop="name">我画的第一块四层板</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
+        
 
 
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/08/17/220817-gps/" rel="prev" title="GPS报文解析">
+      <i class="fa fa-chevron-left"></i> GPS报文解析
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-  </div>
+      </footer>
+    
+  </article>
   
   
-  
-
   
 
 
@@ -268,6 +299,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ADC%E8%BF%87%E9%87%87%E6%A0%B7"><span class="nav-number">1.</span> <span class="nav-text">ADC过采样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ADC%E9%99%8D%E9%87%87%E6%A0%B7-%E5%87%8F%E9%87%87%E6%A0%B7-%E4%B8%8B%E9%87%87%E6%A0%B7-down-sampling"><span class="nav-number">2.</span> <span class="nav-text">ADC降采样(减采样&#x2F;下采样&#x2F;down sampling)</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
