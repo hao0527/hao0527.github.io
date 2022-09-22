@@ -157,6 +157,175 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/11/220511-C%E8%AF%AD%E8%A8%80%E9%A2%84%E5%A4%84%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/11/220511-C%E8%AF%AD%E8%A8%80%E9%A2%84%E5%A4%84%E7%90%86/" class="post-title-link" itemprop="url">C语言预处理</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-11 23:00:00" itemprop="dateCreated datePublished" datetime="2022-05-11T23:00:00+08:00">2022-05-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-05-31 23:20:29" itemprop="dateModified" datetime="2022-05-31T23:20:29+08:00">2022-05-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="ANSI-C标准"><a href="#ANSI-C标准" class="headerlink" title="ANSI C标准"></a><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/ANSI%20C%E6%A0%87%E5%87%86/6044290?fr=aladdin">ANSI C标准</a></h3><p>ANSI C是<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%BE%8E%E5%9B%BD%E5%9B%BD%E5%AE%B6%E6%A0%87%E5%87%86%E5%8D%8F%E4%BC%9A/5709537">美国国家标准协会</a>（ANSI）对<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/C%E8%AF%AD%E8%A8%80">C语言</a>发布的标准。使用C的软件开发者被鼓励遵循ANSI C文档的要求，因为它鼓励使用<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E8%B7%A8%E5%B9%B3%E5%8F%B0/8558902">跨平台</a>的代码。</p>
+<p>发展过程中产生了C89、C90、C99、C11四套标准，最早的C89在1983年创立，C90是1990年创立的ANSI C标准（带有一些小改动），C99在2000年3月创立，C11在2011年12月创立。</p>
+<h3 id="C预处理器"><a href="#C预处理器" class="headerlink" title="C预处理器"></a><a target="_blank" rel="noopener" href="https://www.runoob.com/cprogramming/c-preprocessors.html">C预处理器</a></h3><table>
+<thead>
+<tr>
+<th align="left">指令</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">#define</td>
+<td align="left">定义宏</td>
+</tr>
+<tr>
+<td align="left">#include</td>
+<td align="left">包含一个源代码文件</td>
+</tr>
+<tr>
+<td align="left">#undef</td>
+<td align="left">取消已定义的宏</td>
+</tr>
+<tr>
+<td align="left">#ifdef</td>
+<td align="left">如果宏已经定义，则返回真</td>
+</tr>
+<tr>
+<td align="left">#ifndef</td>
+<td align="left">如果宏没有定义，则返回真</td>
+</tr>
+<tr>
+<td align="left">#if</td>
+<td align="left">如果给定条件为真，则编译下面代码</td>
+</tr>
+<tr>
+<td align="left">#else</td>
+<td align="left">#if 的替代方案</td>
+</tr>
+<tr>
+<td align="left">#elif</td>
+<td align="left">如果前面的 #if 给定条件不为真，当前条件为真，则编译下面代码</td>
+</tr>
+<tr>
+<td align="left">#endif</td>
+<td align="left">结束一个 #if……#else 条件编译块</td>
+</tr>
+<tr>
+<td align="left">#error</td>
+<td align="left">当遇到标准错误时，输出错误消息</td>
+</tr>
+<tr>
+<td align="left">#pragma</td>
+<td align="left">使用标准化方法，向编译器发布特殊的命令到编译器中</td>
+</tr>
+</tbody></table>
+<h3 id="预定义宏"><a href="#预定义宏" class="headerlink" title="预定义宏"></a>预定义宏</h3><p>ANSI C 定义了许多宏。在编程中可以使用这些宏，但是不能直接修改这些预定义的宏。</p>
+<table>
+<thead>
+<tr>
+<th align="left">宏</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">__DATE__</td>
+<td align="left">当前日期，一个以 “MMM DD YYYY” 格式表示的字符常量。</td>
+</tr>
+<tr>
+<td align="left">__TIME__</td>
+<td align="left">当前时间，一个以 “HH:MM:SS” 格式表示的字符常量。</td>
+</tr>
+<tr>
+<td align="left">__FILE__</td>
+<td align="left">这会包含当前文件名，一个字符串常量。</td>
+</tr>
+<tr>
+<td align="left">__LINE__</td>
+<td align="left">这会包含当前行号，一个十进制常量。</td>
+</tr>
+<tr>
+<td align="left">__STDC__</td>
+<td align="left">当编译器以 ANSI 标准编译时，则定义为 1。</td>
+</tr>
+</tbody></table>
+<h3 id="pragma"><a href="#pragma" class="headerlink" title="#pragma"></a><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_39640298/article/details/84503428">#pragma</a></h3><p>#pragma指令的作用是：用于指定计算机或操作系统特定的编译器功能。C 和 C++ 的每个实现均支持某些对其主机或操作系统唯一的功能。 例如，某些程序必须对将数据放入的内存区域进行准确的控制或控制某些函数接收参数的方式。 在保留与 C 和 C++ 语言的总体兼容性的同时，#pragma 指令使每个编译器均能够提供特定于计算机和操作系统的功能。</p>
+<p>根据定义，#pragma指令是计算机或操作系统特定的，并且通常对于每个编译器而言都有所不同。 #pragma指令可用于条件语句以提供新的预处理器功能，或为编译器提供实现所定义的信息。</p>
+<p><code>#pragma pack([ show ] | [ push | pop ] [, identifier ] , n)</code>，用于内存对齐。<br><code>#pragma message(messageString)</code>，用于不中断编译的情况下，发送一个字符串文字量到标准输出。</p>
+<p>编译器可识别的指令还有很多。</p>
+<h3 id="和…"><a href="#和…" class="headerlink" title="##和…"></a><a target="_blank" rel="noopener" href="https://blog.csdn.net/ysds20211402/article/details/122300354">##和…</a></h3><p><code>##</code> 起连接字符串的作用，用于把参数宏中的“形参”与其它没有天然分割的内容粘连在一起。<br>例如：<code>#define def_u32_array(__name, __size)    uint32_t array_##__name[__size];</code><br><code>def_u32_array(sample_buffer, 64)</code>，宏展开后为：<code>uint32_t array_sample_buffer[64];</code></p>
+<p><code>...</code> 是ANSI-C99标准引入的另外一个参数宏扩展，“可变参数宏”，其实就是将__VA_ARGS__替换为…中的值。<br>例如：<code>#define log_info(__STRING, ...)    printf(__STRING, __VA_ARGS__)</code><br><code>log_info(&quot;Count:%d&quot;, total_cycle_cnt);</code>，宏展开后：<code>printf(&quot;Count:%d&quot;, total_cycle_cnt);</code><br><code>log_info(&quot;-----------------\r\n&quot;);</code>，宏展开后：<code>printf(&quot;-----------------\r\n&quot;,);</code>，…无参数，__VA_ARGS__为空，但是宏展开后仍有逗号。</p>
+<p>逗号后无内容可能会产生个warning，想解决逗号问题，可以##和…一起使用。<br>例如：<code>\#define log_info(__STRING, ...)    printf(__STRING,##__VA_ARGS__)</code><br><code>log_info(&quot;-----------------\r\n&quot;);</code>，宏展开后：<code>printf(&quot;-----------------\r\n&quot;);</code></p>
+<h3 id="…初始化数组"><a href="#…初始化数组" class="headerlink" title="…初始化数组"></a>…初始化数组</h3><p><code>int a[5] = &#123;[0...2] = 1, [3...4] = 2&#125;;</code>使数组a[0]~a[2] = 1, a[3]和a[4] = 2。</p>
+<p>这种写法只可以在gcc编译C的情况下使用，gcc编译c++也不行。</p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1429,116 +1598,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/13/220113-fpga%E4%B9%8Beth/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/13/220113-fpga%E4%B9%8Beth/" class="post-title-link" itemprop="url">FPGA之以太网学习</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-01-13 20:00:00 / 修改时间：20:51:58" itemprop="dateCreated datePublished" datetime="2022-01-13T20:00:00+08:00">2022-01-13</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E7%A1%AC%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">硬件</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="学习视频"><a href="#学习视频" class="headerlink" title="学习视频"></a>学习视频</h3><ul>
-<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV194411f7GD?p=80">【正点原子】手把手教你学FPGA系列视频——以太网通信实验</a></li>
-</ul>
-<h3 id="以太网的介绍"><a href="#以太网的介绍" class="headerlink" title="以太网的介绍"></a>以太网的介绍</h3><h4 id="网络体系结构"><a href="#网络体系结构" class="headerlink" title="网络体系结构"></a>网络体系结构</h4><p><img src="/2022/01/13/220113-fpga%E4%B9%8Beth/220113-fpga%E4%B9%8Beth-1.jpg" alt="220113-fpga之eth-1.jpg"></p>
-<ul>
-<li>物理层：在物理层上所传数据的单位是比特。发送方发送1(或0)时，接收方应当收到1(或0)而不是0 (或1)，因此物理层要考虑用多大的电压代表”1”或”0”，以及接收方如何识别出发送方所发送的比特。物理层还要确定连接电缆的插头应当有多少根引脚以及各引脚应如何连接。当然，解释比特代表的意思，就不是物理层的任务。请注意，传递信息所利用的-些物理媒体，如双绞线、同轴电缆、光缆、无线信道等，并不在物理层协议之内而是在物理层协议的下面。</li>
-<li>数据链路层：数据链路层常简称为链路层。我们知道，两台主机之间的数据传输，总是在一段一段的链路上传送的，这就需要使用专门的链路层的协议。在两个相邻结点之间传送数据时，数据链路层将网络层交下来的IP数据报组装成帧(framing)，在两个相邻结点间的链路上传送帧(frame)，每一帧包括数据和必要的控制信息(如同步信息、地址信息、差错控制等)。在接收数据时，控制信息使接收端能够知道一个帧从哪个比特开始和到哪个比特结·束。这样，数据链路层在收到一个帧后，就可从中提取出数据部分，上交给网络层。控制信息还使接收端能够检测到所收到的帧中有无差错。如发现有差错，数据链路层就简单地丢弃这个出了差错的帧，以免继续在网络中传送下去白白浪费网络资源。如果需要改正数据在数据链路层传输时出现的差错(这就是说，数据链路层不仅要检错，而且要纠错)，那么就要采用可靠传输协议来纠正出现的差错。这种方法会使数据链路层的协议复杂些。</li>
-<li>网络层、运输层、应用层见《计算机网络》书籍；fpga跑eth主要用到了phy层、数据链路mac层、网络层、udp传输层；</li>
-</ul>
-<h4 id="FPGA数据包内容"><a href="#FPGA数据包内容" class="headerlink" title="FPGA数据包内容"></a>FPGA数据包内容</h4><p>下面放出fpga发送的以太网数据包的组层图，图片来自《开拓者FPGA 开发指南V1.3》，相关介绍也可以查看PDF。</p>
-<h5 id="以太网数据包格式"><a href="#以太网数据包格式" class="headerlink" title="以太网数据包格式"></a>以太网数据包格式</h5><p><img src="/2022/01/13/220113-fpga%E4%B9%8Beth/220113-fpga%E4%B9%8Beth-2.jpg" alt="220113-fpga之eth-2.jpg"></p>
-<h5 id="以太网帧格式"><a href="#以太网帧格式" class="headerlink" title="以太网帧格式"></a>以太网帧格式</h5><p><img src="/2022/01/13/220113-fpga%E4%B9%8Beth/220113-fpga%E4%B9%8Beth-3.jpg" alt="220113-fpga之eth-3.jpg"></p>
-<h5 id="IP数据包格式"><a href="#IP数据包格式" class="headerlink" title="IP数据包格式"></a>IP数据包格式</h5><p><img src="/2022/01/13/220113-fpga%E4%B9%8Beth/220113-fpga%E4%B9%8Beth-4.jpg" alt="220113-fpga之eth-4.jpg"></p>
-<h5 id="UDP数据格式"><a href="#UDP数据格式" class="headerlink" title="UDP数据格式"></a>UDP数据格式</h5><p><img src="/2022/01/13/220113-fpga%E4%B9%8Beth/220113-fpga%E4%B9%8Beth-5.jpg" alt="220113-fpga之eth-5.jpg"></p>
-<h4 id="千兆以太网物理层"><a href="#千兆以太网物理层" class="headerlink" title="千兆以太网物理层"></a>千兆以太网物理层</h4><ul>
-<li>下面这个是我开发板图和板上的千兆以太网原理图，设计的非常好，板子上的IO基本上都是等长线。  </li>
-</ul>
-<p><img src="/2022/01/13/220113-fpga%E4%B9%8Beth/220113-fpga%E4%B9%8Beth-6.jpg" alt="220113-fpga之eth-6.jpg"></p>
-<p><img src="/2022/01/13/220113-fpga%E4%B9%8Beth/220113-fpga%E4%B9%8Beth-7.jpg" alt="220113-fpga之eth-7.jpg"></p>
-<ul>
-<li>物理层的设计和学习还有个非常重要的学习资料就是《RTL8211数据手册》，这个手册上竟然写着不对外公布。</li>
-</ul>
-<h3 id="调试过程"><a href="#调试过程" class="headerlink" title="调试过程"></a>调试过程</h3><h4 id="例程修改"><a href="#例程修改" class="headerlink" title="例程修改"></a>例程修改</h4><ul>
-<li>简易的修改了下例程，让udp每次数据包发送1472个字节数据，其中前4字节是包序列号，用于接收端检测是否掉包，其他的1468个字节数据为0x00-0xFF循环，从而更为精确的模仿正常传输时的内容。再通过每次发完控制idle时间来控制传输速率。</li>
-</ul>
-<h4 id="上位机编写"><a href="#上位机编写" class="headerlink" title="上位机编写"></a>上位机编写</h4><ul>
-<li>上位机才用Python编写，在JupyterNotebook里实现。实现原理主要就是一直读udp，再去比较这次的包序列号是不是上一次+1，如果不是的话打印出来。</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line">BUFSIZE = <span class="number">1472</span> * <span class="number">100</span></span><br><span class="line">ip_port = (<span class="string">&#x27;192.168.0.3&#x27;</span>, <span class="number">8080</span>)</span><br><span class="line">server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  <span class="comment"># udp协议</span></span><br><span class="line">server.bind(ip_port)</span><br><span class="line">error = <span class="number">0</span></span><br><span class="line">recv_data_a = server.recvfrom(BUFSIZE)[<span class="number">0</span>][:<span class="number">4</span>]</span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    recv_data_b = server.recvfrom(BUFSIZE)[<span class="number">0</span>][:<span class="number">4</span>]</span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">int</span>.from_bytes(recv_data_b,byteorder=<span class="string">&#x27;big&#x27;</span>,signed=<span class="literal">False</span>) != \</span><br><span class="line">       <span class="built_in">int</span>.from_bytes(recv_data_a,byteorder=<span class="string">&#x27;big&#x27;</span>,signed=<span class="literal">False</span>) + <span class="number">1</span>):</span><br><span class="line">        error += <span class="number">1</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;error:%u, recv_data_a = %u, recv_data_b = %u&quot;</span> \</span><br><span class="line">              %(error, <span class="built_in">int</span>.from_bytes(recv_data_a,byteorder=<span class="string">&#x27;big&#x27;</span>,signed=<span class="literal">False</span>), \</span><br><span class="line">                <span class="built_in">int</span>.from_bytes(recv_data_b,byteorder=<span class="string">&#x27;big&#x27;</span>,signed=<span class="literal">False</span>)))</span><br><span class="line">    recv_data_a = server.recvfrom(BUFSIZE)[<span class="number">0</span>][:<span class="number">4</span>]</span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">int</span>.from_bytes(recv_data_a,byteorder=<span class="string">&#x27;big&#x27;</span>,signed=<span class="literal">False</span>) != \</span><br><span class="line">       <span class="built_in">int</span>.from_bytes(recv_data_b,byteorder=<span class="string">&#x27;big&#x27;</span>,signed=<span class="literal">False</span>) + <span class="number">1</span>):</span><br><span class="line">        error += <span class="number">1</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;error:%u, recv_data_b = %u, recv_data_a = %u&quot;</span> \</span><br><span class="line">              %(error, <span class="built_in">int</span>.from_bytes(recv_data_b,byteorder=<span class="string">&#x27;big&#x27;</span>,signed=<span class="literal">False</span>), \</span><br><span class="line">                <span class="built_in">int</span>.from_bytes(recv_data_a,byteorder=<span class="string">&#x27;big&#x27;</span>,signed=<span class="literal">False</span>)))</span><br><span class="line">server.close()</span><br></pre></td></tr></table></figure>
-
-<h4 id="掉包处理"><a href="#掉包处理" class="headerlink" title="掉包处理"></a>掉包处理</h4><ul>
-<li>在100Mbps速率传输的时候，每65536帧传输后都会出现2帧的掉包，通过WireShark查看，能找到那2帧包，也就是说数据包被网卡接收但是在上位机处没有接收。通过WireShark查看整个以太网数据包内容后发现规律：只有在IP数据包的首部校验和为0xFFFF的时候才会出现掉包，百度上也有这样的案例，于是修改FPGA代码，让IP包首部标识位不每次+1，这样校验和就不会出现0XFFFF。</li>
-</ul>
-<h4 id="调试结果"><a href="#调试结果" class="headerlink" title="调试结果"></a>调试结果</h4><ul>
-<li>经过简易测试，当传输速率为200Mbps的时候，不掉包；当传输速率为300Mbps的时候，出现掉包。</li>
-</ul>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
-<li>本次调试，学习了网络5层模型的物理层和MAC层，通过亲自实践解决出现的问题，对网络的底层实现有了更清楚的认识，对日后学习Linux驱动开发的网络部分会有极大的帮助，以及我的毕设，udp传输图像只是其中的一小部分，如果有时间，我会做个更复杂题目，学习更多的网络知识（大学只学了物联网和网络相关，计网没学）。</li>
-</ul>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1608,7 +1667,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-count">49</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

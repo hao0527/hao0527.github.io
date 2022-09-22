@@ -157,6 +157,123 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/09/09/220909-flash/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/09/09/220909-flash/" class="post-title-link" itemprop="url">eeprom， norflash， nandflash</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-09 08:00:00" itemprop="dateCreated datePublished" datetime="2022-09-09T08:00:00+08:00">2022-09-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-09-22 08:31:30" itemprop="dateModified" datetime="2022-09-22T08:31:30+08:00">2022-09-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>这几天在做云途单片机的flash接口移植，同时陀螺仪的代码也需要将校准参数保存到flash每次开机读取，于是就看了s32k单片机的flash操作和模拟eeprom，同时看了云途的手册和sdk，也看了stm32闪存编程参考手册和hal库。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Lx411Z7Qa?p=66&spm_id_from=pageDriver&vd_source=67da16e91bf092509864c6a51f44c92e">【正点原子】 手把手教你学STM32入门教学视频单片机 嵌入式 之 F103-基于新战舰V3/精英/MINI板</a></li>
+<li>《STM32F10xxx闪存编程参考手册》，《STM32 FLASH  模拟 EEPROM 使用和优化》</li>
+<li>云途、s32k的参考手册，云途和stm32的sdk</li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_38179373/article/details/111660812">nor flash原理详细讲解</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/gongjiwei/article/details/83475544">NANDFlash原理</a></li>
+</ol>
+<h2 id="eeprom-norflash-nandflash特性"><a href="#eeprom-norflash-nandflash特性" class="headerlink" title="eeprom, norflash, nandflash特性"></a>eeprom, norflash, nandflash特性</h2><p>搬运自<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43564374/article/details/122602141">EEPROM, NAND FLASH, NOR FLASH</a></p>
+<h3 id="内部结构"><a href="#内部结构" class="headerlink" title="内部结构"></a>内部结构</h3><p><strong>EEPROM</strong>基于浮栅管单元（Floating gate transister）的结构。 EEPROM 的 单元是由FLOTOX（Floating- gate tuneling oxide transister）及一个附加的Transister 组成。由于FLOTOX 的特性及两管结构，所以可以单bit写。它的每个存储单元并联。</p>
+<p>flash属于广义的EEPROM。FLASH 基于EEPROM， 与EEPROM主要的不同是FLASH 去除了 EEPROM 存储单元里的Tansister， 简化了存储电路(注意不是控制电路)。除此之外FLASH 的浮栅工艺不同， 所以写入速度更快。</p>
+<p><strong>NOR FLASH</strong>的每个存储单元(bit)以并联的方式连接到数据bit线，方便对每一位进行随机存取。同时具有专用的地址线(可以理解为字线)，可以实现byte的直接寻址。NORFLASH具有足够的地址和数据线来映射整个存储区域，类似于SRAM的工作方式。例如，具有16位数据总线的2Gbit（256MB）NOR闪存将具有27条地址线，可以对任何byte进行随机读取访问。所以NORFLASH可以按byte读取。</p>
+<p><strong>NAND FLASH</strong>各存储单元(bit)之间是串联的。在读取数据时，当字线和位线锁定某个晶体管时，该晶体管的控制极不加偏置电压，其它的 7 个都加上偏置电压而导通，如果这个晶体管的浮栅中有电荷就会导通使位线为低电平，读出的数就是 0，反之就是 1。所以每次读取都是读取一行bytes里面的同一个bit， 最后整合为一个块:它是按块读取。</p>
+<h3 id="成本，容量"><a href="#成本，容量" class="headerlink" title="成本，容量"></a>成本，容量</h3><p>EEPROM存储电路并联， 每个bit的存储单元还要多加一个三极管， 最复杂所以单位成本也最高(注意不是控制电路)<br>因此它容量最低。EEPROM都是几十kbytes到几百kbytes，基本没有有超过512K。</p>
+<p>NOR FLASH去除了EEPROM存储单元的三极管，每个存储单元并联， 去除了EEPROM存储单元的三极管， 集成度较小， 所以单位成本高。容量一般为1～16MB。</p>
+<p>NAND FLASH， 去除了EEPROM存储单元的三极管， 各存储单元之间串联， 所以集成度大，单位成本最低。容量一般为8～512MB。</p>
+<h3 id="写入"><a href="#写入" class="headerlink" title="写入"></a>写入</h3><p>EEPROM和FLASH在写入新数据之前，必须先将一个单元擦除(写 1)。 然后再在相应位写0。</p>
+<p>NOR&amp;NAND FLASH 去除了EEPROM存储单元的三极管。 所以只能整块的擦除。每次擦除只能擦除一行字节的一个bit。这是一个降低了单位成本的折衷办法，因为这容易导致损耗：减少了总擦除/写入次数。擦除块越小擦除越快。 然而擦除块越小芯片面积和存储器成本增加。 与NOR闪存相比NAND闪存可以更经济高效地支持更小的擦除块。目前，NAND闪存的典型块大小为8KB至32KB， NOR Flash为64KB至256KB。</p>
+<p>除此之外在NOR闪存中，每个字节在擦除之前都需要写入“0”。这使得NOR闪存的擦除操作比NAND闪存慢得多。例如，NAND闪存S34ML04G2需要3。5ms才能擦除128KB块，而NOR闪存S70GL02GT则需要约520ms来擦除类似的128KB扇区。这相差近150倍。除此之外NOR的擦除块更大，这就更慢了。</p>
+<p>EEPROM和FLASH的浮栅工艺不同， 所以NANDFLASH写入速度最快， EEPROM居中， NOR最慢。</p>
+<h3 id="读取数据粒度与速度"><a href="#读取数据粒度与速度" class="headerlink" title="读取数据粒度与速度"></a>读取数据粒度与速度</h3><p>EEPROM可以单字节读取。EERPOM一般用于低端产品，读的速度不需要那么快，真要做的话，其实也是可以做的和FLASH 差不多。它的每个存储单元并联。 所以它的特点是可以随机访问和修改任何一个字节，可以往每个bit中写入0或者1。</p>
+<p>NOR FLASH可以单字节读取。NORFLASH的每个存储单元(bit)以并联的方式连接到数据bit线，方便对每一位进行随机存取；同时具有专用的地址线(可以理解为字线)，可以实现byte的直接寻址。NORFLASH具有足够的地址和数据线来映射整个存储区域，类似于SRAM的工作方式。例如，具有16位数据总线的2Gbit（256MB）NOR闪存将具有27条地址线，可以对任何byte进行随机读取访问。所以NORFLASH可以按byte读取， 随机读取(给一个地址读一个字节)时间很短。</p>
+<p>NAND FLASH以页为单位读取。NAND FLASH各存储单元(bit)之间是串联的。在读取数据时，当字线和位线锁定某个晶体管时，该晶体管的控制极不加偏置电压，其它的 7 个都加上偏置电压而导通，如果这个晶体管的浮栅中有电荷就会导通使位线为低电平，读出的数就是 0，反之就是 1。所以每次读取都是读取一行bytes里面的同一个bit， 最后整合为一个页:它是按页读取。 随机读取时间很长。NAND 的全部存储单元分为若干个块，每个块又分为若干个页，每个页是 512byte: 每个页有 512 条位线，每条位线下有 8 个存储单元。</p>
+<p>NAND FLASH每页存储的数据正好跟硬盘的一个块存储的数据相同，这是设计时为了方便与磁盘进行数据交换而特意安排的。在NAND闪存中，使用多路复用地址和数据总线访问存储器。典型的NAND闪存使用8位或16位多路复用地址/数据总线以及其他信号，如芯片使能，写使能，读使能，地址锁存使能，命令锁存使能和就绪/忙碌。 NAND Flash需要提供命令（读，写或擦除），然后是地址和数据。这些额外的操作也使NAND闪存的随机读取速度慢得多。</p>
+<p>NAND闪存的顺序访问持续时间通常低于NOR闪存设备中的随机访问持续时间。利用NOR Flash的随机访问架构，需要在每个读取周期切换地址线，从而累积随机访问以进行顺序读取。随着要读取的数据块的大小增加，NOR闪存中的累积延迟变得大于NAND闪存。因此，NAND Flash顺序读取可以更快。但是由于NAND Flash的初始读取访问持续时间要长得多，两者的性能差异只有在传输大数据块(超过1 KB)时才明显。</p>
+<h3 id="可靠性"><a href="#可靠性" class="headerlink" title="可靠性"></a>可靠性</h3><p>EEPROM存储电路复杂， 具有较高的可靠性， 最稳定可以保存100年。</p>
+<p>NOR FLASH存储电路比复杂， 具有比较高的可靠性。</p>
+<p>NAND FLASH存储电路简单， 可靠性比较低。</p>
+<p>闪存会遭遇称为位翻转的现象，其中一些位可以被反转。这种现象在NAND存储电路简单中所以位翻转比NOR更常见。NAND器件中的坏块是随机分布的。以前也曾有过消除坏块的努力，但发现成品率太低，代价太高，根本不划算。NAND需要对介质进行初始化扫描以发现坏块，并将坏块标记为不可用。一般来说NAND的Block0是没有位翻转的。随着擦除和编程周期在NAND闪存的整个生命周期中持续，更多的存储器单元变坏。因此坏块处理(错误探测/错误更正(EDC/ECC)算法。)是NAND闪存的强制性功能。 这导致NAND的控制器电路复杂。这个问题对于用NAND存储多媒体信息时不是致命的。 但如果用本地存储设备来存储操作系统，配置文件或其他敏感信息时，必须使用EDC/ECC系统以确保可靠性。</p>
+<p>另一方面， NOR闪存坏块少，在存储器的使用寿命期间具有非常低的坏块累积。因此，当涉及存储数据的可靠性时，NOR Flash优于NAND Flash。可靠性的另一个方面是数据保留，这方面，NOR Flash再次占据优势，例如，NOR Flash闪存S70GL02GT提供20年的数据保留，最高可达1K编程/擦除周期，NAND闪存S34ML04G2提供10年的典型数据保留。</p>
+<h3 id="擦除次数"><a href="#擦除次数" class="headerlink" title="擦除次数"></a>擦除次数</h3><p>EEPROM 每次只需要擦除一个字节所以不容易损耗，可以擦写100w次。</p>
+<p>NAND闪存编程和擦除次数比NOR闪存好10倍。在NAND闪存中每个块的最大擦写次数是一百万次，NOR的擦写次数是十万次，NAND存储器除了块擦除次数优势， 典型的NAND块尺寸要比NOR器件小8倍， 每个NAND存储器块在给定的时间内的删除次数要少一些。编程和擦除的数量曾是一个需要考虑的重要特性。随着技术进步，这已不再适用，因为这两种存储器在这方面的性能已经很接近。例如，S70GL02GT NOR和S34ML04G2 NAND都支持100，000个编程 - 擦除次数。但是，由于NAND闪存中使用的块尺寸较小，因此每次操作都会擦除较小的区域， 与NOR Flash相比其整体寿命更长。</p>
+<h3 id="XIP（eXecute-In-Place）"><a href="#XIP（eXecute-In-Place）" class="headerlink" title="XIP（eXecute In Place）"></a>XIP（eXecute In Place）</h3><p>eXecute In Place，即芯片内执行、就地执行，是指CPU直接从存储器中读取程序代码执行，而不用再读到内存中。应用程序可以直接在flash闪存内运行，不必再把代码读到系统RAM中。</p>
+<p>flash内执行是指nor flash不需要初始化，可以直接在flash内执行代码。但往往只执行部分代码，比如初始化RAM。好处即是程序代码无需占用内存，减少内存的要求。</p>
+<p>EEPROM&amp;NORFLASH 可以像内存一样读任意地址(任意字节)，可以XIP，当然这也要看接口是不是内存接口，如果不支持随机读取就一般不行，大部分NOR flash带有SRAM接口，有足够的地址引脚来寻址，可以很容易地存取其内部的每一个字节。可以非常直接地使用基于NOR的闪存，可以像其他存储器那样连接，并可以在上面直接运行代码。有的Norflash可以并行连接实现XIP，也可以串行通过SPI实现XIP。对于PC这需要相应的总线桥(内存控制器)芯片支持， Soc内部要集成相应桥芯片， 挂接到PCIE或者AMBA总线。 桥芯片的硬件逻辑会实现串并转换，总线仲裁，Cache结构，Burst等逻辑。</p>
+<p>NANDFLASH 是按块读取，随机读取太慢所以不适合XIP当然这也要看接口是不是内存接口，如果不支持随机读取就一般不行，NAND使用复杂的I/O口来串行地存取数据。 一般是8个引脚用来传送控制，地址和数据信息 NANDFLASH只是不适合做XIP，但并不是不能做XIP，它坏块多，读取也太慢。比如EMMC启动就必须要把代码load到RAM里才能启动，你看到某些芯片支持EMMC启动，必定是有片内程序把EMMC的代码读到了RAM里。</p>
+<h3 id="驱动复杂程度"><a href="#驱动复杂程度" class="headerlink" title="驱动复杂程度"></a>驱动复杂程度</h3><p>NAND更容易遇到位翻转， 驱动和控制电路要复杂的多。在使用NAND器件时，必须先写入驱动程序，才能继续执行其他操作。NAND在每一行上有CRC位标记，以及一些用于指示行是否为好的位。NAND处理芯片将管理CRC计算，允许在读取时纠正位错误，并管理坏行。</p>
+<p>在USB驱动器中，这一切都由USB接口芯片处理。在SSD中，它由SATA（或其他接口模式）芯片处理，因此CRC错误和坏点映射对用户来说都是不可见的。这意味着在NAND器件上自始至终都必须进行虚拟映射。NAND内存的可靠运行还需要损耗均衡(就是把擦除平均到每个块上)，损耗均衡也由USB或SSD控制器处理，因此用户也不可见。</p>
+<h3 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h3><p>通常，NOR闪存是需要较低容量，快速随机读取访问和更高数据可靠性的应用的理想选择，例如代码执行。<br>NAND闪存则非常适用于需要更高内存容量和更快写入和擦除操作的数据存储等应用。</p>
+<p>LINUX嵌入式系统多用一个小容量的nor flash存储引导代码，用一个大容量的nand flash存放文件系统和内核。</p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/24/220824-adc%E9%87%87%E6%A0%B7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -520,7 +637,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-16 23:23:32" itemprop="dateModified" datetime="2022-08-16T23:23:32+08:00">2022-08-16</time>
+                <time title="修改时间：2022-09-22 08:18:51" itemprop="dateModified" datetime="2022-09-22T08:18:51+08:00">2022-09-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -558,6 +675,12 @@
 </ol>
 <h2 id="串口接收一帧不定长数据"><a href="#串口接收一帧不定长数据" class="headerlink" title="串口接收一帧不定长数据"></a>串口接收一帧不定长数据</h2><ol>
 <li>可使用<code>tm32f7xx_hal_uart_ex.h</code>中的<code>HAL_UARTEx_ReceiveToIdle()</code>函数。</li>
+</ol>
+<h2 id="HAL库操作Flash"><a href="#HAL库操作Flash" class="headerlink" title="HAL库操作Flash"></a>HAL库操作Flash</h2><ol>
+<li>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/shoufei403/article/details/81978731">基于STM32F407 HAL库的Flash编程操作</a> 和 STM32F10xxx闪存编程参考手册</li>
+<li>在每次擦除或编程前先要解锁Flash，在HAL库中，只需要调用<code>stm32f1xx_hal_flash.h</code>中的<code>HAL_FLASH_Unlock()</code>函数。</li>
+<li>擦除时最小要以页为单位，传入的地址需要注意是否是页的起始地址。</li>
+<li>编程时要注意4字节对齐，不同单片机可能不同。</li>
 </ol>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
@@ -686,7 +809,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-07-24 11:13:56" itemprop="dateModified" datetime="2022-07-24T11:13:56+08:00">2022-07-24</time>
+                <time title="修改时间：2022-09-22 08:20:27" itemprop="dateModified" datetime="2022-09-22T08:20:27+08:00">2022-09-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1171,175 +1294,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/11/220511-C%E8%AF%AD%E8%A8%80%E9%A2%84%E5%A4%84%E7%90%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/11/220511-C%E8%AF%AD%E8%A8%80%E9%A2%84%E5%A4%84%E7%90%86/" class="post-title-link" itemprop="url">C语言预处理</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-05-11 23:00:00" itemprop="dateCreated datePublished" datetime="2022-05-11T23:00:00+08:00">2022-05-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-31 23:20:29" itemprop="dateModified" datetime="2022-05-31T23:20:29+08:00">2022-05-31</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="ANSI-C标准"><a href="#ANSI-C标准" class="headerlink" title="ANSI C标准"></a><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/ANSI%20C%E6%A0%87%E5%87%86/6044290?fr=aladdin">ANSI C标准</a></h3><p>ANSI C是<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%BE%8E%E5%9B%BD%E5%9B%BD%E5%AE%B6%E6%A0%87%E5%87%86%E5%8D%8F%E4%BC%9A/5709537">美国国家标准协会</a>（ANSI）对<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/C%E8%AF%AD%E8%A8%80">C语言</a>发布的标准。使用C的软件开发者被鼓励遵循ANSI C文档的要求，因为它鼓励使用<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E8%B7%A8%E5%B9%B3%E5%8F%B0/8558902">跨平台</a>的代码。</p>
-<p>发展过程中产生了C89、C90、C99、C11四套标准，最早的C89在1983年创立，C90是1990年创立的ANSI C标准（带有一些小改动），C99在2000年3月创立，C11在2011年12月创立。</p>
-<h3 id="C预处理器"><a href="#C预处理器" class="headerlink" title="C预处理器"></a><a target="_blank" rel="noopener" href="https://www.runoob.com/cprogramming/c-preprocessors.html">C预处理器</a></h3><table>
-<thead>
-<tr>
-<th align="left">指令</th>
-<th align="left">描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">#define</td>
-<td align="left">定义宏</td>
-</tr>
-<tr>
-<td align="left">#include</td>
-<td align="left">包含一个源代码文件</td>
-</tr>
-<tr>
-<td align="left">#undef</td>
-<td align="left">取消已定义的宏</td>
-</tr>
-<tr>
-<td align="left">#ifdef</td>
-<td align="left">如果宏已经定义，则返回真</td>
-</tr>
-<tr>
-<td align="left">#ifndef</td>
-<td align="left">如果宏没有定义，则返回真</td>
-</tr>
-<tr>
-<td align="left">#if</td>
-<td align="left">如果给定条件为真，则编译下面代码</td>
-</tr>
-<tr>
-<td align="left">#else</td>
-<td align="left">#if 的替代方案</td>
-</tr>
-<tr>
-<td align="left">#elif</td>
-<td align="left">如果前面的 #if 给定条件不为真，当前条件为真，则编译下面代码</td>
-</tr>
-<tr>
-<td align="left">#endif</td>
-<td align="left">结束一个 #if……#else 条件编译块</td>
-</tr>
-<tr>
-<td align="left">#error</td>
-<td align="left">当遇到标准错误时，输出错误消息</td>
-</tr>
-<tr>
-<td align="left">#pragma</td>
-<td align="left">使用标准化方法，向编译器发布特殊的命令到编译器中</td>
-</tr>
-</tbody></table>
-<h3 id="预定义宏"><a href="#预定义宏" class="headerlink" title="预定义宏"></a>预定义宏</h3><p>ANSI C 定义了许多宏。在编程中可以使用这些宏，但是不能直接修改这些预定义的宏。</p>
-<table>
-<thead>
-<tr>
-<th align="left">宏</th>
-<th align="left">描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">__DATE__</td>
-<td align="left">当前日期，一个以 “MMM DD YYYY” 格式表示的字符常量。</td>
-</tr>
-<tr>
-<td align="left">__TIME__</td>
-<td align="left">当前时间，一个以 “HH:MM:SS” 格式表示的字符常量。</td>
-</tr>
-<tr>
-<td align="left">__FILE__</td>
-<td align="left">这会包含当前文件名，一个字符串常量。</td>
-</tr>
-<tr>
-<td align="left">__LINE__</td>
-<td align="left">这会包含当前行号，一个十进制常量。</td>
-</tr>
-<tr>
-<td align="left">__STDC__</td>
-<td align="left">当编译器以 ANSI 标准编译时，则定义为 1。</td>
-</tr>
-</tbody></table>
-<h3 id="pragma"><a href="#pragma" class="headerlink" title="#pragma"></a><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_39640298/article/details/84503428">#pragma</a></h3><p>#pragma指令的作用是：用于指定计算机或操作系统特定的编译器功能。C 和 C++ 的每个实现均支持某些对其主机或操作系统唯一的功能。 例如，某些程序必须对将数据放入的内存区域进行准确的控制或控制某些函数接收参数的方式。 在保留与 C 和 C++ 语言的总体兼容性的同时，#pragma 指令使每个编译器均能够提供特定于计算机和操作系统的功能。</p>
-<p>根据定义，#pragma指令是计算机或操作系统特定的，并且通常对于每个编译器而言都有所不同。 #pragma指令可用于条件语句以提供新的预处理器功能，或为编译器提供实现所定义的信息。</p>
-<p><code>#pragma pack([ show ] | [ push | pop ] [, identifier ] , n)</code>，用于内存对齐。<br><code>#pragma message(messageString)</code>，用于不中断编译的情况下，发送一个字符串文字量到标准输出。</p>
-<p>编译器可识别的指令还有很多。</p>
-<h3 id="和…"><a href="#和…" class="headerlink" title="##和…"></a><a target="_blank" rel="noopener" href="https://blog.csdn.net/ysds20211402/article/details/122300354">##和…</a></h3><p><code>##</code> 起连接字符串的作用，用于把参数宏中的“形参”与其它没有天然分割的内容粘连在一起。<br>例如：<code>#define def_u32_array(__name, __size)    uint32_t array_##__name[__size];</code><br><code>def_u32_array(sample_buffer, 64)</code>，宏展开后为：<code>uint32_t array_sample_buffer[64];</code></p>
-<p><code>...</code> 是ANSI-C99标准引入的另外一个参数宏扩展，“可变参数宏”，其实就是将__VA_ARGS__替换为…中的值。<br>例如：<code>#define log_info(__STRING, ...)    printf(__STRING, __VA_ARGS__)</code><br><code>log_info(&quot;Count:%d&quot;, total_cycle_cnt);</code>，宏展开后：<code>printf(&quot;Count:%d&quot;, total_cycle_cnt);</code><br><code>log_info(&quot;-----------------\r\n&quot;);</code>，宏展开后：<code>printf(&quot;-----------------\r\n&quot;,);</code>，…无参数，__VA_ARGS__为空，但是宏展开后仍有逗号。</p>
-<p>逗号后无内容可能会产生个warning，想解决逗号问题，可以##和…一起使用。<br>例如：<code>\#define log_info(__STRING, ...)    printf(__STRING,##__VA_ARGS__)</code><br><code>log_info(&quot;-----------------\r\n&quot;);</code>，宏展开后：<code>printf(&quot;-----------------\r\n&quot;);</code></p>
-<h3 id="…初始化数组"><a href="#…初始化数组" class="headerlink" title="…初始化数组"></a>…初始化数组</h3><p><code>int a[5] = &#123;[0...2] = 1, [3...4] = 2&#125;;</code>使数组a[0]~a[2] = 1, a[3]和a[4] = 2。</p>
-<p>这种写法只可以在gcc编译C的情况下使用，gcc编译c++也不行。</p>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1409,7 +1363,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-count">49</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
