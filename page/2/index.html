@@ -157,6 +157,108 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/" class="post-title-link" itemprop="url">交叉编译工具链的使用</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-22 00:00:00" itemprop="dateCreated datePublished" datetime="2022-05-22T00:00:00+08:00">2022-05-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-03 23:40:28" itemprop="dateModified" datetime="2022-08-03T23:40:28+08:00">2022-08-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="交叉编译简介"><a href="#交叉编译简介" class="headerlink" title="交叉编译简介"></a>交叉编译简介</h2><p>交叉编译，是一个和本地编译相对应的概念，交叉编译通俗地讲就是一种平台上编译出的程序能够运行在不同体系结构的平台上，比如在PC平台（X86 CPU）上编译出能运行在ARM CPU的程序。</p>
+<h2 id="使用交叉编译的原因"><a href="#使用交叉编译的原因" class="headerlink" title="使用交叉编译的原因"></a>使用交叉编译的原因</h2><p>主要原因是：嵌入式系统中的资源太少。具体的解释就是：所要运行的目标环境中，各种资源，都相对有限，所以很难进行直接的本地编译。嵌入式开发板的CPU、RAM、Falsh等硬件资源相对比较紧张，在已经运行了嵌入式Linux的前提下，没法方便的进行本地编译。因为编译，开发，都需要相对比较多的CPU，内存，硬盘等资源，而嵌入式开发上的资源，只够嵌入式（Linux）系统运行的，没太多剩余的资源，供你本地编译。</p>
+<h2 id="交叉编译工具链组成"><a href="#交叉编译工具链组成" class="headerlink" title="交叉编译工具链组成"></a>交叉编译工具链组成</h2><p>常用交叉编译工具有交叉编译器、交叉连接器、交叉解释器还有交叉ELF文件工具、交叉反汇编器等工具。交叉编译工具链主要由binutils、gcc和glibc三个部分组成。有时出于减小 libc 库大小的考虑，也可以用别的 c 库来代替 glibc，例如 uClibc、dietlibc 和 newlib。</p>
+<p>编译器能将我们编写的语言转成计算机可以识别的机器语言，解释器能够执行用其他计算机语言编写的程序的系统软件，它是一种翻译程序，转换一行，运行一行，再转换一行，再运行一行。<strong>解释性</strong>语言：Python，JavaScript，<strong>编译性</strong>语言：Java，c，c++。</p>
+<h2 id="交叉工具链命名规则"><a href="#交叉工具链命名规则" class="headerlink" title="交叉工具链命名规则"></a>交叉工具链命名规则</h2><p>交叉编译工具链的命名规则为：arch - vendor - os - (gnu)eabi</p>
+<p>arch – 体系架构，如ARM，MIPS，表示该编译器用于编译哪个目标平台的程序<br>vendor – 工具链提供商，通常是把vendor写成体系架构的值，比如cortex_a8<br>os – 运行编译产生的程序的目标操作系统，一般用linux表示有操作系统，none表示裸系统，uboot编译无os<br>eabi – 嵌入式应用二进制接口（Embedded Application Binary Interface），abi是计算机上的</p>
+<h2 id="编译工具使用（持续更新）"><a href="#编译工具使用（持续更新）" class="headerlink" title="编译工具使用（持续更新）"></a>编译工具使用（持续更新）</h2><p>交叉编译工具使用方法与本地编译工具链基本一样，只是命名不同。</p>
+<h3 id="gcc"><a href="#gcc" class="headerlink" title="gcc"></a>gcc</h3><p>Linux系统下的GCC编译器实际上是GNU编译工具链中的一款软件，可以用它来调用其他不同的工具进行诸如预处理、编译、汇编和链接这样的工作。gcc编译器从拿到一个c源文件到生成一个可执行程序，中间一共经历了四个步骤：</p>
+<p><img src="/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-1.jpg" alt="220522-交叉编译工具链-1.jpg"></p>
+<h3 id="ld"><a href="#ld" class="headerlink" title="ld"></a>ld</h3><p>ld是GNU操作系统上的连接器，把二进制文件连接成可执行文件。<strong>ELF文件</strong>可用于程序的链接，重定位目标文件。用于链接的ELF文件格式：</p>
+<p><img src="/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-2.jpg" alt="220522-交叉编译工具链-2.jpg"></p>
+<p>从编译和链接角度看ELF文件<strong>ELF头</strong>，每个ELF文件都必须存在一个ELF_Header，这里存放了很多重要的信息用来<strong>描述整个文件的组织</strong>，如：版本信息、入口信息、偏移信息等，程序执行也必须依靠其提供的信息。</p>
+<p><strong>段头表</strong>，存放的是所有<strong>不同段将在内存中的位置</strong>。代码段.text section，存放已编译程序的机器代码，一般是只读的。只读数据段.rodata section，此段的数据不可修改，存放常量。数据段.data section，存放已初始化的全局变量。.bss section，未初始化全局变量，仅是占位符，不占据任何实际磁盘空间，目标文件格式区分初始化和非初始化是为了空间效率。</p>
+<p>符号表.symtab section，它存放在程序中定义和引用的函数和全局变量的信息。.text节的重定位信息.rel.txt section，用于重新修改代码段的指令中的地址信息。.data节的重定位信息.rel.data section，用于对被模块使用或定义的全局变量进行重定位的信息。调试用的符号表.debug section。.strtab section，包含symtab和debug节中符号及节名。.line section，存储调试的行号信息，描述源代码和机器码之间的对应关系。</p>
+<p>ELF(Executable and Linkable Format)的完整描述，可以参考这个文档 - <a target="_blank" rel="noopener" href="http://www.uclibc.org/docs/elf-64-gen.pdf">这里</a></p>
+<h3 id="size"><a href="#size" class="headerlink" title="size"></a>size</h3><p><img src="/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-3.jpg" alt="220522-交叉编译工具链-3.jpg"></p>
+<p>用于显示二进制文件各节的大小。</p>
+<p>text段最终是存放在FLASH存储器中的，text段不仅包含函数，还有常量。</p>
+<p>data段是用于初始化数据（全局/外部），既有初始化值的数据。</p>
+<p>bss段包含着所有未初始化（或初始化值为0）的数据（全局/外部）。</p>
+<p>dec（decimal的缩写，即十进制数）是text，data和bss的算术和。</p>
+<h3 id="objcopy"><a href="#objcopy" class="headerlink" title="objcopy"></a>objcopy</h3><p><img src="/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-4.jpg" alt="220522-交叉编译工具链-4.jpg"></p>
+<p>把一种目标文件中的内容复制到另一种类型的目标文件中。</p>
+<p><code>objcopy -O ihex xxxxxx.elf xxxxxx.hex</code> 将编译生成的elf文件转换为hex格式的文件。</p>
+<p><code>objcopy -O srec xxxxxx.elf xxxxxx.srec</code> 将编译生成的elf文件转换为srec格式的文件。</p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/12/220512-Git%E5%92%8CSVN/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1635,120 +1737,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/20/220220-%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/02/20/220220-%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B/" class="post-title-link" itemprop="url">进程与线程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-02-20 20:10:00 / 修改时间：22:44:21" itemprop="dateCreated datePublished" datetime="2022-02-20T20:10:00+08:00">2022-02-20</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="再次了解进程与线程"><a href="#再次了解进程与线程" class="headerlink" title="再次了解进程与线程"></a>再次了解进程与线程</h2><ul>
-<li><a href="/2021/06/11/210611-python%E5%BC%82%E6%AD%A5%E4%B8%8E%E7%BA%BF%E7%A8%8B/">Python异步与线程</a>：这是21年6月时对线程、进程、同步、异步的简单了解，最近在做毕设时又用到了，打算重新回顾一遍。</li>
-</ul>
-<h2 id="多线程与多进程的区别"><a href="#多线程与多进程的区别" class="headerlink" title="多线程与多进程的区别"></a>多线程与多进程的区别</h2><p><strong>多线程 threading：</strong> 一个人有与异性聊天和看剧两件事要做。单线程的她可以看完剧再去聊天，但这样子可能就没人陪她聊天了「哼，发消息不回」。我们把她看成一个CPU核心，为她开起多线程——先看一会剧，偶尔看看新消息，在两件事（线程）间来回切换。多线程：单个CPU核心可以同时做几件事，不至于卡在某一步傻等着。</p>
-<p>用处：爬取网站信息（爬虫），等待多个用户输入</p>
-<p><strong>多进程 processing：</strong> 一个人有很多砖需要搬，他领取手套、推车各种物资（向系统申请了资源）然后开始搬砖。然而他身边有很多人，我们让这些人去帮他！（一核有难，八核围观）。于是他们做了分工，砖很快就搬完了。多进程让多个CPU核心可以一起做事，不至于只有一人干活而其他人傻站着。</p>
-<p>用处：进行高性能计算。只有多进程方案设计合理，才能加速计算。</p>
-<h2 id="Python中应用多进程"><a href="#Python中应用多进程" class="headerlink" title="Python中应用多进程"></a>Python中应用多进程</h2><ul>
-<li>毕设的上位机要接收显示图像，我在udp数据接收解码后，写入IO流，通过管道发给另一个进程，另一个进程做图像的处理与显示，这样就不会因为处理时间过长而阻塞下一次接收解码了。</li>
-<li><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3.7/library/multiprocessing.html">multiprocessing — 基于进程的并行</a>：multiprocessing是Python自带的多进程库，这是Python官方的文档对multiprocessing库的介绍。</li>
-<li>Python的线程是操作系统线程，因此要有Python全局解释器锁。一个python解释器进程内有一条<strong>主线程</strong>，以及多条用户程序的<strong>执行线程</strong>。即使在多核CPU平台上，由于GIL的存在，所以禁止多线程的并行执行。Python 3.6 才让multiprocessing逐渐发展成一个能用的Python内置多进程库，可以进行进程间的通信，以及有限的内存共享。</li>
-</ul>
-<h3 id="两种多进程创建方式"><a href="#两种多进程创建方式" class="headerlink" title="两种多进程创建方式"></a>两种多进程创建方式</h3><p>Python多进程可以选择两种创建进程的方式，spawn与fork，实际使用中可以根据子进程具体做什么来选取用fork还是spawn。</p>
-<ol>
-<li>fork：除了必要的启动资源外，其他变量，包，数据等都继承自父进程，并且是copy-on-write的，也就是共享了父进程的一些内存页，因此启动较快，但是由于大部分都用的父进程数据，所以是不安全的进程</li>
-<li>spawn：从头构建一个子进程，父进程的数据等拷贝到子进程空间内，拥有自己的Python解释器，所以需要重新加载一遍父进程的包，因此启动较慢，由于数据都是自己的，安全性较高</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">multiprocessing.set_start_method(<span class="string">&#x27;spawn&#x27;</span>)  <span class="comment"># default on WinOS or MacOS</span></span><br><span class="line">multiprocessing.set_start_method(<span class="string">&#x27;fork&#x27;</span>)   <span class="comment"># default on Linux (UnixOS)</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="四种进程间通信方式"><a href="#四种进程间通信方式" class="headerlink" title="四种进程间通信方式"></a>四种进程间通信方式</h3><p>Python中进程间通信可以采用进程池Pool、管道Pipe、队列Queue，在新版本Python中多了共享内存Manager的方式。</p>
-<ol>
-<li><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3.7/library/multiprocessing.html#module-multiprocessing.pool">进程池Pool</a>：不怎么使用？通常使用另外两个方式通信</li>
-<li><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3.7/library/multiprocessing.html#pipes-and-queues">管道和队列</a>：Queue用于多个进程间实现通信，Pipe是两个进程的通信。Queue通过put和get方法插入读取队列，Pipe通过send和recv方法发送和接收信息，用法可以参考这篇文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/guguobao/p/9398653.html">python进程间通信</a>，如果追求运行更快，那么最好使用管道Pipe而队列Queue，详细查看<a target="_blank" rel="noopener" href="https://www.raspberrypi.org/forums/viewtopic.php?t=141576">Python pipes and queues performance</a></li>
-<li><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/multiprocessing.html#sharing-state-between-processes">共享内存Manager</a>：Pipe Queue 把需要通信的信息从内存里深拷贝了一份给其他线程使用（需要分发的线程越多，其占用的内存越多）。而共享内存会由解释器负责维护一块共享内存（而不用深拷贝），这块内存每个进程都能读取到，读写的时候遵守管理（因此不要以为用了共享内存就一定变快）</li>
-</ol>
-<h3 id="编程中要注意"><a href="#编程中要注意" class="headerlink" title="编程中要注意"></a>编程中要注意</h3><p>为了避免自己调用自己时重复执行主进程，**多进程的主进程一定要写在程序入口if __name__ == ‘__main__’:，否则可能会报错。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">function1</span>(<span class="params"><span class="built_in">id</span></span>):  <span class="comment"># 这里是子进程</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;id <span class="subst">&#123;<span class="built_in">id</span>&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">run__process</span>():  <span class="comment"># 这里是主进程</span></span><br><span class="line">    <span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process</span><br><span class="line">    process = [mp.Process(target=function1, args=(<span class="number">1</span>,)),</span><br><span class="line">               mp.Process(target=function1, args=(<span class="number">2</span>,)), ]</span><br><span class="line">    [p.start() <span class="keyword">for</span> p <span class="keyword">in</span> process]  <span class="comment"># 开启了两个进程</span></span><br><span class="line">    [p.join() <span class="keyword">for</span> p <span class="keyword">in</span> process]   <span class="comment"># 等待两个进程依次结束</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># run__process()  # 主线程不建议写在 if外部。由于这里的例子很简单，你强行这么做可能不会报错</span></span><br><span class="line"><span class="keyword">if</span> __name__ ==<span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    run__process()  <span class="comment"># 正确做法：主线程只能写在 if内部</span></span><br></pre></td></tr></table></figure>
-
-<p>设计高性能的多进程时，遵守以下规则：</p>
-<ul>
-<li>尽可能少传一点数据</li>
-<li>尽可能减少主线程的负担</li>
-<li>尽可能不让某个进程傻等着</li>
-<li>尽可能减少进程间通信的频率</li>
-</ul>
-<h2 id="网上一些好的文档"><a href="#网上一些好的文档" class="headerlink" title="网上一些好的文档"></a>网上一些好的文档</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/340965963">Python程序入口 <strong>name</strong> == ‘<strong>main</strong>‘ 有重要功能（多线程）而非编程习惯</a>：这篇文章讲述了Python中程序入口的作用，Python用这个简单的方法来判断当前的模块是被直接运行还是被调用，这是很重要的功能。</li>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/340657122">在Python中优雅地用多进程</a></li>
-</ul>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1814,7 +1806,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-count">51</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

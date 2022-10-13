@@ -157,6 +157,96 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/13/221013-rtthread/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/10/13/221013-rtthread/" class="post-title-link" itemprop="url">RT-Thread使用笔记</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-10-13 21:00:00 / 修改时间：23:05:27" itemprop="dateCreated datePublished" datetime="2022-10-13T21:00:00+08:00">2022-10-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>今天在移植陀螺仪项目时，之前的代码全局变量过多，函数功能不够独立，现在使用国产雅特力MCU，M4主频120MHz，64K ROM，16K RAM，想使用RTOS重新写代码，实践一次嵌入式RTOS编程。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li>参考RT-Thread官网教程：<a target="_blank" rel="noopener" href="https://www.rt-thread.org/document/site/#/">https://www.rt-thread.org/document/site/#/</a></li>
+</ol>
+<h2 id="开始干"><a href="#开始干" class="headerlink" title="开始干"></a>开始干</h2><h3 id="选型"><a href="#选型" class="headerlink" title="选型"></a>选型</h3><p>选用RT-Thread Nano版本，资源占用小：对 RAM 与 ROM 的开销非常小，在支持 semaphore 和 mailbox 特性，并运行两个线程 (main 线程 + idle 线程) 情况下，ROM 和 RAM 依然保持着极小的尺寸，RAM 占用约 1K 左右，ROM 占用 4K 左右。</p>
+<h3 id="移植"><a href="#移植" class="headerlink" title="移植"></a>移植</h3><p>移植参考官网教程：<a target="_blank" rel="noopener" href="https://www.rt-thread.org/document/site/#/rt-thread-version/rt-thread-nano/nano-port-keil/an0039-nano-port-keil">使用 MDK 移植</a></p>
+<h4 id="移植时遇到的几个问题"><a href="#移植时遇到的几个问题" class="headerlink" title="移植时遇到的几个问题"></a>移植时遇到的几个问题</h4><ol>
+<li><code>#error &quot;TODO 1: OS Tick Configuration.&quot;</code>一直报错，这个只是编译时提醒我们要配置OS Tick，配置后需手动注释掉这条。</li>
+<li><code>SysTick_Handler()</code>有时进有时不进，检查方法查看SysTick结构体，发现CTRL中使能位0，原因：后面的代码使用了delay函数关闭SysTick的使能位。</li>
+</ol>
+<h3 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h3><h4 id="初始化静态线程"><a href="#初始化静态线程" class="headerlink" title="初始化静态线程"></a>初始化静态线程</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">rt_err_t</span> <span class="title function_">rt_thread_init</span><span class="params">(<span class="keyword">struct</span> rt_thread* thread,</span></span><br><span class="line"><span class="params">                        <span class="type">const</span> <span class="type">char</span>* name,</span></span><br><span class="line"><span class="params">                        <span class="type">void</span> (*entry)(<span class="type">void</span>* parameter), <span class="type">void</span>* parameter,</span></span><br><span class="line"><span class="params">                        <span class="type">void</span>* stack_start, <span class="type">rt_uint32_t</span> stack_size,</span></span><br><span class="line"><span class="params">                        <span class="type">rt_uint8_t</span> priority, <span class="type">rt_uint32_t</span> tick)</span>;</span><br></pre></td></tr></table></figure>
+
+<h4 id="启动线程"><a href="#启动线程" class="headerlink" title="启动线程"></a>启动线程</h4><p><code> rt_err_t rt_thread_startup(rt_thread_t thread);</code></p>
+<h4 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h4><ol>
+<li><p>遇到rt_thread_init()函数卡死，百度竟然啥都查不到（rt-thread用的人这么少的吗），后尝试将栈大小增加至256后成功初始化线程。虽然任务里没什么局部变量，但是一个简单的按键任务竟然占了500多字节内存，可能是因为栈中还保存了寄存器、TCB等信息，那我这单片机16K字节内存可能不够。</p>
+</li>
+<li><p>需要在main函数while(1)中加入rt_thread_mdelay(10); 否则main线程优先级更高，其他线程无法运行。</p>
+</li>
+</ol>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/09/27/220927-CAN/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1219,112 +1309,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/" class="post-title-link" itemprop="url">交叉编译工具链的使用</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-05-22 00:00:00" itemprop="dateCreated datePublished" datetime="2022-05-22T00:00:00+08:00">2022-05-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-03 23:40:28" itemprop="dateModified" datetime="2022-08-03T23:40:28+08:00">2022-08-03</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="交叉编译简介"><a href="#交叉编译简介" class="headerlink" title="交叉编译简介"></a>交叉编译简介</h2><p>交叉编译，是一个和本地编译相对应的概念，交叉编译通俗地讲就是一种平台上编译出的程序能够运行在不同体系结构的平台上，比如在PC平台（X86 CPU）上编译出能运行在ARM CPU的程序。</p>
-<h2 id="使用交叉编译的原因"><a href="#使用交叉编译的原因" class="headerlink" title="使用交叉编译的原因"></a>使用交叉编译的原因</h2><p>主要原因是：嵌入式系统中的资源太少。具体的解释就是：所要运行的目标环境中，各种资源，都相对有限，所以很难进行直接的本地编译。嵌入式开发板的CPU、RAM、Falsh等硬件资源相对比较紧张，在已经运行了嵌入式Linux的前提下，没法方便的进行本地编译。因为编译，开发，都需要相对比较多的CPU，内存，硬盘等资源，而嵌入式开发上的资源，只够嵌入式（Linux）系统运行的，没太多剩余的资源，供你本地编译。</p>
-<h2 id="交叉编译工具链组成"><a href="#交叉编译工具链组成" class="headerlink" title="交叉编译工具链组成"></a>交叉编译工具链组成</h2><p>常用交叉编译工具有交叉编译器、交叉连接器、交叉解释器还有交叉ELF文件工具、交叉反汇编器等工具。交叉编译工具链主要由binutils、gcc和glibc三个部分组成。有时出于减小 libc 库大小的考虑，也可以用别的 c 库来代替 glibc，例如 uClibc、dietlibc 和 newlib。</p>
-<p>编译器能将我们编写的语言转成计算机可以识别的机器语言，解释器能够执行用其他计算机语言编写的程序的系统软件，它是一种翻译程序，转换一行，运行一行，再转换一行，再运行一行。<strong>解释性</strong>语言：Python，JavaScript，<strong>编译性</strong>语言：Java，c，c++。</p>
-<h2 id="交叉工具链命名规则"><a href="#交叉工具链命名规则" class="headerlink" title="交叉工具链命名规则"></a>交叉工具链命名规则</h2><p>交叉编译工具链的命名规则为：arch - vendor - os - (gnu)eabi</p>
-<p>arch – 体系架构，如ARM，MIPS，表示该编译器用于编译哪个目标平台的程序<br>vendor – 工具链提供商，通常是把vendor写成体系架构的值，比如cortex_a8<br>os – 运行编译产生的程序的目标操作系统，一般用linux表示有操作系统，none表示裸系统，uboot编译无os<br>eabi – 嵌入式应用二进制接口（Embedded Application Binary Interface），abi是计算机上的</p>
-<h2 id="编译工具使用（持续更新）"><a href="#编译工具使用（持续更新）" class="headerlink" title="编译工具使用（持续更新）"></a>编译工具使用（持续更新）</h2><p>交叉编译工具使用方法与本地编译工具链基本一样，只是命名不同。</p>
-<h3 id="gcc"><a href="#gcc" class="headerlink" title="gcc"></a>gcc</h3><p>Linux系统下的GCC编译器实际上是GNU编译工具链中的一款软件，可以用它来调用其他不同的工具进行诸如预处理、编译、汇编和链接这样的工作。gcc编译器从拿到一个c源文件到生成一个可执行程序，中间一共经历了四个步骤：</p>
-<p><img src="/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-1.jpg" alt="220522-交叉编译工具链-1.jpg"></p>
-<h3 id="ld"><a href="#ld" class="headerlink" title="ld"></a>ld</h3><p>ld是GNU操作系统上的连接器，把二进制文件连接成可执行文件。<strong>ELF文件</strong>可用于程序的链接，重定位目标文件。用于链接的ELF文件格式：</p>
-<p><img src="/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-2.jpg" alt="220522-交叉编译工具链-2.jpg"></p>
-<p>从编译和链接角度看ELF文件<strong>ELF头</strong>，每个ELF文件都必须存在一个ELF_Header，这里存放了很多重要的信息用来<strong>描述整个文件的组织</strong>，如：版本信息、入口信息、偏移信息等，程序执行也必须依靠其提供的信息。</p>
-<p><strong>段头表</strong>，存放的是所有<strong>不同段将在内存中的位置</strong>。代码段.text section，存放已编译程序的机器代码，一般是只读的。只读数据段.rodata section，此段的数据不可修改，存放常量。数据段.data section，存放已初始化的全局变量。.bss section，未初始化全局变量，仅是占位符，不占据任何实际磁盘空间，目标文件格式区分初始化和非初始化是为了空间效率。</p>
-<p>符号表.symtab section，它存放在程序中定义和引用的函数和全局变量的信息。.text节的重定位信息.rel.txt section，用于重新修改代码段的指令中的地址信息。.data节的重定位信息.rel.data section，用于对被模块使用或定义的全局变量进行重定位的信息。调试用的符号表.debug section。.strtab section，包含symtab和debug节中符号及节名。.line section，存储调试的行号信息，描述源代码和机器码之间的对应关系。</p>
-<p>ELF(Executable and Linkable Format)的完整描述，可以参考这个文档 - <a target="_blank" rel="noopener" href="http://www.uclibc.org/docs/elf-64-gen.pdf">这里</a></p>
-<h3 id="size"><a href="#size" class="headerlink" title="size"></a>size</h3><p><img src="/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-3.jpg" alt="220522-交叉编译工具链-3.jpg"></p>
-<p>用于显示二进制文件各节的大小。</p>
-<p>text段最终是存放在FLASH存储器中的，text段不仅包含函数，还有常量。</p>
-<p>data段是用于初始化数据（全局/外部），既有初始化值的数据。</p>
-<p>bss段包含着所有未初始化（或初始化值为0）的数据（全局/外部）。</p>
-<p>dec（decimal的缩写，即十进制数）是text，data和bss的算术和。</p>
-<h3 id="objcopy"><a href="#objcopy" class="headerlink" title="objcopy"></a>objcopy</h3><p><img src="/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-4.jpg" alt="220522-交叉编译工具链-4.jpg"></p>
-<p>把一种目标文件中的内容复制到另一种类型的目标文件中。</p>
-<p><code>objcopy -O ihex xxxxxx.elf xxxxxx.hex</code> 将编译生成的elf文件转换为hex格式的文件。</p>
-<p><code>objcopy -O srec xxxxxx.elf xxxxxx.srec</code> 将编译生成的elf文件转换为srec格式的文件。</p>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1390,7 +1378,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-count">51</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
