@@ -157,6 +157,102 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/" class="post-title-link" itemprop="url">Xilinx FPGA 点灯</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-07-08 00:01:00" itemprop="dateCreated datePublished" datetime="2022-07-08T00:01:00+08:00">2022-07-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-07-09 23:35:14" itemprop="dateModified" datetime="2022-07-09T23:35:14+08:00">2022-07-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="好久不见，甚是想念"><a href="#好久不见，甚是想念" class="headerlink" title="好久不见，甚是想念"></a>好久不见，甚是想念</h2><p>一个多月没写博客了，毕业后学习时间少了，白天忙公司的项目，偶尔晚上有空看看自己想学的资料，自己还在做个地质分析仪的项目，每周日会花一天的时间做。为自己加油，2022年我还要完成这块FPGA的学习，感谢那位支持我学这块开发板的人。</p>
+<h2 id="安装Vivado"><a href="#安装Vivado" class="headerlink" title="安装Vivado"></a>安装Vivado</h2><ol>
+<li>下载vivado安装包，资料链接B盘：<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1eM7Sx-RmeYFE1ht_RPqxhw">https://pan.baidu.com/s/1eM7Sx-RmeYFE1ht_RPqxhw</a> 提取码：a8vu</li>
+<li>解压安装包到<strong>无中文路径的目录</strong>下，否则会出现安装包无法打开的情况。打开安装包，我在安装选件的页面取消了K系列、V系列和Soc Zynq的选件，安装空间要70GB左右，因此我还买了个1T的固态。</li>
+<li>激活只需要网上下载对应版本的激活licences，在激活页面load a licences即可。</li>
+</ol>
+<h2 id="软件操作"><a href="#软件操作" class="headerlink" title="软件操作"></a>软件操作</h2><ol>
+<li>Tools -&gt; Settings -&gt; Text Editor中选择编辑器，我选择的是notepad++，需要将编辑器路径加到系统环境变量。</li>
+<li>创建PLL IP核：<img src="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-2.jpg" alt="220708-XilinxFPGA点灯-2.jpg"></li>
+<li>功能仿真，RTL分析，综合，约束输入，设计实现都在左侧的Flow Navigator中。</li>
+</ol>
+<h2 id="流水灯"><a href="#流水灯" class="headerlink" title="流水灯"></a>流水灯</h2><ol>
+<li>New Project，芯片选择xc7a35tfgg484-2。<img src="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-1.jpg" alt="220708-XilinxFPGA点灯-1.jpg"></li>
+<li>Add Sources -&gt; Create File，创建led_top.v文件。</li>
+<li>Vivado中打开文件会调用Notepad++编辑器，编写流水灯代码：<img src="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-5.jpg" alt="220708-XilinxFPGA点灯-5.jpg"></li>
+<li>再功能仿真（可选），再综合、约束输入。</li>
+<li>最后生成bit流下载到开发板：<img src="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-4.jpg" alt="220708-XilinxFPGA点灯-4.jpg"></li>
+<li>Xilinx的集成开发环境要比Altera的好用不少，就是编译速度较慢。</li>
+</ol>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1528,215 +1624,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/24/220224-Linux%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/02/24/220224-Linux%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7/" class="post-title-link" itemprop="url">Linux实用工具</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-02-24 11:00:00" itemprop="dateCreated datePublished" datetime="2022-02-24T11:00:00+08:00">2022-02-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-02 00:33:15" itemprop="dateModified" datetime="2022-08-02T00:33:15+08:00">2022-08-02</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="Linux-screen工具"><a href="#Linux-screen工具" class="headerlink" title="Linux screen工具"></a>Linux screen工具</h2><h3 id="功能介绍"><a href="#功能介绍" class="headerlink" title="功能介绍"></a>功能介绍</h3><p>Linux screen命令用于多重视窗管理程序。此处所谓的视窗，是指一个全屏幕的文字模式画面。通常只有在使用telnet登入主机或是使用老式的终端机时，才有可能用到screen程序。</p>
-<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">screen [-AmRvx -ls -wipe][-d &lt;作业名称&gt;][-h &lt;行数&gt;][-r &lt;作业名称&gt;][-s &lt;shell&gt;][-S &lt;作业名称&gt;]</span><br></pre></td></tr></table></figure>
-
-<h3 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明"></a>参数说明</h3><ul>
-<li>-A 　将所有的视窗都调整为目前终端机的大小。</li>
-<li>-d&lt;作业名称&gt; 　将指定的screen作业离线。</li>
-<li>-h&lt;行数&gt; 　指定视窗的缓冲区行数。</li>
-<li>-m 　即使目前已在作业中的screen作业，仍强制建立新的screen作业。</li>
-<li>-r&lt;作业名称&gt; 　恢复离线的screen作业。</li>
-<li>-R 　先试图恢复离线的作业。若找不到离线的作业，即建立新的screen作业。</li>
-<li>-s<shell> 　指定建立新视窗时，所要执行的shell。</shell></li>
-<li>-S&lt;作业名称&gt; 　指定screen作业的名称。</li>
-<li>-v 　显示版本信息。</li>
-<li>-x 　恢复之前离线的screen作业。</li>
-<li>-ls或–list 　显示目前所有的screen作业。</li>
-<li>-wipe 　检查目前所有的screen作业，并删除已经无法使用的screen作业。</li>
-</ul>
-<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">screen -ls  # 显示已创建的screen终端</span><br><span class="line">screen -S &lt;screen name&gt;  # 创建新的screen终端</span><br><span class="line">screen -r &lt;screen name&gt;  # 重连screen终端</span><br><span class="line">screen -d &lt;screen name&gt;  # 断开screen终端</span><br><span class="line">screen -S &lt;screen name&gt; -X quit  # 强制停止命令</span><br></pre></td></tr></table></figure>
-
-<h3 id="screen快捷键"><a href="#screen快捷键" class="headerlink" title="screen快捷键"></a>screen快捷键</h3><ul>
-<li>Ctrl -a c            创建新的视窗</li>
-<li>Ctrl -a d            断开screen终端，任务还在运行</li>
-<li>Ctrl -a k            删除当前视窗</li>
-<li>Ctrl -a 空格      视窗切换</li>
-<li>Ctrl -a ?           快捷键帮助</li>
-<li>Ctrl -a :            命令模式，类似vi</li>
-<li>Ctrl -a [            复制模式，可以移光标上去看上面的打印</li>
-</ul>
-<h3 id="screen配置"><a href="#screen配置" class="headerlink" title="screen配置"></a>screen配置</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/hao0527/hao0527.github.io/blob/main/others/screencfg -O ~/.screenrc  # 一个好用的screen配置文件</span><br></pre></td></tr></table></figure>
-
-<p>上面这个配置指令有些问题，wget下载下来的是html，所以就手动复制下内容到~/.screenrc文件吧。</p>
-<h2 id="Linux-vi-vim工具"><a href="#Linux-vi-vim工具" class="headerlink" title="Linux vi/vim工具"></a>Linux vi/vim工具</h2><h3 id="功能介绍-1"><a href="#功能介绍-1" class="headerlink" title="功能介绍"></a>功能介绍</h3><p>所有的 Unix Like 系统都会内建 vi 文书编辑器，其他的文书编辑器则不一定会存在。vim 具有程序编辑的能力，可以主动的以字体颜色辨别语法的正确性，方便程序设计。</p>
-<h3 id="vi-vim使用"><a href="#vi-vim使用" class="headerlink" title="vi/vim使用"></a>vi/vim使用</h3><p>基本上 vi/vim 共分为三种模式，分别是<strong>命令模式（Command mode）</strong>，<strong>输入模式（Insert mode）</strong>和<strong>底线命令模式（Last line mode）</strong>。</p>
-<h4 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h4><p><img src="/2022/02/24/220224-Linux%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7/220224-Linux%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7-1.jpg" alt="220224-Linux实用工具-1.jpg"></p>
-<table>
-<thead>
-<tr>
-<th>输入</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>yy</td>
-<td>复制游标所在的那一行。(常用)</td>
-</tr>
-<tr>
-<td>dd</td>
-<td>剪切游标所在的那一整行(常用)，用 p/P 可以粘贴。</td>
-</tr>
-<tr>
-<td>p/P</td>
-<td>p粘贴在光标行下面，P粘贴在光标行上面。</td>
-</tr>
-<tr>
-<td>u</td>
-<td>复原前一个动作。(常用)</td>
-</tr>
-<tr>
-<td>[Ctrl]+r</td>
-<td>重做上一个动作。(常用)</td>
-</tr>
-<tr>
-<td>/word</td>
-<td>向光标之下寻找一个名称为 word 的字符串。 (常用)</td>
-</tr>
-<tr>
-<td>?word</td>
-<td>向光标之上寻找一个字符串名称为 word 的字符串。</td>
-</tr>
-<tr>
-<td>i, I</td>
-<td>进入输入模式(Insert mode)</td>
-</tr>
-<tr>
-<td>ZZ</td>
-<td>如果修改过，保存当前文件，然后退出！效果等同于保存并退出</td>
-</tr>
-</tbody></table>
-<p>常用的还有替换功能：</p>
-<ul>
-<li><code>:1,$s/word1/word2/g</code> 或 <code>:%s/word1/word2/g</code>，从第一行到最后一行寻找 word1 字符串，并将该字符串取代为 word2 ！(常用)</li>
-<li><code>:1,$s/word1/word2/gc</code> 或 <code>:%s/word1/word2/gc</code>，从第一行到最后一行寻找 word1 字符串，并将该字符串取代为 word2 ，加了c表示取代前显示提示字符给用户确认 (confirm) 是否需要取代。</li>
-</ul>
-<h4 id="输入模式"><a href="#输入模式" class="headerlink" title="输入模式"></a>输入模式</h4><p>输入模式比较简单，可以使用键盘上的Home、End等功能键，按Esc退出输入模式到命令模式</p>
-<h4 id="底线命令模式"><a href="#底线命令模式" class="headerlink" title="底线命令模式"></a>底线命令模式</h4><table>
-<thead>
-<tr>
-<th>输入</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>:w</td>
-<td>将编辑的数据写入硬盘档案中(常用)</td>
-</tr>
-<tr>
-<td>:q</td>
-<td>离开 vi (常用)</td>
-</tr>
-<tr>
-<td>:q!</td>
-<td>若曾修改过档案，又不想储存，使用 ! 为『强制』离开不储存档案。</td>
-</tr>
-<tr>
-<td>:wq</td>
-<td>储存后离开，若为 :wq! 则为强制储存后离开 (常用)</td>
-</tr>
-<tr>
-<td>:w [filename]</td>
-<td>将编辑的数据储存成另一个档案（类似另存新档）</td>
-</tr>
-<tr>
-<td>:r [filename]</td>
-<td>在编辑的数据中，读入另一个档案的数据。亦即将 『filename』 这个档案内容加到游标所在行后面</td>
-</tr>
-<tr>
-<td>:n1,n2 w [filename]</td>
-<td>将 n1 到 n2 的内容储存成 filename 这个档案。</td>
-</tr>
-<tr>
-<td>:! command</td>
-<td>暂时离开 vi 到指令行模式下执行 command 的显示结果！例如<br>『:! ls /home』即可在 vi 当中察看 /home 底下以 ls 输出的档案信息！</td>
-</tr>
-<tr>
-<td>:set nu/nonu</td>
-<td>显示/取消行号</td>
-</tr>
-</tbody></table>
-<h2 id="Linux-tldr工具"><a href="#Linux-tldr工具" class="headerlink" title="Linux tldr工具"></a>Linux tldr工具</h2><h3 id="功能介绍-2"><a href="#功能介绍-2" class="headerlink" title="功能介绍"></a>功能介绍</h3><p>一个比 –help 和 man 好用的查指令手册的工具，<a target="_blank" rel="noopener" href="https://github.com/tldr-pages/tldr">点我跳到tldr(too long don’t read)主页</a>。</p>
-<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>我使用<code>sudo apt install tldr</code>安装，然后<code>mkdir -p ~/.tldr/tldr</code>，再更新字典<code>sudo git clone https://gitclone.com/github.com/tldr-pages/tldr.git ~/.tldr/tldr</code>，国内使用这个镜像快。</p>
-<p>推荐：官网上说可以使用npm或pip3安装。</p>
-<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>使用方式极其简单，<code>tldr tldr</code>你就可以查到tldr的使用手册。</p>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1806,7 +1693,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-count">52</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
