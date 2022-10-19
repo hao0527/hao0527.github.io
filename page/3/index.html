@@ -157,6 +157,130 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/25/220225-asmInC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/02/25/220225-asmInC/" class="post-title-link" itemprop="url">C语言内嵌汇编</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-02-25 15:00:00" itemprop="dateCreated datePublished" datetime="2022-02-25T15:00:00+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-10-19 08:26:19" itemprop="dateModified" datetime="2022-10-19T08:26:19+08:00">2022-10-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="今晨的日出"><a href="#今晨的日出" class="headerlink" title="今晨的日出"></a>今晨的日出</h2><p><img src="/2022/02/25/220225-asmInC/220225-asmInC-1.jpg" alt="220225-asmInC-1.jpg"></p>
+<p>早晨学习操作系统，看到系统调用实现时，遇到了C内嵌汇编，所以补了下相关知识。</p>
+<h2 id="asm"><a href="#asm" class="headerlink" title="__asm__"></a>__asm__</h2><p>补充资料：<a target="_blank" rel="noopener" href="https://dirtysalt.github.io/html/gcc-asm.html">https://dirtysalt.github.io/html/gcc-asm.html</a></p>
+<p>在内嵌汇编中，可以将C语言表达式指定为汇编指令的操作数，而且不用去管如何将C语言表达式的值读入哪个寄存器，以及如何将计算结果写回C 变量，你只要告诉程序中C语言表达式与汇编指令操作数之间的对应关系即可，GCC会自动插入代码完成必要的操作。</p>
+<p>完整的内嵌汇编格式：<code>__asm__ __volatile__(&quot;Instruction List&quot; : Output : Input : Clobber/Modify);</code></p>
+<p>__asm__ 是GCC关键字asm的宏定义，asm用于声明这行代码是一个内嵌汇编表达式，任何内嵌的汇编表达式都以此关键字作为开头。</p>
+<p>一个最简单的内嵌汇编：<code>__asm__(&quot;nop&quot;);</code> 括号里的是汇编指令，表示运行空指令，一个机器周期。Instruction List 是汇编指令序列，它可以是空的。可以有多条汇编指令，需要将所有指令放在多对引号中，两条指令必须用换行或分号分开。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">printk</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *fmt, ...)</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="comment">//    ……</span></span><br><span class="line">    __asm__(<span class="string">&quot;push %%fs\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;push %%ds\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;pop %%fs\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;pushl %0\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;pushl $buf\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;pushl $0\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;call tty_write\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;addl $8,%%esp\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;popl %0\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;pop %%fs&quot;</span></span><br><span class="line">            ::<span class="string">&quot;r&quot;</span> (i):<span class="string">&quot;ax&quot;</span>,<span class="string">&quot;cx&quot;</span>,<span class="string">&quot;dx&quot;</span>);</span><br><span class="line"><span class="comment">//    ……</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看上面<code>printk()</code>的例子，首先<code>push %fs</code>保存这个指向用户段的寄存器，在最后<code>pop %fs</code>将其恢复，<code>printk()</code>的核心是调用<code>tty_write()</code>。</p>
+<p>Output Input 用来指定当前内联汇编语句的输出与输入，格式为形如“constraint”(variable)的列表（逗号分隔)，constraint是限制字符，下面表中列出几个常用限制字符作用，更多用法见：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_15974389/article/details/76416668">GCC内嵌汇编一些限制字符串</a>。</p>
+<table>
+<thead>
+<tr>
+<th>限制字符</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>a/b/c/d/s/d</td>
+<td>将输入变量放入eax/ebx/ecx/edx/esi/edi</td>
+</tr>
+<tr>
+<td>q</td>
+<td>将输入变量放入eax,ebx,ecx,edx中的一个</td>
+</tr>
+<tr>
+<td>r</td>
+<td>输入变量放入通用寄存器，也就是eax,ebx,ecx,edx,esi,edi中的一个</td>
+</tr>
+<tr>
+<td>=/+</td>
+<td>操作数在指令中是只写/读写类型的（输出操作数）</td>
+</tr>
+</tbody></table>
+<h2 id="volatile"><a href="#volatile" class="headerlink" title="__volatile__"></a>__volatile__</h2><p>__volatile__ 是GCC关键字volatile的宏定义，在内联汇编中，它是可选的。使用它会向GCC声明不允许对该内联汇编优化，否则当使用了优化选项(-O)进行编译时，GCC将会根据自己的判断决定是否将这个内联汇编表达式中的指令优化掉。</p>
+<p>编译器优化常用的方法有：将内存变量缓存到寄存器；调整指令顺序充分利用CPU指令流水线，常见的是重新排序读写指令。对常规内存进行优化的时候，这些优化是透明的，而且效率很好。由编译器优化或者硬件重新排序引起的问题的解决办法是在从硬件（或者其他处理器）的角度看必须以特定顺序执行的操作之间设置内存屏障（memory barrier），linux 提供了一个宏，<code>barrier()</code>，解决编译器的执行顺序问题，但对硬件无效。</p>
+<p>有一种硬件级别的优化：内存访问速度远不及CPU处理速度，为提高机器整体性能，在硬件上引入硬件高速缓存Cache，加速对内存的访问。在现代CPU中指令的执行并不一定严格按照顺序执行，没有相关性的指令可以乱序执行，以充分利用CPU的指令流水线，提高执行速度。</p>
+<h2 id="Clobber-Modify"><a href="#Clobber-Modify" class="headerlink" title="Clobber/Modify"></a>Clobber/Modify</h2><p>有时候，你想通知GCC当前内联汇编语句可能会对某些寄存器或内存进行修改，希望GCC在编译时能够将这一点考虑进去。那么你就可以在Clobber/Modify域声明这些寄存器或内存。这种情况一般发生在一个寄存器出现在”Instruction List”，但却不是由Input/Output操作表达式所指定的，也不是在一些Input/Output操作表达式使用”r”约束时由GCC 为其选择的，同时此寄存器被”Instruction List”中的指令修改，而这个寄存器只是供当前内联汇编临时使用的情况。</p>
+<p>例如：<code>__asm__ (&quot;mov R0, #0x34&quot; : : : &quot;R0&quot;);</code>寄存器R0出现在”Instruction List中”，并且被mov指令修改，但却未被任何Input/Output操作表达式指定，所以你需要在Clobber/Modify域指定”R0”，以让GCC知道这一点。</p>
+<p>因为你在Input/Output操作表达式所指定的寄存器，或当你为一些Input/Output操作表达式使用”r”约束，让GCC为你选择一个寄存器时，GCC对这些寄存器是非常清楚的——它知道这些寄存器是被修改的，你根本不需要在Clobber/Modify域再声明它们。但除此之外， GCC对剩下的寄存器中哪些会被当前的内联汇编修改一无所知。所以如果你真的在当前内联汇编指令中修改了它们，那么就最好在Clobber/Modify 中声明它们，让GCC针对这些寄存器做相应的处理。否则有可能会造成寄存器的不一致，从而造成程序执行错误。</p>
+<p>如果一个内联汇编语句的Clobber/Modify域存在”memory”，那么GCC会保证在此内联汇编之前，如果某个内存的内容被装入了寄存器，那么在这个内联汇编之后，如果需要使用这个内存处的内容，就会直接到这个内存处重新读取，而不是使用被存放在寄存器中的拷贝。因为这个 时候寄存器中的拷贝已经很可能和内存处的内容不一致了。</p>
+<p>这只是使用”memory”时，GCC会保证做到的一点，但这并不是全部。因为使用”memory”是向GCC声明内存发生了变化，而内存发生变化带来的影响并不止这一点。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> __argc, <span class="type">char</span>* __argv[])</span> </span><br><span class="line">&#123; </span><br><span class="line">    <span class="type">int</span>* __p = (<span class="type">int</span>*)__argc; </span><br><span class="line">    (*__p) = <span class="number">9999</span>; </span><br><span class="line">    __asm__(<span class="string">&quot;&quot;</span>:::<span class="string">&quot;memory&quot;</span>); </span><br><span class="line">    <span class="keyword">if</span>((*__p) == <span class="number">9999</span>) </span><br><span class="line">        <span class="keyword">return</span> <span class="number">5</span>; </span><br><span class="line">    <span class="keyword">return</span> (*__p); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面例子中，如果没有那条内联汇编语句，那个if语句的判断条件就完全是一句废话。GCC在优化时会意识到这一点，而直接只生成return 5的汇编代码，而不会再生成if语句的相关代码，而不会生成return (*__p)的相关代码。但你加上了这条内联汇编语句，它除了声明内存变化之外，什么都没有做。但GCC此时就不能简单的认为它不需要判断都知道 (*__p)一定与9999相等，它只有老老实实生成这条if语句的汇编代码，一起相关的两个return语句相关代码。</p>
+<p>linux内核中内存屏障也是基于它实现，<code>#define barrier() _asm__volatile_(&quot;&quot; : : : &quot;memory&quot;)</code>，主要是保证程序的执行遵循顺序一致性。</p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/24/220224-Linux%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1199,110 +1323,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/17/210917-%E9%A9%B1%E5%8A%A8%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/09/17/210917-%E9%A9%B1%E5%8A%A8%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1/" class="post-title-link" itemprop="url">电动工具驱动部分设计</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-09-17 14:00:00" itemprop="dateCreated datePublished" datetime="2021-09-17T14:00:00+08:00">2021-09-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-29 10:13:32" itemprop="dateModified" datetime="2021-09-29T10:13:32+08:00">2021-09-29</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E7%A1%AC%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">硬件</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="逆变"><a href="#逆变" class="headerlink" title="逆变"></a>逆变</h1><h2 id="单相逆变"><a href="#单相逆变" class="headerlink" title="单相逆变"></a>单相逆变</h2><ol>
-<li>需要4个NMOS或者IGBT控制</li>
-<li>正弦脉宽调制SPWM，在输出加电感电容滤波，电感电容值需要足够大（6mH 20uF）</li>
-<li>在mos桥驱动中，用PNP三极管挂在MOS的GS上，作用是用三极管形成放电回路，否则GS电容的电过二极管往驱动芯片内部下管释放<br><img src="/2021/09/17/210917-%E9%A9%B1%E5%8A%A8%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1/210917-%E9%A9%B1%E5%8A%A8%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1-1.jpg" alt="210917-驱动部分设计-1.JPG"></li>
-<li>在PCB布线时要注意让MOS开关部分的高频回流面积最小；功率地需要单点接地，高频开关环流路径不要铺地，以减小地干扰<br><img src="/2021/09/17/210917-%E9%A9%B1%E5%8A%A8%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1/210917-%E9%A9%B1%E5%8A%A8%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1-2.jpg" alt="210917-驱动部分设计-2.JPG"></li>
-<li>反馈到单片机的信号需要隔离（电流电压互感器），低通或带通滤波</li>
-<li>先直流升压再逆变的效率比先逆变再工频变压器升压的效率高很多</li>
-</ol>
-<h2 id="三相逆变"><a href="#三相逆变" class="headerlink" title="三相逆变"></a>三相逆变</h2><ol>
-<li>需要6个NMOS或者IGBT控制</li>
-<li>负载有星形负载和三角形负载<br><img src="/2021/09/17/210917-%E9%A9%B1%E5%8A%A8%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1/210917-%E9%A9%B1%E5%8A%A8%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1-3.jpg" alt="210917-驱动部分设计-3.JPG"></li>
-<li>三相桥式逆变器可控器件导通顺序<br><img src="/2021/09/17/210917-%E9%A9%B1%E5%8A%A8%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1/210917-%E9%A9%B1%E5%8A%A8%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1-4.jpg" alt="210917-驱动部分设计-4.JPG"></li>
-</ol>
-<h1 id="驱动系统"><a href="#驱动系统" class="headerlink" title="驱动系统"></a>驱动系统</h1><h2 id="高铁"><a href="#高铁" class="headerlink" title="高铁"></a>高铁</h2><ol>
-<li>接触网上传输高压交流电（25kV），通过变压器降压和四象限整流器转换成直流电，在经过逆变器降至六点转换成可调压调频的交流电，输入三相异步、同步牵引电动机，通过传动系统带动车轮运行</li>
-<li>牵引变电所输入220kV三相交流电，通过三相变压器，低侧输出25kV三相交流电，一相往前方接触网，一相往后方接触网，另一项接铁轨</li>
-<li>高铁趋势：整流 -&gt; 图腾柱PFC(无桥PFC)；IPM(IGBT) -&gt; SIC mostet(6个IGBT封装在一起)；三相异步电动机 -&gt; 永磁同步电动机(省电30%)</li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/mahoon411/article/details/116980096">MOS管、IGBT、BJT的区别</a></li>
-</ol>
-<h1 id="PFC功率因数校正"><a href="#PFC功率因数校正" class="headerlink" title="PFC功率因数校正"></a>PFC功率因数校正</h1><h2 id="什么是PFC"><a href="#什么是PFC" class="headerlink" title="什么是PFC"></a>什么是PFC</h2><p>PFC的英文全称为”Power Factor Correction” ，意思是“功率因数校正”，功率因数指的是有效功率与总耗电量(视在功率)之间的关系，也就是有效功率除以总耗电量(视在功率)的比值。基本上功率因数可以衡量电力被有效利用的程度，当功率因数值越大，代表其电力利用率越高。功率因数是用来衡量用电设备用电效率的参数，低功率因数代表低电力效能。为了提高用电设备功率因数的技术就称为功率因数校正。（大于70瓦就必须使用功率因数校正PFC）</p>
-<h2 id="被动式PFC"><a href="#被动式PFC" class="headerlink" title="被动式PFC"></a>被动式PFC</h2><p>被动式PFC一般分“电感补偿式”和“填谷电路式(Valley Fill Circuit)”<br>“电感补偿式”是使交流输入的基波电流与电压之间相位差减小来提高功率因数，“电感补偿式”包括静音式和非静音式。“电感补偿式”的功率因数只能达到0.7～0.8，它一般在高压滤波电容附近。<br>“填谷电路式”属于一种新型无源功率因数校正电路，其特点是利用整流桥后面的填谷电路来大幅度增加整流管的导通角，通过填平谷点，使输入电流从尖峰脉冲变为接近于正弦波的波形，将功率因数提高到0.9左右，显著降低总谐波失真。与传统的电感式无源功率因数校正电路相比，其优点是电路简单，功率因数补偿效果显著，并且在输入电路中不需要使用体积大重量沉的大电感器。</p>
-<h2 id="主动式PFC"><a href="#主动式PFC" class="headerlink" title="主动式PFC"></a>主动式PFC</h2><p>主动式PFC则由电感电容及电子元器件组成，体积小、通过专用IC去调整电流的波形，对电流电压间的相位差进行补偿。主动式PFC可以达到较高的功率因数──通常可达98%以上，但成本也相对较高。此外，主动式PFC还可用作辅助电源，因此在使用主动式PFC电路中，往往不需要待机变压器，而且主动式PFC输出直流电压的纹波很小，这种电源不必采用很大容量的滤波电容。</p>
-<h2 id="Boost-PFC变换器"><a href="#Boost-PFC变换器" class="headerlink" title="Boost PFC变换器"></a>Boost PFC变换器</h2><p><img src="/2021/09/17/210917-%E9%A9%B1%E5%8A%A8%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1/210917-%E9%A9%B1%E5%8A%A8%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1-5.jpg" alt="210917-驱动部分设计-5.JPG"></p>
-<h2 id="PFC参考"><a href="#PFC参考" class="headerlink" title="PFC参考"></a>PFC参考</h2><ol>
-<li><a target="_blank" rel="noopener" href="https://www.sohu.com/a/436812131_100281310">一文搞懂PFC（功率因数校正）</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1ko4y1C7km?spm_id_from=333.999.0.0">电赛必备之PFC电路，2006年B题功率因数监测与补偿系统</a></li>
-</ol>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1372,7 +1392,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">52</span>
+          <span class="site-state-item-count">53</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
