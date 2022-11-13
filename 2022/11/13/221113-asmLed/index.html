@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/heng32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/heng16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="程序设计点灯流程 使能指定 GPIO 的时钟 设置 IO 的复用功能 配置 GPIO 输出功能、上拉、速度等等 设置 GPIO 输出高电平或低电平  点灯汇编代码代码中的地址参考《i.MX 6ULL Applications Processor Reference Manual》 12345678910111213141516171819202122232425262728293031323334">
+<meta property="og:type" content="article">
+<meta property="og:title" content="I.MX6U Assembly LED Driver">
+<meta property="og:url" content="http://example.com/2022/11/13/221113-asmLed/index.html">
+<meta property="og:site_name" content="永恆博客网">
+<meta property="og:description" content="程序设计点灯流程 使能指定 GPIO 的时钟 设置 IO 的复用功能 配置 GPIO 输出功能、上拉、速度等等 设置 GPIO 输出高电平或低电平  点灯汇编代码代码中的地址参考《i.MX 6ULL Applications Processor Reference Manual》 12345678910111213141516171819202122232425262728293031323334">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-11-13T01:00:00.000Z">
+<meta property="article:modified_time" content="2022-11-13T05:18:29.151Z">
+<meta property="article:author" content="Hao">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2022/11/13/221113-asmLed/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>I.MX6U Assembly LED Driver | 永恆博客网</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">永恆博客网</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/11/13/221113-asmLed/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          I.MX6U Assembly LED Driver
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-11-13 09:00:00 / 修改时间：13:18:29" itemprop="dateCreated datePublished" datetime="2022-11-13T09:00:00+08:00">2022-11-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="程序设计"><a href="#程序设计" class="headerlink" title="程序设计"></a>程序设计</h2><h3 id="点灯流程"><a href="#点灯流程" class="headerlink" title="点灯流程"></a>点灯流程</h3><ol>
+<li>使能指定 GPIO 的时钟</li>
+<li>设置 IO 的复用功能</li>
+<li>配置 GPIO 输出功能、上拉、速度等等</li>
+<li>设置 GPIO 输出高电平或低电平</li>
+</ol>
+<h3 id="点灯汇编代码"><a href="#点灯汇编代码" class="headerlink" title="点灯汇编代码"></a>点灯汇编代码</h3><p>代码中的地址参考《i.MX 6ULL Applications Processor Reference Manual》</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">.global _start	@ global label</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line">	ldr r1, =0xffffffff</span><br><span class="line">	mov r2, #6</span><br><span class="line">	ldr r0, =0x020c4080	@ CCM_CCGR6</span><br><span class="line">	ldr r2, =0x020c4068	@ CCM_CCGR0</span><br><span class="line"></span><br><span class="line">CCGR_loop_init:</span><br><span class="line">	str r1, [r0]</span><br><span class="line">	sub r0, #4</span><br><span class="line">	cmp r2, r0</span><br><span class="line">	ble CCGR_loop_init</span><br><span class="line">	</span><br><span class="line">	ldr r0, =0x020e0068	@ IOMUXC_SW_MUX_CTL_PAD_GPIO1_IO03</span><br><span class="line">	ldr r1, =0x5</span><br><span class="line">	str r1, [r0]</span><br><span class="line">	</span><br><span class="line">	ldr r0, =0x020e02f4	@ IOMUXC_SW_PAD_CTL_PAD_GPIO1_IO03</span><br><span class="line">	ldr r1, =0x10b0</span><br><span class="line">	str r1, [r0]</span><br><span class="line"></span><br><span class="line">	ldr r0, =0x0209c004	@ GPIO1_GDIR</span><br><span class="line">	ldr r1, =0x8</span><br><span class="line">	str r1, [r0]</span><br><span class="line">	</span><br><span class="line">loop:</span><br><span class="line">	ldr r0, =0x0209c000	@ GPIO1_DR</span><br><span class="line">	ldr r1, =0x0</span><br><span class="line">	str r1, [r0]</span><br><span class="line"></span><br><span class="line">	ldr r0, =0x1f78a400	@ 528M</span><br><span class="line">	ldr r1, =0xfbc5200	@ 264M</span><br><span class="line">delay1:</span><br><span class="line">	sub r0, #100</span><br><span class="line">	cmp r0, r1</span><br><span class="line">	bge delay1</span><br><span class="line"></span><br><span class="line">	ldr r0, =0x0209c000	@ GPIO1_DR</span><br><span class="line">	ldr r1, =0x8</span><br><span class="line">	str r1, [r0]</span><br><span class="line"></span><br><span class="line">	ldr r0, =0x1f78a400	@ 528M</span><br><span class="line">	ldr r1, =0xfbc5200	@ 264M</span><br><span class="line">delay2:</span><br><span class="line">	sub r0, #100</span><br><span class="line">	cmp r0, r1</span><br><span class="line">	bge delay2</span><br><span class="line"></span><br><span class="line">	b loop</span><br></pre></td></tr></table></figure>
+
+<h2 id="程序编译"><a href="#程序编译" class="headerlink" title="程序编译"></a>程序编译</h2><h3 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h3><p><code>arm-linux-gnueabihf-gcc -g -c led.s -o led.o</code></p>
+<p>上述命令就是将 led.s 编译为 led.o，其中“-g”选项是产生调试信息，GDB 能够使用这些调试信息进行代码调试。“-c”选项是编译源文件，但是不链接。“-o”选项是指定编译产生的文件名字。</p>
+<h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><p><code>arm-linux-gnueabihf-ld -Ttext 0X87800000 led.o -o led.elf</code></p>
+<p>上述命令中-Ttext 就是指定链接地址，“-o”选项指定链接生成的 elf 文件名，这里命名为 led.elf。</p>
+<h3 id="格式转换"><a href="#格式转换" class="headerlink" title="格式转换"></a>格式转换</h3><p><code>arm-linux-gnueabihf-objcopy -O binary -S -g led.elf led.bin</code></p>
+<p>烧录要用到bin文件，上述命令中，“-O”选项指定以什么格式输出，后面的“binary”表示以二进制格式输出，选项“-S”表示不要复制源文件中的重定位信息和符号信息，“-g”表示不复制源文件中的调试信息。</p>
+<h3 id="反汇编"><a href="#反汇编" class="headerlink" title="反汇编"></a>反汇编</h3><p><code>arm-linux-gnueabihf-objdump -D led.elf &gt; led.dis</code></p>
+<p>有时候需要查看其汇编代码来调试代码，因此就需要进行反汇编，一般可以将 elf 文件反汇编，上述代码中的“-D”选项表示反汇编所有的段。</p>
+<h2 id="Makefile脚本"><a href="#Makefile脚本" class="headerlink" title="Makefile脚本"></a>Makefile脚本</h2><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">led.bin:led.s</span></span><br><span class="line">	arm-linux-gnueabihf-gcc -g -c led.s -o led.o</span><br><span class="line">	arm-linux-gnueabihf-ld -Ttext 0X87800000 led.o -o led.elf</span><br><span class="line">	arm-linux-gnueabihf-objcopy -O binary -S -g led.elf led.bin</span><br><span class="line">	arm-linux-gnueabihf-objdump -D led.elf &gt; led.dis</span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm -rf *.o led.bin led.elf led.dis</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：每一个命令行必须以 注意：每一个命令行必须以[Tab]字符开始，不能是空格开始，[Tab] 字符告诉 make 此行是一个命令行，make 按照命令完成相应的动作。这也是书写按照命令完成相应的动作，这也是书写 Makefile 中容易产生，而且比较隐蔽的错误。报错信息：<code>Makefile:2: *** 遗漏分隔符 (null)。 停止。</code></p>
+<h2 id="反汇编-1"><a href="#反汇编-1" class="headerlink" title="反汇编"></a>反汇编</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">Disassembly of section .text:</span><br><span class="line"></span><br><span class="line">87800000 &lt;_start&gt;:</span><br><span class="line">87800000:	e3e01000 	mvn	r1, #0</span><br><span class="line">87800004:	e3a02006 	mov	r2, #6</span><br><span class="line">87800008:	e59f0078 	ldr	r0, [pc, #120]	; 87800088 &lt;delay2+0x10&gt;</span><br><span class="line">8780000c:	e59f2078 	ldr	r2, [pc, #120]	; 8780008c &lt;delay2+0x14&gt;</span><br><span class="line"></span><br><span class="line">87800010 &lt;CCGR_loop_init&gt;:</span><br><span class="line">87800010:	e5801000 	str	r1, [r0]</span><br><span class="line">87800014:	e2400004 	sub	r0, r0, #4</span><br><span class="line">87800018:	e1520000 	cmp	r2, r0</span><br><span class="line">8780001c:	dafffffb 	ble	87800010 &lt;CCGR_loop_init&gt;</span><br><span class="line">87800020:	e59f0068 	ldr	r0, [pc, #104]	; 87800090 &lt;delay2+0x18&gt;</span><br><span class="line">87800024:	e3a01005 	mov	r1, #5</span><br><span class="line">87800028:	e5801000 	str	r1, [r0]</span><br><span class="line">8780002c:	e59f0060 	ldr	r0, [pc, #96]	; 87800094 &lt;delay2+0x1c&gt;</span><br><span class="line">87800030:	e59f1060 	ldr	r1, [pc, #96]	; 87800098 &lt;delay2+0x20&gt;</span><br><span class="line">87800034:	e5801000 	str	r1, [r0]</span><br><span class="line">87800038:	e59f005c 	ldr	r0, [pc, #92]	; 8780009c &lt;delay2+0x24&gt;</span><br><span class="line">8780003c:	e3a01008 	mov	r1, #8</span><br><span class="line">87800040:	e5801000 	str	r1, [r0]</span><br><span class="line"></span><br><span class="line">87800044 &lt;loop&gt;:</span><br><span class="line">87800044:	e59f0054 	ldr	r0, [pc, #84]	; 878000a0 &lt;delay2+0x28&gt;</span><br><span class="line">87800048:	e3a01000 	mov	r1, #0</span><br><span class="line">8780004c:	e5801000 	str	r1, [r0]</span><br><span class="line">87800050:	e59f004c 	ldr	r0, [pc, #76]	; 878000a4 &lt;delay2+0x2c&gt;</span><br><span class="line">87800054:	e59f104c 	ldr	r1, [pc, #76]	; 878000a8 &lt;delay2+0x30&gt;</span><br><span class="line"></span><br><span class="line">87800058 &lt;delay1&gt;:</span><br><span class="line">87800058:	e2400064 	sub	r0, r0, #100	; 0x64</span><br><span class="line">8780005c:	e1500001 	cmp	r0, r1</span><br><span class="line">87800060:	aafffffc 	bge	87800058 &lt;delay1&gt;</span><br><span class="line">87800064:	e59f0034 	ldr	r0, [pc, #52]	; 878000a0 &lt;delay2+0x28&gt;</span><br><span class="line">87800068:	e3a01008 	mov	r1, #8</span><br><span class="line">8780006c:	e5801000 	str	r1, [r0]</span><br><span class="line">87800070:	e59f002c 	ldr	r0, [pc, #44]	; 878000a4 &lt;delay2+0x2c&gt;</span><br><span class="line">87800074:	e59f102c 	ldr	r1, [pc, #44]	; 878000a8 &lt;delay2+0x30&gt;</span><br><span class="line"></span><br><span class="line">87800078 &lt;delay2&gt;:</span><br><span class="line">87800078:	e2400064 	sub	r0, r0, #100	; 0x64</span><br><span class="line">8780007c:	e1500001 	cmp	r0, r1</span><br><span class="line">87800080:	aafffffc 	bge	87800078 &lt;delay2&gt;</span><br><span class="line">87800084:	eaffffee 	b	87800044 &lt;loop&gt;</span><br><span class="line">87800088:	020c4080 	andeq	r4, ip, #128	; 0x80</span><br><span class="line">8780008c:	020c4068 	andeq	r4, ip, #104	; 0x68</span><br><span class="line">87800090:	020e0068 	andeq	r0, lr, #104	; 0x68</span><br><span class="line">87800094:	020e02f4 	andeq	r0, lr, #244, 4	; 0x4000000f</span><br><span class="line">87800098:	000010b0 	strheq	r1, [r0], -r0</span><br><span class="line">8780009c:	0209c004 	andeq	ip, r9, #4</span><br><span class="line">878000a0:	0209c000 	andeq	ip, r9, #0</span><br><span class="line">878000a4:	1f78a400 	svcne	0x0078a400</span><br><span class="line">878000a8:	0fbc5200 	svceq	0x00bc5200</span><br></pre></td></tr></table></figure>
+
+<p>和我写的汇编代码都是一一对应的，只是把直接数放在了代码段的最后，ldr通过pc+offset来取。</p>
+<p>从反汇编来看还把ldr一些短的直接数改成了mov指令。</p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/11/03/221103-mcustartup/" rel="prev" title="MCU startup.s">
+      <i class="fa fa-chevron-left"></i> MCU startup.s
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.</span> <span class="nav-text">程序设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%82%B9%E7%81%AF%E6%B5%81%E7%A8%8B"><span class="nav-number">1.1.</span> <span class="nav-text">点灯流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%82%B9%E7%81%AF%E6%B1%87%E7%BC%96%E4%BB%A3%E7%A0%81"><span class="nav-number">1.2.</span> <span class="nav-text">点灯汇编代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91"><span class="nav-number">2.</span> <span class="nav-text">程序编译</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91"><span class="nav-number">2.1.</span> <span class="nav-text">编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%93%BE%E6%8E%A5"><span class="nav-number">2.2.</span> <span class="nav-text">链接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%BC%E5%BC%8F%E8%BD%AC%E6%8D%A2"><span class="nav-number">2.3.</span> <span class="nav-text">格式转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E6%B1%87%E7%BC%96"><span class="nav-number">2.4.</span> <span class="nav-text">反汇编</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Makefile%E8%84%9A%E6%9C%AC"><span class="nav-number">3.</span> <span class="nav-text">Makefile脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8D%E6%B1%87%E7%BC%96-1"><span class="nav-number">4.</span> <span class="nav-text">反汇编</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Hao</p>
+  <div class="site-description" itemprop="description">保持热爱，奔赴山海。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">55</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hao</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -185,6 +185,101 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/11/13/221113-asmLed/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/11/13/221113-asmLed/" class="post-title-link" itemprop="url">I.MX6U Assembly LED Driver</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-11-13 09:00:00 / 修改时间：13:18:29" itemprop="dateCreated datePublished" datetime="2022-11-13T09:00:00+08:00">2022-11-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="程序设计"><a href="#程序设计" class="headerlink" title="程序设计"></a>程序设计</h2><h3 id="点灯流程"><a href="#点灯流程" class="headerlink" title="点灯流程"></a>点灯流程</h3><ol>
+<li>使能指定 GPIO 的时钟</li>
+<li>设置 IO 的复用功能</li>
+<li>配置 GPIO 输出功能、上拉、速度等等</li>
+<li>设置 GPIO 输出高电平或低电平</li>
+</ol>
+<h3 id="点灯汇编代码"><a href="#点灯汇编代码" class="headerlink" title="点灯汇编代码"></a>点灯汇编代码</h3><p>代码中的地址参考《i.MX 6ULL Applications Processor Reference Manual》</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">.global _start	@ global label</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line">	ldr r1, =0xffffffff</span><br><span class="line">	mov r2, #6</span><br><span class="line">	ldr r0, =0x020c4080	@ CCM_CCGR6</span><br><span class="line">	ldr r2, =0x020c4068	@ CCM_CCGR0</span><br><span class="line"></span><br><span class="line">CCGR_loop_init:</span><br><span class="line">	str r1, [r0]</span><br><span class="line">	sub r0, #4</span><br><span class="line">	cmp r2, r0</span><br><span class="line">	ble CCGR_loop_init</span><br><span class="line">	</span><br><span class="line">	ldr r0, =0x020e0068	@ IOMUXC_SW_MUX_CTL_PAD_GPIO1_IO03</span><br><span class="line">	ldr r1, =0x5</span><br><span class="line">	str r1, [r0]</span><br><span class="line">	</span><br><span class="line">	ldr r0, =0x020e02f4	@ IOMUXC_SW_PAD_CTL_PAD_GPIO1_IO03</span><br><span class="line">	ldr r1, =0x10b0</span><br><span class="line">	str r1, [r0]</span><br><span class="line"></span><br><span class="line">	ldr r0, =0x0209c004	@ GPIO1_GDIR</span><br><span class="line">	ldr r1, =0x8</span><br><span class="line">	str r1, [r0]</span><br><span class="line">	</span><br><span class="line">loop:</span><br><span class="line">	ldr r0, =0x0209c000	@ GPIO1_DR</span><br><span class="line">	ldr r1, =0x0</span><br><span class="line">	str r1, [r0]</span><br><span class="line"></span><br><span class="line">	ldr r0, =0x1f78a400	@ 528M</span><br><span class="line">	ldr r1, =0xfbc5200	@ 264M</span><br><span class="line">delay1:</span><br><span class="line">	sub r0, #100</span><br><span class="line">	cmp r0, r1</span><br><span class="line">	bge delay1</span><br><span class="line"></span><br><span class="line">	ldr r0, =0x0209c000	@ GPIO1_DR</span><br><span class="line">	ldr r1, =0x8</span><br><span class="line">	str r1, [r0]</span><br><span class="line"></span><br><span class="line">	ldr r0, =0x1f78a400	@ 528M</span><br><span class="line">	ldr r1, =0xfbc5200	@ 264M</span><br><span class="line">delay2:</span><br><span class="line">	sub r0, #100</span><br><span class="line">	cmp r0, r1</span><br><span class="line">	bge delay2</span><br><span class="line"></span><br><span class="line">	b loop</span><br></pre></td></tr></table></figure>
+
+<h2 id="程序编译"><a href="#程序编译" class="headerlink" title="程序编译"></a>程序编译</h2><h3 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h3><p><code>arm-linux-gnueabihf-gcc -g -c led.s -o led.o</code></p>
+<p>上述命令就是将 led.s 编译为 led.o，其中“-g”选项是产生调试信息，GDB 能够使用这些调试信息进行代码调试。“-c”选项是编译源文件，但是不链接。“-o”选项是指定编译产生的文件名字。</p>
+<h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><p><code>arm-linux-gnueabihf-ld -Ttext 0X87800000 led.o -o led.elf</code></p>
+<p>上述命令中-Ttext 就是指定链接地址，“-o”选项指定链接生成的 elf 文件名，这里命名为 led.elf。</p>
+<h3 id="格式转换"><a href="#格式转换" class="headerlink" title="格式转换"></a>格式转换</h3><p><code>arm-linux-gnueabihf-objcopy -O binary -S -g led.elf led.bin</code></p>
+<p>烧录要用到bin文件，上述命令中，“-O”选项指定以什么格式输出，后面的“binary”表示以二进制格式输出，选项“-S”表示不要复制源文件中的重定位信息和符号信息，“-g”表示不复制源文件中的调试信息。</p>
+<h3 id="反汇编"><a href="#反汇编" class="headerlink" title="反汇编"></a>反汇编</h3><p><code>arm-linux-gnueabihf-objdump -D led.elf &gt; led.dis</code></p>
+<p>有时候需要查看其汇编代码来调试代码，因此就需要进行反汇编，一般可以将 elf 文件反汇编，上述代码中的“-D”选项表示反汇编所有的段。</p>
+<h2 id="Makefile脚本"><a href="#Makefile脚本" class="headerlink" title="Makefile脚本"></a>Makefile脚本</h2><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">led.bin:led.s</span></span><br><span class="line">	arm-linux-gnueabihf-gcc -g -c led.s -o led.o</span><br><span class="line">	arm-linux-gnueabihf-ld -Ttext 0X87800000 led.o -o led.elf</span><br><span class="line">	arm-linux-gnueabihf-objcopy -O binary -S -g led.elf led.bin</span><br><span class="line">	arm-linux-gnueabihf-objdump -D led.elf &gt; led.dis</span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm -rf *.o led.bin led.elf led.dis</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：每一个命令行必须以 注意：每一个命令行必须以[Tab]字符开始，不能是空格开始，[Tab] 字符告诉 make 此行是一个命令行，make 按照命令完成相应的动作。这也是书写按照命令完成相应的动作，这也是书写 Makefile 中容易产生，而且比较隐蔽的错误。报错信息：<code>Makefile:2: *** 遗漏分隔符 (null)。 停止。</code></p>
+<h2 id="反汇编-1"><a href="#反汇编-1" class="headerlink" title="反汇编"></a>反汇编</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">Disassembly of section .text:</span><br><span class="line"></span><br><span class="line">87800000 &lt;_start&gt;:</span><br><span class="line">87800000:	e3e01000 	mvn	r1, #0</span><br><span class="line">87800004:	e3a02006 	mov	r2, #6</span><br><span class="line">87800008:	e59f0078 	ldr	r0, [pc, #120]	; 87800088 &lt;delay2+0x10&gt;</span><br><span class="line">8780000c:	e59f2078 	ldr	r2, [pc, #120]	; 8780008c &lt;delay2+0x14&gt;</span><br><span class="line"></span><br><span class="line">87800010 &lt;CCGR_loop_init&gt;:</span><br><span class="line">87800010:	e5801000 	str	r1, [r0]</span><br><span class="line">87800014:	e2400004 	sub	r0, r0, #4</span><br><span class="line">87800018:	e1520000 	cmp	r2, r0</span><br><span class="line">8780001c:	dafffffb 	ble	87800010 &lt;CCGR_loop_init&gt;</span><br><span class="line">87800020:	e59f0068 	ldr	r0, [pc, #104]	; 87800090 &lt;delay2+0x18&gt;</span><br><span class="line">87800024:	e3a01005 	mov	r1, #5</span><br><span class="line">87800028:	e5801000 	str	r1, [r0]</span><br><span class="line">8780002c:	e59f0060 	ldr	r0, [pc, #96]	; 87800094 &lt;delay2+0x1c&gt;</span><br><span class="line">87800030:	e59f1060 	ldr	r1, [pc, #96]	; 87800098 &lt;delay2+0x20&gt;</span><br><span class="line">87800034:	e5801000 	str	r1, [r0]</span><br><span class="line">87800038:	e59f005c 	ldr	r0, [pc, #92]	; 8780009c &lt;delay2+0x24&gt;</span><br><span class="line">8780003c:	e3a01008 	mov	r1, #8</span><br><span class="line">87800040:	e5801000 	str	r1, [r0]</span><br><span class="line"></span><br><span class="line">87800044 &lt;loop&gt;:</span><br><span class="line">87800044:	e59f0054 	ldr	r0, [pc, #84]	; 878000a0 &lt;delay2+0x28&gt;</span><br><span class="line">87800048:	e3a01000 	mov	r1, #0</span><br><span class="line">8780004c:	e5801000 	str	r1, [r0]</span><br><span class="line">87800050:	e59f004c 	ldr	r0, [pc, #76]	; 878000a4 &lt;delay2+0x2c&gt;</span><br><span class="line">87800054:	e59f104c 	ldr	r1, [pc, #76]	; 878000a8 &lt;delay2+0x30&gt;</span><br><span class="line"></span><br><span class="line">87800058 &lt;delay1&gt;:</span><br><span class="line">87800058:	e2400064 	sub	r0, r0, #100	; 0x64</span><br><span class="line">8780005c:	e1500001 	cmp	r0, r1</span><br><span class="line">87800060:	aafffffc 	bge	87800058 &lt;delay1&gt;</span><br><span class="line">87800064:	e59f0034 	ldr	r0, [pc, #52]	; 878000a0 &lt;delay2+0x28&gt;</span><br><span class="line">87800068:	e3a01008 	mov	r1, #8</span><br><span class="line">8780006c:	e5801000 	str	r1, [r0]</span><br><span class="line">87800070:	e59f002c 	ldr	r0, [pc, #44]	; 878000a4 &lt;delay2+0x2c&gt;</span><br><span class="line">87800074:	e59f102c 	ldr	r1, [pc, #44]	; 878000a8 &lt;delay2+0x30&gt;</span><br><span class="line"></span><br><span class="line">87800078 &lt;delay2&gt;:</span><br><span class="line">87800078:	e2400064 	sub	r0, r0, #100	; 0x64</span><br><span class="line">8780007c:	e1500001 	cmp	r0, r1</span><br><span class="line">87800080:	aafffffc 	bge	87800078 &lt;delay2&gt;</span><br><span class="line">87800084:	eaffffee 	b	87800044 &lt;loop&gt;</span><br><span class="line">87800088:	020c4080 	andeq	r4, ip, #128	; 0x80</span><br><span class="line">8780008c:	020c4068 	andeq	r4, ip, #104	; 0x68</span><br><span class="line">87800090:	020e0068 	andeq	r0, lr, #104	; 0x68</span><br><span class="line">87800094:	020e02f4 	andeq	r0, lr, #244, 4	; 0x4000000f</span><br><span class="line">87800098:	000010b0 	strheq	r1, [r0], -r0</span><br><span class="line">8780009c:	0209c004 	andeq	ip, r9, #4</span><br><span class="line">878000a0:	0209c000 	andeq	ip, r9, #0</span><br><span class="line">878000a4:	1f78a400 	svcne	0x0078a400</span><br><span class="line">878000a8:	0fbc5200 	svceq	0x00bc5200</span><br></pre></td></tr></table></figure>
+
+<p>和我写的汇编代码都是一一对应的，只是把直接数放在了代码段的最后，ldr通过pc+offset来取。</p>
+<p>从反汇编来看还把ldr一些短的直接数改成了mov指令。</p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/11/03/221103-mcustartup/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1307,101 +1402,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/31/220731-CubeMX/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/07/31/220731-CubeMX/" class="post-title-link" itemprop="url">STM32CubeMX使用上遇到的一些问题</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-07-31 14:00:00" itemprop="dateCreated datePublished" datetime="2022-07-31T14:00:00+08:00">2022-07-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-09-22 08:18:51" itemprop="dateModified" datetime="2022-09-22T08:18:51+08:00">2022-09-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="使用DMA发送串口数据问题"><a href="#使用DMA发送串口数据问题" class="headerlink" title="使用DMA发送串口数据问题"></a>使用DMA发送串口数据问题</h2><ol>
-<li>CubeMX生成的代码初始化DMA和UART顺序问题，应该先初始化DMA再UART，可以在CubeMX中调整生成初始化代码的顺序。<img src="/2022/07/31/220731-CubeMX/2207031-CubeMX-1.jpg" alt="2207031-CubeMX-1.jpg"></li>
-<li>CubeMX生成的代码使用<code>HAL_UART_Transmit_DMA()</code>后需要手动将串口状态配置成空闲状态，可以在DMA传输完成中断中加<code>(&amp;huart1)-&gt;gState = HAL_UART_STATE_READY;</code></li>
-</ol>
-<h2 id="串口接收溢出后接收不到数据"><a href="#串口接收溢出后接收不到数据" class="headerlink" title="串口接收溢出后接收不到数据"></a>串口接收溢出后接收不到数据</h2><ol>
-<li>产生问题的原因：超出接收size、在没接收的时候接收超过1个字节的数据。</li>
-<li>解决方法参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/chengj_/article/details/122689442">stm32cube，HAL库 HAL_UART_Receive_IT中断接收多个字符，串口溢出卡死问题</a>。</li>
-<li>关闭检测Overrun功能，或者使用错误处理回调函数。</li>
-</ol>
-<h2 id="串口接收一帧不定长数据"><a href="#串口接收一帧不定长数据" class="headerlink" title="串口接收一帧不定长数据"></a>串口接收一帧不定长数据</h2><ol>
-<li>可使用<code>tm32f7xx_hal_uart_ex.h</code>中的<code>HAL_UARTEx_ReceiveToIdle()</code>函数。</li>
-</ol>
-<h2 id="HAL库操作Flash"><a href="#HAL库操作Flash" class="headerlink" title="HAL库操作Flash"></a>HAL库操作Flash</h2><ol>
-<li>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/shoufei403/article/details/81978731">基于STM32F407 HAL库的Flash编程操作</a> 和 STM32F10xxx闪存编程参考手册</li>
-<li>在每次擦除或编程前先要解锁Flash，在HAL库中，只需要调用<code>stm32f1xx_hal_flash.h</code>中的<code>HAL_FLASH_Unlock()</code>函数。</li>
-<li>擦除时最小要以页为单位，传入的地址需要注意是否是页的起始地址。</li>
-<li>编程时要注意4字节对齐，不同单片机可能不同。</li>
-</ol>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1471,7 +1471,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-count">55</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

@@ -185,6 +185,101 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/31/220731-CubeMX/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/07/31/220731-CubeMX/" class="post-title-link" itemprop="url">STM32CubeMX使用上遇到的一些问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-07-31 14:00:00" itemprop="dateCreated datePublished" datetime="2022-07-31T14:00:00+08:00">2022-07-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-09-22 08:18:51" itemprop="dateModified" datetime="2022-09-22T08:18:51+08:00">2022-09-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="使用DMA发送串口数据问题"><a href="#使用DMA发送串口数据问题" class="headerlink" title="使用DMA发送串口数据问题"></a>使用DMA发送串口数据问题</h2><ol>
+<li>CubeMX生成的代码初始化DMA和UART顺序问题，应该先初始化DMA再UART，可以在CubeMX中调整生成初始化代码的顺序。<img src="/2022/07/31/220731-CubeMX/2207031-CubeMX-1.jpg" alt="2207031-CubeMX-1.jpg"></li>
+<li>CubeMX生成的代码使用<code>HAL_UART_Transmit_DMA()</code>后需要手动将串口状态配置成空闲状态，可以在DMA传输完成中断中加<code>(&amp;huart1)-&gt;gState = HAL_UART_STATE_READY;</code></li>
+</ol>
+<h2 id="串口接收溢出后接收不到数据"><a href="#串口接收溢出后接收不到数据" class="headerlink" title="串口接收溢出后接收不到数据"></a>串口接收溢出后接收不到数据</h2><ol>
+<li>产生问题的原因：超出接收size、在没接收的时候接收超过1个字节的数据。</li>
+<li>解决方法参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/chengj_/article/details/122689442">stm32cube，HAL库 HAL_UART_Receive_IT中断接收多个字符，串口溢出卡死问题</a>。</li>
+<li>关闭检测Overrun功能，或者使用错误处理回调函数。</li>
+</ol>
+<h2 id="串口接收一帧不定长数据"><a href="#串口接收一帧不定长数据" class="headerlink" title="串口接收一帧不定长数据"></a>串口接收一帧不定长数据</h2><ol>
+<li>可使用<code>tm32f7xx_hal_uart_ex.h</code>中的<code>HAL_UARTEx_ReceiveToIdle()</code>函数。</li>
+</ol>
+<h2 id="HAL库操作Flash"><a href="#HAL库操作Flash" class="headerlink" title="HAL库操作Flash"></a>HAL库操作Flash</h2><ol>
+<li>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/shoufei403/article/details/81978731">基于STM32F407 HAL库的Flash编程操作</a> 和 STM32F10xxx闪存编程参考手册</li>
+<li>在每次擦除或编程前先要解锁Flash，在HAL库中，只需要调用<code>stm32f1xx_hal_flash.h</code>中的<code>HAL_FLASH_Unlock()</code>函数。</li>
+<li>擦除时最小要以页为单位，传入的地址需要注意是否是页的起始地址。</li>
+<li>编程时要注意4字节对齐，不同单片机可能不同。</li>
+</ol>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/24/220724-python%E8%B4%A6%E6%9C%AC%E5%A4%84%E7%90%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -579,7 +674,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-16 23:51:43" itemprop="dateModified" datetime="2022-08-16T23:51:43+08:00">2022-08-16</time>
+                <time title="修改时间：2022-11-13 13:19:37" itemprop="dateModified" datetime="2022-11-13T13:19:37+08:00">2022-11-13</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -741,7 +836,7 @@
 <p>TortoiseSVN 是 SVN(Subversion) 版本控制系统的一个免费开源客户端，可以超越时间的管理文件和目录。TortoiseSVN 使用教程：<a target="_blank" rel="noopener" href="https://www.runoob.com/svn/tortoisesvn-intro.html">https://www.runoob.com/svn/tortoisesvn-intro.html</a></p>
 <p>企业通常是使用TortoiseSVN提供的图像化界面操作，使用较简单。Windows的Git提供了GitGUI，也可以使用TortoiseGit，配置参数也有图形化界面，之前实习的一家公司就是 TortoiseGit 和 TortoiseSVN 。</p>
 <h2 id="版本管控工具分支管理"><a href="#版本管控工具分支管理" class="headerlink" title="版本管控工具分支管理"></a>版本管控工具分支管理</h2><h3 id="SVN分支管理策略"><a href="#SVN分支管理策略" class="headerlink" title="SVN分支管理策略"></a>SVN分支管理策略</h3><ul>
-<li>truck (主干|主线|主分支)：是用来做主方向开发的，新功能的开发应放在主线中，当模块开发完成后，需要修改，就用branch。</li>
+<li>trunk(主干|主线|主分支)：是用来做主方向开发的，新功能的开发应放在主线中，当模块开发完成后，需要修改，就用branch。</li>
 <li>branches(分支)：分支开发和主线开发是可以同时进行的，也就是并行开发，分支通常用于修复bug时使用。</li>
 <li>tags (标记)：用于标记某个可用的版本，可以标记已经上线发布的版本，也可以标记正在测试的版本，通常是只读的。</li>
 </ul>
@@ -1360,180 +1455,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-title-link" itemprop="url">《操作系统》笔记</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-03-26 15:00:00" itemprop="dateCreated datePublished" datetime="2022-03-26T15:00:00+08:00">2022-03-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-04-06 20:25:48" itemprop="dateModified" datetime="2022-04-06T20:25:48+08:00">2022-04-06</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="课程链接"><a href="#课程链接" class="headerlink" title="课程链接"></a>课程链接</h2><ul>
-<li><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1d4411v7u7?p=1">操作系统（哈工大李治军老师）32讲（全）超清</a></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://www.shiyanlou.com/courses/115">配套实验课</a></p>
-</li>
-</ul>
-<h2 id="课程笔记"><a href="#课程笔记" class="headerlink" title="课程笔记"></a>课程笔记</h2><h3 id="L1-L3"><a href="#L1-L3" class="headerlink" title="L1~L3"></a>L1~L3</h3><ol>
-<li><p>课程目标：进入操作系统，学习操作系统的运作。</p>
-</li>
-<li><p>计算机工作方式：取址执行，取CS和PC指针指向内存中的指令，在CPU执行</p>
-</li>
-<li><p>操作系统引导：启动引导时内核在内存中的位置和移动后的位置情况图<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-1.jpg" alt="220326-操作系统-1.jpg"></p>
-<p>开机时，CS=0xffff，IP=0x0000，CPU处于实模式。实模式寻址CS&lt;&lt;4+IP，CS存放段地址，IP存放4位段偏移量，共20位。0xffff0地址属于BIOS映射区，在BIOS里检查硬件（RAM，键盘，…）；</p>
-<p>将磁盘0磁道0扇区（引导扇区）读到内存0x7c00，引导扇区代码存放在bootsect.s；</p>
-<p>将引导扇区代码从内存0x7c00处移动到0x90000处；</p>
-<p><code>jmpi go, INITSEG</code>，INITSEG=0x9000，跳至bios的go标号处；</p>
-<p><code>jmpi 0, SETUPSEG</code>，SETUPSEG=0x9020，跳至setup.s；</p>
-<p>在setup.s  start:中读取扩展内存大小，读取显卡参数，…；</p>
-<p>do_move:中将system模块移动到0地址，<code>jmpi 0, 8</code>，跳转到system模块，system模块开始是head.s；</p>
-<p>通过设置cr0最后一位，PE=1由16位实模式转到32位保护模式，在保护模式下，CS表示选择子，查GDT表得到；</p>
-<p>在head.s中初始化GDT表和IDT表，setup_paging执行ret后，会执行函数main()，进入main()后的栈为0，0，0，L6，三个0表示main函数的参数，L6表示main函数返回时进入死循环；</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">after_page_tables:</span><br><span class="line">    pushl $0 # These are the parameters to main :-)</span><br><span class="line">    pushl $0 # 这些是调用 main 程序的参数（指 init/main.c）。</span><br><span class="line">    pushl $0 # 其中的&#x27;$&#x27;符号表示这是一个立即操作数。</span><br><span class="line">    pushl $L6 # return address for main, if it decides to.</span><br><span class="line">    pushl $_main # &#x27;_main&#x27;是编译程序对 main 的内部表示方法。</span><br><span class="line">    jmp setup_paging # 跳转至第 198 行。</span><br><span class="line">L6:</span><br><span class="line">    jmp L6 # main should never return here, but</span><br><span class="line">    # just in case, we know what happens.</span><br><span class="line">    # main 程序绝对不应该返回到这里。不过为了以防万一，</span><br><span class="line">    # 所以添加了该语句。这样我们就知道发生什么问题了。</span><br><span class="line">setup_paging:</span><br><span class="line">    设置页表...</span><br><span class="line">    ret</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="L4-L7"><a href="#L4-L7" class="headerlink" title="L4~L7"></a>L4~L7</h3><ol>
-<li>操作系统接口：接口表现为函数调用，又由系统提供，所以称为系统调用，可移植操作系统接口(Portable Operating System Interface of uniX, POSIX)</li>
-<li>系统调用的实现：应用层要通过接口访问内核，不能直接读内核内存，内核是受保护的。中断是进入内核的唯一方法；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-2.jpg" alt="220326-操作系统-2.jpg"><img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-3.jpg" alt="220326-操作系统-3.jpg"></li>
-<li>课程任务：操作系统要学习CPU管理、内存管理、文件管理；</li>
-</ol>
-<h3 id="L8-L19"><a href="#L8-L19" class="headerlink" title="L8~L19"></a>L8~L19</h3><ol>
-<li><p>CPU管理：多道程序，交替执行（并发）。运行的程序是进程，多进程切换时要保存现场。通过进程控制块(Process Control Block, PCB)来记录进程信息。操作系统要把这些进程记录好，要按照合理的次序分配资源、调度；</p>
-</li>
-<li><p>进程状态图：<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-4.jpg" alt="220326-操作系统-4.jpg"></p>
-</li>
-<li><p>通过进程内存映射表来实现内存分离，切换进程时要切换内存映射表；通过上锁，来保证共享内存的正确被读写；</p>
-</li>
-<li><p>用户级线程和核心级线程区别：用户级线程创建、切换无需进内核，一个线程阻塞进程会被切换；</p>
-</li>
-<li><p>线程的优点：线程切换无需切换内存映射表。<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-5.jpg" alt="220326-操作系统-5.jpg"></p>
-</li>
-<li><p>用户级线程切换通过Yield()，要先切换栈，栈会存在TCB（线程控制块）中，每个线程对应一个TCB；</p>
-</li>
-<li><p>核心级线程切换时除了用户栈还有内核栈也要一起切换。在内核阻塞时要进行TCB切换，使用<code>switch_to(cur, next);</code>TCB切换完后根据TCB完成内核栈切换，最后IRET返回用户态，切换用户栈；</p>
-</li>
-<li><p>前台任务需要响应时间小-&gt;导致切换次数多-&gt;导致系统内耗大-&gt;导致吞吐量（完成任务的量）小。后台任务更加关注周转时间。任务可分成IO约束型任务和CPU约束型任务；</p>
-</li>
-<li><p>CPU调度策略：FIFO、Priority；CPU调度算法：先来先服务（First come, first served），短作业优先（SJF）这个算法周转时间最小，按时间片来轮转调度（RR），优先级调度（前台&gt;后台）；</p>
-</li>
-<li><p>linux0.11中的调度函数既考虑了优先级又考虑了时间片：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">Schedule</span><span class="params">(<span class="type">void</span>)</span> <span class="comment">// 在 kernel/sched.c 中</span></span><br><span class="line">&#123; <span class="keyword">while</span>(<span class="number">1</span>)&#123; c=<span class="number">-1</span>; next=<span class="number">0</span>; i=NR_TASKS; p=&amp;task[NR_TASKS];</span><br><span class="line">    <span class="keyword">while</span>(--i)&#123; <span class="keyword">if</span>((*p-&gt;state == TASK_RUNNING&amp;&amp;(*p)-&gt;counter&gt;c)</span><br><span class="line">        c=(*p)-&gt;counter, next=i; &#125;</span><br><span class="line">    <span class="keyword">if</span>(c) <span class="keyword">break</span>; <span class="comment">// 找到了最大的counter,跳出，执行switch_to()</span></span><br><span class="line">    <span class="keyword">for</span>(p=&amp;LAST_TASK;p&gt;&amp;FIRST_TASK;--p)</span><br><span class="line">        (*p)-&gt;counter=((*p)-&gt;counter&gt;&gt;<span class="number">1</span>)+(*p)-&gt;priority; </span><br><span class="line">    &#125;</span><br><span class="line">switch_to(next);&#125;</span><br></pre></td></tr></table></figure></li>
-<li><p>进程间同步看信号量（Semaphore），可使多个进程合理有序运行。<strong>读写信号量的代码一定在临界区</strong>，或者原子操作。临界区：一次只允许一个进程进入该进程的那段代码。原子操作：不会被线程调度机制打断的操作;</p>
-</li>
-<li><p>保护临界区的方法：关闭中断<code>cli();</code>，临界区，开中断<code>sti();</code>，剩余区。这种方法只适用于小系统，不适用于多核CPU。还可以采取硬件原子指令法，硬件一条指令修改mutex变量；</p>
-</li>
-<li><p>信号量未互斥使用会造成死锁。死锁处理：死锁预防，死锁避免，死锁检测+恢复，死锁忽略；</p>
-</li>
-</ol>
-<h3 id="L20-L25"><a href="#L20-L25" class="headerlink" title="L20~L25"></a>L20~L25</h3><ol>
-<li><p>内存使用：将程序放到内存中，PC指向开始的地址。将程序从硬盘载入内存需要重定位，物理地址=基址+逻辑地址。重定位可以在编译时（静态系统）、载入时执行、<strong>运行时执行</strong>。编译时重定位的程序只能放在内存固定位，载入时重定位的程序一旦载入内存就不能动了；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-6.jpg" alt="220326-操作系统-6.jpg"></p>
-</li>
-<li><p>程序载入后还需要移动，引入<strong>交换</strong>（swap）概念，可以把暂时不用的内存搬到交换分区，充分利用内存。</p>
-</li>
-<li><p>引入分段，程序由若干部分(段)组成，每个段有各自的特点、用途：主程序（只读）、变量集（可写、不会动态增长）、函数集、动态数组（会动态增长）、栈。使用分段思想可以让用户分治每个段，可以让内存更高效使用。定位具体指令<code>mov [es:bx], ax</code>。地址组成：&lt;段号，段内偏移&gt;。进程段表存放在LDT表，系统段表存放在GDT表，LDT存放在PCB中；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-7.jpg" alt="220326-操作系统-7.jpg"></p>
-</li>
-<li><p><strong>内存分区</strong>可分为固定分区和可变分区。可变分区的管理：空闲分区表、已分配分区表。可变分区分配内存算法：首先适配（最快）、最佳适配和申请空间长度最接近（会导致内存碎片）、最差适配；</p>
-</li>
-<li><p>实际物理内存采用<strong>分页</strong>来管理，分区是对虚拟内存（交换分区）的管理方法。分区会造成内存碎片，分页会将物理内存分割（比如每4k分割），程序也会被分页，每段都会被分页，分页会使内存存储离散化。地址翻译有专门的硬件内存管理单元（MMU）执行；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-8.jpg" alt="220326-操作系统-8.jpg"></p>
-</li>
-<li><p>为了提高内存空间利用率，页应该小，但是页小了页表就大了。如果页表只存放用到的页，则需要顺序查找页表，速度慢。采用多级页表可兼顾速度和空间，即页目录表+页表，地址组成&lt;10bits页目录号，10bits页号，12bits偏移&gt;，12bits偏移刚好是4K。</p>
-</li>
-<li><p>多级页表增加了访存的次数，尤其是64位系统。硬件上引入转译后备缓冲区（Translation Look-aside Buffer，TLB，快表），快表能存放最近查过多级页表的逻辑页和物理页，可以根据页号直接查物理页号；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-9.jpg" alt="220326-操作系统-9.jpg"></p>
-</li>
-<li><p>段页结合：段面向用户，页面向硬件。实际的段页内存管理，程序如何载入内存，fork后内存做了什么可以看<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1d4411v7u7?p=23">L23 段页结合的实际内存管理</a>；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-10.jpg" alt="220326-操作系统-10.jpg"></p>
-</li>
-<li><p>用内存换入换出实现“大内存”，虚拟内存4G，物理内存可以只有1G。当程序运行缺页时， page fault中断请求do_no_page调页（读磁盘），这就是换入；</p>
-</li>
-<li><p>内存换出：将内存中不用的页换出到磁盘。如何找不用的页？换出算法：FIFO（先来的先被换出，不太行）、MIN（将未来最远要使用的页淘汰，是最优方案，但无法预测未来）、LRU（Least Recently Used，最近最少使用）；</p>
-</li>
-<li><p>LUR的准确实现：可以用时间戳，每次地址访问都需要修改时间戳，需维护一个全局时钟，实现代价较较大，可以用页码栈，选择栈底淘汰，代价也太大。在实际中内存换出算法采用LUR的近似实现：时钟算法（环形队列）<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-11.jpg" alt="220326-操作系统-11.jpg"><img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-12.jpg" alt="220326-操作系统-12.jpg"></p>
-</li>
-<li><p>给进程分配多少页框？分配多了，请求调页导致的内存高效利用就没有了。分配少了，会频繁请求调页导致系统低效。系统低效解释：系统内进程增多多，每个进程的缺页率增大大，缺页率增大到一定程度，进程总等待调页完成，CPU利用率降低低，进程进一步增多，缺页率更大，称这一现象为颠簸(thrashing)；</p>
-</li>
-</ol>
-<h3 id="L26-L32"><a href="#L26-L32" class="headerlink" title="L26~L32"></a>L26~L32</h3><ol>
-<li><p>IO设备、显示器、键盘，让这些外设工作的基本思想就是往外设硬件寄存器写值，外设处理完再产生中断，CPU处理。在Linux中无论什么设备都用文件接口open、read、write、close，例如<code>int fd = open(&quot;/dev/xxx&quot;);</code>到最后是通过out写对应寄存器；</p>
-</li>
-<li><p>生磁盘的使用：磁盘驱动负责从盘块号（block）计算出柱面（cgl）、磁头（head）、扇区号（sec）。从CHS到扇区号，从扇区到盘块（第一层抽象）：<strong>扇区号 = C×H×S+H×S+S</strong> 。<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-13.jpg" alt="220326-操作系统-13.jpg"></p>
-</li>
-<li><p>多个进程通过<strong>请求队列</strong>使用磁盘（第二层抽象）；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-14.jpg" alt="220326-操作系统-14.jpg"></p>
-</li>
-<li><p><strong>访问磁盘时间 = 写入控制器时间 + 寻道时间（8~12ms）+ 旋转时间（7200rmp，半周4ms）+ 传输时间（50MB/s，约0.3ms）</strong>。可见访问磁盘主要时间花在寻道，block相邻的盘块可以快速读出，因此需要考虑寻道算法。寻道调度算法有FCFS（先来先服务）、SSTF（短寻道优先算法，可能有磁道长时间访问不到）、SCAN（SSTF+中途不折回）、C-SCAN（SCAN+直接移动到另一端，电梯算法）；</p>
-</li>
-<li><p>引入文件（第三层抽象），文件是建立字符流在磁盘块集合的映射关系，每个文件都对应一个文件控制块（FCB），连续结构存储FCB包含文件名、起始块、块数的信息，链式结构存储FCB包含文件名、起始块的信息，链式结构存储顺序访问慢、可靠性差，<strong>索引结构</strong>存储文件是连续和链式的有效折中，FCB包含文件名、索引块的信息。在实际系统中采用的是<strong>多级索引结构</strong>，根据不同大小文件分成不同级索引通过<strong>inode</strong>一级级查询访问，因此可以标识很大的文件，很小的文件可以高效访问，中等大小的文件访问速度也不慢；</p>
-</li>
-<li><p>引入文件系统（第四层抽象），文件系统引入目录树，文件目录也是个文件，存放目录下其他文件名和对应文件的FCB指针。inode位图：哪些inode空闲，哪些被占用。盘块位图：哪些盘块是空闲的，硬盘大小不同这个位图的大小也不同。超级块：存放i节点位图和盘块位图的大小，因此可以计算出i节点起始地址；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-15.jpg" alt="220326-操作系统-15.jpg"><img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-16.jpg" alt="220326-操作系统-16.jpg"><img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-17.jpg" alt="220326-操作系统-17.jpg"></p>
-</li>
-</ol>
-<h2 id="课程总结"><a href="#课程总结" class="headerlink" title="课程总结"></a>课程总结</h2><p>通过本次操作系统的学习，了解了操作系统全图（CPU、内存、文件设备），学习了多进程视图、文件视图。哈工大的几个实验非常的难，Study OS by coding !!!</p>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1603,7 +1524,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-count">55</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

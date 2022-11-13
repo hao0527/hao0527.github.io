@@ -185,6 +185,117 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/07/211007-clashForLinux/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/10/07/211007-clashForLinux/" class="post-title-link" itemprop="url">Ubuntu使用Clash</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-10-07 08:00:00 / 修改时间：09:46:52" itemprop="dateCreated datePublished" datetime="2021-10-07T08:00:00+08:00">2021-10-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="安装运行clash"><a href="#安装运行clash" class="headerlink" title="安装运行clash"></a>安装运行clash</h2><ol>
+<li><p>在<a target="_blank" rel="noopener" href="https://github.com/Dreamacro/clash/releases">clash发布网站</a>下载对应的版本，我下载的是<strong>clash-linux-amd64-v1.7.1.gz</strong></p>
+</li>
+<li><p>将压缩包里的文件解压至**/opt/clash**，改名为clash，下载订阅链接文件到同个目录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo wget -O config.yaml [订阅链接]</span><br></pre></td></tr></table></figure></li>
+<li><p>Country.mmdb为全球IP库，可以实现各个国家的IP信息解析和地理定位，没有这个文件clash是无法运行的</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo wget -O Country.mmdb https://www.sub-speeder.com/client-download/Country.mmdb</span><br></pre></td></tr></table></figure></li>
+<li><p>把clash权限改为可执行应用</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x clash</span><br></pre></td></tr></table></figure></li>
+<li><p>执行clash，</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./clash -d .</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="修改系统代理"><a href="#修改系统代理" class="headerlink" title="修改系统代理"></a>修改系统代理</h2><ol>
+<li>我使用的是ubuntu18.4，在设置里面修改。打开系统设置，点击网络代理右边的 ⚙ 按钮，选择手动，填写 HTTP 和 HTTPS 代理为 127.0.0.1:7890，填写 Socks 主机为 127.0.0.1:7891，即可启用系统代理</li>
+</ol>
+<h2 id="配置clash"><a href="#配置clash" class="headerlink" title="配置clash"></a>配置clash</h2><ol>
+<li>在运行了clash后可以打开<a target="_blank" rel="noopener" href="http://clash.razord.top/#/proxies">clash配置页面</a>进行配置，基本上就和windows中的clash图形化差不多了</li>
+</ol>
+<h2 id="设置为开机启动"><a href="#设置为开机启动" class="headerlink" title="设置为开机启动"></a>设置为开机启动</h2><ol>
+<li><p>创建service文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">touch /etc/systemd/system/clash.service</span><br></pre></td></tr></table></figure></li>
+<li><p>编辑service文件，填入以下内容(注意修改clash文件夹路径)</p>
+<blockquote>
+<p>[Unit]<br>Description=clash daemon</p>
+<p>[Service]<br>Type=simple<br>User=root<br>ExecStart=/opt/clash/clash -d /opt/clash/<br>Restart=on-failure</p>
+<p>[Install]<br>WantedBy=multi-user.target</p>
+</blockquote>
+</li>
+<li><p>重新加载systemctl daemon，<strong>systemctl daemon-reload</strong></p>
+</li>
+<li><p>启动Clash，<strong>systemctl start clash.service</strong></p>
+</li>
+<li><p>设置Clash开机自启动，<strong>systemctl enable clash.service</strong></p>
+</li>
+<li><p>systemctl的其他命令参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/skh2015java/article/details/94012643">linux中systemctl详细理解及常用命令</a></p>
+</li>
+</ol>
+<h2 id="配置定时更新订阅"><a href="#配置定时更新订阅" class="headerlink" title="配置定时更新订阅"></a>配置定时更新订阅</h2><ol>
+<li>可以设置个定时执行的任务，去下载新的配置文件，并重启clash服务</li>
+</ol>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/24/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1064,118 +1175,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/28/210628-GND%E4%B9%8B%E9%97%B4%E7%9A%84%E8%BF%9E%E6%8E%A5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/06/28/210628-GND%E4%B9%8B%E9%97%B4%E7%9A%84%E8%BF%9E%E6%8E%A5/" class="post-title-link" itemprop="url">电路设计中各种GND之间的连接</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-06-28 16:00:00 / 修改时间：16:45:07" itemprop="dateCreated datePublished" datetime="2021-06-28T16:00:00+08:00">2021-06-28</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E7%A1%AC%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">硬件</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qlexcel/article/details/92728245">PCB的地与机壳（连接大地）为什么用阻容连接？</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv8008391/">电路设计中有几种地？各类GND的含义详解</a></li>
-</ul>
-<h3 id="GND可以分为几种"><a href="#GND可以分为几种" class="headerlink" title="GND可以分为几种"></a>GND可以分为几种</h3><ol>
-<li><p>模拟地线AGND<br> 模拟信号是微弱信号，容易受到其他电路大电流的影响，大电流会在模拟电路中产生大的压降，会使得模拟信号失真。</p>
-</li>
-<li><p>数字地线DGND<br> 有按键检测电路、USB通信电路、单片机电路，在由0跳变到1的过程，电压产生了变化，根据麦克斯韦电磁理论，变化的电流周围会产生磁场，也就会形成EMC辐射，使用单独的DGND与其他电路隔离，防止辐射扩散。</p>
-</li>
-<li><p>功率地线PGND<br> 大电流会造成不同功能电路之间的地偏移现象。</p>
-</li>
-<li><p>电源地线GND<br> 是所有电路的0V电压参考点，是电源的地线GND。</p>
-</li>
-<li><p>交流地线CGND<br> 在AC-DC电源电路中，一个是交流地线，一个是直流地线，交流地线作为交流电路部分的0V参考点，直流地线作为直流电路部分的0V参考点。通常为了在电路中统一一个地线GND，工程师会将交流地线通过一个耦合电容或者电感与直流地线连接在一起。</p>
-</li>
-<li><p>大地地线EGND<br> 地线是在电系统或电子设备中，接大地、接外壳或接参考电位为零的导线。为了增强电路的安全系数，工程师一般在高压大电流的项目中使用大地的地线EGND，例如在家用电器电风扇、电冰箱、电视机等电路中。</p>
-</li>
-</ol>
-<h3 id="不细分GND会导致的问题"><a href="#不细分GND会导致的问题" class="headerlink" title="不细分GND会导致的问题"></a>不细分GND会导致的问题</h3><ol>
-<li><p>信号串扰<br> 假如将不同功能的地线GND直接连接在一起，大功率电路通过地线GND，会影响小功率电路的0V参考点GND，这样就产生了不同电路信号之间的串扰。</p>
-</li>
-<li><p>信号精度<br> 交流电源的地线CGND由于是正弦波，是周期性的上下波动变化，它的电压也是上下波动，不是像直流地线GND一样始终维持在一个0V上不变。将不同电路的地线GND连接在一起，周期性变化的交流地线CGND会带动模拟电路的地线AGND变化，这样就影响了模拟信号的电压精度值了。</p>
-</li>
-<li><p>EMC实验<br> 信号越弱，对外的电磁辐射EMC也就越弱；信号越强，对外的电磁辐射EMC也就越强。假如将不同电路的地线GND连接在一起，信号强电路的地线GND，直接干扰了信号弱电路的地线GND。</p>
-</li>
-<li><p>电路可靠性<br> 电路系统之间，信号连接的部分越少，电路独立运行的能力越强；信号连接的部分越多，电路独立运行的能力就越弱。</p>
-</li>
-</ol>
-<h3 id="GND和机壳的连接"><a href="#GND和机壳的连接" class="headerlink" title="GND和机壳的连接"></a>GND和机壳的连接</h3><p>​    PCB板卡置于金属机壳中，机壳一般接大地，PCB的GND与机壳之间经常使用一个电容（1nF/1KV）并联一个电阻（1M）连接。</p>
-<ol>
-<li><p>电容是干啥用的<br>从EMS（电磁抗扰度）角度说，这个电容是在假设PE良好连接大地的前提下，降低可能存在的，以大地电平为参考的高频干扰型号对电路的影响，是为了抑制电路和干扰源之间瞬态共模压差的。其实GND直连PE是最好的，但是，直连可能不可操作或者不安全，例如，220V交流电过整流桥之后产生的GND是不可以连接PE的，所以就弄个低频过不去，高频能过去的路径。从EMI（电磁干扰）角度说，如果有与PE相连的金属外壳，有这个高频路径，也能够避免高频信号辐射出来。</p>
-</li>
-<li><p>一般在1nF左右比较合适<br>如果答主在变频器、伺服驱动器这样8~16kHz开关频率的工业设备上用这么大的电容值，那么，用户摸外壳会有触电的风险的。一般选到这么大，都是电路其他地方设计不合格，为了对付EMC测试，只好把这个电容加大的。<strong>最好是安规电容，GND和PE间选用Y电容</strong>。</p>
-</li>
-<li><p>1M电阻是干啥用的<br>这是对付ESD（静电放电）测试用的。因为这种用电容连接PE和GND的系统（浮地系统），在做ESD测试的时候，打入被测电路的电荷无处释放，会逐渐累积，抬升或降低GND相对与PE的电平，累积到一定程度，超过了PE和电路之间的绝缘最薄弱处所能耐受的电压范围，GND和PE之间就会放电，几个纳秒间，在PCB上的产生数十到数百安培的电流，这足以让任何电路因EMP（电磁脉冲）宕机，或者是让PE与电路之间绝缘最薄弱处所在信号连接的器件损坏。但是刚才说了，有时候又不能直接连接PE和GND，那么就用一个1-2M的电阻去慢慢释放这个电荷，以消除二者间的压差。当然1-2M这个数值是根据ESD测试标准选择的，因为IEC61000里面规定最高的重复次数只有10次/秒，如果你搞个1000次/秒的非标ESD放电，那么1~2M的电阻我觉得是不能释放掉累积的电荷的。1M电阻的高阻接地方式，往往是为了在<strong>提供EMC保护</strong>的同时或者说不影响防护效果的同时<strong>限制故障电流</strong>，印象中1M是根据人体模型得到的结果。比如内部挂了，GND连到高压上的故障，有这个1M，通过的电流不会伤害人体。</p>
-</li>
-<li><p>PE不可靠！因为很多国内的客户根本不会给你接上有效的PE，也就是说，你根本无法依靠PE来提升EMS或降低EMI的指标。其实这也不能全怪客户，是因为他们的车间、厂房、办公室根本就没按照电工标准来修，压根就是没有接地线的！所以，我明白PE不可靠以后，就使用一些技巧让电路能够硬抗过EMS测试。</p>
-</li>
-<li><p>PE（机壳）和GND直连是不行的。多见的系统是浮地，机壳连PE，PCBA不连PE，这样机壳就是个很好的法拉第笼，有效屏蔽外界。</p>
-</li>
-</ol>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1245,7 +1244,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-count">55</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
