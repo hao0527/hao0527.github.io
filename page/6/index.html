@@ -185,6 +185,136 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/07/210507-%E5%8D%A1%E7%89%87%E6%9C%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/07/210507-%E5%8D%A1%E7%89%87%E6%9C%BA/" class="post-title-link" itemprop="url">卡片机项目进度</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-05-07 16:00:00" itemprop="dateCreated datePublished" datetime="2021-05-07T16:00:00+08:00">2021-05-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-08-10 21:13:02" itemprop="dateModified" datetime="2021-08-10T21:13:02+08:00">2021-08-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B7%A5%E4%BD%9C%E6%97%A5%E5%BF%97/" itemprop="url" rel="index"><span itemprop="name">工作日志</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B7%A5%E4%BD%9C%E6%97%A5%E5%BF%97/%E5%8D%A1%E7%89%87%E6%9C%BA/" itemprop="url" rel="index"><span itemprop="name">卡片机</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="室内-双光-配电柜卡片机"><a href="#室内-双光-配电柜卡片机" class="headerlink" title="室内 双光 配电柜卡片机"></a>室内 双光 配电柜卡片机</h2><h3 id="需求分析"><a href="#需求分析" class="headerlink" title="需求分析"></a>需求分析</h3><ol>
+<li>80*62 分辨率  预留160*120的空间和接口</li>
+<li>200W 1920*1080  可见光分辨率</li>
+<li>白光 LED 拍照照明</li>
+<li>DC6-8.4V外部供电</li>
+<li>低功耗</li>
+<li>6-8pin航插，DC5V，uart 和SWD接口</li>
+<li>无线图传电台：开阔地300米</li>
+</ol>
+<h3 id="技术方案"><a href="#技术方案" class="headerlink" title="技术方案"></a>技术方案</h3><ol>
+<li><p>红外：80*62 的 3.3v spi接口上拉  160*120  fpc的 8Mbps UART ，DC5.0V降压 </p>
+</li>
+<li><p>可见光：OV2640 200W 24pin  考虑fpga作为DVP-spi接口 fpga时钟</p>
+</li>
+<li><p> 白光LED： DC3.4V 100-500mA</p>
+</li>
+<li><p>无线模块：24L01 2.4-2.52GHZ 250Kbps 500mW 27DB发射功率</p>
+</li>
+<li><p>电源：DC6V-8.4V 输入，加单向TVS和PTC保护  1uA低功耗LDO 接MCU ,带有EN使能脚的BUCK输出3.3V/5V</p>
+</li>
+<li><p>光敏  光电二极管加lmv321 放大 ADC</p>
+</li>
+<li><p>输出接口：SMA 无线  8pin 航插  RST，Vin ，rx/tx , SWD (ESD保护)</p>
+</li>
+<li><p>MCU：带RTC 32.768</p>
+</li>
+</ol>
+<h3 id="调试阶段进度"><a href="#调试阶段进度" class="headerlink" title="调试阶段进度"></a>调试阶段进度</h3><h4 id="硬件"><a href="#硬件" class="headerlink" title="硬件"></a>硬件</h4><ul>
+<li><input checked disabled type="checkbox"> 绘制原理图</li>
+<li><input checked disabled type="checkbox"> 绘制PCB（调试板）</li>
+<li><input checked disabled type="checkbox"> 制板焊接（调试板）</li>
+<li><input checked disabled type="checkbox"> 绘制产品的PCB</li>
+</ul>
+<h4 id="软件"><a href="#软件" class="headerlink" title="软件"></a>软件</h4><ul>
+<li><input checked disabled type="checkbox"> 调试80*60红外模块</li>
+<li><input checked disabled type="checkbox"> 调试160*120红外模块</li>
+<li><input checked disabled type="checkbox"> 调试FPGA-OV2640部分</li>
+<li><input checked disabled type="checkbox"> 调试FPGA-MCU部分</li>
+<li><input checked disabled type="checkbox"> 调试24L01模块</li>
+<li><input checked disabled type="checkbox"> 调试电源管理部分</li>
+<li><input disabled type="checkbox"> 调试其他功能</li>
+</ul>
+<h4 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h4><ul>
+<li><input checked disabled type="checkbox"> 红外模块板外形</li>
+<li><input disabled type="checkbox"> ……</li>
+</ul>
+<h2 id="无线集抄器部分"><a href="#无线集抄器部分" class="headerlink" title="无线集抄器部分"></a>无线集抄器部分</h2><h3 id="需求分析-1"><a href="#需求分析-1" class="headerlink" title="需求分析"></a>需求分析</h3><ol>
+<li>可以支持500个从站</li>
+<li>服务器端配置网络和从站设备</li>
+<li>网口或者CAT1上传服务器</li>
+<li>户外型  安装部署方便</li>
+<li>DC12V 持续供电</li>
+</ol>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/06/210506-bjt%E5%92%8Cfet/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -728,7 +858,7 @@
 <h3 id="Hexo-Github部署"><a href="#Hexo-Github部署" class="headerlink" title="Hexo Github部署"></a>Hexo Github部署</h3><ol>
 <li>安装hexo-deployer-git插件 ‘cnpm install –save hexo-deployer-git’</li>
 <li>git添加SSHKey</li>
-<li>blog文件夹中_config.yml配置hexo-deployer-git插件<br> type: git<br> repo: <a href="mailto:&#x67;&#105;&#x74;&#64;&#103;&#x69;&#x74;&#104;&#x75;&#x62;&#x2e;&#x63;&#111;&#x6d;">&#x67;&#105;&#x74;&#64;&#103;&#x69;&#x74;&#104;&#x75;&#x62;&#x2e;&#x63;&#111;&#x6d;</a>:hao0527/hao0527.github.io.git<br> branch: main</li>
+<li>blog文件夹中_config.yml配置hexo-deployer-git插件<br> type: git<br> repo: <a href="mailto:&#103;&#105;&#x74;&#64;&#x67;&#x69;&#116;&#104;&#x75;&#x62;&#46;&#99;&#111;&#x6d;">&#103;&#105;&#x74;&#64;&#x67;&#x69;&#116;&#104;&#x75;&#x62;&#46;&#99;&#111;&#x6d;</a>:hao0527/hao0527.github.io.git<br> branch: main</li>
 <li>hexo g 编译<br> hexo d 发布到Github</li>
 <li>每次发布会GithubPages的Custom domain都会被删除，在本地source文件夹中添加CNAME文件，内容写自定义域名就行</li>
 </ol>
@@ -819,7 +949,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">55</span>
+          <span class="site-state-item-count">56</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
