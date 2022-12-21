@@ -20,24 +20,19 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="好久不见，甚是想念一个多月没写博客了，毕业后学习时间少了，白天忙公司的项目，偶尔晚上有空看看自己想学的资料，自己还在做个地质分析仪的项目，每周日会花一天的时间做。为自己加油，2022年我还要完成这块FPGA的学习，感谢那位支持我学这块开发板的人。 安装Vivado 下载vivado安装包，资料链接B盘：https:&#x2F;&#x2F;pan.baidu.com&#x2F;s&#x2F;1eM7Sx-RmeYFE1ht_RPqxhw">
+  <meta name="description" content="起因在学习FPGA时使用了DDR3，最近学ARM处理器也用到了DDR3的外设，在FPGA是使用 MIG(Memory Interface Generators)IP核驱动DDR3，ARM处理器是通过配置MMDC(Multi Mode DDR Controller)模块驱动DDR3，这编博客将会介绍使用DDR需配置的几个关键参数。 SRAM操作流程、时序图可以浏览我之前的文章，FPGA之SDRAM学">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Xilinx FPGA 点灯">
-<meta property="og:url" content="http://example.com/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/index.html">
+<meta property="og:title" content="DDR关键参数介绍">
+<meta property="og:url" content="http://example.com/2022/12/17/221217-ddr/index.html">
 <meta property="og:site_name" content="永恆博客网">
-<meta property="og:description" content="好久不见，甚是想念一个多月没写博客了，毕业后学习时间少了，白天忙公司的项目，偶尔晚上有空看看自己想学的资料，自己还在做个地质分析仪的项目，每周日会花一天的时间做。为自己加油，2022年我还要完成这块FPGA的学习，感谢那位支持我学这块开发板的人。 安装Vivado 下载vivado安装包，资料链接B盘：https:&#x2F;&#x2F;pan.baidu.com&#x2F;s&#x2F;1eM7Sx-RmeYFE1ht_RPqxhw">
+<meta property="og:description" content="起因在学习FPGA时使用了DDR3，最近学ARM处理器也用到了DDR3的外设，在FPGA是使用 MIG(Memory Interface Generators)IP核驱动DDR3，ARM处理器是通过配置MMDC(Multi Mode DDR Controller)模块驱动DDR3，这编博客将会介绍使用DDR需配置的几个关键参数。 SRAM操作流程、时序图可以浏览我之前的文章，FPGA之SDRAM学">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-2.jpg">
-<meta property="og:image" content="http://example.com/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-1.jpg">
-<meta property="og:image" content="http://example.com/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-5.jpg">
-<meta property="og:image" content="http://example.com/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-4.jpg">
-<meta property="article:published_time" content="2022-07-07T16:01:00.000Z">
-<meta property="article:modified_time" content="2022-07-09T15:35:14.661Z">
+<meta property="article:published_time" content="2022-12-17T09:00:00.000Z">
+<meta property="article:modified_time" content="2022-12-21T00:27:07.151Z">
 <meta property="article:author" content="Hao">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-2.jpg">
 
-<link rel="canonical" href="http://example.com/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/">
+<link rel="canonical" href="http://example.com/2022/12/17/221217-ddr/">
 
 
 <script id="page-configurations">
@@ -50,7 +45,7 @@
   };
 </script>
 
-  <title>Xilinx FPGA 点灯 | 永恆博客网</title>
+  <title>DDR关键参数介绍 | 永恆博客网</title>
   
 
 
@@ -193,7 +188,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/12/17/221217-ddr/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -206,7 +201,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Xilinx FPGA 点灯
+          DDR关键参数介绍
         </h1>
 
         <div class="post-meta">
@@ -216,14 +211,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-07-08 00:01:00" itemprop="dateCreated datePublished" datetime="2022-07-08T00:01:00+08:00">2022-07-08</time>
+              <time title="创建时间：2022-12-17 17:00:00" itemprop="dateCreated datePublished" datetime="2022-12-17T17:00:00+08:00">2022-12-17</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-07-09 23:35:14" itemprop="dateModified" datetime="2022-07-09T23:35:14+08:00">2022-07-09</time>
+                <time title="修改时间：2022-12-21 08:27:07" itemprop="dateModified" datetime="2022-12-21T08:27:07+08:00">2022-12-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -250,25 +245,16 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="好久不见，甚是想念"><a href="#好久不见，甚是想念" class="headerlink" title="好久不见，甚是想念"></a>好久不见，甚是想念</h2><p>一个多月没写博客了，毕业后学习时间少了，白天忙公司的项目，偶尔晚上有空看看自己想学的资料，自己还在做个地质分析仪的项目，每周日会花一天的时间做。为自己加油，2022年我还要完成这块FPGA的学习，感谢那位支持我学这块开发板的人。</p>
-<h2 id="安装Vivado"><a href="#安装Vivado" class="headerlink" title="安装Vivado"></a>安装Vivado</h2><ol>
-<li>下载vivado安装包，资料链接B盘：<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1eM7Sx-RmeYFE1ht_RPqxhw">https://pan.baidu.com/s/1eM7Sx-RmeYFE1ht_RPqxhw</a> 提取码：a8vu</li>
-<li>解压安装包到<strong>无中文路径的目录</strong>下，否则会出现安装包无法打开的情况。打开安装包，我在安装选件的页面取消了K系列、V系列和Soc Zynq的选件，安装空间要70GB左右，因此我还买了个1T的固态。</li>
-<li>激活只需要网上下载对应版本的激活licences，在激活页面load a licences即可。</li>
-</ol>
-<h2 id="软件操作"><a href="#软件操作" class="headerlink" title="软件操作"></a>软件操作</h2><ol>
-<li>Tools -&gt; Settings -&gt; Text Editor中选择编辑器，我选择的是notepad++，需要将编辑器路径加到系统环境变量。</li>
-<li>创建PLL IP核：<img src="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-2.jpg" alt="220708-XilinxFPGA点灯-2.jpg"></li>
-<li>功能仿真，RTL分析，综合，约束输入，设计实现都在左侧的Flow Navigator中。</li>
-</ol>
-<h2 id="流水灯"><a href="#流水灯" class="headerlink" title="流水灯"></a>流水灯</h2><ol>
-<li>New Project，芯片选择xc7a35tfgg484-2。<img src="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-1.jpg" alt="220708-XilinxFPGA点灯-1.jpg"></li>
-<li>Add Sources -&gt; Create File，创建led_top.v文件。</li>
-<li>Vivado中打开文件会调用Notepad++编辑器，编写流水灯代码：<img src="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-5.jpg" alt="220708-XilinxFPGA点灯-5.jpg"></li>
-<li>再功能仿真（可选），再综合、约束输入。</li>
-<li>最后生成bit流下载到开发板：<img src="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-4.jpg" alt="220708-XilinxFPGA点灯-4.jpg"></li>
-<li>Xilinx的集成开发环境要比Altera的好用不少，就是编译速度较慢。</li>
-</ol>
+        <h3 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h3><p>在学习FPGA时使用了DDR3，最近学ARM处理器也用到了DDR3的外设，在FPGA是使用 MIG(Memory Interface Generators)IP核驱动DDR3，ARM处理器是通过配置MMDC(Multi Mode DDR Controller)模块驱动DDR3，这编博客将会介绍使用DDR需配置的几个关键参数。</p>
+<p>SRAM操作流程、时序图可以浏览我之前的文章，<a href="/2021/12/19/211219-fpga%E4%B9%8Bsdram/">FPGA之SDRAM学习</a>。</p>
+<h3 id="关键参数"><a href="#关键参数" class="headerlink" title="关键参数"></a>关键参数</h3><h4 id="传输速率"><a href="#传输速率" class="headerlink" title="传输速率"></a>传输速率</h4><p>传输速率的单位是MT/s(Mega Transfer Per Second)，即每秒传输的百万次数，常见DDR3有800MT/s、1066MT/s、1333MT/s、1600MT/s等，这是首先需要考虑的，该参数决定了DDR的最高数据传输速率。</p>
+<h4 id="tRCD-参数"><a href="#tRCD-参数" class="headerlink" title="tRCD 参数"></a>tRCD 参数</h4><p>tRCD 全称是 RAS-to-CAS Delay，也就是<strong>行寻址到列寻址之间的延迟</strong>。 DDR 的寻址流程是先指定 BANK 地址，然后在指定行地址，最后指定列地址确定最终要寻址的单元。 BANK 地址和行地址是同时发出的，这个命令叫做<strong>行激活</strong>(Row Active)。行激活以后就发送列地址和具体的操作命令(读还是写)，这两个是同时发出的，因此一般也用<strong>读/写命令</strong>表示<strong>列寻址</strong>。在行有效(行激活)到读/写命令发出的这段时间间隔叫做 tRCD。</p>
+<h4 id="CL-参数"><a href="#CL-参数" class="headerlink" title="CL 参数"></a>CL 参数</h4><p>当列地址发出以后就会触发数据传输，但是从数据从存储单元到内存芯片 IO 接口上还需要一段时间，这段时间就是非常著名的 CL(CAS Latency)，也就是<strong>列地址选通潜伏期</strong>。</p>
+<h4 id="AL-参数"><a href="#AL-参数" class="headerlink" title="AL 参数"></a>AL 参数</h4><p>在 DDR 的发展中，提出了一个前置 CAS 的概念，目的是为了解决 DDR 中的指令冲突，它允许 CAS 信号紧随着 RAS 发送，相当于将 DDR 中的 CAS 前置了。但是读/写操作并没有因此提前，依旧要保证足够的延迟/潜伏期，为此引入了 AL(Additive Latency)，单位也是时钟周期数。 AL+CL 组成了 RL(Read Latency)，从 DDR2 开始还引入了写潜伏期 WL(Write Latency)，WL 表示写命令发出以后到第一笔数据写入的潜伏期。</p>
+<h4 id="tRAS-参数"><a href="#tRAS-参数" class="headerlink" title="tRAS 参数"></a>tRAS 参数</h4><p>RAS active time，也指Active to Precharge Delay，行有效至行预充电时间。是指从收到一个请求后到初始化RAS(行地址选通脉冲)真正开始接受数据的间隔时间，tRAS 是 ACTIVE 命令到 PRECHARGE 命令之间的最小时间，tRAS=tRCD+tWR。</p>
+<h3 id="其他参数"><a href="#其他参数" class="headerlink" title="其他参数"></a>其他参数</h3><h4 id="tRP-参数"><a href="#tRP-参数" class="headerlink" title="tRP 参数"></a>tRP 参数</h4><p>在发出预充电命令之后，要经过一段时间才能允许发送RAS行有效命令打开新的工作行，这个间隔被称为tRP（RAS Precharge time，预充电有效时间）。</p>
+<h4 id="tRC-参数"><a href="#tRC-参数" class="headerlink" title="tRC 参数"></a>tRC 参数</h4><p>tRC(Row Cycle Time)，表示“SDRAM行周期时间”，它是包括行单元预充电到激活在内的整个过程所需要的最小的时钟周期数，是两个 ACTIVE 命令或者 ACTIVE 命令到 REFRESH 命令之间的周期。tRC=tRAS+tRP。如果tRC的时间过长，会因在完成整个时钟周期后激活新的地址而等待无谓的延时，而降低性能。然而如果该值设置过小，在被激活的行单元被充分充电之前，新的周期就可以被初始化，也会导致数据丢失和损坏。</p>
+<h4 id="tWR-参数"><a href="#tWR-参数" class="headerlink" title="tWR 参数"></a>tWR 参数</h4><p>由于数据信号由控制端发出，输入时芯片无需做任何调校，只需直接传到数据输入寄存器中，然后再由写入驱动器进行对存储电容的充电操作，因此数据可以与CAS同时发送，也就是说写入延迟为0。不过，数据并不是即时地写入存储电容，因为选通三极管（就如读取时一样）与电容的充电必须要有一段时间，所以数据的真正写入需要一定的周期。为了保证数据的可靠写入，都会留出足够的写入/校正时间（tWR，Write Recovery Time），这个操作也被称作写回（Write Back）。tWR至少占用一个时钟周期或再多一点（时钟频率越高，tWR占用周期越多）。</p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
     </div>
 
@@ -284,13 +270,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/" rel="prev" title="交叉编译工具链的使用">
-      <i class="fa fa-chevron-left"></i> 交叉编译工具链的使用
+    <a href="/2022/11/29/221129-j1939/" rel="prev" title="基于CAN2.0的J1939协议">
+      <i class="fa fa-chevron-left"></i> 基于CAN2.0的J1939协议
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/" rel="next" title="RC振荡器 晶体振荡器">
-      RC振荡器 晶体振荡器 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -349,7 +332,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A5%BD%E4%B9%85%E4%B8%8D%E8%A7%81%EF%BC%8C%E7%94%9A%E6%98%AF%E6%83%B3%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">好久不见，甚是想念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Vivado"><span class="nav-number">2.</span> <span class="nav-text">安装Vivado</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AF%E4%BB%B6%E6%93%8D%E4%BD%9C"><span class="nav-number">3.</span> <span class="nav-text">软件操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E6%B0%B4%E7%81%AF"><span class="nav-number">4.</span> <span class="nav-text">流水灯</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B5%B7%E5%9B%A0"><span class="nav-number">1.</span> <span class="nav-text">起因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%8F%82%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">关键参数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%A0%E8%BE%93%E9%80%9F%E7%8E%87"><span class="nav-number">2.1.</span> <span class="nav-text">传输速率</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tRCD-%E5%8F%82%E6%95%B0"><span class="nav-number">2.2.</span> <span class="nav-text">tRCD 参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CL-%E5%8F%82%E6%95%B0"><span class="nav-number">2.3.</span> <span class="nav-text">CL 参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AL-%E5%8F%82%E6%95%B0"><span class="nav-number">2.4.</span> <span class="nav-text">AL 参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tRAS-%E5%8F%82%E6%95%B0"><span class="nav-number">2.5.</span> <span class="nav-text">tRAS 参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%8F%82%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">其他参数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#tRP-%E5%8F%82%E6%95%B0"><span class="nav-number">3.1.</span> <span class="nav-text">tRP 参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tRC-%E5%8F%82%E6%95%B0"><span class="nav-number">3.2.</span> <span class="nav-text">tRC 参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tWR-%E5%8F%82%E6%95%B0"><span class="nav-number">3.3.</span> <span class="nav-text">tWR 参数</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
