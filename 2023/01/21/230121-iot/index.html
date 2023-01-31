@@ -27,13 +27,13 @@
 <meta property="og:site_name" content="永恆博客网">
 <meta property="og:description" content="前言这篇文章是对之前文章【LTE Cat.1模块和阿里云物联网平台使用】的一个补充。之前只介绍了阿里云物联网平台如何创建产品、添加设备、添加物模型概述，缺少对消息解析、物模型展示的使用介绍，导致我这次用阿里云物联网平台时花了将近半天的时间在做之前做过又忘记怎么做的事情。本文就来介绍下消息解析、物模型展示的功能。 另外阿里云免费的物联网平台公共实例的资源包将于2023年2月20日下线，我看企业版的最">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2023/01/21/230121-iot/230121-iot-1.jpg">
-<meta property="og:image" content="http://example.com/2023/01/21/230121-iot/230121-iot-2.jpg">
+<meta property="og:image" content="https://hao0527.gitee.io/230121-iot/230121-iot-1.jpg">
+<meta property="og:image" content="https://hao0527.gitee.io/230121-iot/230121-iot-2.jpg">
 <meta property="article:published_time" content="2023-01-21T13:00:00.000Z">
-<meta property="article:modified_time" content="2023-01-22T15:52:41.047Z">
+<meta property="article:modified_time" content="2023-01-31T15:40:50.880Z">
 <meta property="article:author" content="Hao">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2023/01/21/230121-iot/230121-iot-1.jpg">
+<meta name="twitter:image" content="https://hao0527.gitee.io/230121-iot/230121-iot-1.jpg">
 
 <link rel="canonical" href="http://example.com/2023/01/21/230121-iot/">
 
@@ -221,7 +221,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-01-22 23:52:41" itemprop="dateModified" datetime="2023-01-22T23:52:41+08:00">2023-01-22</time>
+                <time title="修改时间：2023-01-31 23:40:50" itemprop="dateModified" datetime="2023-01-31T23:40:50+08:00">2023-01-31</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -251,7 +251,7 @@
         <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>这篇文章是对之前文章【<a href="2021/12/17/211217-ltecat1/">LTE Cat.1模块和阿里云物联网平台使用</a>】的一个补充。之前只介绍了阿里云物联网平台如何创建产品、添加设备、添加物模型概述，缺少对消息解析、物模型展示的使用介绍，导致我这次用阿里云物联网平台时花了将近半天的时间在做之前做过又忘记怎么做的事情。本文就来介绍下<strong>消息解析</strong>、<strong>物模型展示</strong>的功能。</p>
 <p>另外阿里云免费的物联网平台公共实例的资源包将于2023年2月20日下线，我看企业版的最便宜的也要700元/月，我这种添加一个设备调试用的不能白嫖了，到时候需要的话只能包一台服务器自己搭个MQTT划算点了，或者看看其他云服务商那能不能白嫖😂。</p>
 <h3 id="添加物模型"><a href="#添加物模型" class="headerlink" title="添加物模型"></a>添加物模型</h3><p>在<strong>设备管理-&gt;产品-&gt;对应产品名称-&gt;功能定义-&gt;编辑草稿</strong>中添加物模型数据，功能类型有<strong>属性、服务、事件</strong>，我目前只使用到了属性类型，编辑完成后发布上线即可，下面是我这次调试模块用到的物模型功能定义：</p>
-<p><img src="/2023/01/21/230121-iot/230121-iot-1.jpg" alt="img"></p>
+<p><img src="https://hao0527.gitee.io/230121-iot/230121-iot-1.jpg" alt="img"></p>
 <h3 id="消息解析"><a href="#消息解析" class="headerlink" title="消息解析"></a>消息解析</h3><p>在<strong>设备管理-&gt;产品-&gt;对应产品名称-&gt;消息解析-&gt;编辑草稿</strong>中编写消息解析的脚本代码，有<strong>js、Python、php</strong>三种语言可供选择，我选择的是Python。消息解析有<a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/149962.html">自定义Topic消息解析</a>和<a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/66640.html">物模型消息解析</a>两种，创建产品时数据格式选择<strong>透传/自定义</strong>，消息解析里才有设备上报数据和设备接收数据，数据格式选ICA 标准数据格式(Alink JSON)，消息解析里只有自定义Topic消息解析。通过看模拟输入中模拟类型有哪些，可以知道是否支持某种消息类型的数据解析。</p>
 <h4 id="自定义Topic消息解析"><a href="#自定义Topic消息解析" class="headerlink" title="自定义Topic消息解析"></a>自定义Topic消息解析</h4><p>设备通过携带解析标记<code>?_sn=default</code>的自定义Topic上报自定义格式消息时，物联网平台收到消息数据后，需调用消息解析脚本将自定义格式数据转换为JSON结构体，再流转给后续业务系统。例如，设备发送到Topic <code>/$&#123;productKey&#125;/$&#123;deviceName&#125;/user/update</code>的消息需要解析为JSON格式，在开发设备端时，就需配置该Topic为：<code>/$&#123;productKey&#125;/$&#123;deviceName&#125;/user/update?_sn=default</code>。</p>
 <p>在Python脚本中，自定义Topic消息解析的接口函数名为<code>transform_payload(topic, rawData)</code>，可以根据不同的topic选择不同的解析方式。</p>
@@ -261,7 +261,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">ALINK_PROP_REPORT_METHOD = <span class="string">&#x27;thing.event.property.post&#x27;</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">raw_data_to_protocol</span>(<span class="params">rawData</span>):</span><br><span class="line">    uint8Array = []</span><br><span class="line">    <span class="keyword">for</span> byteValue <span class="keyword">in</span> rawData:</span><br><span class="line">        uint8Array.append(byteValue &amp; <span class="number">0xff</span>)</span><br><span class="line">    </span><br><span class="line">    jsonMap = &#123;&#125;</span><br><span class="line">    params = &#123;&#125;</span><br><span class="line">    params[<span class="string">&#x27;status&#x27;</span>] = uint8Array[<span class="number">0</span>]</span><br><span class="line">    params[<span class="string">&#x27;error&#x27;</span>] = uint8Array[<span class="number">1</span>]</span><br><span class="line">    params[<span class="string">&#x27;validIDNum&#x27;</span>] = uint8Array[<span class="number">2</span>]</span><br><span class="line">    params[<span class="string">&#x27;errorSlave&#x27;</span>] = uint8Array[<span class="number">3</span>]</span><br><span class="line">    params[<span class="string">&#x27;idallocTimes&#x27;</span>] = uint8Array[<span class="number">4</span>]</span><br><span class="line">    params[<span class="string">&#x27;costTime&#x27;</span>] = (uint8Array[<span class="number">6</span>]|(uint8Array[<span class="number">7</span>]&lt;&lt;<span class="number">8</span>))		<span class="comment"># 非单字节变量注意大小端</span></span><br><span class="line">    params[<span class="string">&#x27;successCnt&#x27;</span>] = (uint8Array[<span class="number">8</span>]|(uint8Array[<span class="number">9</span>]&lt;&lt;<span class="number">8</span>)|(uint8Array[<span class="number">10</span>]&lt;&lt;<span class="number">16</span>)|(uint8Array[<span class="number">11</span>]&lt;&lt;<span class="number">24</span>))</span><br><span class="line">    params[<span class="string">&#x27;errorCnt&#x27;</span>] = (uint8Array[<span class="number">12</span>]|(uint8Array[<span class="number">13</span>]&lt;&lt;<span class="number">8</span>)|(uint8Array[<span class="number">14</span>]&lt;&lt;<span class="number">16</span>)|(uint8Array[<span class="number">15</span>]&lt;&lt;<span class="number">24</span>))</span><br><span class="line">    jsonMap[<span class="string">&#x27;params&#x27;</span>] = params		<span class="comment"># 物模型中的属性添加到params中，再加到jsonMap</span></span><br><span class="line">    jsonMap[<span class="string">&#x27;method&#x27;</span>] = ALINK_PROP_REPORT_METHOD	<span class="comment"># 标准的Alink JSON必须要加method</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> jsonMap</span><br></pre></td></tr></table></figure>
 
 <h3 id="物模型显示效果"><a href="#物模型显示效果" class="headerlink" title="物模型显示效果"></a>物模型显示效果</h3><p>这次应用是有软件模块过年放假期间需要测试，我用4G Cat.1模块传到阿里云物联网平台记录数据，最终物模型显示效果如下图：</p>
-<p><img src="/2023/01/21/230121-iot/230121-iot-2.jpg" alt="img"></p>
+<p><img src="https://hao0527.gitee.io/230121-iot/230121-iot-2.jpg" alt="img"></p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
     </div>
 
