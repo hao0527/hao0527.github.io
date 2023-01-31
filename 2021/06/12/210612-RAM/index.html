@@ -27,12 +27,12 @@
 <meta property="og:site_name" content="永恆博客网">
 <meta property="og:description" content="参考 浅谈关于SRAM与DRAM的区别  SRAM与DRAM的区别​        SRAM(Static RAM)与DRAM(Dynamic RAM)，从名字上看，SRAM与DRAM的区别只在于一个是静态一个是动态。由于SRAM不需要刷新电路就能够保存数据，所以具有静止存取数据的作用。而DRAM则需要不停地刷新电路，否则内部的数据将会消失。而且不停刷新电路的功耗是很高的，在我们的PC待机时消耗的">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2021/06/12/210612-RAM/210612-RAM-1.jpg">
+<meta property="og:image" content="https://hao0527.gitee.io/210612-RAM/210612-RAM-1.jpg">
 <meta property="article:published_time" content="2021-06-12T01:00:00.000Z">
-<meta property="article:modified_time" content="2021-06-12T01:12:56.967Z">
+<meta property="article:modified_time" content="2023-01-31T16:01:48.544Z">
 <meta property="article:author" content="Hao">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2021/06/12/210612-RAM/210612-RAM-1.jpg">
+<meta name="twitter:image" content="https://hao0527.gitee.io/210612-RAM/210612-RAM-1.jpg">
 
 <link rel="canonical" href="http://example.com/2021/06/12/210612-RAM/">
 
@@ -212,10 +212,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-06-12 09:00:00 / 修改时间：09:12:56" itemprop="dateCreated datePublished" datetime="2021-06-12T09:00:00+08:00">2021-06-12</time>
+              <time title="创建时间：2021-06-12 09:00:00" itemprop="dateCreated datePublished" datetime="2021-06-12T09:00:00+08:00">2021-06-12</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-02-01 00:01:48" itemprop="dateModified" datetime="2023-02-01T00:01:48+08:00">2023-02-01</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -246,7 +252,7 @@
 </ul>
 <h3 id="SRAM与DRAM的区别"><a href="#SRAM与DRAM的区别" class="headerlink" title="SRAM与DRAM的区别"></a>SRAM与DRAM的区别</h3><p>​        SRAM(Static RAM)与DRAM(Dynamic RAM)，从名字上看，SRAM与DRAM的区别只在于一个是静态一个是动态。由于SRAM不需要刷新电路就能够保存数据，所以具有静止存取数据的作用。而DRAM则需要不停地刷新电路，否则内部的数据将会消失。而且不停刷新电路的功耗是很高的，在我们的PC待机时消耗的电量有很大一部分都来自于对内存的刷新。那么为什么我们不用SRAM来作为内存呢？</p>
 <p><strong>SRAM的基本单元结构图</strong> 和 <strong>DRAM的基本单元结构图</strong></p>
-<p><img src="/2021/06/12/210612-RAM/210612-RAM-1.jpg" alt="210612-RAM-1.jpg"></p>
+<p><img src="https://hao0527.gitee.io/210612-RAM/210612-RAM-1.jpg" alt="210612-RAM-1.jpg"></p>
 <p>​        SRAM存储一位需要花6个晶体管，而DRAM只需要花一个电容和一个晶体管。cache（高速缓冲存储器）追求的是速度所以选择SRAM，而内存则追求容量所以选择能够在相同空间中存放更多内容并且造价相对低廉的DRAM。</p>
 <p>​        我们姑且不去讨论关于SRAM是如何静态存储数据（触发器）的。为什么DRAM需要不断刷新呢？</p>
 <p>​        DRAM的数据实际上是存在电容里的。而电容放久了，内部的电荷就会越来越少，对外就形成不了电位的变化。而且当对DRAM进行读操作的时候需要将电容与外界形成回路，通过检查是否有电荷流进或流出来判断该bit是1还是0。所以无论怎样，在读操作中我们都破坏了原来的数据。所以在读操作结束后需要将数据写回DRAM中。在整个读或者写操作的周期中，计算机都会进行DRAM的刷新，通常是刷新的周期是4ms-64ms。</p>
