@@ -185,6 +185,240 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/12/220512-Git%E5%92%8CSVN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/12/220512-Git%E5%92%8CSVN/" class="post-title-link" itemprop="url">Git和SVN</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-12 21:00:00" itemprop="dateCreated datePublished" datetime="2022-05-12T21:00:00+08:00">2022-05-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-02-01 00:01:48" itemprop="dateModified" datetime="2023-02-01T00:01:48+08:00">2023-02-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="Git和SVN"><a href="#Git和SVN" class="headerlink" title="Git和SVN"></a>Git和SVN</h2><p>公司里常用的两种版本控制工具：Git和SVN，两者最大的区别就是Git是分布式，SVN是集中式。<strong>集中式</strong>的版本控制系统都有一个单一的集中管理的服务器，保存所有文件的修订版本，而协同工作的人们都通过客户端连到这台服务器，取出最新的文件或者提交更新。 <strong>分布式</strong>的版本控制系统都有一个单一的集中管理的服务器，保存所有文件的修订版本，而协同工作的人们在自己本地也会创建一个库，用于保存自己的修改与提交，之后再将自己库提交至服务器库进行更新。</p>
+<p><strong>Subversion的特点概括起来主要由以下几条：</strong></p>
+<ul>
+<li>每个版本库有唯一的URL（官方地址），每个用户都从这个地址获取代码和数据；</li>
+<li>获取代码的更新，也只能连接到这个唯一的版本库，同步以取得最新数据；</li>
+<li>提交必须有网络连接（非本地版本库）；</li>
+<li>提交需要授权，如果没有写权限，提交会失败；</li>
+<li>提交并非每次都能够成功。如果有其他人先于你提交，会提示“改动基于过时的版本，先更新再提交”… 诸如此类；</li>
+<li>冲突解决是一个提交速度的竞赛：手快者，先提交，平安无事；手慢者，后提交，可能遇到麻烦的冲突解决；</li>
+</ul>
+<p><strong>Git具有以下特点：</strong></p>
+<ul>
+<li>Git中每个克隆(clone)的版本库都是平等的。你可以从任何一个版本库的克隆来创建属于你自己的版本库，同时你的版本库也可以作为源提供给他人，只要你愿意；</li>
+<li>Git的每一次提取操作，实际上都是一次对代码仓库的完整备份；</li>
+<li>提交完全在本地完成，无须别人给你授权，你的版本库你作主，并且提交总是会成功；</li>
+<li>甚至基于旧版本的改动也可以成功提交，提交会基于旧的版本创建一个新的分支；</li>
+<li>Git的提交不会被打断，直到你的工作完全满意了，PUSH给他人或者他人PULL你的版本库，合并会发生在PULL和PUSH过程中，不能自动解决的冲突会提示您手工完成；</li>
+<li>冲突解决不再像是SVN一样的提交竞赛，而是在需要的时候才进行合并和冲突解决；</li>
+<li>Git 也可以模拟集中式的工作模式，Git版本库统一放在服务器中，Git 的集中式工作模式非常灵活；</li>
+<li>可以为 Git 版本库进行授权：谁能创建版本库，谁能向版本库PUSH，谁能够读取（克隆）版本库;</li>
+<li>团队的成员先将服务器的版本库克隆到本地；并经常的从服务器的版本库拉（PULL）最新的更新；</li>
+<li>团队的成员将自己的改动推（PUSH）到服务器的版本库中，当其他人和版本库同步（PULL）时，会自动获取改变；</li>
+<li>你完全可以在脱离Git服务器所在网络的情况下，如移动办公或出差时，照常使用代码库；</li>
+<li>你只需要在能够接入Git服务器所在网络时，PULL和PUSH即可完成和服务器同步以及提交；</li>
+<li>Git提供 rebase 命令，可以让你的改动看起来是基于最新的代码实现的改动；</li>
+<li>Git 有更多的工作模式可以选择，远非 Subversion可比；</li>
+<li>Git 分支是指针指向某次提交，而 SVN 分支是拷贝的目录，这个特性使 Git 的分支切换非常迅速，且创建成本非常低；</li>
+</ul>
+<h2 id="Git基本概念和常用命令"><a href="#Git基本概念和常用命令" class="headerlink" title="Git基本概念和常用命令"></a>Git基本概念和常用命令</h2><ul>
+<li><strong>工作区：</strong>就是你在电脑里能看到的目录。</li>
+<li><strong>暂存区：</strong>英文叫 stage 或 index。一般存放在 <strong>.git</strong> 目录下的 index 文件（.git/index）中，所以我们把暂存区有时也叫作索引（index）。</li>
+<li><strong>版本库：</strong>工作区有一个隐藏目录 <strong>.git</strong>，这个不算工作区，而是 Git 的版本库，版本库可分为远程仓库和本地仓库。<br><img src="https://hao0527.gitee.io/220512-Git%E5%92%8CSVN/220512-Git%E5%92%8CSVN-1.jpg" alt="220512-Git和SVN-1.jpg"></li>
+</ul>
+<p>Git 常用的是以下 6 个命令：<strong>git clone</strong>、<strong>git push</strong>、<strong>git add</strong> 、<strong>git commit</strong>、<strong>git checkout</strong>、<strong>git pull</strong><br><img src="https://hao0527.gitee.io/220512-Git%E5%92%8CSVN/220512-Git%E5%92%8CSVN-2.jpg" alt="220512-Git和SVN-2.jpg"></p>
+<p> git 创建仓库的命令：</p>
+<table>
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>git init</code></td>
+<td align="left">初始化仓库</td>
+</tr>
+<tr>
+<td align="left"><code>git clone</code></td>
+<td align="left">拷贝一份远程仓库，也就是下载一个项目。</td>
+</tr>
+</tbody></table>
+<p>提交与修改的命令：</p>
+<table>
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>git add</code></td>
+<td align="left">添加文件到暂存区</td>
+</tr>
+<tr>
+<td align="left"><code>git status</code></td>
+<td align="left">查看仓库当前的状态，显示有变更的文件。</td>
+</tr>
+<tr>
+<td align="left"><code>git diff</code></td>
+<td align="left">比较文件的不同，即暂存区和工作区的差异。</td>
+</tr>
+<tr>
+<td align="left"><code>git commit</code></td>
+<td align="left">提交暂存区到本地仓库。</td>
+</tr>
+<tr>
+<td align="left"><code>git reset</code></td>
+<td align="left">回退版本。</td>
+</tr>
+<tr>
+<td align="left"><code>git rm</code></td>
+<td align="left">删除工作区文件。</td>
+</tr>
+<tr>
+<td align="left"><code>git mv</code></td>
+<td align="left">移动或重命名工作区文件。</td>
+</tr>
+</tbody></table>
+<p>提交日志的命令：</p>
+<table>
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>git log</code></td>
+<td align="left">查看历史提交记录</td>
+</tr>
+<tr>
+<td align="left"><code>git blame </code></td>
+<td align="left">以列表形式查看指定文件的历史修改记录</td>
+</tr>
+</tbody></table>
+<p>远程操作的命令：</p>
+<table>
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>git remote</code></td>
+<td align="left">远程仓库操作</td>
+</tr>
+<tr>
+<td align="left"><code>git fetch</code></td>
+<td align="left">从远程获取代码库</td>
+</tr>
+<tr>
+<td align="left"><code>git pull</code></td>
+<td align="left">下载远程代码并合并</td>
+</tr>
+<tr>
+<td align="left"><code>git push</code></td>
+<td align="left">上传远程代码并合并</td>
+</tr>
+</tbody></table>
+<p>Git 分支管理：<a target="_blank" rel="noopener" href="https://www.runoob.com/git/git-branch.html">https://www.runoob.com/git/git-branch.html</a><br>Git 查看提交历史：<a target="_blank" rel="noopener" href="https://www.runoob.com/git/git-commit-history.html">https://www.runoob.com/git/git-commit-history.html</a><br>Git 标签：<a target="_blank" rel="noopener" href="https://www.runoob.com/git/git-tag.html">https://www.runoob.com/git/git-tag.html</a><br>更多命令查看Git完整命令手册地址：<a target="_blank" rel="noopener" href="http://git-scm.com/docs">http://git-scm.com/docs</a></p>
+<h2 id="Tortoise-SVN"><a href="#Tortoise-SVN" class="headerlink" title="Tortoise SVN"></a>Tortoise SVN</h2><p>SVN教程：<a target="_blank" rel="noopener" href="https://www.runoob.com/svn/svn-tutorial.html">https://www.runoob.com/svn/svn-tutorial.html</a></p>
+<p>TortoiseSVN 是 SVN(Subversion) 版本控制系统的一个免费开源客户端，可以超越时间的管理文件和目录。TortoiseSVN 使用教程：<a target="_blank" rel="noopener" href="https://www.runoob.com/svn/tortoisesvn-intro.html">https://www.runoob.com/svn/tortoisesvn-intro.html</a></p>
+<p>企业通常是使用TortoiseSVN提供的图像化界面操作，使用较简单。Windows的Git提供了GitGUI，也可以使用TortoiseGit，配置参数也有图形化界面，之前实习的一家公司就是 TortoiseGit 和 TortoiseSVN 。</p>
+<h2 id="版本管控工具分支管理"><a href="#版本管控工具分支管理" class="headerlink" title="版本管控工具分支管理"></a>版本管控工具分支管理</h2><h3 id="SVN分支管理策略"><a href="#SVN分支管理策略" class="headerlink" title="SVN分支管理策略"></a>SVN分支管理策略</h3><ul>
+<li>trunk(主干|主线|主分支)：是用来做主方向开发的，新功能的开发应放在主线中，当模块开发完成后，需要修改，就用branch。</li>
+<li>branches(分支)：分支开发和主线开发是可以同时进行的，也就是并行开发，分支通常用于修复bug时使用。</li>
+<li>tags (标记)：用于标记某个可用的版本，可以标记已经上线发布的版本，也可以标记正在测试的版本，通常是只读的。</li>
+</ul>
+<p>branch是用来做并行开发的，这里的并行是指和trunk进行比较。比如，3.0开发完成，这个时候要做一个tag，tag_release_3_0，然后基于这个tag做release，比如安装程序等。trunk进入3.1的开发，但是3.0发现了bug，那么就需要基于tag_release_3_0做一个branch，branch_bugfix_3_0，基于这个branch进行bugfix，等到bugfix结束，做一个tag，tag_release_3_0_1，然后，根据需要决定branch_bugfix_3_0是否并入trunk。</p>
+<h3 id="Git分支管理策略"><a href="#Git分支管理策略" class="headerlink" title="Git分支管理策略"></a>Git分支管理策略</h3><p><strong>Git Flow模型</strong>中定义了主分支和辅助分支两类分支。其中主分支用于组织与软件开发、部署相关的活动，辅助分支组织用于解决特定的问题而进行的各种开发活动。Git Flow开发模型从源代码管理角度对通常意义上的软件开发活动进行了约束，为软件开发提供了一个可供参考的管理模型。Git Flow开发模型让代码仓库保持整洁，让小组各个成员之间的开发相互隔离，能够有效避免处于开发状态中的代码相互影响而导致的效率低下和混乱。</p>
+<p>Git Flow模型的特点是只有2个主干分支，Master和Develop分支：Master分支上只有稳定的生产版本，Develop分支用于集成。其中还涉及到HotFix分支。而其他还有三类分支：Feature分支用于开发人员各自开发；Release用于代码合并和集成；HotFix用于产品版本代码的紧急修订。</p>
+<p><strong>master分支</strong>通常只能从其它分支合并，不能在master分支直接修改。master分支上存放的是随时可供在生产环境中部署的代码（Production Ready state）。当开发活动到一定阶段，产生一份新的可供部署的代码时，master分支上的代码会被更新。同时，每一次更新，最好添加对应的版本号标签（TAG），所有在Master分支上的Commit应该打Tag。</p>
+<p><strong>develop分支</strong>是保持当前开发最新成果的分支，一般会在此分支上进行晚间构建（Nightly Build）并执行自动化测试。develop分支产生于master分支, 并长期存在。当一个版本功能开发完毕且通过测试功能稳定时，就会合并到master分支上，并打好带有相应版本号的tag。develop分支是主开发分支，包含所有要发布到下一个Release的代码，主要合并其它分支，比如Feature分支。</p>
+<p><strong>辅助分支</strong>是用于组织解决特定问题的各种软件开发活动的分支。辅助分支主要用于组织软件新功能的并行开发、简化新功能开发代码的跟踪、辅助完成版本发布工作以及对生产代码的缺陷进行紧急修复工作。辅助分支通常只会在有限的时间范围内存在。辅助分支包括用于开发新功能时所使用的feature分支，用于辅助版本发布的release分支，用于修正生产代码中的缺陷的hotfix分支。辅助分支都有固定的使用目的和分支操作限制。通过对分支的命名，定义了使用辅助分支的方法。</p>
+<p><strong>feature分支</strong>可以从develop分支派生。feature分支的命名可以使用除master，develop，release-*，hotfix-*之外的任何名称。feature分支（topic分支）通常在开发一项新的软件功能的时候使用，分支上的代码变更最终合并回develop分支或者干脆被抛弃掉（例如实验性且效果不好的代码变更）。一般而言，feature分支代码可以保存在开发者自己的代码库中而不强制提交到主代码库里。Feature分支开发完成后，必须合并回Develop分支，合并完分支后一般会删feature分支，但也可以保留。</p>
+<p><strong>release分支</strong>可以从develop分支派生。release分支是为发布新的产品版本而设计的。在release分支上的代码允许做测试、bug修改、准备发布版本所需的各项说明信息（版本号、发布时间、编译时间等）。通过在release分支上进行发布相关工作可以让develop分支空闲出来以接受新的feature分支上的代码提交，进入新的软件开发迭代周期。当develop分支上的代码已经包含了所有即将发布的版本中所计划包含的软件功能，并且已通过所有测试时，可以考虑准备创建release分支。而所有在当前即将发布的版本外的业务需求一定要确保不能混到release分支内（避免由此引入一些不可控的系统缺陷）。成功的派生release分支并被赋予版本号后，develop分支就可以为下一个版本服务。版本号的命名可以依据项目定义的版本号命名规则进行。发布Release分支时，合并Release到Master和Develop， 同时在Master分支上打个Tag记住Release版本号，然后就可以删除Release分支。</p>
+<p><strong>hotfix分支</strong>可以从master分支派生。hotfix分支是计划外创建的，可以产生一个新的可供在生产环境部署的软件版本。当生产环境中的软件遇到异常情况或者发现了严重到必须立即修复的软件缺陷时，就需要从master分支上指定的TAG版本派生hotfix分支来组织代码的紧急修复工作。优点是不会打断正在进行的develop分支的开发工作，能够让团队中负责新功能开发的人与负责代码紧急修复的人并行的开展工作。hotfix分支基于Master分支创建，开发完后需要合并回Master和Develop分支，同时在Master上打一个tag。</p>
+<h2 id="使用Git遇到的问题"><a href="#使用Git遇到的问题" class="headerlink" title="使用Git遇到的问题"></a>使用Git遇到的问题</h2><h3 id="Git-tag"><a href="#Git-tag" class="headerlink" title="Git tag"></a>Git tag</h3><p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_21746331/article/details/1207767">GIT 中如何打标签（git tag）</a></p>
+<p><img src="https://hao0527.gitee.io/220512-Git%E5%92%8CSVN/220512-Git%E5%92%8CSVN-3.jpg" alt="220512-Git和SVN-3.jpg"></p>
+<h3 id="Git-show"><a href="#Git-show" class="headerlink" title="Git show"></a>Git show</h3><p>给历史版本打标签时用的commit可以通过git show查看历史版本的hash。</p>
+<p><img src="https://hao0527.gitee.io/220512-Git%E5%92%8CSVN/220512-Git%E5%92%8CSVN-4.jpg" alt="220512-Git和SVN-4.jpg"></p>
+<h3 id="Git-log"><a href="#Git-log" class="headerlink" title="Git log"></a>Git log</h3><p>查看提交日志，当你要修改历史提交前，你可以通过git log看看要修改第几次的提交。</p>
+<p><img src="https://hao0527.gitee.io/220512-Git%E5%92%8CSVN/220512-Git%E5%92%8CSVN-5.jpg" alt="220512-Git和SVN-5.jpg"></p>
+<h3 id="Git-rebase"><a href="#Git-rebase" class="headerlink" title="Git rebase"></a>Git rebase</h3><p>通过git rebase可以修改历史的版本，参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_62277266/article/details/124260568">Git系列之修改历史提交信息</a>，使用rebase指令后会在vi编辑器中选择要修改哪次提交，然后通过vi编辑器修改提交的内容。</p>
+<p>注意：异常退出可能导致文件丢失，不要慌终端有提示如何恢复。</p>
+<p><img src="https://hao0527.gitee.io/220512-Git%E5%92%8CSVN/220512-Git%E5%92%8CSVN-6.jpg" alt="220512-Git和SVN-6.jpg"></p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/11/220511-C%E8%AF%AD%E8%A8%80%E9%A2%84%E5%A4%84%E7%90%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1561,93 +1795,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/19/220119-%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E5%AF%92%E5%81%87/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/19/220119-%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E5%AF%92%E5%81%87/" class="post-title-link" itemprop="url">大学最后一个假期</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-01-19 20:00:00" itemprop="dateCreated datePublished" datetime="2022-01-19T20:00:00+08:00">2022-01-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-02-14 22:08:15" itemprop="dateModified" datetime="2022-02-14T22:08:15+08:00">2022-02-14</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%BF%99%E7%AE%97%E4%BB%80%E4%B9%88/" itemprop="url" rel="index"><span itemprop="name">这算什么</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="大学回忆录"><a href="#大学回忆录" class="headerlink" title="大学回忆录"></a>大学回忆录</h1><h2 id="大一上学期"><a href="#大一上学期" class="headerlink" title="大一上学期"></a>大一上学期</h2><p>回忆从开学前几日的寝室生活开始，<strong>室友都非常的好相处</strong>，大家在一起能玩的很嗨。再到大一我参加了两个学生会的部门（学生会办公室&amp;党员之家实践部）和一个社团（单车俱乐部），自己在部门里认识了些不同班级不同专业的朋友，也<strong>交到了一位知心</strong>，大一上学期我天天晚上会和他去健身房，或是去钱塘江边散步，或是在寝室喝酒，元旦跨年我去了他家里，人生中第一次和别人跨年。参与了学生会的活动演出和演讲还有优秀干部的竞选；</p>
-<h2 id="大一寒假"><a href="#大一寒假" class="headerlink" title="大一寒假"></a>大一寒假</h2><p>寒假里我一个人坐飞机去了山东蓬莱，找我高考结束后在华为上班认识的同事，蓬莱待了7天，青岛待了2天。独自旅行，去一个陌生的地方，享受孤独，思考人生，一个人狂欢。旅行结束回家后，我学习了郭天祥的<strong>十天学会51单片机</strong>，但并没有完全学会；</p>
-<h2 id="大一下学期"><a href="#大一下学期" class="headerlink" title="大一下学期"></a>大一下学期</h2><p>大一下学期有我喜欢的课程模电，我通过教同学们解题来学习这门课程，因此也<strong>交到了陪伴我至今的女朋友</strong>。除了模电课我还选了一门电子课程设计也非常喜欢，老师授课讲了51单片机的知识，课程做了51数字钟（我在5月19日晚上写完，拍了个51开发版显示520倒计时的视频），最后的作业是51小车。这学期学生会部门成员积极性变差了，我最后没有选择留任执委，选择了留在电子创新实验室（一待就是三年）；</p>
-<h2 id="大一暑假"><a href="#大一暑假" class="headerlink" title="大一暑假"></a>大一暑假</h2><p>暑假我留在实验室<strong>准备19年的全国大学生电子设计竞赛</strong>，暑假做了历年的题目（声音存储录放、风力摆、旋转倒立摆），那时候的我不知道熬夜会伤身体，每天白天调试，晚上在寝室看文档到凌晨2点。暑假里由于比较专注比赛，忘记关心女朋友，两人有过多次争执，女朋友不回消息，我直接去她家里了，就这样被她家人认识，至今我还常去她家蹭饭。这个暑假差一点点就分手了；</p>
-<h2 id="大二上学期"><a href="#大二上学期" class="headerlink" title="大二上学期"></a>大二上学期</h2><p>大二上学期，一开学和徐高东学长参加了<strong>工程训练大赛</strong>，那次比赛后感觉之前所有学过的东西都能联会贯通了。比赛的时候出现了意外，没有取得好成绩，东哥说了句：比赛不就是这样。随后我参加了<strong>飞思卡尔智能车竞赛</strong>，在校内训练的时候感觉都良好，本来计划我和洪晨益写程序，由于硬件画的板子实在惨不忍睹，就自己动手把硬件做完了，我那写代码的队友也很强，一人能维护好代码，那年寒假前我们俩调车调到学校关门。这学期，我和我的女朋友分手了，但几个星期又复合了，我们相互都很缺时间在一起交流；</p>
-<h2 id="大二寒假"><a href="#大二寒假" class="headerlink" title="大二寒假"></a>大二寒假</h2><p>那年是全世界肺炎流行的一年，寒假在家3个月，当然我也没闲着，趁家里无聊，打开电脑学了些东西，有<strong>python，tensorflow，sklearn，百度飞桨，git</strong>等，有潘利斌陪我一起学。疫情原因只能在家调飞卡，在家里把<strong>Altium Designer</strong>了一遍，画板子是没有问题了。3月在家网课，网课非常适合我，我可以不仅可以回放自己学校老师上课讲的，还能去B站慕课上找名校老师上课的视频；</p>
-<h2 id="大二下学期"><a href="#大二下学期" class="headerlink" title="大二下学期"></a>大二下学期</h2><p>中国疫情控制的很厉害，4月中就能返校了。这学期在学校主要是准备电赛，准备飞卡，飞卡参加的是<strong>AI组别</strong>，通过机器学习，训练后部署到单片机，实现自主规划路线；</p>
-<h2 id="大二暑假"><a href="#大二暑假" class="headerlink" title="大二暑假"></a>大二暑假</h2><p>暑假<strong>培训大一电赛新生</strong>，不过今年比赛延期了，暑假没有比赛。飞卡如期举行，离国赛就差0.02秒，怎么就这么可惜呀。电赛准备了很多模块，把模块间通信学的明明白白的，还有很多PCB上的设计规范也学了一遍，那年我们实验室都在看<strong>长江大学唐老师</strong>的教学视频。</p>
-<h2 id="大三上学期"><a href="#大三上学期" class="headerlink" title="大三上学期"></a>大三上学期</h2><p>大三上学期开始在黄道麒<strong>公司实习</strong>，老板非常厉害，抓住了疫情这个风口，做红外热像仪体温枪这些生意。公司离学校很近，我每天上完课就去公司，那段时间进步非常快，学的东西也非常多非常杂。用了好多品牌的国产mcu，用QT写了上位机，学习了二元光学。十月份<strong>浙江省电子大赛</strong>，作品实物验收满分取得了省二等奖，队友配合的非常棒！这学期上了算法与数据结构和数字逻辑设计、51汇编，非常感兴趣，买了块FPGA开发板练手；</p>
-<h2 id="大三寒假"><a href="#大三寒假" class="headerlink" title="大三寒假"></a>大三寒假</h2><p>寒假里我还在公司上班，老板让我住宾馆可以报销。寒假里我学习了<strong>linux应用开发</strong>，opencv，makefile，cmake，用树莓派做了个红外热像仪的demo。这个寒假我在公司借了很多书看，有linux的，opencv的，无线传感器网络的，感测技术的。在公司里和老板经常聊到很晚，我们谈未来的方向，谈生活时政等等，无所不谈，<strong>是一家有温度的公司</strong>；</p>
-<h2 id="大三下学期"><a href="#大三下学期" class="headerlink" title="大三下学期"></a>大三下学期</h2><p>这学期了解了一些<strong>网络安全，开关电源设计，搭建了blog</strong>，仍然在公司实习。搞的东西太杂了容易忘记自己学过什么，写写博客记录下的话翻到还能有印象。公司里主要是把之前用树莓派跑的demo移到了m4的mcu，另一个项目是用高云fpga做了ov2640的串并转换到mcu处理，练习了fpga。5月份之前飞卡的软件队友提出来要再参加一次，让我做一下硬件，这次我非常熟练，PCB最多就设计了两版就完成了硬件设计；</p>
-<h2 id="大三暑假"><a href="#大三暑假" class="headerlink" title="大三暑假"></a>大三暑假</h2><p>暑假去了一家做半导体芯片的公司实习，是属于系统集成部，公司平均年龄比较大，部门里同事都不怎么说话，公司氛围不太好，领导经常会骂别人很凶，我一看不对劲就溜溜球了。暑假在做wifi图传的项目，尝试用m4自己看数据手册写<strong>WiFi驱动</strong>，不过后来这事没成，换了<strong>esp32用idf</strong>开发。很早开始我就对网络感兴趣，可能未来也会多往这个方向发展；</p>
-<h2 id="大四上学期"><a href="#大四上学期" class="headerlink" title="大四上学期"></a>大四上学期</h2><p>大四第一学期在世界五百强<strong>博世</strong>上班，公司的氛围特别好，领导都很有管理的能力，同事之间办公都非常的舒心，博世是个不加班的外企，但是工作效率挺高的，流程虽多，但处理速度很快。我在博世工作了4个月，学习了高压交流的PCB设计，直流无刷电机，永磁同步电机，把电力这一块学了一遍，也了解了电机的控制算法，最简单的六步换向，还有FOC。可以说这次实习经历相当难忘，每个牛的公司，都有一群好的团队管理者。这学期，还报名考研了，算是把大学的知识复习了一下，没考好，以后也不会再有考研的想法了；</p>
-<h1 id="还有最后一个假期"><a href="#还有最后一个假期" class="headerlink" title="还有最后一个假期"></a>还有最后一个假期</h1><p>最后一个假期也没选择安逸，找了家做安防的公司实习，在这里我学到了<strong>linux驱动开发</strong>的知识，我的主管年龄挺大的技术很好，整个框架是他从头写出来的，我看git log一步步看他怎么写出来，太强了！面试的时候就被他的技术所吸引，这么强的人为人还非常谦虚，值得我去学习！在这里我重学了一年前了解过的<strong>makefile编写，shell脚本编程，C代码规范</strong>等等。看了主管写的几万行脚本代码，我再感叹到太强了！过年在家里自己系统的学了一遍计算机网络，本来还想学计算机组成原理和操作系统的，学操作系统的时候卡住了，看早期的linux源码也非常的费劲，只能推到我2月实习完回学校再学了；</p>
-<h1 id="致青春：如果没有源自内心的冲动，怎么可能登峰造极呢？"><a href="#致青春：如果没有源自内心的冲动，怎么可能登峰造极呢？" class="headerlink" title="致青春：如果没有源自内心的冲动，怎么可能登峰造极呢？"></a>致青春：<strong>如果没有源自内心的冲动，怎么可能登峰造极呢？</strong></h1><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1717,7 +1864,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-count">60</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

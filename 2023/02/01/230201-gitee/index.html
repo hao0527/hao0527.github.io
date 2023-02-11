@@ -20,19 +20,19 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="注册流程 在易名官网注册网站账号，实名认证（审核了半天） 选择好域名加入购物车，支付就可以，我的域名价格为35元一年  相关配置 注册完域名后进入后台-域名管理-我的域名  DNS使用的是易名DNS（免费版），网上听说易名DNS很烂，以后我再换一个DNS，易名DNS服务器是海外的，国内的DNS服务器需要备案，我的空间和服务器在本地，备案比较麻烦，就没备案  易名云解析中解析记录的一些配置如下  主">
+  <meta name="description" content="起因用Github部署静态站访问国内速度慢，主要表现有2个，一是首次请求页面打开慢，二是打开后图片加载慢。问题一原因是域名解析需要访问多个海外的DNS服务器，且Github静态站服务器也在海外，首次请求国内或本地没有缓存。问题二也是访问Github静态站服务器速度受限，图片和文本并发访问，文本比图片数据量小先加载完成显示。 本想将博客全部移到Gitee上，尝试部署又遇到三个问题，一是不能使用自己的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="喜提域名ihcode.cn（爱皓码）">
-<meta property="og:url" content="http://example.com/2021/05/04/210504-%E5%9F%9F%E5%90%8D/index.html">
+<meta property="og:title" content="Github静态博客访问速度慢，部署图片资源到其他服务器">
+<meta property="og:url" content="http://example.com/2023/02/01/230201-gitee/index.html">
 <meta property="og:site_name" content="永恆博客网">
-<meta property="og:description" content="注册流程 在易名官网注册网站账号，实名认证（审核了半天） 选择好域名加入购物车，支付就可以，我的域名价格为35元一年  相关配置 注册完域名后进入后台-域名管理-我的域名  DNS使用的是易名DNS（免费版），网上听说易名DNS很烂，以后我再换一个DNS，易名DNS服务器是海外的，国内的DNS服务器需要备案，我的空间和服务器在本地，备案比较麻烦，就没备案  易名云解析中解析记录的一些配置如下  主">
+<meta property="og:description" content="起因用Github部署静态站访问国内速度慢，主要表现有2个，一是首次请求页面打开慢，二是打开后图片加载慢。问题一原因是域名解析需要访问多个海外的DNS服务器，且Github静态站服务器也在海外，首次请求国内或本地没有缓存。问题二也是访问Github静态站服务器速度受限，图片和文本并发访问，文本比图片数据量小先加载完成显示。 本想将博客全部移到Gitee上，尝试部署又遇到三个问题，一是不能使用自己的">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-05-04T11:00:00.000Z">
-<meta property="article:modified_time" content="2021-05-06T06:59:13.757Z">
+<meta property="article:published_time" content="2023-02-01T08:00:00.000Z">
+<meta property="article:modified_time" content="2023-02-11T06:03:38.207Z">
 <meta property="article:author" content="Hao">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/2021/05/04/210504-%E5%9F%9F%E5%90%8D/">
+<link rel="canonical" href="http://example.com/2023/02/01/230201-gitee/">
 
 
 <script id="page-configurations">
@@ -45,7 +45,7 @@
   };
 </script>
 
-  <title>喜提域名ihcode.cn（爱皓码） | 永恆博客网</title>
+  <title>Github静态博客访问速度慢，部署图片资源到其他服务器 | 永恆博客网</title>
   
 
 
@@ -188,7 +188,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/04/210504-%E5%9F%9F%E5%90%8D/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/01/230201-gitee/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -201,7 +201,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          喜提域名ihcode.cn（爱皓码）
+          Github静态博客访问速度慢，部署图片资源到其他服务器
         </h1>
 
         <div class="post-meta">
@@ -211,14 +211,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-05-04 19:00:00" itemprop="dateCreated datePublished" datetime="2021-05-04T19:00:00+08:00">2021-05-04</time>
+              <time title="创建时间：2023-02-01 16:00:00" itemprop="dateCreated datePublished" datetime="2023-02-01T16:00:00+08:00">2023-02-01</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-06 14:59:13" itemprop="dateModified" datetime="2021-05-06T14:59:13+08:00">2021-05-06</time>
+                <time title="修改时间：2023-02-11 14:03:38" itemprop="dateModified" datetime="2023-02-11T14:03:38+08:00">2023-02-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -245,59 +245,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h3 id="注册流程"><a href="#注册流程" class="headerlink" title="注册流程"></a>注册流程</h3><ol>
-<li>在<a target="_blank" rel="noopener" href="https://www.ename.cn/">易名官网</a>注册网站账号，实名认证（审核了半天）</li>
-<li>选择好域名加入购物车，支付就可以，我的域名价格为35元一年</li>
-</ol>
-<h3 id="相关配置"><a href="#相关配置" class="headerlink" title="相关配置"></a>相关配置</h3><ol>
-<li><p>注册完域名后进入后台-域名管理-我的域名</p>
-</li>
-<li><p>DNS使用的是<strong>易名DNS</strong>（免费版），网上听说易名DNS很烂，以后我再换一个DNS，易名DNS服务器是海外的，国内的DNS服务器需要备案，我的空间和服务器在本地，备案比较麻烦，就没备案</p>
-</li>
-<li><p>易名云解析中解析记录的一些配置如下</p>
-<ul>
-<li><p>主机记录就是域名前缀，常见用法有：</p>
-<p>www：解析后的域名为 <code>www.ihcode.cn</code></p>
-<p>@：直接解析主域名ihcode.cn</p>
-<p>*：泛解析，匹配其他所有域名 *.ihcode.cn</p>
-</li>
-<li><p>要指向空间商提供的 IP 地址，选择「类型 A」，要指向一个域名，选择「类型 CNAME」</p>
-</li>
-<li><p>各类型的记录值一般是这样的：</p>
-<p>A记录：填写您服务器 IP，如果您不知道，请咨询您的空间商</p>
-<p>CNAME记录：填写空间商给您提供的域名</p>
-</li>
-<li><p>TTL(Time To Live)，缓存的生存时间。指地方dns缓存您域名记录信息的时间，缓存失效后会再次到获取记录值。</p>
-<p>600（10分钟）：建议正常情况下使用600。</p>
-<p>60（1分钟）：如果您经常修改IP，修改记录一分钟即可生效。长期使用60，解析速度会略受影响。</p>
-<p>3600（1小时）：如果您IP极少变动（一年几次），建议选择3600，解析速度快。</p>
-</li>
-</ul>
-</li>
-<li><p>易名云解析中URL转发的一些配置如下</p>
-<ul>
-<li><p>域名，可以是 *.ihcode.cn 或者 <code>www.ihcode.cn</code></p>
-</li>
-<li><p>类型：显性或隐性</p>
-<p>设置显性URL转发后，当用户访问域名会自动转向访问指定值，址栏显示指定值</p>
-<p>设置隐性URL转发后，当用户访问域名会自动转向访问指定值，址栏仍旧显示之前域名</p>
-</li>
-<li><p>转发值：就是要跳转的域名链接http://，可以带端口号</p>
-</li>
-</ul>
-</li>
-</ol>
-<h3 id="问题与解决"><a href="#问题与解决" class="headerlink" title="问题与解决"></a>问题与解决</h3><ol>
-<li><p>解析记录的记录值只能是IP地址或者是指向的该IP的DDNS域名，不能加端口号</p>
-<p>使用url转发可以带端口号，但是隐性类型转发后无法获取网页logo和名称，UI不正确等问题，使用显性类型转发可以</p>
-</li>
-<li><p>修改完解析记录后需要至少10分钟才能正常使用</p>
-<p>清空DNS缓存即可，Windows管理员CMD输入<code>ipconfig /flushdns</code></p>
-</li>
-<li><p>Hexo 4000端口微信访问的时候会报非标准端口警告</p>
-<p>考虑以后使用树莓派开一个web服务器，使用80端口映射到公网IP</p>
-</li>
-</ol>
+        <h3 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h3><p>用Github部署静态站访问国内速度慢，主要表现有2个，一是首次请求页面打开慢，二是打开后图片加载慢。问题一原因是域名解析需要访问多个海外的DNS服务器，且Github静态站服务器也在海外，首次请求国内或本地没有缓存。问题二也是访问Github静态站服务器速度受限，图片和文本并发访问，文本比图片数据量小先加载完成显示。</p>
+<p>本想将博客全部移到Gitee上，尝试部署又遇到三个问题，一是不能使用自己的域名解析，二是部署Gitee静态站服务它竟说我有文章不合规，三是每次上传Gitee后不会自动更新静态页面，每次要重新发布审核。</p>
+<p>本人使用的解决办法是将图片上传到gitee，github静态博客上的图片都使用gitee的链接，<a target="_blank" rel="noopener" href="https://gitee.com/hao0527/hao0527/tree/img/">Gitee/blog仓库img分支</a>上传了本博客用到的图片。</p>
+<h3 id="部署方式"><a href="#部署方式" class="headerlink" title="部署方式"></a>部署方式</h3><p>参考：<a target="_blank" rel="noopener" href="https://gitee.com/help/articles/4136#article-header0">Gitee Pages</a></p>
+<p>在Gitee中创建仓库，开然后将博客用到的图片上传到Gitee中，开通仓库的Pages服务更新分支。审核成功后就可以通过Gitee提供的域名，加上图片在仓库中的路径访问了。例如我的静态页面网址是：<code>https://hao0527.gitee.io/</code>，要访问仓库<code>210430-at32</code>文件夹中的<code>210430-at32-1.jpg</code>，访问网址为：<code>https://hao0527.gitee.io/210430-at32/210430-at32-1.jpg</code>。</p>
+<h3 id="使用域名转发"><a href="#使用域名转发" class="headerlink" title="使用域名转发"></a>使用域名转发</h3><p>加入以后我的图床地址变了，但我又不想重新修改每个文章里的图片网址怎么办？</p>
+<p>使用域名转发可以解决此问题，我使用的是易名注册的域名和易名免费的域名解析服务，开启URL隐性转发，转发值为你的静态页面网址，这样就可以通过自己的域名访问了，以后想换个图床的话只需要转发地址更改下就可以了。使用易名域名解析转发到我的静态页面会审核不通过，这是因为静态页面没有内容，只需要加个index.html骗骗审核就行了，审核结束就可以删除。</p>
+<p>遇到一个问题，使用域名转发通过http访问可以，通过https访问不行，暂且文章里的图片网址用http访问吧。</p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
     </div>
 
@@ -313,13 +268,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/05/03/210503-ov2640/" rel="prev" title="OV2640初步调试记录">
-      <i class="fa fa-chevron-left"></i> OV2640初步调试记录
+    <a href="/2023/01/21/230121-iot/" rel="prev" title="阿里云物联网平台数据解析与物模型显示">
+      <i class="fa fa-chevron-left"></i> 阿里云物联网平台数据解析与物模型显示
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/05/06/210506-bjt%E5%92%8Cfet/" rel="next" title="BJT和FET相关知识总结">
-      BJT和FET相关知识总结 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -378,7 +330,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E5%86%8C%E6%B5%81%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">注册流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">相关配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E4%B8%8E%E8%A7%A3%E5%86%B3"><span class="nav-number">3.</span> <span class="nav-text">问题与解决</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B5%B7%E5%9B%A0"><span class="nav-number">1.</span> <span class="nav-text">起因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">部署方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9F%9F%E5%90%8D%E8%BD%AC%E5%8F%91"><span class="nav-number">3.</span> <span class="nav-text">使用域名转发</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
