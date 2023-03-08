@@ -185,6 +185,231 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/03/07/230307-cAsm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/03/07/230307-cAsm/" class="post-title-link" itemprop="url">分析c语言函数调用时的汇编代码，进出函数时CPU做了什么？</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-03-07 16:00:00" itemprop="dateCreated datePublished" datetime="2023-03-07T16:00:00+08:00">2023-03-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-03-08 08:20:03" itemprop="dateModified" datetime="2023-03-08T08:20:03+08:00">2023-03-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">foo</span> &#123;</span><span class="type">int</span> a; <span class="type">int</span> b; <span class="type">int</span> c; <span class="type">int</span> d; <span class="type">int</span> e;&#125; g_stTest;</span><br><span class="line"></span><br><span class="line"><span class="keyword">volatile</span> <span class="keyword">struct</span> foo <span class="title function_">testFun2</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b, <span class="type">int</span> c, <span class="type">int</span> d, <span class="type">int</span> e)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">foo</span> <span class="title">stTest</span>;</span></span><br><span class="line">    stTest.a = a;</span><br><span class="line">    stTest.b = b;</span><br><span class="line">    stTest.c = c;</span><br><span class="line">    stTest.d = d;</span><br><span class="line">    stTest.e = e;</span><br><span class="line">    <span class="keyword">return</span> stTest;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">volatile</span> <span class="type">void</span> <span class="title function_">testFun1</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    g_stTest = testFun2(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="反汇编"><a href="#反汇编" class="headerlink" title="反汇编"></a>反汇编</h3><p>用gcc工具链编译s32k144平台的代码，通过ozone分析elf得到反汇编如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">volatile</span> <span class="type">void</span> <span class="title function_">testFun1</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="comment">// 0002C74C   PUSH           &#123;R4-R5, R7, LR&#125;</span></span><br><span class="line"><span class="comment">// 0002C74E   SUB            SP, SP, #32</span></span><br><span class="line"><span class="comment">// 0002C750   ADD            R7, SP, #8</span></span><br><span class="line">    g_stTest = testFun2(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>);</span><br><span class="line">    <span class="comment">// 0002C752   LDR            R4, =g_stTest                 ; [PC, #40] [0x0002C77C] =0x20002318</span></span><br><span class="line">    <span class="comment">// 0002C754   MOV            R2, R7</span></span><br><span class="line">    <span class="comment">// 0002C756   MOVS           R3, #4</span></span><br><span class="line">    <span class="comment">// 0002C758   STR            R3, [SP, #0]</span></span><br><span class="line">    <span class="comment">// 0002C75A   MOVS           R3, #5</span></span><br><span class="line">    <span class="comment">// 0002C75C   STR            R3, [SP, #4]</span></span><br><span class="line">    <span class="comment">// 0002C75E   MOV            R0, R2</span></span><br><span class="line">    <span class="comment">// 0002C760   MOVS           R1, #1</span></span><br><span class="line">    <span class="comment">// 0002C762   MOVS           R2, #2</span></span><br><span class="line">    <span class="comment">// 0002C764   MOVS           R3, #3</span></span><br><span class="line">    <span class="comment">// 0002C766   BL             testFun2                      ; 0x0002C710</span></span><br><span class="line">    <span class="comment">// 0002C76A   MOV            R5, R4</span></span><br><span class="line">    <span class="comment">// 0002C76C   MOV            R4, R7</span></span><br><span class="line">    <span class="comment">// 0002C76E   LDM            R4!, &#123;R0-R3&#125;</span></span><br><span class="line">    <span class="comment">// 0002C770   STM            R5!, &#123;R0-R3&#125;</span></span><br><span class="line">    <span class="comment">// 0002C772   LDR            R3, [R4]</span></span><br><span class="line">    <span class="comment">// 0002C774   STR            R3, [R5]</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 0002C776   ADDS           R7, #24</span></span><br><span class="line"><span class="comment">// 0002C778   MOV            SP, R7</span></span><br><span class="line"><span class="comment">// 0002C77A   POP            &#123;R4-R5, R7, PC&#125;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">volatile</span> <span class="keyword">struct</span> foo <span class="title function_">testFun2</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b, <span class="type">int</span> c, <span class="type">int</span> d, <span class="type">int</span> e)</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="comment">// 0002C710   PUSH           &#123;R4-R5, R7&#125;</span></span><br><span class="line"><span class="comment">// 0002C712   SUB            SP, SP, #44</span></span><br><span class="line"><span class="comment">// 0002C714   ADD            R7, SP, #0</span></span><br><span class="line"><span class="comment">// 0002C716   STR            R0, [R7, #12]</span></span><br><span class="line"><span class="comment">// 0002C718   STR            R1, [R7, #8]</span></span><br><span class="line"><span class="comment">// 0002C71A   STR            R2, [R7, #4]</span></span><br><span class="line"><span class="comment">// 0002C71C   STR            R3, [R7]</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">foo</span> <span class="title">stTest</span>;</span></span><br><span class="line">    stTest.a = a;</span><br><span class="line">    <span class="comment">// 0002C71E   LDR            R3, [R7, #8]</span></span><br><span class="line">    <span class="comment">// 0002C720   STR            R3, [R7, #20]</span></span><br><span class="line">    stTest.b = b;</span><br><span class="line">    <span class="comment">// 0002C722   LDR            R3, [R7, #4]</span></span><br><span class="line">    <span class="comment">// 0002C724   STR            R3, [R7, #24]</span></span><br><span class="line">    stTest.c = c;</span><br><span class="line">    <span class="comment">// 0002C726   LDR            R3, [R7]</span></span><br><span class="line">    <span class="comment">// 0002C728   STR            R3, [R7, #28]</span></span><br><span class="line">    stTest.d = d;</span><br><span class="line">    <span class="comment">// 0002C72A   LDR            R3, [R7, #56]</span></span><br><span class="line">    <span class="comment">// 0002C72C   STR            R3, [R7, #32]</span></span><br><span class="line">    stTest.e = e;</span><br><span class="line">    <span class="comment">// 0002C72E   LDR            R3, [R7, #60]</span></span><br><span class="line">    <span class="comment">// 0002C730   STR            R3, [R7, #36]</span></span><br><span class="line">    <span class="keyword">return</span> stTest;</span><br><span class="line">    <span class="comment">// 0002C732   LDR            R3, [R7, #12]</span></span><br><span class="line">    <span class="comment">// 0002C734   MOV            R5, R3</span></span><br><span class="line">    <span class="comment">// 0002C736   ADD.W          R4, R7, #20</span></span><br><span class="line">    <span class="comment">// 0002C73A   LDM            R4!, &#123;R0-R3&#125;</span></span><br><span class="line">    <span class="comment">// 0002C73C   STM            R5!, &#123;R0-R3&#125;</span></span><br><span class="line">    <span class="comment">// 0002C73E   LDR            R3, [R4]</span></span><br><span class="line">    <span class="comment">// 0002C740   STR            R3, [R5]</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 0002C742   LDR            R0, [R7, #12]</span></span><br><span class="line"><span class="comment">// 0002C744   ADDS           R7, #44</span></span><br><span class="line"><span class="comment">// 0002C746   MOV            SP, R7</span></span><br><span class="line"><span class="comment">// 0002C748   POP            &#123;R4-R5, R7&#125;</span></span><br><span class="line"><span class="comment">// 0002C74A   BX             LR</span></span><br></pre></td></tr></table></figure>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><ol>
+<li>在进入函数后，首先会将R4, R5, R7寄存器压栈，使用PUSH指令后SP会自动减去压栈空间的大小。</li>
+<li>然后是SP减去一个直接数，是在给局部变量、形参和参数传递开辟栈区空间。</li>
+<li>R7 = SP + 偏移，R7是局部变量所在栈区的地址，偏移的大小是函数内调用函数时，参数传递所需要的空间大小。</li>
+<li><code>g_stTest = testFun2(1, 2, 3, 4, 5);</code>反汇编中，参数4, 5通过栈传递，参数1, 2, 3通过R1~R3寄存器传递。</li>
+<li>在<code>testFun2</code>函数进入后，<code>STR R0, [R7, #12]</code>等指令，会将R0~R3寄存器传递的参数存入（局部变量）栈中，为什么传参的还有R0？</li>
+<li>重新分析<code>g_stTest = testFun2(1, 2, 3, 4, 5);</code>反汇编，R0传入的是R7（局部变量地址），在<code>testFun2</code>函数<code>return stTest;</code>时，将stTest写入R0传入的地址区域。</li>
+<li>在退出函数时，如果函数有return参数，会将return参数写入R0，若大于4字节会将进入函数时R0传入的地址返回。</li>
+<li>在退出函数时，会将SP改回进入函数前的SP，并使用POP指令出栈（POP指令会增加SP），最后跳转出函数（还可以直接POP取出PC跳转）。</li>
+</ol>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/15/230215-git/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/02/15/230215-git/" class="post-title-link" itemprop="url">分享一个学习Git的网站，记录Git一些用法</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-02-15 16:00:00" itemprop="dateCreated datePublished" datetime="2023-02-15T16:00:00+08:00">2023-02-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-03-08 08:23:14" itemprop="dateModified" datetime="2023-03-08T08:23:14+08:00">2023-03-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="网站：Learn-Git-Branching"><a href="#网站：Learn-Git-Branching" class="headerlink" title="网站：Learn Git Branching"></a>网站：<a target="_blank" rel="noopener" href="https://learngitbranching.js.org/?locale=zh_CN">Learn Git Branching</a></h2><h3 id="分离HEAD"><a href="#分离HEAD" class="headerlink" title="分离HEAD"></a>分离HEAD</h3><p><strong>HEAD 是一个对当前检出记录的符号引用</strong>，也就是指向你正在其基础上进行工作的提交记录。HEAD 总是指向当前分支上最近一次提交记录。大多数修改提交树的 Git 命令都是从改变 HEAD 的指向开始的。HEAD 通常情况下是指向分支名的。在你提交时，改变了分支的状态，这一变化通过 HEAD 变得可见。<br>如果想看 HEAD 指向，可以通过 cat .git/HEAD 查看， 如果 HEAD 指向的是一个引用，还可以用 git symbolic-ref HEAD 查看它的指向。 </p>
+<h3 id="相对引用"><a href="#相对引用" class="headerlink" title="相对引用"></a>相对引用</h3><p>切换至上个版本<code>git checkout HEAD^</code><br>切换至上上上版本<code>git checkout HEAD~3</code></p>
+<h3 id="强制修改分支位置"><a href="#强制修改分支位置" class="headerlink" title="强制修改分支位置"></a>强制修改分支位置</h3><p>我使用相对引用最多的就是移动分支。可以直接使用 -f 选项让分支指向另一个提交。例如:<code>git branch -f main HEAD~3</code>，命令会将 main 分支强制指向 HEAD 的第 3 级父提交。</p>
+<h3 id="撤销变更"><a href="#撤销变更" class="headerlink" title="撤销变更"></a>撤销变更</h3><p><code>git reset</code> 通过把分支记录回退几个提交记录来实现撤销改动。你可以将这想象成“改写历史”。<code>git reset</code> 向上移动分支，原来指向的提交记录就跟从来没有提交过一样。<br>为了撤销更改并分享给别人，我们需要使用 <code>git revert</code>，在我们要撤销的提交记录后面居然多了一个新提交，此次提交是用来撤销上一次提交的，此次提交与上上一次提交状态相同。</p>
+<h3 id="Git-Cherry-pick"><a href="#Git-Cherry-pick" class="headerlink" title="Git Cherry-pick"></a>Git Cherry-pick</h3><p>如果你想<strong>将一些提交复制到当前所在的位置（HEAD）下面</strong>的话， Cherry-pick 是最直接的方式了。命令形式为：<code>git cherry-pick &lt;提交号&gt;...</code></p>
+<h3 id="交互式的-Rebase"><a href="#交互式的-Rebase" class="headerlink" title="交互式的 Rebase"></a>交互式的 Rebase</h3><p>交互式 rebase 指的是使用带参数 –interactive 的 rebase 命令, 简写为 -i。<br>如果你在命令后增加了这个选项, Git 会打开一个 UI 界面并列出将要被复制到目标分支的备选提交记录，它还会显示每个提交记录的哈希值和提交说明，提交说明有助于你理解这个提交进行了哪些更改。Git会自动打开默认的文本编辑器，比如在我本地使用的是vim。在文本编辑器的开始几行会列出所有满足条件的提交记录，每个提交记录对应一行，每行开头单词代表要对这条提交记录实施的操作。</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>pick</td>
+<td>采用该提交（默认行为）</td>
+</tr>
+<tr>
+<td>reword</td>
+<td>采用该提交，但要求修改提交记录的备注</td>
+</tr>
+<tr>
+<td>edit</td>
+<td>采用该提交，但要求修改提交记录的信息，如：作者名称，邮箱地址等</td>
+</tr>
+<tr>
+<td>squash</td>
+<td>采用该提交，但它会被并入前一条提交</td>
+</tr>
+<tr>
+<td>fixup</td>
+<td>类似“squash”，但是会丢弃这条提交记录的日志信息</td>
+</tr>
+<tr>
+<td>exec</td>
+<td>执行指定的shell脚本或命令</td>
+</tr>
+<tr>
+<td>drop</td>
+<td>丢弃该提交</td>
+</tr>
+</tbody></table>
+<h3 id="Git-Describe"><a href="#Git-Describe" class="headerlink" title="Git Describe"></a>Git Describe</h3><p>git describe 的​​语法是：<code>git describe &lt;ref&gt;</code><br><code>&lt;ref&gt;</code> 可以是任何能被 Git 识别成提交记录的引用，如果你没有指定的话，Git 会以你目前所检出的位置（HEAD）。<br>它输出的结果：<code>&lt;tag&gt;_&lt;numCommits&gt;_g&lt;hash&gt;</code><br>tag 表示的是离 ref 最近的标签， numCommits 是表示这个 ref 与 tag 相差有多少个提交记录， hash 表示的是你所给定的 ref 所表示的提交记录哈希值的前几位。当 ref 提交记录上有某个标签时，则只输出标签名称。</p>
+<h3 id="Git-Pull"><a href="#Git-Pull" class="headerlink" title="Git Pull"></a>Git Pull</h3><p>git pull 就是 git fetch 和 git merge 的缩写！</p>
+<h3 id="rebase和merge区别【阅读原文】"><a href="#rebase和merge区别【阅读原文】" class="headerlink" title="rebase和merge区别【阅读原文】"></a>rebase和merge区别【<a target="_blank" rel="noopener" href="https://joyohub.com/2020/04/06/git-rebase/">阅读原文</a>】</h3><p>使用git merge 命令将 master 分支合并到 feature分支中：<code>git merge feature master</code>，git merge 会在 feature 分支中新增一个新的 merge commit，然后将两个分支的历史联系在一起。</p>
+<ul>
+<li>使用 merge 是很好的方式，因为它是一种非破坏性的操作，对现有分支不会以任何方式被更改。</li>
+<li>另一方面，这也意味着 feature 分支每次需要合并上游更改时，它都将产生一个额外的合并提交。</li>
+<li>如果master 提交非常活跃，这可能会严重污染你的 feature 分支历史记录。不过这个问题可以使用高级选项 git log 来缓解。</li>
+</ul>
+<p>使用git rebase 命令将 master 分支合并到 feature分支中：<code>git rebase feature master</code></p>
+<ul>
+<li>rebase 会将整个 feature 分支移动到 master 分支的顶端，从而有效地整合了所有 master 分支上的提交。</li>
+<li>但是，与 merge 提交方式不同，rebase 通过为原始分支中的每个提交创建全新的 commits 来重写项目历史记录,特点是仍然会在feature分支上形成线性提交。</li>
+<li>rebase 的主要好处是可以获得更清晰的项目历史。首先，它消除了 git merge 所需的不必要的合并提交；其次，正如你在上图中所看到的，rebase 会产生完美线性的项目历史记录，你可以在 feature分支上没有任何分叉的情况下一直追寻到项目的初始提交。</li>
+</ul>
+<h3 id="Pull-Request"><a href="#Pull-Request" class="headerlink" title="Pull Request"></a>Pull Request</h3><p>如果你是在一个大的合作团队中工作, 很可能是main被锁定了, 需要一些Pull Request流程来合并修改。如果你直接提交(commit)到本地main, 然后试图推送(push)修改, 你将会收到这样类似的信息:<br><code>! [远程服务器拒绝] main -&gt; main (TF402455: 不允许推送(push)这个分支; 你必须使用pull request来更新这个分支.)</code></p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/01/230201-gitee/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -929,214 +1154,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/14/221014-pyEncrypt/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/10/14/221014-pyEncrypt/" class="post-title-link" itemprop="url">用Python做文件加密解密</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-10-14 20:00:00" itemprop="dateCreated datePublished" datetime="2022-10-14T20:00:00+08:00">2022-10-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-10-16 23:39:37" itemprop="dateModified" datetime="2022-10-16T23:39:37+08:00">2022-10-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="参数解析"><a href="#参数解析" class="headerlink" title="参数解析"></a>参数解析</h2><p><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/argparse.html#module-argparse">argparse</a> — 命令行选项、参数和子命令解析器</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个解析器</span></span><br><span class="line">parser = argparse.ArgumentParser(description=<span class="string">&#x27;use for Encrypting/Decrypting.&#x27;</span>)</span><br><span class="line"><span class="comment"># 添加参数</span></span><br><span class="line">parser.add_argument(<span class="string">&#x27;-d&#x27;</span>, action=<span class="string">&quot;store_true&quot;</span>, <span class="built_in">help</span>=<span class="string">&#x27;Decryption command&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;-e&#x27;</span>, action=<span class="string">&quot;store_true&quot;</span>, <span class="built_in">help</span>=<span class="string">&#x27;Encryption command&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;-r&#x27;</span>, action=<span class="string">&quot;store_true&quot;</span>, <span class="built_in">help</span>=<span class="string">&#x27;Rename command&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;-p&#x27;</span>, action=<span class="string">&quot;store&quot;</span>, required=<span class="literal">True</span>, <span class="built_in">help</span>=<span class="string">&#x27;file path or folder path&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    args = <span class="built_in">vars</span>(parser.parse_args())</span><br><span class="line">    <span class="built_in">print</span>(args)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>指令 -p 为必须，通过 -p 传入文件或文件夹路径参数，指令 -d -e -r 告知脚本要执行什么任务。</p>
-<p><strong><a target="_blank" rel="noopener" href="https://www.runoob.com/python/python-func-vars.html">Python vars() 函数</a></strong> 返回对象object的属性和属性值的字典对象。</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\decipherer&gt; python main.py <span class="literal">-p</span> .\test1.c</span><br><span class="line">&#123;<span class="string">&#x27;d&#x27;</span>: False, <span class="string">&#x27;e&#x27;</span>: False, <span class="string">&#x27;r&#x27;</span>: False, <span class="string">&#x27;p&#x27;</span>: <span class="string">&#x27;.\\test1.c&#x27;</span>&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="解析路径"><a href="#解析路径" class="headerlink" title="解析路径"></a>解析路径</h2><p><a target="_blank" rel="noopener" href="https://www.runoob.com/python/python-os-path.html">Python os.path() 模块</a> — 主要用于获取文件的属性</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">main_file_path = os.path.dirname(os.path.realpath(__file__))</span><br><span class="line">file_name = os.path.basename(file_path)</span><br><span class="line">file_content = fp.read()</span><br><span class="line">file_name_md5 = hashlib.md5(file_name.encode(encoding=<span class="string">&#x27;UTF-8&#x27;</span>)).hexdigest()</span><br><span class="line">file_relative_path = os.path.realpath(file_path).replace(main_file_path, <span class="string">&#x27;&#x27;</span>)  <span class="comment"># 相对地址</span></span><br><span class="line">file_relative_dir = os.path.dirname(file_path).replace(main_file_path, <span class="string">&#x27;&#x27;</span>)  <span class="comment"># 相对地址不带文件名</span></span><br></pre></td></tr></table></figure>
-
-<p><a target="_blank" rel="noopener" href="https://www.runoob.com/python3/python3-os-walk.html">Python3 os.walk() 方法</a> — 用于遍历文件夹</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">rename_dir</span>(<span class="params">dir_path</span>):</span><br><span class="line">    <span class="keyword">for</span> root, dirs, files <span class="keyword">in</span> os.walk(dir_path, topdown=<span class="literal">False</span>):</span><br><span class="line">        <span class="keyword">for</span> name <span class="keyword">in</span> files:</span><br><span class="line">            rename_file(os.path.join(root, name))</span><br></pre></td></tr></table></figure>
-
-<p><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/shutil.html?highlight=shutil%20rmtree#shutil.rmtree">shutil.rmtree()</a> — 删除一个完整的目录树</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> os.path.exists(<span class="string">&#x27;./output_rename&#x27;</span>):</span><br><span class="line">    shutil.rmtree(<span class="string">&#x27;./output_rename&#x27;</span>)  <span class="comment"># 删除之前的目录</span></span><br></pre></td></tr></table></figure>
-
-<p><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/os.html?highlight=os%20makedirs#os.makedirs">makedirs()</a> — 递归目录创建函数</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> os.path.exists(<span class="string">&#x27;./output_rename&#x27;</span> + file_relative_dir) == <span class="number">0</span>:</span><br><span class="line">    os.makedirs(<span class="string">&#x27;./output_rename&#x27;</span> + file_relative_dir)  <span class="comment"># 如果目录不存在 创建新目录</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="MD5加解密"><a href="#MD5加解密" class="headerlink" title="MD5加解密"></a>MD5加解密</h2><p><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/hashlib.html?highlight=hashlib#hash-algorithms">hashlib</a> — 安全哈希与消息摘要</p>
-<h2 id="字符串编解码"><a href="#字符串编解码" class="headerlink" title="字符串编解码"></a>字符串编解码</h2><table>
-<thead>
-<tr>
-<th>方法</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><a target="_blank" rel="noopener" href="https://www.runoob.com/python/att-string-decode.html">string.decode(encoding=’UTF-8’, errors=’strict’)</a></td>
-<td>以 encoding 指定的编码格式解码 string，如果出错默认报一个 ValueError 的 异 常 ， 除非 errors 指 定 的 是 ‘ignore’ 或 者’replace’</td>
-</tr>
-<tr>
-<td><a target="_blank" rel="noopener" href="https://www.runoob.com/python/att-string-encode.html">string.encode(encoding=’UTF-8’, errors=’strict’)</a></td>
-<td>以 encoding 指定的编码格式编码 string，如果出错默认报一个ValueError 的异常，除非 errors 指定的是’ignore’或者’replace’</td>
-</tr>
-</tbody></table>
-<p>保存文件名是用encode指定编码格式，再读取时用decode指定格式解码，否则遇到中文字读取会出问题。</p>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/13/221013-rtthread/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/10/13/221013-rtthread/" class="post-title-link" itemprop="url">RT-Thread使用笔记</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-10-13 21:00:00 / 修改时间：23:05:27" itemprop="dateCreated datePublished" datetime="2022-10-13T21:00:00+08:00">2022-10-13</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>今天在移植陀螺仪项目时，之前的代码全局变量过多，函数功能不够独立，现在使用国产雅特力MCU，M4主频120MHz，64K ROM，16K RAM，想使用RTOS重新写代码，实践一次嵌入式RTOS编程。</p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
-<li>参考RT-Thread官网教程：<a target="_blank" rel="noopener" href="https://www.rt-thread.org/document/site/#/">https://www.rt-thread.org/document/site/#/</a></li>
-</ol>
-<h2 id="开始干"><a href="#开始干" class="headerlink" title="开始干"></a>开始干</h2><h3 id="选型"><a href="#选型" class="headerlink" title="选型"></a>选型</h3><p>选用RT-Thread Nano版本，资源占用小：对 RAM 与 ROM 的开销非常小，在支持 semaphore 和 mailbox 特性，并运行两个线程 (main 线程 + idle 线程) 情况下，ROM 和 RAM 依然保持着极小的尺寸，RAM 占用约 1K 左右，ROM 占用 4K 左右。</p>
-<h3 id="移植"><a href="#移植" class="headerlink" title="移植"></a>移植</h3><p>移植参考官网教程：<a target="_blank" rel="noopener" href="https://www.rt-thread.org/document/site/#/rt-thread-version/rt-thread-nano/nano-port-keil/an0039-nano-port-keil">使用 MDK 移植</a></p>
-<h4 id="移植时遇到的几个问题"><a href="#移植时遇到的几个问题" class="headerlink" title="移植时遇到的几个问题"></a>移植时遇到的几个问题</h4><ol>
-<li><code>#error &quot;TODO 1: OS Tick Configuration.&quot;</code>一直报错，这个只是编译时提醒我们要配置OS Tick，配置后需手动注释掉这条。</li>
-<li><code>SysTick_Handler()</code>有时进有时不进，检查方法查看SysTick结构体，发现CTRL中使能位0，原因：后面的代码使用了delay函数关闭SysTick的使能位。</li>
-</ol>
-<h3 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h3><h4 id="初始化静态线程"><a href="#初始化静态线程" class="headerlink" title="初始化静态线程"></a>初始化静态线程</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">rt_err_t</span> <span class="title function_">rt_thread_init</span><span class="params">(<span class="keyword">struct</span> rt_thread* thread,</span></span><br><span class="line"><span class="params">                        <span class="type">const</span> <span class="type">char</span>* name,</span></span><br><span class="line"><span class="params">                        <span class="type">void</span> (*entry)(<span class="type">void</span>* parameter), <span class="type">void</span>* parameter,</span></span><br><span class="line"><span class="params">                        <span class="type">void</span>* stack_start, <span class="type">rt_uint32_t</span> stack_size,</span></span><br><span class="line"><span class="params">                        <span class="type">rt_uint8_t</span> priority, <span class="type">rt_uint32_t</span> tick)</span>;</span><br></pre></td></tr></table></figure>
-
-<h4 id="启动线程"><a href="#启动线程" class="headerlink" title="启动线程"></a>启动线程</h4><p><code> rt_err_t rt_thread_startup(rt_thread_t thread);</code></p>
-<h4 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h4><ol>
-<li><p>遇到rt_thread_init()函数卡死，百度竟然啥都查不到（rt-thread用的人这么少的吗），后尝试将栈大小增加至256后成功初始化线程。虽然任务里没什么局部变量，但是一个简单的按键任务竟然占了500多字节内存，可能是因为栈中还保存了寄存器、TCB等信息，那我这单片机16K字节内存可能不够。</p>
-</li>
-<li><p>需要在main函数while(1)中加入rt_thread_mdelay(10); 否则main线程优先级更高，其他线程无法运行。</p>
-</li>
-</ol>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1202,7 +1223,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">60</span>
+          <span class="site-state-item-count">62</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
