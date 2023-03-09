@@ -185,6 +185,111 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/17/221017-232485422/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/10/17/221017-232485422/" class="post-title-link" itemprop="url">串口通信三种方式232, 485, 422</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-10-17 08:00:00" itemprop="dateCreated datePublished" datetime="2022-10-17T08:00:00+08:00">2022-10-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-01-31 23:40:53" itemprop="dateModified" datetime="2023-01-31T23:40:53+08:00">2023-01-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>之前UART用的比较多，232, 485, 422通信方式用的比较少，最近储能的项目用到了485通信，在之前卡片机的项目也用到485通信，今天来归纳下232, 485, 422这三种通信的区别。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li>本文搬运自 <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/352872a0de9d">转载：串口通信232/485/422 详细解析！</a> ，自己复习使用</li>
+</ol>
+<h2 id="UART"><a href="#UART" class="headerlink" title="UART"></a>UART</h2><p>通用异步收发传输器(Universal Asynchronous Receiver/Transmitter)。</p>
+<h3 id="通信协议"><a href="#通信协议" class="headerlink" title="通信协议"></a>通信协议</h3><p>UART作为异步串口通信协议的一种，工作原理是将传输数据的每个字符一位接一位地传输，其中各位的意义如下:</p>
+<p><strong>起始位</strong>：先发出一个逻辑”0”的信号，表示传输字符的开始。</p>
+<p><strong>数据位</strong>：紧接着起始位之后。数据位的个数可以是4、5、6、7、8等，构成一个字符。通常采用ASCII码。从最低位开始传送，靠时钟定位。</p>
+<p><strong>奇偶校验位</strong>：数据位加上这一位后，使得”1”的位数应为偶数(偶校验)或奇数(奇校验)，以此来校验数据传送的正确性。</p>
+<p><strong>停止位</strong>：它是一个字符数据的结束标志。可以是1位、1.5位、2位的高电平。 由于数据是在传输线上定时的，并且每一个设备有其自己的时钟，很可能在通信中两台设备间出现了小小的不同步。<strong>因此停止位不仅仅是表示传输的结束，并且提供计算机校正时钟同步的机会</strong>。<strong>适用于停止位的位数越多，不同时钟同步的容忍程度越大，但是数据传输率同时也越慢</strong>。</p>
+<p><strong>空闲位</strong>：处于逻辑”1”状态，表示当前线路上没有数据传送。</p>
+<p><img src="https://hao0527.gitee.io/221017-232485422/0.jpg" alt="图片"></p>
+<h3 id="波特率与比特率"><a href="#波特率与比特率" class="headerlink" title="波特率与比特率"></a>波特率与比特率</h3><p><strong>比特率</strong>在数字信道中，比特率是数字信号的传输速率，它用单位时间内传输的二进制代码的有效位（bit）数来表示，其单位为每秒比特数bit/s（bps）、每秒千比特数（Kbps）或每秒兆比特数（Mbps）来表示（此处K和M分别为1000和1000000，而不是涉及计算机存储器容量时的1024和1048576）。</p>
+<p><strong>波特率</strong>指数据信号对载波的调制速率，它用单位时间内载波调制状态改变次数来表示，其单位为波特（Baud）。波特率与比特率的关系为：比特率=波特率X单个调制状态对应的二进制位数。</p>
+<p><strong>如何区分两者？</strong>显然，两相调制（单个调制状态对应1个二进制位）的比特率等于波特率；四相调制（单个调制状态对应2个二进制位）的比特率为波特率的两倍；八相调制（单个调制状态对应3个二进制位）的比特率为波特率的三倍；依次类推。</p>
+<h2 id="232"><a href="#232" class="headerlink" title="232"></a>232</h2><p>232 通信主要是由RX,TX,GND三根线组成。RX与TX，TX接RX，GND接GND。因为发送和接收分别是由不同的线处理的，也就是能同时发送数据和接收数据，这就是所谓的全双工。</p>
+<p><img src="https://hao0527.gitee.io/221017-232485422/640-1666051381273.jfif" alt="图片"></p>
+<p>在这里扩展一下，串口通信还有一个功能叫做<strong>全功能串口通信</strong>，也叫标准串口。因为在两个设备间进行数据传输，有些设备处理速度比较快，有些数据比较慢。为了保证数据能正常传输，在RX,TX的基础上，还增加了几个控制引脚，本来好端端就R，T，G，三根线，凑着就凑齐了9个引脚，召唤出了DB9这个东西。</p>
+<p><img src="https://hao0527.gitee.io/221017-232485422/1.jpg" alt="图片"></p>
+<p>这要怪就怪当时使用电脑的时候，还没有互联网这个概念，但是又想在两台电脑间进行通信。所以才有这样一个东西。在后来的设备，很多控制器，人机界面，PLC等使用串口通信中，基本上就不使用标准串口，而是就直接使用RX，TX，GND三根线来通信了。但是这里为什么要提到这个呢。因为只是很多设备这样用，也就是还存在少数设备还保留了标准串口的功能。这就是为什么会遇到明明电脑通信是好的，换成触摸屏通信就不行了。因为很多触摸屏只使用了RX，TX，GND通信，遇到一些还保留标准串口功能的就比较讨厌了。</p>
+<h2 id="485"><a href="#485" class="headerlink" title="485"></a>485</h2><p>485是为了解决232通信距离的问题。原理什么之类的就不多讲了。反正232通信距离就是不长。485主要是以一种差分信号进行传输，只需要两根线，+,-两根线，或者也叫A，B两根线。A，B两根线的差分电平信号就是作为数据信号传输。</p>
+<p>那么问题来了，那是不是就没有RX和TX的概念了。是的，发送和接收就不能分开了。发送和接收都是靠这两根的来传输，也就是每次只能作发送或者只能作接收，这就是半双工的概念了，这在效率上就比232弱很多了。就像对讲机一样，经常是某个人讲完之后，都要说一个over，确保当前说完了，等待对方回复。</p>
+<p><img src="https://hao0527.gitee.io/221017-232485422/640-1666051910756.jfif" alt="图片"></p>
+<p>485就是这样牺牲了232全双工的效率来达到自己传输距离远的代价。那有没有即保留了232的全双工，又可以像485这样提高传输距离呢，于是，422出来了。</p>
+<h2 id="422"><a href="#422" class="headerlink" title="422"></a>422</h2><p>422呢，有些标注为485-4。而485就标注为485-2。有什么区别呢。就是为了好记呢。485-2就是2根线。485-4就是4根线。</p>
+<p><img src="https://hao0527.gitee.io/221017-232485422/640-1666051950808.jfif" alt="图片"></p>
+<p>422就是把232的RX分成两根线，RX+，RX-，把TX分成TX+,TX-。这样就可以同时发送和同时接收了，还可以像485这样，有较远的传输距离。可是这样一种很有优势的通信方式，为什么用的不多呢。我个人的答案和理解就是：线太多了。特别是像我这样懒得接线的人，超过3根线就头晕的。搞个通信还需要接这么多线，什么TX,RX，正啊负啊。交换来交换去。</p>
+<p>因为在很多设备通信中，基本上是属于一问一答式的，因此，232的全双工通信优势其实也并没有发挥出来。就像现在打电话，虽然两个人可以同时说话，但是两个人同时说话，叽叽歪歪的，谁知道说什么呀。特别是一个主站与多个从站通信的时候，485的接线就就方便多了，反正大家就两根线，把+都接一块，把-都接一块。如果是<strong>422作一主多从</strong>，接线上还要理半天呢，而且通信异常了也不好解决。</p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/14/221014-pyEncrypt/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1267,94 +1372,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/" class="post-title-link" itemprop="url">RC振荡器 晶体振荡器</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-07-10 15:00:00" itemprop="dateCreated datePublished" datetime="2022-07-10T15:00:00+08:00">2022-07-10</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-02-01 00:01:48" itemprop="dateModified" datetime="2023-02-01T00:01:48+08:00">2023-02-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E7%A1%AC%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">硬件</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="RC振荡器"><a href="#RC振荡器" class="headerlink" title="RC振荡器"></a>RC振荡器</h2><p>在振荡电路中的频率选择部分可以只用电阻和电容构成，这种只用电阻和电容构成的振荡器称为RC振荡器。RC振荡器需要起振电路，常用的正弦波荡电路有文氏桥振荡电路，要起振所以电路是正反馈，RC构成选频网络，两个二极管和R3构成稳幅电路。</p>
-<p><img src="https://hao0527.gitee.io/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-1.jpg" alt="2207010-RC与晶体振荡器-1.jpg"></p>
-<p>RC振荡器容易封装到芯片中，MCU内部的时钟一般就是RC振荡器。成本低、功耗小、电路板上无需外部晶振，这些都是RC振荡器的优点。</p>
-<p>缺点：MCU的内部振荡电路对外界干扰很敏感，非常容易受到外界环境温度的影响。同时精度也低，下图是用F767内部和外部振荡器生成1Hz方波的区别。</p>
-<p><img src="https://hao0527.gitee.io/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-2.jpg" alt="2207010-RC与晶体振荡器-2.jpg"></p>
-<h2 id="晶体振荡器"><a href="#晶体振荡器" class="headerlink" title="晶体振荡器"></a>晶体振荡器</h2><p>只要在晶体板级上施加交变电压，就会是晶片产生机械变形振动，此现象即所谓逆压电效应。当外加电压频率等于晶体谐振器的固有频率时，就会发生压电谐振，从而导致机械变形的振幅突然增大。一般而言，晶振的振荡频率比较稳定。但是价格稍微高点，还有用晶体振荡器一般还要接两个15-33pF起振电容。</p>
-<p>有源晶振（Oscillator，晶振）只需要供电自身就能起振，无源晶振（Crystal，晶体）最高精度为5ppm，而有源晶振的精度则可以达到0.1ppm。有源晶振的信号电平是固定，所以需要选择好合适输出电平，灵活性较差。无源晶振单片机可以配置振荡输出电压。</p>
-<p><img src="https://hao0527.gitee.io/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-3.jpg" alt="有源晶振"><img src="https://hao0527.gitee.io/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-4.jpg" alt="无源晶振"></p>
-<h2 id="STM32CubeMX中的时钟配置"><a href="#STM32CubeMX中的时钟配置" class="headerlink" title="STM32CubeMX中的时钟配置"></a>STM32CubeMX中的时钟配置</h2><p><img src="https://hao0527.gitee.io/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-5.jpg" alt="STM32中的时钟配置"></p>
-<p>BYPASS Clock Source：使用有源晶振的话，则只需要给它加上电源，即可输出时钟到MCU的时钟输入端，绕过MCU的OSC模块，时钟直接供MCU使用。</p>
-<p>Crystal/Ceramic Resonator：使用晶体的话，除了外部需要加上谐振电容（有些会加上MΩ的反馈电阻）之外，还需要<strong>MCU内部的OSC振荡电路辅助</strong>才能正常产生所需时钟。</p>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1424,7 +1441,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">62</span>
+          <span class="site-state-item-count">63</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

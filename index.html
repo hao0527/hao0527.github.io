@@ -185,6 +185,90 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/03/09/230309-CompoundLiterals/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/03/09/230309-CompoundLiterals/" class="post-title-link" itemprop="url">C语言 复合字面量(Compound Literals)</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-03-09 16:00:00 / 修改时间：21:15:42" itemprop="dateCreated datePublished" datetime="2023-03-09T16:00:00+08:00">2023-03-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://gcc.gnu.org/onlinedocs/gcc/Compound-Literals.html">https://gcc.gnu.org/onlinedocs/gcc/Compound-Literals.html</a></li>
+</ul>
+<h3 id="复合字面量介绍"><a href="#复合字面量介绍" class="headerlink" title="复合字面量介绍"></a>复合字面量介绍</h3><p>假设给带int类型的形参函数传递一个值，可以传递int类型的变量，也可以传递int类型常量，但是对于带数组形参的函数则不一样，可以传递数组，但是不支持传递数组常量，由此C99新增了复合字面量的用法，字面量是指除符号常量外的常量。</p>
+<p>例如：10是int的类型的字面量，10.24是double类型的字面量，”abc”是字符串的字面量等，如果有数组或者结构体的字面量，这样使用起来会更方便。</p>
+<h3 id="数组字面量"><a href="#数组字面量" class="headerlink" title="数组字面量"></a>数组字面量</h3><p>数组的复合字面量和数组初始化列表差不多，前面使用括号括起来的类型名。<br>例如，这是个数组定义：<code>int age[2] = [19, 20];</code><br>使用复合字面量创建一个匿名数组：<code>(int [2])&#123;19, 20&#125;;</code><br>可见去掉定义中的数组名，留下的int[2]就是复合字面量的类型名，整个就是数组字面量。<br>使用数组字面量时可以像定义数组一样省略数组大小，也可以应用于二维或多维数组。<br>还可构造一个字符串数组，将复合字面量强制转换为指向其第一个元素的指针，如：<code>char **foo = (char *[]) &#123; &quot;x&quot;, &quot;y&quot;, &quot;z&quot; &#125;;</code></p>
+<h3 id="结构体字面量"><a href="#结构体字面量" class="headerlink" title="结构体字面量"></a>结构体字面量</h3><p>结构体的复合字面量的指定类型是一个结构体。<br>假设，struct foo 和 structure 声明如：<code>struct foo &#123;int a; char b[2];&#125; structure;</code><br>使用复合字面量构造 struct foo 的示例：<code>structure = ((struct foo) &#123;x + y, &#39;a&#39;, 0&#125;);</code><br>这等效于：<code>&#123;   struct foo temp = &#123;x + y, &#39;a&#39;, 0&#125;;   structure = temp; &#125;</code></p>
+<h3 id="复合字面量生命周期"><a href="#复合字面量生命周期" class="headerlink" title="复合字面量生命周期"></a>复合字面量生命周期</h3><p>在 C 语言中，复合字面量指定具有静态或自动存储持续时间的未命名对象。在 C++ 中，复合字面量指定一个临时对象，该对象仅在其完整表达式结束之前存在。因此，采用复合字面量的子对象地址的定义良好的 C 代码在 C++ 中可以是未定义的，因此 G++ 拒绝将临时数组转换为指针。例如，如果上面的数组复合字面量示例出现在函数内部，则在 C++ 中对 foo 的任何后续使用都会产生未定义的行为，因为数组的生命周期在 foo 的声明之后结束。</p>
+<p>作为一种优化，G++ 有时会为数组复合字面量提供更长的生命周期：当数组出现在函数外部或具有 const 限定类型时。如果 foo 及其初始值设定项具有 char *const 而不是 char * 类型的元素，或者如果 foo 是全局变量，则数组将具有静态存储持续时间。但是，避免在 C++ 代码中使用数组复合字面量可能是最安全的。</p>
+<h3 id="复合字面量应用"><a href="#复合字面量应用" class="headerlink" title="复合字面量应用"></a>复合字面量应用</h3><ol>
+<li>函数参数是结构体、数组，用复合字面量传参。</li>
+<li>程序运行中想给char数组赋字符串。</li>
+</ol>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/03/07/230307-cAsm/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1049,111 +1133,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/17/221017-232485422/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/10/17/221017-232485422/" class="post-title-link" itemprop="url">串口通信三种方式232, 485, 422</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-10-17 08:00:00" itemprop="dateCreated datePublished" datetime="2022-10-17T08:00:00+08:00">2022-10-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-01-31 23:40:53" itemprop="dateModified" datetime="2023-01-31T23:40:53+08:00">2023-01-31</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>之前UART用的比较多，232, 485, 422通信方式用的比较少，最近储能的项目用到了485通信，在之前卡片机的项目也用到485通信，今天来归纳下232, 485, 422这三种通信的区别。</p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
-<li>本文搬运自 <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/352872a0de9d">转载：串口通信232/485/422 详细解析！</a> ，自己复习使用</li>
-</ol>
-<h2 id="UART"><a href="#UART" class="headerlink" title="UART"></a>UART</h2><p>通用异步收发传输器(Universal Asynchronous Receiver/Transmitter)。</p>
-<h3 id="通信协议"><a href="#通信协议" class="headerlink" title="通信协议"></a>通信协议</h3><p>UART作为异步串口通信协议的一种，工作原理是将传输数据的每个字符一位接一位地传输，其中各位的意义如下:</p>
-<p><strong>起始位</strong>：先发出一个逻辑”0”的信号，表示传输字符的开始。</p>
-<p><strong>数据位</strong>：紧接着起始位之后。数据位的个数可以是4、5、6、7、8等，构成一个字符。通常采用ASCII码。从最低位开始传送，靠时钟定位。</p>
-<p><strong>奇偶校验位</strong>：数据位加上这一位后，使得”1”的位数应为偶数(偶校验)或奇数(奇校验)，以此来校验数据传送的正确性。</p>
-<p><strong>停止位</strong>：它是一个字符数据的结束标志。可以是1位、1.5位、2位的高电平。 由于数据是在传输线上定时的，并且每一个设备有其自己的时钟，很可能在通信中两台设备间出现了小小的不同步。<strong>因此停止位不仅仅是表示传输的结束，并且提供计算机校正时钟同步的机会</strong>。<strong>适用于停止位的位数越多，不同时钟同步的容忍程度越大，但是数据传输率同时也越慢</strong>。</p>
-<p><strong>空闲位</strong>：处于逻辑”1”状态，表示当前线路上没有数据传送。</p>
-<p><img src="https://hao0527.gitee.io/221017-232485422/0.jpg" alt="图片"></p>
-<h3 id="波特率与比特率"><a href="#波特率与比特率" class="headerlink" title="波特率与比特率"></a>波特率与比特率</h3><p><strong>比特率</strong>在数字信道中，比特率是数字信号的传输速率，它用单位时间内传输的二进制代码的有效位（bit）数来表示，其单位为每秒比特数bit/s（bps）、每秒千比特数（Kbps）或每秒兆比特数（Mbps）来表示（此处K和M分别为1000和1000000，而不是涉及计算机存储器容量时的1024和1048576）。</p>
-<p><strong>波特率</strong>指数据信号对载波的调制速率，它用单位时间内载波调制状态改变次数来表示，其单位为波特（Baud）。波特率与比特率的关系为：比特率=波特率X单个调制状态对应的二进制位数。</p>
-<p><strong>如何区分两者？</strong>显然，两相调制（单个调制状态对应1个二进制位）的比特率等于波特率；四相调制（单个调制状态对应2个二进制位）的比特率为波特率的两倍；八相调制（单个调制状态对应3个二进制位）的比特率为波特率的三倍；依次类推。</p>
-<h2 id="232"><a href="#232" class="headerlink" title="232"></a>232</h2><p>232 通信主要是由RX,TX,GND三根线组成。RX与TX，TX接RX，GND接GND。因为发送和接收分别是由不同的线处理的，也就是能同时发送数据和接收数据，这就是所谓的全双工。</p>
-<p><img src="https://hao0527.gitee.io/221017-232485422/640-1666051381273.jfif" alt="图片"></p>
-<p>在这里扩展一下，串口通信还有一个功能叫做<strong>全功能串口通信</strong>，也叫标准串口。因为在两个设备间进行数据传输，有些设备处理速度比较快，有些数据比较慢。为了保证数据能正常传输，在RX,TX的基础上，还增加了几个控制引脚，本来好端端就R，T，G，三根线，凑着就凑齐了9个引脚，召唤出了DB9这个东西。</p>
-<p><img src="https://hao0527.gitee.io/221017-232485422/1.jpg" alt="图片"></p>
-<p>这要怪就怪当时使用电脑的时候，还没有互联网这个概念，但是又想在两台电脑间进行通信。所以才有这样一个东西。在后来的设备，很多控制器，人机界面，PLC等使用串口通信中，基本上就不使用标准串口，而是就直接使用RX，TX，GND三根线来通信了。但是这里为什么要提到这个呢。因为只是很多设备这样用，也就是还存在少数设备还保留了标准串口的功能。这就是为什么会遇到明明电脑通信是好的，换成触摸屏通信就不行了。因为很多触摸屏只使用了RX，TX，GND通信，遇到一些还保留标准串口功能的就比较讨厌了。</p>
-<h2 id="485"><a href="#485" class="headerlink" title="485"></a>485</h2><p>485是为了解决232通信距离的问题。原理什么之类的就不多讲了。反正232通信距离就是不长。485主要是以一种差分信号进行传输，只需要两根线，+,-两根线，或者也叫A，B两根线。A，B两根线的差分电平信号就是作为数据信号传输。</p>
-<p>那么问题来了，那是不是就没有RX和TX的概念了。是的，发送和接收就不能分开了。发送和接收都是靠这两根的来传输，也就是每次只能作发送或者只能作接收，这就是半双工的概念了，这在效率上就比232弱很多了。就像对讲机一样，经常是某个人讲完之后，都要说一个over，确保当前说完了，等待对方回复。</p>
-<p><img src="https://hao0527.gitee.io/221017-232485422/640-1666051910756.jfif" alt="图片"></p>
-<p>485就是这样牺牲了232全双工的效率来达到自己传输距离远的代价。那有没有即保留了232的全双工，又可以像485这样提高传输距离呢，于是，422出来了。</p>
-<h2 id="422"><a href="#422" class="headerlink" title="422"></a>422</h2><p>422呢，有些标注为485-4。而485就标注为485-2。有什么区别呢。就是为了好记呢。485-2就是2根线。485-4就是4根线。</p>
-<p><img src="https://hao0527.gitee.io/221017-232485422/640-1666051950808.jfif" alt="图片"></p>
-<p>422就是把232的RX分成两根线，RX+，RX-，把TX分成TX+,TX-。这样就可以同时发送和同时接收了，还可以像485这样，有较远的传输距离。可是这样一种很有优势的通信方式，为什么用的不多呢。我个人的答案和理解就是：线太多了。特别是像我这样懒得接线的人，超过3根线就头晕的。搞个通信还需要接这么多线，什么TX,RX，正啊负啊。交换来交换去。</p>
-<p>因为在很多设备通信中，基本上是属于一问一答式的，因此，232的全双工通信优势其实也并没有发挥出来。就像现在打电话，虽然两个人可以同时说话，但是两个人同时说话，叽叽歪歪的，谁知道说什么呀。特别是一个主站与多个从站通信的时候，485的接线就就方便多了，反正大家就两根线，把+都接一块，把-都接一块。如果是<strong>422作一主多从</strong>，接线上还要理半天呢，而且通信异常了也不好解决。</p>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1223,7 +1202,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">62</span>
+          <span class="site-state-item-count">63</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

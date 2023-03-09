@@ -185,6 +185,117 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/03/210503-ov2640/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/03/210503-ov2640/" class="post-title-link" itemprop="url">OV2640初步调试记录</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-05-03 19:00:00" itemprop="dateCreated datePublished" datetime="2021-05-03T19:00:00+08:00">2021-05-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-02-01 00:01:48" itemprop="dateModified" datetime="2023-02-01T00:01:48+08:00">2023-02-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B7%A5%E4%BD%9C%E6%97%A5%E5%BF%97/" itemprop="url" rel="index"><span itemprop="name">工作日志</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B7%A5%E4%BD%9C%E6%97%A5%E5%BF%97/%E5%8D%A1%E7%89%87%E6%9C%BA/" itemprop="url" rel="index"><span itemprop="name">卡片机</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B7%A5%E4%BD%9C%E6%97%A5%E5%BF%97/%E5%8D%A1%E7%89%87%E6%9C%BA/OV2640/" itemprop="url" rel="index"><span itemprop="name">OV2640</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="OV2640硬件"><a href="#OV2640硬件" class="headerlink" title="OV2640硬件"></a>OV2640硬件</h2><h3 id="原理图"><a href="#原理图" class="headerlink" title="原理图"></a>原理图</h3><p>参考：OV2640硬件开发手册</p>
+<p>设计：Hao</p>
+<p><img src="https://hao0527.gitee.io/210503-ov2640/210503-ov2640-1.jpg" alt="210503-ov2640-1.jpg"></p>
+<h3 id="PCB"><a href="#PCB" class="headerlink" title="PCB"></a>PCB</h3><p>layout：小张</p>
+<h2 id="OV2640软件"><a href="#OV2640软件" class="headerlink" title="OV2640软件"></a>OV2640软件</h2><h3 id="软件需求"><a href="#软件需求" class="headerlink" title="软件需求"></a>软件需求</h3><ul>
+<li>jpeg读取，24l01发送</li>
+<li>光线暗打开闪光（未完成），通过读取曝光时间来判断光线强弱，决定是否打开闪光灯</li>
+</ul>
+<h3 id="程序开发"><a href="#程序开发" class="headerlink" title="程序开发"></a>程序开发</h3><ul>
+<li><p>参考：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Rx411R75t?p=79">正点原子ov2640实验视频</a>、OV2640数据手册、OV2640软件开发手册</p>
+</li>
+<li><p>接口：SCCB（类I2C）、DCMI（8bit并口）</p>
+</li>
+<li><p>传感器、传感器窗口、图像尺寸、图像窗口之间的关系如下图：<img src="https://hao0527.gitee.io/210503-ov2640/210503-ov2640-3.jpg" alt="210503-ov2640-3.jpg"></p>
+</li>
+<li><p>程序开发按照正点原子给的库很容易进行，但部分功能库里没有需要查阅软件开发手册和数据手册，对寄存器进行读写。</p>
+</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li><p>DOVDD是IO的电平，给了3.3V，因为和它通讯的单片机使用的电压也是3.3V，如果这里用2.8V可以也是可以，会产生电流倒灌，增加了产品不稳定的因素</p>
+</li>
+<li><p>ov2640模组在上电的时候比较烫手，温度有55℃上下，不使用的时候将PWDN拉高，停止给电</p>
+</li>
+<li><p>为了节约成本，24Mhz时钟可以由单片机输出，代替有源晶振</p>
+</li>
+<li><p>如果单片机没有DCMI接口，软件模拟速度跟不上，需要使用带FIFO的摄像头（ov7550），才可以由软件模拟读取并口数据，模拟的还没有尝试过，可以参考原子哥M3例程，F103使用0V7550</p>
+</li>
+<li><p>由于大多数低成本国产单片机不带DCMI接口，可以由高云FPGA驱动ov2640，通过SPI发送给单片机，这是本人五一节后要做的事情</p>
+</li>
+</ul>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/30/210430-at32/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -399,7 +510,7 @@
 <h3 id="Hexo-Github部署"><a href="#Hexo-Github部署" class="headerlink" title="Hexo Github部署"></a>Hexo Github部署</h3><ol>
 <li>安装hexo-deployer-git插件 ‘cnpm install –save hexo-deployer-git’</li>
 <li>git添加SSHKey</li>
-<li>blog文件夹中_config.yml配置hexo-deployer-git插件<br> type: git<br> repo: <a href="mailto:&#x67;&#105;&#x74;&#x40;&#103;&#x69;&#x74;&#104;&#x75;&#x62;&#46;&#x63;&#111;&#x6d;">&#x67;&#105;&#x74;&#x40;&#103;&#x69;&#x74;&#104;&#x75;&#x62;&#46;&#x63;&#111;&#x6d;</a>:hao0527/hao0527.github.io.git<br> branch: main</li>
+<li>blog文件夹中_config.yml配置hexo-deployer-git插件<br> type: git<br> repo: <a href="mailto:&#103;&#x69;&#x74;&#64;&#x67;&#105;&#116;&#104;&#x75;&#98;&#x2e;&#99;&#x6f;&#109;">&#103;&#x69;&#x74;&#64;&#x67;&#105;&#116;&#104;&#x75;&#98;&#x2e;&#99;&#x6f;&#109;</a>:hao0527/hao0527.github.io.git<br> branch: main</li>
 <li>hexo g 编译<br> hexo d 发布到Github</li>
 <li>每次发布会GithubPages的Custom domain都会被删除，在本地source文件夹中添加CNAME文件，内容写自定义域名就行</li>
 </ol>
@@ -490,7 +601,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">62</span>
+          <span class="site-state-item-count">63</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
