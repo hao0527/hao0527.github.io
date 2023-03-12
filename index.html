@@ -185,6 +185,115 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/03/10/230310-macro/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/03/10/230310-macro/" class="post-title-link" itemprop="url">C语言 宏的高级用法</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-03-10 16:00:00" itemprop="dateCreated datePublished" datetime="2023-03-10T16:00:00+08:00">2023-03-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-03-13 07:35:35" itemprop="dateModified" datetime="2023-03-13T07:35:35+08:00">2023-03-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="字符串转换符"><a href="#字符串转换符" class="headerlink" title="字符串转换符"></a>字符串转换符</h3><p>使用<code>#</code>运算符可以将宏参数替换为一个字符串，并用双引号括起来，例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> PRINT_STR(x) printf(<span class="string">&quot;The string is: %s\n&quot;</span>, #x)</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    PRINT_STR(Hello World);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这个示例程序中，定义了一个宏PRINT_STR，它的参数x通过#运算符被转换为一个字符串，并被传递给printf函数进行输出。运行这个程序会输出：<code>The string is: Hello World</code></p>
+<h3 id="字符串拼接"><a href="#字符串拼接" class="headerlink" title="字符串拼接"></a>字符串拼接</h3><p>在C语言中，宏定义可以使用##运算符进行字符串拼接，称为连接运算符（Token Pasting Operator）。<code>##</code>运算符可以将两个标记（Token）连接成一个标记，从而实现字符串拼接的功能。例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> CONCAT(x, y) x##y</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">int</span> xy = <span class="number">10</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, CONCAT(x, y));</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这个示例程序中，定义了一个宏CONCAT，它使用<code>##</code>运算符将两个参数x和y连接成一个标记。在main函数中定义了一个变量xy，并将连接后的标记xy作为参数传递给printf函数进行输出。输出结果是：<code>10</code></p>
+<h3 id="变长参数宏"><a href="#变长参数宏" class="headerlink" title="变长参数宏"></a>变长参数宏</h3><p>C语言中的变长参数宏（Variadic Macro）可以接受可变数量的参数。变长参数宏是通过使用特殊的预处理符号<code>__VA_ARGS__</code>来实现的，它表示可变参数的列表。下面是一个简单的示例，展示了如何使用变长参数宏：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PRINTF(...) printf(__VA_ARGS__)</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">int</span> x = <span class="number">10</span>;</span><br><span class="line">    <span class="type">char</span>* str = <span class="string">&quot;hello&quot;</span>;</span><br><span class="line">    PRINTF(<span class="string">&quot;x = %d, str = %s\n&quot;</span>, x, str);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这个示例程序中，定义了一个宏PRINTF，它使用printf函数打印可变数量的参数。使用<code>__VA_ARGS__</code>表示可变参数的列表。在main函数中，PRINTF宏被调用，传递了三个参数，包括一个整数和一个字符串。输出结果是：<code>x = 10, str = hello</code></p>
+<h3 id="宏：取最大值"><a href="#宏：取最大值" class="headerlink" title="宏：取最大值"></a>宏：取最大值</h3><p>一种方式：<code>#define MAX(a, b) ((a) &gt; (b) ? (a) : (b))</code><br>这种方式需要注意参数如果有自增运算，需要在传参的时候加括号，否则自增运算会重复两次。<br>正确调用方法如：<code>z = MAX((x++), (y++));</code></p>
+<p>使用下面一种方式可以避免此类问题</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> MAX(a, b) (&#123; \</span></span><br><span class="line"><span class="meta">    typeof(a) _a = (a); \</span></span><br><span class="line"><span class="meta">    typeof(b) _b = (b); \</span></span><br><span class="line"><span class="meta">    (void)(&amp;_a == &amp;_b); \</span></span><br><span class="line"><span class="meta">    _a &gt; _b ? _a : _b; \</span></span><br><span class="line"><span class="meta">&#125;)</span></span><br></pre></td></tr></table></figure>
+
+<p><code>typeof</code>是GNU C编译器内置的一种类型描述符，用于表示表达式的类型。在编译时，编译器会根据<code>typeof(x)</code>对象的类型生成一个类型的值，并将其插入到代码中。</p>
+<p>比较难理解的是<code>(void)(&amp;_a == &amp;_b);</code>，看起来很多余，仔细分析一下，你会发现这条语句很有意思。它的作用有两个： </p>
+<ol>
+<li>用来给用户提示一个警告，对于不同类型的指针比较，编译器会发出一个警告， 提示两种数据的类型不同。<code>warning: comparison of distinct pointer types lacks a cast.</code></li>
+<li>两个数进行比较运算，运算的结果却没有用到，有些编译器可能会给出一个warning，加一个<code>(void)</code>后，就可以消除这个警告。</li>
+</ol>
+<h3 id="宏：offsetof"><a href="#宏：offsetof" class="headerlink" title="宏：offsetof"></a>宏：offsetof</h3><p><code>offsetof</code>是一个宏，用于获取结构体中成员的偏移量。实现是使用指针运算来计算结构体成员的偏移量。具体实现：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> offsetof(type, member) ((size_t) &amp;((type *)0)-&gt;member)</span></span><br></pre></td></tr></table></figure>
+
+<p>其中，type表示结构体类型，member表示结构体成员。在宏展开时，(type *)0将一个空指针强制转换为结构体指针类型，然后通过指针运算获取成员的地址。由于空指针的地址为0，因此可以确保这个地址不会指向任何实际的内存位置，避免了访问非法内存的风险。最后，将成员的地址转换为size_t类型的偏移量，并返回。</p>
+<p>需要注意的是，offsetof宏只能用于标准布局的结构体，即结构体中的成员按照其定义顺序依次存储，没有嵌套、位域、虚函数等。对于非标准布局的结构体，offsetof可能无法正确计算成员的偏移量。</p>
+<h3 id="宏：container-of"><a href="#宏：container-of" class="headerlink" title="宏：container_of"></a>宏：container_of</h3><p><code>container_of</code>是一个宏，用于从结构体的成员指针计算出结构体的地址。其实现通常基于<code>offsetof</code>宏和指针运算。实现如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> container_of(ptr, type, member) \</span></span><br><span class="line"><span class="meta">    ((type *)((char *)(ptr) - offsetof(type, member)))</span></span><br></pre></td></tr></table></figure>
+
+<p>其中，ptr表示结构体成员的指针，type表示结构体类型，member表示结构体成员名。offsetof(type, member)用于计算结构体成员在结构体中的偏移量，(char *)(ptr)将成员指针转换为char类型指针，以便进行指针运算。通过成员指针的地址减去成员在结构体中的偏移量，可以得到结构体的地址。最后，将地址转换为type类型的指针，并返回。</p>
+<p>container_of宏常用于实现Linux内核中的数据结构，如链表、哈希表等。它可以方便地从链表节点或哈希桶中获取对应的数据结构。</p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/03/09/230309-CompoundLiterals/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1026,113 +1135,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/11/03/221103-mcustartup/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/11/03/221103-mcustartup/" class="post-title-link" itemprop="url">MCU startup.s</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-11-03 08:00:00" itemprop="dateCreated datePublished" datetime="2022-11-03T08:00:00+08:00">2022-11-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-01-31 23:40:52" itemprop="dateModified" datetime="2023-01-31T23:40:52+08:00">2023-01-31</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>云途MCU内存有ECC(Error Correcting Code)功能，需要在startup.s中初始化所有内存（既赋值0），所以软复位后从startup.s中reset_handle运行，会重新初始化内存，原本内存的值会被清0，无法使用内存OTA升级程序，需要用到Flash来保存OTA信息。</p>
-<p>这篇文章来讲下汇编启动程序做了什么，单片机启动过程，ld链接脚本中定义的变量在汇编程序中的引用，不同编译器汇编程序的区别。</p>
-<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ol>
-<li>正点原子《I.MX6U  嵌入式 x Linux  驱动开发指南 V1.6 6》——第七章 ARM  汇编基础</li>
-<li><a target="_blank" rel="noopener" href="https://developer.arm.com/zh-TW/">ARM开发人员网站</a>，可以直接搜索指令</li>
-<li><a target="_blank" rel="noopener" href="https://www.arm.com/zh-TW/resource-library">ARM资源图书馆</a>，可以下载白皮书、ARM编程手册</li>
-<li><a target="_blank" rel="noopener" href="https://sourceware.org/binutils/docs/">Documentation for binutils</a>，binutils工具链(ld, as…)的官方文档</li>
-</ol>
-<h2 id="启动程序和启动过程"><a href="#启动程序和启动过程" class="headerlink" title="启动程序和启动过程"></a>启动程序和启动过程</h2><h3 id="常用指令"><a href="#常用指令" class="headerlink" title="常用指令"></a>常用指令</h3><p><img src="https://hao0527.gitee.io/221103-mcustartup/2020032320502673.png" alt="启动文件使用的 ARM 汇编指令汇总"></p>
-<h3 id="startup-stm32f40-41xxx-s-代码分析"><a href="#startup-stm32f40-41xxx-s-代码分析" class="headerlink" title="startup_stm32f40_41xxx.s 代码分析"></a>startup_stm32f40_41xxx.s 代码分析</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Stack_Size      EQU     0x00000400</span><br><span class="line">                AREA    STACK, NOINIT, READWRITE, ALIGN=3</span><br><span class="line">Stack_Mem       SPACE   Stack_Size</span><br><span class="line">__initial_sp</span><br><span class="line"></span><br><span class="line">Heap_Size       EQU     0x00000200</span><br><span class="line">                AREA    HEAP, NOINIT, READWRITE, ALIGN=3</span><br><span class="line">__heap_base</span><br><span class="line">Heap_Mem        SPACE   Heap_Size</span><br><span class="line">__heap_limit</span><br></pre></td></tr></table></figure>
-
-<p>第1行：EQU 是表示宏定义的伪指令，类似于 C 语言中的#define。伪指令的意思是指这个“指令”并不会生成二进制程序代码，也不会引起变量空间分配。0x00000400 表示栈大小，字节为单位。0x00000400 =1024字节=1KB。</p>
-<p>第2行：开辟一段数据空间可读可写，段名 STACK，按照8字节对齐。ARER 伪指令表示下面将开始定义一个代码段或者数据段。此处是定义数据段。ARER 后面的关键字表示这个段的属性。</p>
-<ul>
-<li>STACK ：表示这个段的名字，可以任意命名。</li>
-<li>NOINIT：表示此数据段不需要填入初始数据。</li>
-<li>READWRITE：表示此段可读可写。</li>
-<li>ALIGN=3 ：表示首地址按照 2 的 3 次方对齐，也就是按照 8 字节对齐(地址对 8 求余数等于0)。</li>
-</ul>
-<p>第3行：SPACE 这行指令告诉汇编器给STACK段分配 0x00000400 字节的连续内存空间。</p>
-<p>第4行：__initial_sp 紧接着SPACE语句放置，表示了栈顶地址。__initial_sp 只是一个标号，标号主要用于表示一片内存空间的某个位置，等价于 C 语言中的“地址”概念。地址仅仅表示存储空间的一个位置，从 C 语言的角度来看，变量的地址，数组的地址或是函数的入口地址在本质上并无区别。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">                PRESERVE8   ; 指定当前文件保持堆栈8字节对齐</span><br><span class="line">                THUMB       ; 表示后面的指令是THUMB指令集</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">; Vector Table Mapped to Address 0 at Reset</span><br><span class="line">                AREA    RESET, DATA, READONLY</span><br><span class="line">                EXPORT  __Vectors       ; EXPORT申明标号为可被外部引用</span><br><span class="line">                EXPORT  __Vectors_End</span><br><span class="line">                EXPORT  __Vectors_Size</span><br><span class="line">                </span><br><span class="line">__Vectors       DCD     __initial_sp               ; Top of Stack</span><br><span class="line">                DCD     Reset_Handler              ; Reset Handler</span><br><span class="line">                DCD     NMI_Handler                ; NMI Handler</span><br><span class="line">                DCD     HardFault_Handler          ; Hard Fault Handler</span><br><span class="line">                DCD     MemManage_Handler          ; MPU Fault Handler</span><br><span class="line">                DCD     BusFault_Handler           ; Bus Fault Handler</span><br><span class="line">                DCD     UsageFault_Handler         ; Usage Fault Handler</span><br><span class="line">...... 省略</span><br><span class="line">                DCD     OTG_HS_IRQHandler                 ; USB OTG HS                   </span><br><span class="line">                DCD     DCMI_IRQHandler                   ; DCMI                         </span><br><span class="line">                DCD     CRYP_IRQHandler                   ; CRYP crypto                   </span><br><span class="line">                DCD     HASH_RNG_IRQHandler               ; Hash and Rng</span><br><span class="line">                DCD     FPU_IRQHandler                    ; FPU             </span><br><span class="line">__Vectors_End</span><br><span class="line">__Vectors_Size  EQU  __Vectors_End - __Vectors</span><br></pre></td></tr></table></figure>
-
-<p>上面这块代码初始化了中断向量表，第一个是SP指针初始化地址，后面是中断向量表，包含异常处理和外设中断，DCD会定义个4Bytes空间存储中断要跳转的地址。这块RESET数据段放在Flash开始，程序从Flash首地址开始运行，先初始化SP和PC(PC就是Reset_Handler)，再跳转去Reset_Handler执行。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">                AREA    |.text|, CODE, READONLY</span><br><span class="line">; Reset handler</span><br><span class="line">Reset_Handler    PROC</span><br><span class="line">                 EXPORT  Reset_Handler             [WEAK] ; 弱定义</span><br><span class="line">        IMPORT  SystemInit</span><br><span class="line">        IMPORT  __main</span><br><span class="line">                 LDR     R0, =SystemInit</span><br><span class="line">                 BLX     R0                 ; 跳转至SystemInit()函数初始化时钟</span><br><span class="line">                 LDR     R0, =__main        ; 跳转至__main()初始化堆栈, __main()由MDK自动生成</span><br><span class="line">                 BX      R0</span><br><span class="line">                 ENDP</span><br><span class="line"></span><br><span class="line">; Dummy Exception Handlers (infinite loops which can be modified)</span><br><span class="line"></span><br><span class="line">NMI_Handler     PROC</span><br><span class="line">                EXPORT  NMI_Handler                [WEAK]</span><br><span class="line">                B       .</span><br><span class="line">                ENDP</span><br><span class="line">...... 省略</span><br></pre></td></tr></table></figure>
-
-<p>上面这块定义了中断服务函数，都是弱定义，用户可以在别的文件中重定义。除了Reset_Handler有实现，其他都为死循环。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">;*******************************************************************************</span><br><span class="line">; User Stack and Heap initialization</span><br><span class="line">;*******************************************************************************</span><br><span class="line">                 IF      :DEF:__MICROLIB</span><br><span class="line">                 EXPORT  __initial_sp</span><br><span class="line">                 EXPORT  __heap_base</span><br><span class="line">                 EXPORT  __heap_limit</span><br><span class="line">                </span><br><span class="line">                 ELSE</span><br><span class="line">                 IMPORT  __use_two_region_memory</span><br><span class="line">                 EXPORT  __user_initial_stackheap</span><br><span class="line">                 </span><br><span class="line">__user_initial_stackheap</span><br><span class="line">                 LDR     R0, =  Heap_Mem</span><br><span class="line">                 LDR     R1, =(Stack_Mem + Stack_Size)</span><br><span class="line">                 LDR     R2, = (Heap_Mem +  Heap_Size)</span><br><span class="line">                 LDR     R3, = Stack_Mem</span><br><span class="line">                 BX      LR</span><br><span class="line">                 ALIGN</span><br><span class="line">                 ENDIF</span><br></pre></td></tr></table></figure>
-
-<p>启动代码的最后一部分，简单的汇编语言实现 IF ELSE语句。如果定义了__MICROLIB，那么程序是不会执行ELSE分支的代码。MDK中MicroLIB的作用，参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42682108/article/details/113357057">KeilMDK配置项中Use MicroLIB</a></p>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1202,7 +1204,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">63</span>
+          <span class="site-state-item-count">64</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

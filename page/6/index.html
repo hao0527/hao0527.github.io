@@ -185,6 +185,102 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/23/210623-fpgaOV/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/06/23/210623-fpgaOV/" class="post-title-link" itemprop="url">FPGA驱动OV2640用SPI转发JPEG数据</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-06-23 20:00:00" itemprop="dateCreated datePublished" datetime="2021-06-23T20:00:00+08:00">2021-06-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-03 14:00:08" itemprop="dateModified" datetime="2021-07-03T14:00:08+08:00">2021-07-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E7%A1%AC%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">硬件</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><ul>
+<li>FPGA采用的是<a target="_blank" rel="noopener" href="http://www.gowinsemi.com.cn/prod_view.aspx?TypeId=10&FId=t3:10:3&Id=168">高云小蜜蜂家族</a>的GW1N-LV4QN88C6/I5</li>
+<li>摄像头使用OV2640，可以配置数据为JPEG压缩后输出</li>
+<li>采用DC-DC降压到3.6V再LDO降至3.3V与2.8V，OV内核和FPGA内核采用DC-DC降到1.2V使用</li>
+</ul>
+<h2 id="FPGA部分"><a href="#FPGA部分" class="headerlink" title="FPGA部分"></a>FPGA部分</h2><h3 id="编程流程图"><a href="#编程流程图" class="headerlink" title="编程流程图"></a>编程流程图</h3><ol>
+<li>I2C驱动</li>
+<li>FIFO配置</li>
+<li>通过I2C配置OV2640寄存器</li>
+<li>获取DCMI接口数据</li>
+<li>JPEG找出帧头帧尾</li>
+<li>把有效数据存入FIFO</li>
+<li>SPI读FIFO数据输出</li>
+</ol>
+<h3 id="I2C驱动"><a href="#I2C驱动" class="headerlink" title="I2C驱动"></a>I2C驱动</h3><p>参考：正点原子OV5640驱动程序</p>
+<h3 id="FIFO配置"><a href="#FIFO配置" class="headerlink" title="FIFO配置"></a>FIFO配置</h3><p>通过FIFO SC HS IP核向导生成（SC是同步的意思），在使用的时候需要查看IP核用户指南，重点要看时序部分</p>
+<h3 id="SPI驱动"><a href="#SPI驱动" class="headerlink" title="SPI驱动"></a>SPI驱动</h3><p>参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/liujinggang/p/9609739.html">SPI总线的原理与Verilog实现</a></p>
+<h2 id="经验总结"><a href="#经验总结" class="headerlink" title="经验总结"></a>经验总结</h2><p>本次FPGA实现读取OV2640并SPI发出来的小功能，解决了低端MCU没有DCMI外设，遇到了IP核不会使用的问题，要多看手册里的时序部分。还有就是有些数据处理的时候要缓冲，加延时，否则会造成信号的错位。后面我要加强流水线结构的设计，多用并行的思想发挥FPGA的优势。</p>
+<h2 id="项目GitHub链接"><a href="#项目GitHub链接" class="headerlink" title="项目GitHub链接"></a>项目GitHub链接</h2><p><a target="_blank" rel="noopener" href="https://github.com/hao0527/fpga-ov2640_fifo_spi">https://github.com/hao0527/fpga-ov2640_fifo_spi</a></p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/12/210612-RAM/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1180,136 +1276,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/04/210504-%E5%9F%9F%E5%90%8D/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/05/04/210504-%E5%9F%9F%E5%90%8D/" class="post-title-link" itemprop="url">喜提域名ihcode.cn（爱皓码）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-05-04 19:00:00" itemprop="dateCreated datePublished" datetime="2021-05-04T19:00:00+08:00">2021-05-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-06 14:59:13" itemprop="dateModified" datetime="2021-05-06T14:59:13+08:00">2021-05-06</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Hexo/" itemprop="url" rel="index"><span itemprop="name">Hexo</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="注册流程"><a href="#注册流程" class="headerlink" title="注册流程"></a>注册流程</h3><ol>
-<li>在<a target="_blank" rel="noopener" href="https://www.ename.cn/">易名官网</a>注册网站账号，实名认证（审核了半天）</li>
-<li>选择好域名加入购物车，支付就可以，我的域名价格为35元一年</li>
-</ol>
-<h3 id="相关配置"><a href="#相关配置" class="headerlink" title="相关配置"></a>相关配置</h3><ol>
-<li><p>注册完域名后进入后台-域名管理-我的域名</p>
-</li>
-<li><p>DNS使用的是<strong>易名DNS</strong>（免费版），网上听说易名DNS很烂，以后我再换一个DNS，易名DNS服务器是海外的，国内的DNS服务器需要备案，我的空间和服务器在本地，备案比较麻烦，就没备案</p>
-</li>
-<li><p>易名云解析中解析记录的一些配置如下</p>
-<ul>
-<li><p>主机记录就是域名前缀，常见用法有：</p>
-<p>www：解析后的域名为 <code>www.ihcode.cn</code></p>
-<p>@：直接解析主域名ihcode.cn</p>
-<p>*：泛解析，匹配其他所有域名 *.ihcode.cn</p>
-</li>
-<li><p>要指向空间商提供的 IP 地址，选择「类型 A」，要指向一个域名，选择「类型 CNAME」</p>
-</li>
-<li><p>各类型的记录值一般是这样的：</p>
-<p>A记录：填写您服务器 IP，如果您不知道，请咨询您的空间商</p>
-<p>CNAME记录：填写空间商给您提供的域名</p>
-</li>
-<li><p>TTL(Time To Live)，缓存的生存时间。指地方dns缓存您域名记录信息的时间，缓存失效后会再次到获取记录值。</p>
-<p>600（10分钟）：建议正常情况下使用600。</p>
-<p>60（1分钟）：如果您经常修改IP，修改记录一分钟即可生效。长期使用60，解析速度会略受影响。</p>
-<p>3600（1小时）：如果您IP极少变动（一年几次），建议选择3600，解析速度快。</p>
-</li>
-</ul>
-</li>
-<li><p>易名云解析中URL转发的一些配置如下</p>
-<ul>
-<li><p>域名，可以是 *.ihcode.cn 或者 <code>www.ihcode.cn</code></p>
-</li>
-<li><p>类型：显性或隐性</p>
-<p>设置显性URL转发后，当用户访问域名会自动转向访问指定值，址栏显示指定值</p>
-<p>设置隐性URL转发后，当用户访问域名会自动转向访问指定值，址栏仍旧显示之前域名</p>
-</li>
-<li><p>转发值：就是要跳转的域名链接http://，可以带端口号</p>
-</li>
-</ul>
-</li>
-</ol>
-<h3 id="问题与解决"><a href="#问题与解决" class="headerlink" title="问题与解决"></a>问题与解决</h3><ol>
-<li><p>解析记录的记录值只能是IP地址或者是指向的该IP的DDNS域名，不能加端口号</p>
-<p>使用url转发可以带端口号，但是隐性类型转发后无法获取网页logo和名称，UI不正确等问题，使用显性类型转发可以</p>
-</li>
-<li><p>修改完解析记录后需要至少10分钟才能正常使用</p>
-<p>清空DNS缓存即可，Windows管理员CMD输入<code>ipconfig /flushdns</code></p>
-</li>
-<li><p>Hexo 4000端口微信访问的时候会报非标准端口警告</p>
-<p>考虑以后使用树莓派开一个web服务器，使用80端口映射到公网IP</p>
-</li>
-</ol>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1379,7 +1345,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">63</span>
+          <span class="site-state-item-count">64</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
