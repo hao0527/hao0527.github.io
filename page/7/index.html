@@ -185,6 +185,94 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/06/210506-bjt%E5%92%8Cfet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/06/210506-bjt%E5%92%8Cfet/" class="post-title-link" itemprop="url">BJT和FET相关知识总结</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-05-06 15:00:00" itemprop="dateCreated datePublished" datetime="2021-05-06T15:00:00+08:00">2021-05-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-02-01 00:01:48" itemprop="dateModified" datetime="2023-02-01T00:01:48+08:00">2023-02-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E7%A1%AC%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">硬件</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="晶体三极管（BJT）"><a href="#晶体三极管（BJT）" class="headerlink" title="晶体三极管（BJT）"></a>晶体三极管（BJT）</h2><p>《模拟电子技术基础》（第五版）P24</p>
+<h2 id="场效应管（FET）"><a href="#场效应管（FET）" class="headerlink" title="场效应管（FET）"></a>场效应管（FET）</h2><h3 id="结型场效应管（JFET）"><a href="#结型场效应管（JFET）" class="headerlink" title="结型场效应管（JFET）"></a>结型场效应管（JFET）</h3><p>《模拟电子技术基础》（第五版）P33</p>
+<h3 id="绝缘栅型场效应管（IGFET）"><a href="#绝缘栅型场效应管（IGFET）" class="headerlink" title="绝缘栅型场效应管（IGFET）"></a>绝缘栅型场效应管（IGFET）</h3><ol>
+<li>绝缘栅型场效应管的栅极与源极、漏极之间都采用SiO<sub>2</sub>绝缘层隔离，栅极为金属铝，又称MOS管</li>
+<li>IGFET的G-S间内阻比JFET大得多，可达10<sup>10</sup>Ω以上</li>
+<li>MOS分N沟道和P沟道两类，每一类分<strong>增强型</strong>和<strong>耗尽型</strong>两种，U<sub>GS</sub>=0时，I<sub>d</sub>=0为增强型，I<sub>d</sub>≠0为耗尽型</li>
+<li>NMOS的U<sub>GS</sub> 越大，反型层越厚，导电沟道电阻越小</li>
+<li>与JFET一样，MOS管有三个工作区：可变电阻区、恒流区、夹断区，当U<sub>DS</sub>增大到U<sub>GS(th)</sub>（即U<sub>DS</sub>=U<sub>GS</sub>-U<sub>GS(th)</sub>）时，沟道在漏极一侧出现加断点，进入恒流区，U<sub>DS</sub>增大的部分几乎全部用于克服预夹断区对漏极电流的阻力</li>
+<li>U<sub>DS</sub>&gt;U<sub>GS</sub>-U<sub>GS(th)</sub>时，对应每一个U<sub>GS</sub>就有一个确定的I<sub>d</sub>，可将I<sub>d</sub>视为电压U<sub>GS</sub>控制的电流源</li>
+</ol>
+<h3 id="FET符号及特性"><a href="#FET符号及特性" class="headerlink" title="FET符号及特性"></a>FET符号及特性</h3><p><img src="https://hao0527.gitee.io/210506-bjt%E5%92%8Cfet/210506-bjt%E5%92%8Cfet-1.jpg" alt="210506-bjt和fet-1.jpg"><img src="https://hao0527.gitee.io/210506-bjt%E5%92%8Cfet/210506-bjt%E5%92%8Cfet-2.jpg" alt="210506-bjt和fet-2.jpg"></p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/04/210504-%E5%9F%9F%E5%90%8D/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -640,7 +728,7 @@
 <h3 id="Hexo-Github部署"><a href="#Hexo-Github部署" class="headerlink" title="Hexo Github部署"></a>Hexo Github部署</h3><ol>
 <li>安装hexo-deployer-git插件 ‘cnpm install –save hexo-deployer-git’</li>
 <li>git添加SSHKey</li>
-<li>blog文件夹中_config.yml配置hexo-deployer-git插件<br> type: git<br> repo: <a href="mailto:&#x67;&#105;&#116;&#x40;&#103;&#105;&#116;&#x68;&#x75;&#98;&#46;&#x63;&#x6f;&#109;">&#x67;&#105;&#116;&#x40;&#103;&#105;&#116;&#x68;&#x75;&#98;&#46;&#x63;&#x6f;&#109;</a>:hao0527/hao0527.github.io.git<br> branch: main</li>
+<li>blog文件夹中_config.yml配置hexo-deployer-git插件<br> type: git<br> repo: <a href="mailto:&#103;&#x69;&#116;&#x40;&#x67;&#x69;&#116;&#104;&#x75;&#98;&#x2e;&#x63;&#111;&#x6d;">&#103;&#x69;&#116;&#x40;&#x67;&#x69;&#116;&#104;&#x75;&#98;&#x2e;&#x63;&#111;&#x6d;</a>:hao0527/hao0527.github.io.git<br> branch: main</li>
 <li>hexo g 编译<br> hexo d 发布到Github</li>
 <li>每次发布会GithubPages的Custom domain都会被删除，在本地source文件夹中添加CNAME文件，内容写自定义域名就行</li>
 </ol>
@@ -731,7 +819,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">64</span>
+          <span class="site-state-item-count">65</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
