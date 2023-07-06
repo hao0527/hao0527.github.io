@@ -185,6 +185,163 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/31/220731-WindowsC%E7%BC%96%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/07/31/220731-WindowsC%E7%BC%96%E7%A8%8B/" class="post-title-link" itemprop="url">Windows C/C++编程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-07-31 18:00:00" itemprop="dateCreated datePublished" datetime="2022-07-31T18:00:00+08:00">2022-07-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-12 23:35:56" itemprop="dateModified" datetime="2022-08-12T23:35:56+08:00">2022-08-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="Windows串口接收代码"><a href="#Windows串口接收代码" class="headerlink" title="Windows串口接收代码"></a>Windows串口接收代码</h2><h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_39100510/article/details/124292893">windows串口通信函数API</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.yfvb.com/help/win32sdk/webhelplefth.htm">Win32API参考手册</a></li>
+<li><a target="_blank" rel="noopener" href="http://t.zoukankan.com/zhuguanhao-p-2887210.html">使用CreateFile()打开COM10及以上串口的问题</a></li>
+</ul>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;Windows.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span>* <span class="title function_">serial_openSerial</span><span class="params">(<span class="type">void</span>* lpFileName, <span class="type">unsigned</span> <span class="type">int</span> baudRate, <span class="type">unsigned</span> <span class="type">int</span> dwInQueue, <span class="type">unsigned</span> <span class="type">int</span> dwOutQueue)</span> &#123;</span><br><span class="line">    HANDLE hComm = <span class="literal">NULL</span>;</span><br><span class="line">    DCB dcb;</span><br><span class="line">    COMMTIMEOUTS commTimeOuts;</span><br><span class="line">    hComm = CreateFile(lpFileName,       <span class="comment">//串口名称</span></span><br><span class="line">                        GENERIC_READ | GENERIC_WRITE, <span class="comment">//允许读和写</span></span><br><span class="line">                        <span class="number">0</span>,             <span class="comment">//独占方式</span></span><br><span class="line">                        <span class="literal">NULL</span>,          <span class="comment">// 无安全属性，不可被子程序继承</span></span><br><span class="line">                        OPEN_EXISTING, <span class="comment">//创建文件的性质，打开而不是创建</span></span><br><span class="line">                        <span class="number">0</span>,             <span class="comment">// Non Overlapped I/O</span></span><br><span class="line">                        <span class="literal">NULL</span>);         <span class="comment">// Null for Comm Devices</span></span><br><span class="line">    SetupComm(hComm, dwInQueue, dwOutQueue);</span><br><span class="line">    GetCommState(hComm, &amp;dcb);</span><br><span class="line">    dcb.BaudRate = baudRate;</span><br><span class="line">    SetCommState(hComm, &amp;dcb);</span><br><span class="line">    commTimeOuts.ReadIntervalTimeout = <span class="number">0</span>;</span><br><span class="line">    commTimeOuts.ReadTotalTimeoutMultiplier = <span class="number">0</span>;</span><br><span class="line">    commTimeOuts.ReadTotalTimeoutConstant = <span class="number">0</span>;</span><br><span class="line">    commTimeOuts.WriteTotalTimeoutMultiplier = <span class="number">0</span>;</span><br><span class="line">    commTimeOuts.WriteTotalTimeoutConstant = <span class="number">0</span>;</span><br><span class="line">    SetCommTimeouts(hComm, &amp;commTimeOuts);	<span class="comment">// 配置Timeout参数(ms)，0表示不Timeout</span></span><br><span class="line">    <span class="keyword">return</span> hComm;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">serial_readLen</span><span class="params">(<span class="type">void</span>* hComm, <span class="type">unsigned</span> <span class="type">char</span>* pBuff, <span class="type">unsigned</span> <span class="type">int</span> len, <span class="type">unsigned</span> <span class="type">int</span>* pLenRead)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> ReadFile(hComm, pBuff, len, pLenRead, <span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">serial_closeSerial</span><span class="params">(<span class="type">void</span>* hComm)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> CloseHandle(hComm);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">serial_purgeSerial</span><span class="params">(<span class="type">void</span>* hComm)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> PurgeComm(hComm, PURGE_RXCLEAR | PURGE_TXCLEAR);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><p>Windows.h的api是<strong>正确返回非0</strong></p>
+<h2 id="不同系统编译各数据类型所占内存空间大小"><a href="#不同系统编译各数据类型所占内存空间大小" class="headerlink" title="不同系统编译各数据类型所占内存空间大小"></a>不同系统编译各数据类型所占内存空间大小</h2><h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>win32</th>
+<th>win64</th>
+<th>linux32</th>
+<th>linux64</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>char</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>short</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr>
+<td>int</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+</tr>
+<tr>
+<td>long</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>8</td>
+</tr>
+<tr>
+<td>long long</td>
+<td>8</td>
+<td>8</td>
+<td>8</td>
+<td>8</td>
+</tr>
+<tr>
+<td>float</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+</tr>
+<tr>
+<td>double</td>
+<td>8</td>
+<td>8</td>
+<td>8</td>
+<td>8</td>
+</tr>
+<tr>
+<td>void*</td>
+<td>4</td>
+<td>8</td>
+<td>4</td>
+<td>8</td>
+</tr>
+</tbody></table>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ol>
+<li>指针所占空间看系统是16位、32位还是64位。</li>
+<li>win64把long编成4字节，linux64把long编成8字节。</li>
+<li>在32位系统中，int和long都是4字节，取值范围相同。</li>
+</ol>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/31/220731-CubeMX/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1355,112 +1512,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/04/220404-C%E7%9A%84%E7%96%91%E6%83%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/04/04/220404-C%E7%9A%84%E7%96%91%E6%83%91/" class="post-title-link" itemprop="url">C/C++中几个易混淆的点</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-04-04 19:00:00" itemprop="dateCreated datePublished" datetime="2022-04-04T19:00:00+08:00">2022-04-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-02 00:32:42" itemprop="dateModified" datetime="2022-08-02T00:32:42+08:00">2022-08-02</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="数组指针-amp-指针数组"><a href="#数组指针-amp-指针数组" class="headerlink" title="数组指针&amp;指针数组"></a>数组指针&amp;指针数组</h2><p>参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/mq0036/p/3382732.html%EF%BC%8C%E4%B8%A4%E8%80%85%E5%86%85%E5%AD%98%E5%88%86%E5%B8%83%E5%86%99%E7%9A%84%E5%BE%88%E8%AF%A6%E7%BB%86%E3%80%82">https://www.cnblogs.com/mq0036/p/3382732.html，两者内存分布写的很详细。</a></p>
-<h3 id="数组指针"><a href="#数组指针" class="headerlink" title="数组指针"></a>数组指针</h3><p>定义<code>int (*p)[n];</code></p>
-<p>()优先级比[]高，首先说明p是一个指针，指向一个整型的一维数组，这个一维数组的长度是n，也可以说是p的步长。</p>
-<p>如要将二维数组赋给一指针，应这样赋值：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a[<span class="number">3</span>][<span class="number">4</span>];</span><br><span class="line"><span class="type">int</span> (*p)[<span class="number">4</span>];   <span class="comment">//该语句是定义一个数组指针，指向含4个元素的一维数组。</span></span><br><span class="line">p = a;     <span class="comment">//将该二维数组的首地址赋给p，也就是a[0]或&amp;a[0][0]</span></span><br><span class="line">p++;       <span class="comment">//该语句执行过后，也就是p=p+1;p跨过行a[0][]指向了行a[1][]</span></span><br></pre></td></tr></table></figure>
-
-<p>所以数组指针也称指向一维数组的指针，亦称行指针。</p>
-<h3 id="指针数组"><a href="#指针数组" class="headerlink" title="指针数组"></a>指针数组</h3><p>定义<code>int *p[n];</code></p>
-<p>[]优先级比*高，先与p结合成为一个数组，再由int*说明这是一个整型指针数组，它有n个指针类型的数组元素。这里执行p+1时，则p指向下一个数组元素，这样赋值是错误的：p=a；因为p是个不可知的表示，只存在p[0]、p[1]、p[2]…p[n-1],而且它们分别是指针变量可以用来存放变量地址。但可以这样 <em>p=a; 这里</em>p表示指针数组第一个元素的值，a的首地址的值。<br>如要将二维数组赋给一指针数组：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> *p[<span class="number">3</span>];</span><br><span class="line"><span class="type">int</span> a[<span class="number">3</span>][<span class="number">4</span>];</span><br><span class="line">p++;  <span class="comment">//该语句表示p数组指向下一个数组元素。注：此数组每一个元素都是一个指针</span></span><br><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">3</span>;i++)</span><br><span class="line">    p[i] = a[i];</span><br></pre></td></tr></table></figure>
-
-<p>这里int *p[3] 表示一个一维数组内存放着三个指针变量，分别是p[0]、p[1]、p[2]，所以要分别赋值。</p>
-<h2 id="常量指针-amp-指针常量"><a href="#常量指针-amp-指针常量" class="headerlink" title="常量指针&amp;指针常量"></a>常量指针&amp;指针常量</h2><h3 id="指针常量"><a href="#指针常量" class="headerlink" title="指针常量"></a>指针常量</h3><p>定义<code>int * const p = &amp;a;</code></p>
-<p>p是个常量，p的类型是int*，所以p的值不能改变，但是*p的值可以改变。</p>
-<h3 id="常量指针"><a href="#常量指针" class="headerlink" title="常量指针"></a>常量指针</h3><p>定义<code>const int * p = NULL;</code></p>
-<p>*p是个常量，p的类型是int*，所以*p的值不能改变，但是p的值可以改变。利用这个特性，在函数传参时使用常量指针可以防止函数对变量值的误修改。</p>
-<h3 id="常量指针常量"><a href="#常量指针常量" class="headerlink" title="常量指针常量"></a>常量指针常量</h3><p>定义<code>const int * const p = &amp;a;</code></p>
-<p>p是个常量，*p也是个常量，p的类型是int*，所以*p的值不能改变，p的值也不能改变。</p>
-<h2 id="引用-amp-常量引用"><a href="#引用-amp-常量引用" class="headerlink" title="引用&amp;常量引用"></a>引用&amp;常量引用</h2><h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><p>定义<code>int&amp; r = a;</code></p>
-<p><a target="_blank" rel="noopener" href="https://www.runoob.com/cplusplus/cpp-references.html">C++ 引用</a>，引用变量是一个别名，也就是说，它是某个已存在变量的另一个名字。</p>
-<p>函数可以通过引用传参，<code>void foo(int &amp;a)&#123;a = 1;&#125;</code>修改引用形参可以改变实参。</p>
-<h3 id="常量引用"><a href="#常量引用" class="headerlink" title="常量引用"></a>常量引用</h3><p>定义<code>const int&amp; r = a;</code></p>
-<p>函数可以通过常量引用传参，<code>void foo(const int &amp;a) &#123;;&#125;</code>只能读取a，不能修改a。利用这个特性，在函数传参时使用常量指针可以防止函数对变量值的误修改。</p>
-<h2 id="函数指针-amp-指针函数"><a href="#函数指针-amp-指针函数" class="headerlink" title="函数指针&amp;指针函数"></a>函数指针&amp;指针函数</h2><h3 id="函数指针"><a href="#函数指针" class="headerlink" title="函数指针"></a>函数指针</h3><p>定义函数指针<code>void (*pFun)(int a, int b);</code></p>
-<p>定义函数<code>void Fun(int a, int b) &#123;;&#125;</code></p>
-<p>将Fun函数的首地址赋给指针变量pFun<code>pFun = Fun;</code>也可以是<code>pFun = &amp;Fun;</code></p>
-<p>通过指针函数调用<code>pFun(1, 2);</code>也可以是<code>(*pFun)(1, 2);</code></p>
-<p>函数指针定义时返回值，参数类型，个数都必须与要指向的函数相同。</p>
-<h3 id="指针函数"><a href="#指针函数" class="headerlink" title="指针函数"></a>指针函数</h3><p>指针函数是返回类型为指针的函数。</p>
-<h2 id="C结构体内存对齐"><a href="#C结构体内存对齐" class="headerlink" title="C结构体内存对齐"></a>C结构体内存对齐</h2><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1530,14 +1581,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">65</span>
+          <span class="site-state-item-count">66</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
