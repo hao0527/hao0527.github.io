@@ -185,6 +185,124 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/11/210511-espidf/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/11/210511-espidf/" class="post-title-link" itemprop="url">esp-idf开发esp32</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-05-11 15:00:00" itemprop="dateCreated datePublished" datetime="2021-05-11T15:00:00+08:00">2021-05-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-05-16 16:50:46" itemprop="dateModified" datetime="2021-05-16T16:50:46+08:00">2021-05-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/esp32/" itemprop="url" rel="index"><span itemprop="name">esp32</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><ol>
+<li>安装Visual Studio Code（下面简称vscode）</li>
+<li>安装python3.7.8（添加环境变量）、Git工具、CMake</li>
+<li>vscode安装ESP-IDF Explorer插件，一键安装idf工具（国内速度慢）</li>
+<li>通过这个插件安装esp-idf可能会失败，我当初用手机流量+梯子装的很快</li>
+</ol>
+<h2 id="使用idf"><a href="#使用idf" class="headerlink" title="使用idf"></a>使用idf</h2><p>Windows开发建议在vscode中使用esp-idf explorer插件</p>
+<p>vscode还支持macOS和Linxu，未试过在其他操作系统使用该插件</p>
+<h3 id="直接使用esp-idf"><a href="#直接使用esp-idf" class="headerlink" title="直接使用esp-idf"></a>直接使用esp-idf</h3><ol>
+<li><p><code>%USERPROFILE%\esp\esp-idf</code>目录下examples文件夹内有例程</p>
+</li>
+<li><p>每次用idf工具，需要执行<code>%USERPROFILE%\esp\esp-idf</code>目录下的export添加环境变量，我是Windows，需要执行export.ps1，<strong>使用export.bat无效</strong>，ps1是Windows Power Shell脚本，需要电脑开启运行脚本权限，在管理员模式下Shell输入<code>set-executionpolicy remotesigned</code>开启权限，然后就可以运行export.ps1</p>
+</li>
+<li><p>在工程文件夹内使用<code>idf.py menuconfig</code>来配置工程</p>
+</li>
+<li><p>使用<code>idf.py build</code>来编译程序（首次编译或更改SDK后的速度慢）</p>
+</li>
+<li><p><code>idf.py -p PORT flash monitor</code>来下载程序</p>
+</li>
+</ol>
+<h3 id="使用esp-idf-explorer插件"><a href="#使用esp-idf-explorer插件" class="headerlink" title="使用esp-idf explorer插件"></a>使用esp-idf explorer插件</h3><ul>
+<li><p>这个工具非常好用，有GUI配SDK，在vscode用插件指令可以编译下载等</p>
+</li>
+<li><p>参考：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV17p4y167uN?p=1">ESP-IDF VS Code 插件快速操作指南</a></p>
+</li>
+<li><p>vscode cmd <code>&gt;ESP-IDF:Show Examples Projects</code>基于例程新建工程</p>
+</li>
+<li><p>编译，下载，调试，设置sdk等功能点点左下角图标就可以</p>
+</li>
+</ul>
+<h2 id="我的esp项目"><a href="#我的esp项目" class="headerlink" title="我的esp项目"></a>我的esp项目</h2><h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3><p>通过esp32把红外热像Demo板的温度信号用TCP发到电脑上</p>
+<h3 id="ESP和Demo板Uart通信"><a href="#ESP和Demo板Uart通信" class="headerlink" title="ESP和Demo板Uart通信"></a>ESP和Demo板Uart通信</h3><ul>
+<li>参考esp例程：uart_events</li>
+</ul>
+<h3 id="ESP和电脑TCP通信"><a href="#ESP和电脑TCP通信" class="headerlink" title="ESP和电脑TCP通信"></a>ESP和电脑TCP通信</h3><ul>
+<li>参考esp例程：tcp_client</li>
+</ul>
+<h3 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h3><ol>
+<li>uart通信波特率设成921600时，接收会hw fifo overflow，esp没有DMA例程，通过降波特率解决</li>
+<li>socket通信电脑端接收的时候不断更改<code>recv(new_fd, buff, BUFSIZ, 0)</code>buff指针会程序中断，未查出原因，通过把每次接收到的数据包写入文件解决</li>
+</ol>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/07/210507-%E5%8D%A1%E7%89%87%E6%9C%BA/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -858,7 +976,7 @@
 <h3 id="Hexo-Github部署"><a href="#Hexo-Github部署" class="headerlink" title="Hexo Github部署"></a>Hexo Github部署</h3><ol>
 <li>安装hexo-deployer-git插件 ‘cnpm install –save hexo-deployer-git’</li>
 <li>git添加SSHKey</li>
-<li>blog文件夹中_config.yml配置hexo-deployer-git插件<br> type: git<br> repo: <a href="mailto:&#x67;&#x69;&#x74;&#64;&#103;&#105;&#116;&#104;&#x75;&#98;&#46;&#x63;&#x6f;&#x6d;">&#x67;&#x69;&#x74;&#64;&#103;&#105;&#116;&#104;&#x75;&#98;&#46;&#x63;&#x6f;&#x6d;</a>:hao0527/hao0527.github.io.git<br> branch: main</li>
+<li>blog文件夹中_config.yml配置hexo-deployer-git插件<br> type: git<br> repo: <a href="mailto:&#x67;&#x69;&#116;&#64;&#x67;&#x69;&#116;&#104;&#x75;&#x62;&#x2e;&#99;&#x6f;&#109;">&#x67;&#x69;&#116;&#64;&#x67;&#x69;&#116;&#104;&#x75;&#x62;&#x2e;&#99;&#x6f;&#109;</a>:hao0527/hao0527.github.io.git<br> branch: main</li>
 <li>hexo g 编译<br> hexo d 发布到Github</li>
 <li>每次发布会GithubPages的Custom domain都会被删除，在本地source文件夹中添加CNAME文件，内容写自定义域名就行</li>
 </ol>
@@ -949,7 +1067,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">66</span>
+          <span class="site-state-item-count">67</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

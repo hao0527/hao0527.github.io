@@ -185,6 +185,96 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/08/22/230822-sourceProtect/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/08/22/230822-sourceProtect/" class="post-title-link" itemprop="url">C语言源码保护技术</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-08-22 20:00:00 / 修改时间：21:34:01" itemprop="dateCreated datePublished" datetime="2023-08-22T20:00:00+08:00">2023-08-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="源码保护技术"><a href="#源码保护技术" class="headerlink" title="源码保护技术"></a>源码保护技术</h2><p>对于一些大软件工程，可能有一部分模块代码是从第三方获取来的，并且可能是不开源的。前段时间给别的部门软件组提供了一份快充协议栈的模块，使用静态库的方式提供，提供头文件给用户调用协议栈中的函数及读取全局变量，快充协议栈的输入也是有模块内部调用用户提供的指定函数，或指定的全局变量实现，在工程最后链接的时候会将静态库中未链接的符号链接到外部代码的地址。</p>
+<p>今天在看PAN1020的SDK，一款蓝牙SOC，它里面的协议栈是不开源的，厂家提供hex文件，于是在想用户需如何集成hex到自己工程，用户代码要如何与协议栈不开源的代码建立联系。自己的猜想基本是对的，厂家还会提供一份头文件，里面有用户需要调用的函数或全局变量，和静态库不同的是，头文件中不是变量和函数的声明，而是需要让用户知道，所需的全局变量与函数在这份hex文件中的哪个位置。</p>
+<h2 id="代码分析"><a href="#代码分析" class="headerlink" title="代码分析"></a>代码分析</h2><p>厂家提供的hex文件需要链接到指定地址，以下是PAN1020未开源模块所提供的头文件：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> STACK_FUN_ADDR					0x00016600</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//app fun register</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SVC_dbg_sys_write_register (*(volatile uint32_t *)(STACK_FUN_ADDR))</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="title function_">void</span> <span class="params">(*dbg_sys_write_register_handler)</span><span class="params">(<span class="type">void</span> (*call)(<span class="type">uint16_t</span> address, <span class="type">uint16_t</span> data))</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SVC_appm_init_register (*(volatile uint32_t *)(STACK_FUN_ADDR + 4))</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="title function_">void</span> <span class="params">(*appm_init_register_handler)</span><span class="params">(<span class="type">void</span> (*call)(<span class="type">void</span>))</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SVC_hci_init_register  (*(volatile uint32_t *)(STACK_FUN_ADDR + 8))</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="title function_">void</span> <span class="params">(*hci_init_register_handler)</span><span class="params">(<span class="type">void</span> (*call)(<span class="type">bool</span> reset))</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SVC_hci_send_2_controller_register (*(volatile uint32_t *)(STACK_FUN_ADDR + 12))</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="title function_">void</span> <span class="params">(*hci_send_2_controller_register_handler)</span><span class="params">(<span class="type">void</span> (*call)(<span class="type">void</span> *param))</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SVC_attm_svc_create_db_register (*(volatile uint32_t *)(STACK_FUN_ADDR + 16))</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="title function_">void</span> <span class="params">(*attm_svc_create_db_register_handler)</span><span class="params">(<span class="type">uint8_t</span> (*call)(<span class="type">uint16_t</span> *shdl, <span class="type">uint16_t</span> uuid, <span class="type">uint8_t</span> *cfg_flag, <span class="type">uint8_t</span> max_nb_att,</span></span><br><span class="line"><span class="params">                           <span class="type">uint8_t</span> *att_tbl, <span class="type">ke_task_id_t</span> <span class="type">const</span> dest_id,<span class="type">const</span> <span class="keyword">struct</span> attm_desc *att_db, <span class="type">uint8_t</span> svc_perm))</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SVC_gattc_con_enable_register (*(volatile uint32_t *)(STACK_FUN_ADDR + 20))</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="title function_">void</span> <span class="params">(*gattc_con_enable_register_handler)</span><span class="params">(<span class="type">void</span> (*call)(<span class="type">uint8_t</span> conidx))</span>;</span><br></pre></td></tr></table></figure>
+
+<p>一开始，我以为是要将hex链接到0x00016600地址，头文件中给出的是函数在hex中的偏移地址。hex文件是带地址的，我用jflash一看后才明白，hex的起始地址是0，0x00016600地址上存放的是一个网表，用来存放函数的真实地址，网表其实就是函数指针类型的数组。</p>
+<p>代码中的<code>(STACK_FUN_ADDR + offset)</code>其实就是函数指针的地址，所以<code>(*(volatile uint32_t *)(STACK_FUN_ADDR + offset))</code>就是取出函数指针的值，这个是函数真实所在的地址。头文件中还有函数指针的typedef，可以通过函数指针类型知道每个函数的形参和返回值。</p>
+<p>有了函数地址与函数类型，用户就可以通过以下方式去调用库中的函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">app_fun_resgister</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	((appm_init_register_handler)SVC_appm_init_register)(appm_init);</span><br><span class="line">	((hci_init_register_handler)SVC_hci_init_register)(hci_init);</span><br><span class="line">	((hci_send_2_controller_register_handler)SVC_hci_send_2_controller_register)(hci_send_2_controller);</span><br><span class="line">	((attm_svc_create_db_register_handler)SVC_attm_svc_create_db_register)(attm_svc_create_db);</span><br><span class="line">	((gattc_con_enable_register_handler)SVC_gattc_con_enable_register)(gattc_con_enable);</span><br><span class="line">	((gattm_cleanup_register_handler)SVC_gattm_cleanup_register)(gattm_cleanup);</span><br><span class="line">	((gattm_create_register_handler)SVC_gattm_create_register)(gattm_create);</span><br><span class="line">	((prf_cleanup_register_handler)SVC_prf_cleanup_register)(prf_cleanup);</span><br><span class="line">	((prf_create_register_handler)SVC_prf_create_register)(prf_create);</span><br><span class="line">	((prf_get_id_from_task_register_handler)SVC_prf_get_id_from_task_register)(prf_get_id_from_task);</span><br><span class="line">	((prf_get_task_from_id_register_handler)SVC_prf_get_task_from_id_register)(prf_get_task_from_id);</span><br><span class="line">	((prf_init_register_handler)SVC_prf_init_register)(prf_init);</span><br><span class="line">	((attm_att_update_perm_register_handler)SVC_attm_att_update_perm_register)(attm_att_update_perm);</span><br><span class="line">	((gattm_init_attr_register_handler)SVC_gattm_init_attr_register)(gattm_init_attr);</span><br><span class="line">	((hci_basic_cmd_send_2_controller_register_handler)SVC_hci_basic_cmd_send_2_controller_register)(hci_basic_cmd_send_2_controller);</span><br><span class="line">	((prf_add_profile_register_handler)SVC_prf_add_profile_register)(prf_add_profile);</span><br><span class="line">	((gattc_get_mtu_register_handler)SVC_gattc_get_mtu_register)(gattc_get_mtu);</span><br><span class="line">	((attm_init_register_handler)SVC_attm_init_register)(attm_init);</span><br><span class="line">	((gattm_init_register_handler)SVC_gattm_init_register)(gattm_init);</span><br><span class="line">	((hci_send_2_host_register_handler)SVC_hci_send_2_host_register)(hci_send_2_host);</span><br><span class="line">	((attmdb_destroy_register_handler)SVC_attmdb_destroy_register)(attmdb_destroy);</span><br><span class="line">	((sleep_handler_register)SVC_sleep_handler_register)(sleep_handler);</span><br><span class="line">	((ble_event_handler_register)SVC_ble_event_handler_register)(ble_event_handler);</span><br><span class="line">	((rf_init_handler_register)SVC_rf_init_handler_register)(rf_init_handler);</span><br><span class="line">	((ble_rx_handler_register)SVC_ble_rx_handler_register)(ble_rx_handler);</span><br><span class="line">	((rf_dev_cal_init_handler_register)SVC_rf_dev_cal_init_handler_register)(rf_dev_cal_init_handler);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上代码为初始化模块中，用户将模块所需要的一些函数注册到模块中。</p>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p>PAN1020这种方式保护源码，让用户不可见源码，相比我之前封静态库的方式有以下优势：</p>
+<ol>
+<li>编译模块的时候不需要其他模块的头文件声明，通过模块对外提供注册函数的方式，获取外部函数地址后调用。我之前静态库的方式就需要在编译模块的时候提供其他模块的函数声明头文件，而且如果链接的时候找不到还会链接失败。</li>
+<li>这种由外部注册函数的方式，模块所依赖其他模块的函数名可以关心，如果用静态库方式就外部函数的函数名就必须与声明的一致。</li>
+<li>提供给用户hex，比静态库文件的信息更少，静态库中有网表信息，hex中只有二进制文件和地址。</li>
+</ol>
+<p>是否可以将一个工程的各模块分开独立，编译成各个hex后再集成？优点：可以使公司的源码不易泄露，每个人都维护自己的模块。</p>
+<p>让各个模块编译完hex后的地址都为0开始，hex中网表的前两个为模块init和模块main。用户将所有的hex链接到指定flash地址，配置给os各模块网表起始地址，网表大小，模块调度周期。因为网表的前两个是init和main，所以os可以轻松创建好任务。模块与模块之间调用，由模块向os请求获取特定模块特定网表index的函数地址。</p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/06/25/230625-Linux%E5%86%85%E6%A0%B8%E4%BB%A3%E7%A0%81%E9%A3%8E%E6%A0%BC/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1350,93 +1440,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/12/17/221217-ddr/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/12/17/221217-ddr/" class="post-title-link" itemprop="url">DDR关键参数介绍</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-12-17 17:00:00" itemprop="dateCreated datePublished" datetime="2022-12-17T17:00:00+08:00">2022-12-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-12-21 08:27:07" itemprop="dateModified" datetime="2022-12-21T08:27:07+08:00">2022-12-21</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h3><p>在学习FPGA时使用了DDR3，最近学ARM处理器也用到了DDR3的外设，在FPGA是使用 MIG(Memory Interface Generators)IP核驱动DDR3，ARM处理器是通过配置MMDC(Multi Mode DDR Controller)模块驱动DDR3，这编博客将会介绍使用DDR需配置的几个关键参数。</p>
-<p>SRAM操作流程、时序图可以浏览我之前的文章，<a href="/2021/12/19/211219-fpga%E4%B9%8Bsdram/">FPGA之SDRAM学习</a>。</p>
-<h3 id="关键参数"><a href="#关键参数" class="headerlink" title="关键参数"></a>关键参数</h3><h4 id="传输速率"><a href="#传输速率" class="headerlink" title="传输速率"></a>传输速率</h4><p>传输速率的单位是MT/s(Mega Transfer Per Second)，即每秒传输的百万次数，常见DDR3有800MT/s、1066MT/s、1333MT/s、1600MT/s等，这是首先需要考虑的，该参数决定了DDR的最高数据传输速率。</p>
-<h4 id="tRCD-参数"><a href="#tRCD-参数" class="headerlink" title="tRCD 参数"></a>tRCD 参数</h4><p>tRCD 全称是 RAS-to-CAS Delay，也就是<strong>行寻址到列寻址之间的延迟</strong>。 DDR 的寻址流程是先指定 BANK 地址，然后在指定行地址，最后指定列地址确定最终要寻址的单元。 BANK 地址和行地址是同时发出的，这个命令叫做<strong>行激活</strong>(Row Active)。行激活以后就发送列地址和具体的操作命令(读还是写)，这两个是同时发出的，因此一般也用<strong>读/写命令</strong>表示<strong>列寻址</strong>。在行有效(行激活)到读/写命令发出的这段时间间隔叫做 tRCD。</p>
-<h4 id="CL-参数"><a href="#CL-参数" class="headerlink" title="CL 参数"></a>CL 参数</h4><p>当列地址发出以后就会触发数据传输，但是从数据从存储单元到内存芯片 IO 接口上还需要一段时间，这段时间就是非常著名的 CL(CAS Latency)，也就是<strong>列地址选通潜伏期</strong>。</p>
-<h4 id="AL-参数"><a href="#AL-参数" class="headerlink" title="AL 参数"></a>AL 参数</h4><p>在 DDR 的发展中，提出了一个前置 CAS 的概念，目的是为了解决 DDR 中的指令冲突，它允许 CAS 信号紧随着 RAS 发送，相当于将 DDR 中的 CAS 前置了。但是读/写操作并没有因此提前，依旧要保证足够的延迟/潜伏期，为此引入了 AL(Additive Latency)，单位也是时钟周期数。 AL+CL 组成了 RL(Read Latency)，从 DDR2 开始还引入了写潜伏期 WL(Write Latency)，WL 表示写命令发出以后到第一笔数据写入的潜伏期。</p>
-<h4 id="tRAS-参数"><a href="#tRAS-参数" class="headerlink" title="tRAS 参数"></a>tRAS 参数</h4><p>RAS active time，也指Active to Precharge Delay，行有效至行预充电时间。是指从收到一个请求后到初始化RAS(行地址选通脉冲)真正开始接受数据的间隔时间，tRAS 是 ACTIVE 命令到 PRECHARGE 命令之间的最小时间，tRAS=tRCD+tWR。</p>
-<h3 id="其他参数"><a href="#其他参数" class="headerlink" title="其他参数"></a>其他参数</h3><h4 id="tRP-参数"><a href="#tRP-参数" class="headerlink" title="tRP 参数"></a>tRP 参数</h4><p>在发出预充电命令之后，要经过一段时间才能允许发送RAS行有效命令打开新的工作行，这个间隔被称为tRP（RAS Precharge time，预充电有效时间）。</p>
-<h4 id="tRC-参数"><a href="#tRC-参数" class="headerlink" title="tRC 参数"></a>tRC 参数</h4><p>tRC(Row Cycle Time)，表示“SDRAM行周期时间”，它是包括行单元预充电到激活在内的整个过程所需要的最小的时钟周期数，是两个 ACTIVE 命令或者 ACTIVE 命令到 REFRESH 命令之间的周期。tRC=tRAS+tRP。如果tRC的时间过长，会因在完成整个时钟周期后激活新的地址而等待无谓的延时，而降低性能。然而如果该值设置过小，在被激活的行单元被充分充电之前，新的周期就可以被初始化，也会导致数据丢失和损坏。</p>
-<h4 id="tWR-参数"><a href="#tWR-参数" class="headerlink" title="tWR 参数"></a>tWR 参数</h4><p>由于数据信号由控制端发出，输入时芯片无需做任何调校，只需直接传到数据输入寄存器中，然后再由写入驱动器进行对存储电容的充电操作，因此数据可以与CAS同时发送，也就是说写入延迟为0。不过，数据并不是即时地写入存储电容，因为选通三极管（就如读取时一样）与电容的充电必须要有一段时间，所以数据的真正写入需要一定的周期。为了保证数据的可靠写入，都会留出足够的写入/校正时间（tWR，Write Recovery Time），这个操作也被称作写回（Write Back）。tWR至少占用一个时钟周期或再多一点（时钟频率越高，tWR占用周期越多）。</p>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1506,7 +1509,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">66</span>
+          <span class="site-state-item-count">67</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
