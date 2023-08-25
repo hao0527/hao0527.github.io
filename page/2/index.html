@@ -185,6 +185,100 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/01/20/230120-printf/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/01/20/230120-printf/" class="post-title-link" itemprop="url">C语言printf变长参数如何实现</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-01-20 17:00:00" itemprop="dateCreated datePublished" datetime="2023-01-20T17:00:00+08:00">2023-01-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-01-31 23:40:51" itemprop="dateModified" datetime="2023-01-31T23:40:51+08:00">2023-01-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="printf函数"><a href="#printf函数" class="headerlink" title="printf函数"></a>printf函数</h3><p>函数原型：<code>int printf(const char *format, ...)</code><br>调用格式为：<code>printf(&quot;&lt;格式化字符串&gt;&quot;, &lt;参量表&gt;);</code><br>功能：发送格式化输出到标准输出 stdout</p>
+<h3 id="变长参数实现思路"><a href="#变长参数实现思路" class="headerlink" title="变长参数实现思路"></a>变长参数实现思路</h3><p>C语言支持变长参数函数(Variable Argument Functions)，即参数的个数可以是不定个，在函数定义的时候用<code>...</code>表示。采用这种形式定义的变长参数函数，<strong>至少需要一个普通的形参</strong>，且<code>...</code>需要放在最后一个参数，比如printf函数中的<code>*format</code>后面的<code>...</code>是函数原型的一部分。</p>
+<p>变长参数的实现得益于C语言默认的<em><strong>cdecl</strong></em>调用惯例，其参数是<strong>从右向左</strong>压入栈的，第一个参数位于栈顶。这样printf函数实现的时候，就无需关心调用他的函数会传递几个参数过来，而只要关心自己用到几个，将全部参数压入栈，函数处理时从栈中取即可。</p>
+<h3 id="自己实现一个变长参数的函数"><a href="#自己实现一个变长参数的函数" class="headerlink" title="自己实现一个变长参数的函数"></a>自己实现一个变长参数的函数</h3><p>Ｃ已经有现成可用的一些东西来帮我们实现变长参数，它主要通过<code>stdarg.h</code>头文件定义的一个变量类型（va_list）和三个宏（va_start、va_arg、va_end）来实现。</p>
+<p>实现一个可变长参数的sum函数，第一个参数<code>num</code>传递变长参数中有参数的数量，紧接着后面会传递<code>num</code>个整型变量，具体实现如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">sum</span><span class="params">(<span class="type">int</span> num, ...)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> i, val = <span class="number">0</span>;</span><br><span class="line">    va_list ap;	<span class="comment">//定义一个具有va_list型的变量，这个变量是指向参数的指针</span></span><br><span class="line">    va_start(ap, num);	<span class="comment">//始化变量刚定义的va_list变量,使其指向第一个可变参数的地址,地址自动增加</span></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; num; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        val += va_arg(ap, <span class="type">int</span>);	<span class="comment">//va_arg返回va_list中的参数，并增加指针偏移</span></span><br><span class="line">    &#125;</span><br><span class="line">    va_end(ap);	<span class="comment">//结束可变参数列表</span></span><br><span class="line">    <span class="keyword">return</span> val;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;16+38+53=%d\n&quot;</span>, sum(<span class="number">3</span>, <span class="number">16</span>, <span class="number">38</span>, <span class="number">53</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="变长参数实现原理"><a href="#变长参数实现原理" class="headerlink" title="变长参数实现原理"></a>变长参数实现原理</h3><p>上面的sum函数也可以不使用va_list等宏，通过其他方法实现。<br>当我们调用：<code>int n = sum(3, 16, 38, 53);</code><br>参数在栈上会形成如下布局：<br><img src="https://hao0527.gitee.io/230120-printf/230120-printf-1.jpg" alt="img"></p>
+<p>在函数内部，函数可以使用变量<code>num</code>来访问数字3，但无法使用任何名称访问其他的几个不定参数。但此时由于栈上其他的几个参数实际恰好依序排列在参数<code>num</code>的高地址方向，因此可以很简单地通过<code>num</code>的地址计算出其他参数的地址，sum函数的另一种实现如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">sum</span><span class="params">(<span class="type">int</span> num, ...)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span>* p = &amp;num + <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(num--)</span><br><span class="line">        ret += *p++;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;   </span><br></pre></td></tr></table></figure>
+
+<p>printf的不定参数比sum要复杂得多，因为printf的参数不仅数量不定，而且<strong>类型</strong>也不定。所以printf需要在格式字符串中注明参数的类型，例如用<code>%d</code>表明是一个整数。printf里的格式字符串如果将类型描述错误，因为不同参数的大小不同，不仅可能导致这个参数的输出错误，还有可能导致其后的一系列参数错误。[摘自《程序员的自我修养——链接、封装、库》P338]</p>
+<p><code>printf(&quot;%lf\t%d\t%c\n&quot;, 1, 666, &#39;a&#39;);</code> 在这行函数里，printf的第一个输出参数是一个int(4 字节)，而我们告诉printf它是一个double(8字节)，因此printf的输出会错误，由于printf在读取double的时候实际造成了越界，因此后面几个参数的输出也会失败。该程序的实际输出为：<code>0.000000 97</code>（根据实际编译器和环境可能不同）</p>
+<h3 id="va-list等宏如何实现"><a href="#va-list等宏如何实现" class="headerlink" title="va_list等宏如何实现"></a>va_list等宏如何实现</h3><p><strong>va_list</strong> 实际是一个指针，用来指向各个不定参数。由于类型不明，因此这个 va_list 以 void* 或 char*  为最佳选择。<br><strong>va_start</strong> 将 va_list 定义的指针指向函数的最后一个参数后面的位置，这个位置就是第一个不定参数。<br><strong>va_arg</strong> 获取当前不定参数的值，并根据当前不定参数的大小将指针移向下一个参数。<br><strong>va_end</strong> 将指针清 0。<br>按照以上思路，va_list等宏的一个<strong>最简单的实现</strong>就可以得到了，如下所示：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> va_list char*</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> va_start(ap, arg) (ap=(va_list)&amp;arg+sizeof(arg))</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> va_arg(ap, t) (*(t*)((ap+=sizeof(t))-sizeof(t)))</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> va_end(ap) (ap=(va_list)0)</span></span><br></pre></td></tr></table></figure>
+
+<p>注意：实际代码中还套了很多宏，不同编译器，不同架构都有可能使用不同的代码实现，但具体实现思想一致，有些x64条件编译时va_list会是一个结构体，里面会记录可变参数开始地址、结束地址、参数数量等信息。</p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/12/17/221217-ddr/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1241,88 +1335,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/24/220824-adc%E9%87%87%E6%A0%B7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/08/24/220824-adc%E9%87%87%E6%A0%B7/" class="post-title-link" itemprop="url">ADC采样滤波算法</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-08-24 08:00:00" itemprop="dateCreated datePublished" datetime="2022-08-24T08:00:00+08:00">2022-08-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-09-04 23:23:34" itemprop="dateModified" datetime="2022-09-04T23:23:34+08:00">2022-09-04</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E7%A1%AC%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">硬件</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="ADC过采样"><a href="#ADC过采样" class="headerlink" title="ADC过采样"></a>ADC过采样</h2><p>用过不少模块中有ADC采样，如陀螺仪、磁罗盘、气压计、AFE中，都有ADC过采样率的配置，这些模块配置过采样率，输出的ADC量化位数没变，ADC值静态偏移量减小（信噪比提高），所以可以理解为多次采样取平均值。使用ADC过采样能提升精度，但是由于输出ADC值为多次采样平均，并不是单次采样时刻的值，AFE采电池电压的同时采电流，电压的值不是采电流那一时刻的瞬时值，导致SOC估算不准确。使用ADC过采样会提升采样次数，增大ADC的功耗。</p>
-<p>下面来说说书里介绍的过采样。首先是结论：<strong>过采样率每提高4倍，可以提高ADC 1bit的有效分辨率</strong>。</p>
-<p>假设ADC过采样率为4，ADC会采集4次将值相加，这其实增加了2bits的有效分辨率，这个过程还需要降低采样，或者下抽，下抽是将四次采样累计值&gt;&gt;1，这么做除了降低数据量外，就是可以提高分辨率。</p>
-<h2 id="ADC降采样-减采样-下采样-down-sampling"><a href="#ADC降采样-减采样-下采样-down-sampling" class="headerlink" title="ADC降采样(减采样/下采样/down sampling)"></a>ADC降采样(减采样/下采样/down sampling)</h2><p>降采样网上的资料比较少，一般是原有的采样率比实际信号的有效最高频率要高很多，就可以对采到的信号做低通滤波，除去高频干扰后向下抽样。</p>
-<p>采样这一块还得向香农和奈奎斯特学习，<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E9%A6%99%E5%86%9C%E9%87%87%E6%A0%B7%E5%AE%9A%E7%90%86/7259506">香农-奈奎斯特采样定理</a>，当一个信号被减采样时，必须满足采样定理以避免混叠。为了满足采样定理的要求，信号在进行减采样操作前，必须通过一个具有适当截止频率的低通滤波器。这个用于避免混叠的低通滤波器，称为抗混叠滤波器。</p>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1392,14 +1404,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-count">68</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>

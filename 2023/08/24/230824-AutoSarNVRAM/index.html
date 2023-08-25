@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/heng32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/heng16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="参考资料 AUTOSAR Memory Stack(MemStack) Specification of NVRAM Manager NV Data Handling Guideline  功能简介为了管理汽车领域中的非易失性存储器(NV Memory)，在AUTOSAR环境中使用了内存堆栈(MemStack)。 AUTOSAR中的MemStack主要有以下功能：  数据检索：以结构化方式存储数据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AUTOSAR Memory Stack 架构">
+<meta property="og:url" content="http://example.com/2023/08/24/230824-AutoSarNVRAM/index.html">
+<meta property="og:site_name" content="永恆博客网">
+<meta property="og:description" content="参考资料 AUTOSAR Memory Stack(MemStack) Specification of NVRAM Manager NV Data Handling Guideline  功能简介为了管理汽车领域中的非易失性存储器(NV Memory)，在AUTOSAR环境中使用了内存堆栈(MemStack)。 AUTOSAR中的MemStack主要有以下功能：  数据检索：以结构化方式存储数据">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://hao0527.gitee.io/230824-AutoSarNVRAM/230824-AutoSarNVRAM-1.jpg">
+<meta property="article:published_time" content="2023-08-24T08:00:00.000Z">
+<meta property="article:modified_time" content="2023-08-25T10:53:17.320Z">
+<meta property="article:author" content="Hao">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://hao0527.gitee.io/230824-AutoSarNVRAM/230824-AutoSarNVRAM-1.jpg">
+
+<link rel="canonical" href="http://example.com/2023/08/24/230824-AutoSarNVRAM/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>AUTOSAR Memory Stack 架构 | 永恆博客网</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">永恆博客网</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/08/24/230824-AutoSarNVRAM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          AUTOSAR Memory Stack 架构
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-08-24 16:00:00" itemprop="dateCreated datePublished" datetime="2023-08-24T16:00:00+08:00">2023-08-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-08-25 18:53:17" itemprop="dateModified" datetime="2023-08-25T18:53:17+08:00">2023-08-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/AUTOSAR/" itemprop="url" rel="index"><span itemprop="name">AUTOSAR</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ol>
+<li><a target="_blank" rel="noopener" href="https://www.fer.unizg.hr/_download/repository/3._Vjestine_AUTOSAR_MemStack._v3.pdf">AUTOSAR Memory Stack(MemStack)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.autosar.org/fileadmin/standards/R20-11/CP/AUTOSAR_SWS_NVRAMManager.pdf">Specification of NVRAM Manager</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.autosar.org/fileadmin/standards/R21-11/CP/AUTOSAR_EXP_NVDataHandling.pdf">NV Data Handling Guideline</a></li>
+</ol>
+<h3 id="功能简介"><a href="#功能简介" class="headerlink" title="功能简介"></a>功能简介</h3><p>为了管理汽车领域中的非易失性存储器(NV Memory)，在AUTOSAR环境中使用了内存堆栈(MemStack)。</p>
+<p>AUTOSAR中的MemStack主要有以下功能：</p>
+<ol>
+<li>数据检索：以结构化方式存储数据</li>
+<li>数据存储：对NV Memory的读取与写入</li>
+<li>抽象层：对不同的内部或外部NV Memory提供抽象</li>
+<li>耐久性管理：管理内存写入周期</li>
+<li>错误处理和纠正：管理NV Memory的纠错和错误检测机制</li>
+<li>内存块管理：管理内存块(Memory Block)</li>
+<li>地址映射：虚拟地址到物理地址的映射</li>
+</ol>
+<p>AUTOSAR的内存堆栈为应用层和基础软件(BSW)模块提供访问非易失性存储器的服务（例如读写）。使用AUTOSAR MemStack API，应用层中的软件组件(SWC)和BSW模块可以从NV Memory读取数据并将数据写入NV Memory，例如诊断事件管理器(DEM)使用MemStack服务将冻结帧数据写入NV Memory。</p>
+<h3 id="存储协议栈架构"><a href="#存储协议栈架构" class="headerlink" title="存储协议栈架构"></a>存储协议栈架构</h3><p><img src="https://hao0527.gitee.io/230824-AutoSarNVRAM/230824-AutoSarNVRAM-1.jpg" alt="img"></p>
+<p>NvM访问内存抽象接口(MemIf)，该接口抽象了Flash模拟Eep模块(Fee)和EEPROM抽象模块(Ea)。因此，NvM是硬件无关的。</p>
+<p>应用程序通常不直接访问BSW模块的服务。它们通过RTE和BSW模块提供的服务端口进行连接。应用程序SWC或NV SWC可以从NV Memory读取或写入数据。NvM将调用传递给MemIf，调用将传递给内存驱动模块，驱动模块将数据写入NV Memory。如果是外部Flash（通过SPI连接）的情况下，将使用SPI驱动程序。</p>
+<h4 id="NvM（NVRAM-Manager）"><a href="#NvM（NVRAM-Manager）" class="headerlink" title="NvM（NVRAM Manager）"></a>NvM（NVRAM Manager）</h4><p>NvM模块提供了数据存储和数据维护的服务。NvM模块位于AUTOSAR堆栈的服务层中，并向用户（即SWC）提供从NV Memory读取数据或写入数据的服务。NvM是访问NV Memory的唯一方式，或者我们可以说NvM是SWC访问NV Memory的网关。</p>
+<p>NvM执行存储器的初始化、NV Block的错误更正和错误检测。</p>
+<h4 id="MemIf-Fee-Ea（Memory-Abstraction-Interface）"><a href="#MemIf-Fee-Ea（Memory-Abstraction-Interface）" class="headerlink" title="MemIf/Fee/Ea（Memory Abstraction Interface）"></a>MemIf/Fee/Ea（Memory Abstraction Interface）</h4><p>MemIf提供了对底层Fee或Ea模块的抽象，因此上层模块（例如NVRAM管理器）会请求MemIf模块进行读/写操作，然后MemIf模块将请求传递给底层的Fee或Ea模块。</p>
+<p>Fee和Ea提供虚拟32位地址空间，并抽象出设备特定的寻址方案。Fee和Ea将虚拟地址转换为物理地址。</p>
+<h4 id="Fls-EEP（Memory-Driver）"><a href="#Fls-EEP（Memory-Driver）" class="headerlink" title="Fls/EEP（Memory Driver）"></a>Fls/EEP（Memory Driver）</h4><p>存储器驱动程序用于访问mcu的内部flash或外部存储器。存储器驱动程序提供从EEPROM或Flash存储器读取、写入和擦除的功能。Fls驱动程序与Flash存储器相关联，EEP驱动程序与EEPROM存储器相关联。</p>
+<p>用于外部EEPROM的驱动程序使用处理程序（在大多数情况下为SPI）或驱动程序来访问外部EEPROM设备，它位于ECU抽象层中。</p>
+<h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><p>今年的一项PBC：仿照AUTOSAR的存储器协议栈，开发一套适合自己公司使用的存储器协议栈。经过大半年零散的、自下而上的开发与测试，我的软件终于上量产车使用了，这几天整理下资料和回顾下开发过程，后续再写些文章。</p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/08/22/230822-sourceProtect/" rel="prev" title="C语言源码保护技术">
+      <i class="fa fa-chevron-left"></i> C语言源码保护技术
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">1.</span> <span class="nav-text">参考资料</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%9F%E8%83%BD%E7%AE%80%E4%BB%8B"><span class="nav-number">2.</span> <span class="nav-text">功能简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E5%8D%8F%E8%AE%AE%E6%A0%88%E6%9E%B6%E6%9E%84"><span class="nav-number">3.</span> <span class="nav-text">存储协议栈架构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#NvM%EF%BC%88NVRAM-Manager%EF%BC%89"><span class="nav-number">3.1.</span> <span class="nav-text">NvM（NVRAM Manager）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MemIf-Fee-Ea%EF%BC%88Memory-Abstraction-Interface%EF%BC%89"><span class="nav-number">3.2.</span> <span class="nav-text">MemIf&#x2F;Fee&#x2F;Ea（Memory Abstraction Interface）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Fls-EEP%EF%BC%88Memory-Driver%EF%BC%89"><span class="nav-number">3.3.</span> <span class="nav-text">Fls&#x2F;EEP（Memory Driver）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">4.</span> <span class="nav-text">后记</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Hao</p>
+  <div class="site-description" itemprop="description">保持热爱，奔赴山海。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hao</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -185,6 +185,110 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/08/24/230824-AutoSarNVRAM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/08/24/230824-AutoSarNVRAM/" class="post-title-link" itemprop="url">AUTOSAR Memory Stack 架构</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-08-24 16:00:00" itemprop="dateCreated datePublished" datetime="2023-08-24T16:00:00+08:00">2023-08-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-08-25 18:53:17" itemprop="dateModified" datetime="2023-08-25T18:53:17+08:00">2023-08-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/AUTOSAR/" itemprop="url" rel="index"><span itemprop="name">AUTOSAR</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ol>
+<li><a target="_blank" rel="noopener" href="https://www.fer.unizg.hr/_download/repository/3._Vjestine_AUTOSAR_MemStack._v3.pdf">AUTOSAR Memory Stack(MemStack)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.autosar.org/fileadmin/standards/R20-11/CP/AUTOSAR_SWS_NVRAMManager.pdf">Specification of NVRAM Manager</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.autosar.org/fileadmin/standards/R21-11/CP/AUTOSAR_EXP_NVDataHandling.pdf">NV Data Handling Guideline</a></li>
+</ol>
+<h3 id="功能简介"><a href="#功能简介" class="headerlink" title="功能简介"></a>功能简介</h3><p>为了管理汽车领域中的非易失性存储器(NV Memory)，在AUTOSAR环境中使用了内存堆栈(MemStack)。</p>
+<p>AUTOSAR中的MemStack主要有以下功能：</p>
+<ol>
+<li>数据检索：以结构化方式存储数据</li>
+<li>数据存储：对NV Memory的读取与写入</li>
+<li>抽象层：对不同的内部或外部NV Memory提供抽象</li>
+<li>耐久性管理：管理内存写入周期</li>
+<li>错误处理和纠正：管理NV Memory的纠错和错误检测机制</li>
+<li>内存块管理：管理内存块(Memory Block)</li>
+<li>地址映射：虚拟地址到物理地址的映射</li>
+</ol>
+<p>AUTOSAR的内存堆栈为应用层和基础软件(BSW)模块提供访问非易失性存储器的服务（例如读写）。使用AUTOSAR MemStack API，应用层中的软件组件(SWC)和BSW模块可以从NV Memory读取数据并将数据写入NV Memory，例如诊断事件管理器(DEM)使用MemStack服务将冻结帧数据写入NV Memory。</p>
+<h3 id="存储协议栈架构"><a href="#存储协议栈架构" class="headerlink" title="存储协议栈架构"></a>存储协议栈架构</h3><p><img src="https://hao0527.gitee.io/230824-AutoSarNVRAM/230824-AutoSarNVRAM-1.jpg" alt="img"></p>
+<p>NvM访问内存抽象接口(MemIf)，该接口抽象了Flash模拟Eep模块(Fee)和EEPROM抽象模块(Ea)。因此，NvM是硬件无关的。</p>
+<p>应用程序通常不直接访问BSW模块的服务。它们通过RTE和BSW模块提供的服务端口进行连接。应用程序SWC或NV SWC可以从NV Memory读取或写入数据。NvM将调用传递给MemIf，调用将传递给内存驱动模块，驱动模块将数据写入NV Memory。如果是外部Flash（通过SPI连接）的情况下，将使用SPI驱动程序。</p>
+<h4 id="NvM（NVRAM-Manager）"><a href="#NvM（NVRAM-Manager）" class="headerlink" title="NvM（NVRAM Manager）"></a>NvM（NVRAM Manager）</h4><p>NvM模块提供了数据存储和数据维护的服务。NvM模块位于AUTOSAR堆栈的服务层中，并向用户（即SWC）提供从NV Memory读取数据或写入数据的服务。NvM是访问NV Memory的唯一方式，或者我们可以说NvM是SWC访问NV Memory的网关。</p>
+<p>NvM执行存储器的初始化、NV Block的错误更正和错误检测。</p>
+<h4 id="MemIf-Fee-Ea（Memory-Abstraction-Interface）"><a href="#MemIf-Fee-Ea（Memory-Abstraction-Interface）" class="headerlink" title="MemIf/Fee/Ea（Memory Abstraction Interface）"></a>MemIf/Fee/Ea（Memory Abstraction Interface）</h4><p>MemIf提供了对底层Fee或Ea模块的抽象，因此上层模块（例如NVRAM管理器）会请求MemIf模块进行读/写操作，然后MemIf模块将请求传递给底层的Fee或Ea模块。</p>
+<p>Fee和Ea提供虚拟32位地址空间，并抽象出设备特定的寻址方案。Fee和Ea将虚拟地址转换为物理地址。</p>
+<h4 id="Fls-EEP（Memory-Driver）"><a href="#Fls-EEP（Memory-Driver）" class="headerlink" title="Fls/EEP（Memory Driver）"></a>Fls/EEP（Memory Driver）</h4><p>存储器驱动程序用于访问mcu的内部flash或外部存储器。存储器驱动程序提供从EEPROM或Flash存储器读取、写入和擦除的功能。Fls驱动程序与Flash存储器相关联，EEP驱动程序与EEPROM存储器相关联。</p>
+<p>用于外部EEPROM的驱动程序使用处理程序（在大多数情况下为SPI）或驱动程序来访问外部EEPROM设备，它位于ECU抽象层中。</p>
+<h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><p>今年的一项PBC：仿照AUTOSAR的存储器协议栈，开发一套适合自己公司使用的存储器协议栈。经过大半年零散的、自下而上的开发与测试，我的软件终于上量产车使用了，这几天整理下资料和回顾下开发过程，后续再写些文章。</p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/08/22/230822-sourceProtect/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1346,100 +1450,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/01/20/230120-printf/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/01/20/230120-printf/" class="post-title-link" itemprop="url">C语言printf变长参数如何实现</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-01-20 17:00:00" itemprop="dateCreated datePublished" datetime="2023-01-20T17:00:00+08:00">2023-01-20</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-01-31 23:40:51" itemprop="dateModified" datetime="2023-01-31T23:40:51+08:00">2023-01-31</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="printf函数"><a href="#printf函数" class="headerlink" title="printf函数"></a>printf函数</h3><p>函数原型：<code>int printf(const char *format, ...)</code><br>调用格式为：<code>printf(&quot;&lt;格式化字符串&gt;&quot;, &lt;参量表&gt;);</code><br>功能：发送格式化输出到标准输出 stdout</p>
-<h3 id="变长参数实现思路"><a href="#变长参数实现思路" class="headerlink" title="变长参数实现思路"></a>变长参数实现思路</h3><p>C语言支持变长参数函数(Variable Argument Functions)，即参数的个数可以是不定个，在函数定义的时候用<code>...</code>表示。采用这种形式定义的变长参数函数，<strong>至少需要一个普通的形参</strong>，且<code>...</code>需要放在最后一个参数，比如printf函数中的<code>*format</code>后面的<code>...</code>是函数原型的一部分。</p>
-<p>变长参数的实现得益于C语言默认的<em><strong>cdecl</strong></em>调用惯例，其参数是<strong>从右向左</strong>压入栈的，第一个参数位于栈顶。这样printf函数实现的时候，就无需关心调用他的函数会传递几个参数过来，而只要关心自己用到几个，将全部参数压入栈，函数处理时从栈中取即可。</p>
-<h3 id="自己实现一个变长参数的函数"><a href="#自己实现一个变长参数的函数" class="headerlink" title="自己实现一个变长参数的函数"></a>自己实现一个变长参数的函数</h3><p>Ｃ已经有现成可用的一些东西来帮我们实现变长参数，它主要通过<code>stdarg.h</code>头文件定义的一个变量类型（va_list）和三个宏（va_start、va_arg、va_end）来实现。</p>
-<p>实现一个可变长参数的sum函数，第一个参数<code>num</code>传递变长参数中有参数的数量，紧接着后面会传递<code>num</code>个整型变量，具体实现如下：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">sum</span><span class="params">(<span class="type">int</span> num, ...)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> i, val = <span class="number">0</span>;</span><br><span class="line">    va_list ap;	<span class="comment">//定义一个具有va_list型的变量，这个变量是指向参数的指针</span></span><br><span class="line">    va_start(ap, num);	<span class="comment">//始化变量刚定义的va_list变量,使其指向第一个可变参数的地址,地址自动增加</span></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; num; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        val += va_arg(ap, <span class="type">int</span>);	<span class="comment">//va_arg返回va_list中的参数，并增加指针偏移</span></span><br><span class="line">    &#125;</span><br><span class="line">    va_end(ap);	<span class="comment">//结束可变参数列表</span></span><br><span class="line">    <span class="keyword">return</span> val;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;16+38+53=%d\n&quot;</span>, sum(<span class="number">3</span>, <span class="number">16</span>, <span class="number">38</span>, <span class="number">53</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="变长参数实现原理"><a href="#变长参数实现原理" class="headerlink" title="变长参数实现原理"></a>变长参数实现原理</h3><p>上面的sum函数也可以不使用va_list等宏，通过其他方法实现。<br>当我们调用：<code>int n = sum(3, 16, 38, 53);</code><br>参数在栈上会形成如下布局：<br><img src="https://hao0527.gitee.io/230120-printf/230120-printf-1.jpg" alt="img"></p>
-<p>在函数内部，函数可以使用变量<code>num</code>来访问数字3，但无法使用任何名称访问其他的几个不定参数。但此时由于栈上其他的几个参数实际恰好依序排列在参数<code>num</code>的高地址方向，因此可以很简单地通过<code>num</code>的地址计算出其他参数的地址，sum函数的另一种实现如下：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">sum</span><span class="params">(<span class="type">int</span> num, ...)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span>* p = &amp;num + <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(num--)</span><br><span class="line">        ret += *p++;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;   </span><br></pre></td></tr></table></figure>
-
-<p>printf的不定参数比sum要复杂得多，因为printf的参数不仅数量不定，而且<strong>类型</strong>也不定。所以printf需要在格式字符串中注明参数的类型，例如用<code>%d</code>表明是一个整数。printf里的格式字符串如果将类型描述错误，因为不同参数的大小不同，不仅可能导致这个参数的输出错误，还有可能导致其后的一系列参数错误。[摘自《程序员的自我修养——链接、封装、库》P338]</p>
-<p><code>printf(&quot;%lf\t%d\t%c\n&quot;, 1, 666, &#39;a&#39;);</code> 在这行函数里，printf的第一个输出参数是一个int(4 字节)，而我们告诉printf它是一个double(8字节)，因此printf的输出会错误，由于printf在读取double的时候实际造成了越界，因此后面几个参数的输出也会失败。该程序的实际输出为：<code>0.000000 97</code>（根据实际编译器和环境可能不同）</p>
-<h3 id="va-list等宏如何实现"><a href="#va-list等宏如何实现" class="headerlink" title="va_list等宏如何实现"></a>va_list等宏如何实现</h3><p><strong>va_list</strong> 实际是一个指针，用来指向各个不定参数。由于类型不明，因此这个 va_list 以 void* 或 char*  为最佳选择。<br><strong>va_start</strong> 将 va_list 定义的指针指向函数的最后一个参数后面的位置，这个位置就是第一个不定参数。<br><strong>va_arg</strong> 获取当前不定参数的值，并根据当前不定参数的大小将指针移向下一个参数。<br><strong>va_end</strong> 将指针清 0。<br>按照以上思路，va_list等宏的一个<strong>最简单的实现</strong>就可以得到了，如下所示：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> va_list char*</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> va_start(ap, arg) (ap=(va_list)&amp;arg+sizeof(arg))</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> va_arg(ap, t) (*(t*)((ap+=sizeof(t))-sizeof(t)))</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> va_end(ap) (ap=(va_list)0)</span></span><br></pre></td></tr></table></figure>
-
-<p>注意：实际代码中还套了很多宏，不同编译器，不同架构都有可能使用不同的代码实现，但具体实现思想一致，有些x64条件编译时va_list会是一个结构体，里面会记录可变参数开始地址、结束地址、参数数量等信息。</p>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1509,14 +1519,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-count">68</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
