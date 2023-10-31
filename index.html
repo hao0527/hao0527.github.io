@@ -406,6 +406,164 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/23/230923-ble/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/09/23/230923-ble/" class="post-title-link" itemprop="url">蓝牙BLE调试记录</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-09-23 08:00:00" itemprop="dateCreated datePublished" datetime="2023-09-23T08:00:00+08:00">2023-09-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-10-31 08:19:03" itemprop="dateModified" datetime="2023-10-31T08:19:03+08:00">2023-10-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="蓝牙SOC芯片"><a href="#蓝牙SOC芯片" class="headerlink" title="蓝牙SOC芯片"></a>蓝牙SOC芯片</h2><p>国产芯片PAN1020，M0带蓝牙收发器的SOC只要2.5r/pcs，可以用来做一些低成本的小产品，带上蓝牙控制的功能。参考资料：<a target="_blank" rel="noopener" href="https://bbs.panchip.com/forum.php?mod=viewthread&tid=7480&extra=page=1">PAN1020_Public_SDK_V2.0.8</a>。</p>
+<ul>
+<li>RF<br>- 2.4GHz 射频收发机（兼容 BLE4.2）<br>- 接收灵敏度：-90 dBm@1Mbps<br>- 最大接收信号：0 dBm<br>- 可编程发射输出功率：最大为 13 dBm，一般为 8 dBm<br>- 单线天线：无需 RF 匹配或 RX/TX 切换</li>
+<li>内核<br>- MCU 内核运行速度高达 26 MHz<br>- 一个 24 位系统定时器<br>- 支持低功耗空闲模式<br>- 单周期 32 位硬件乘法器<br>- 支持串行线调试（SWD）接口和两个观察点/四个断点</li>
+<li>内存<br>- 256 KB 闪存用于程序存储器<br>- 16 KB SRAM</li>
+</ul>
+<p><strong>低功耗说明</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>NO</th>
+<th>Mode</th>
+<th>Interval</th>
+<th>Average Current</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Advertising</td>
+<td>100ms</td>
+<td>545uA</td>
+<td>32K RC</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Advertising</td>
+<td>1000ms</td>
+<td>66uA</td>
+<td>32K RC</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Connected</td>
+<td>100ms</td>
+<td>301uA</td>
+<td>32K RC</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Connected</td>
+<td>1000ms</td>
+<td>55uA</td>
+<td>32K RC</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Advertising</td>
+<td>100ms</td>
+<td>400uA</td>
+<td>32K XO</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Connected</td>
+<td>100ms</td>
+<td>230uA</td>
+<td>32K XO</td>
+</tr>
+</tbody></table>
+<h2 id="产品需求"><a href="#产品需求" class="headerlink" title="产品需求"></a>产品需求</h2><p>蓝牙温度计，能记录历史数据，手机app显示温度波形，40mah纽扣电池供电，使用5天。</p>
+<h2 id="软件开发记录"><a href="#软件开发记录" class="headerlink" title="软件开发记录"></a>软件开发记录</h2><p>代码已上传 GIthub：<a target="_blank" rel="noopener" href="https://github.com/hao0527/BLE_APP">BLE_APP 源码</a></p>
+<h3 id="启用中断回调"><a href="#启用中断回调" class="headerlink" title="启用中断回调"></a>启用中断回调</h3><p>我配置了 ADC 并开启中断，测试程序会卡死，最后发现与 ADC 中断是否开启相关。在 BLE 协议栈接口那发现了注册中断的接口。</p>
+<p>使用如下代码将 <code>ADC_IRQ</code> 的中断回调 <code>mcu_adc_isr</code> 注册到协议栈后，问题解决。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 注册中断处理函数到协议栈，否则中断会卡死。</span></span><br><span class="line">((interrupt_register_handler)SVC_interrupt_register)(ADC_IRQ, mcu_adc_isr);</span><br></pre></td></tr></table></figure>
+
+<h3 id="开启低功耗模式"><a href="#开启低功耗模式" class="headerlink" title="开启低功耗模式"></a>开启低功耗模式</h3><p>如需开启低功耗模式，只需在 <code>panip_config.h</code> 中 <code>#define SLEEP_EN (1)</code>。</p>
+<p>PAN1020 SDK 定义的全局变量在使用前都必须要在函数中初始化，如果定义的时候就初始化，当前初始化的值是不生效的。</p>
+<p>因为<strong>开启低功耗模式需配置编译器将 RAM 设置为 NoInit</strong>，如图所示：</p>
+<p><img src="https://hao0527.gitee.io/230923-ble/230923-ble-1.jpg" alt="img"></p>
+<p>设为 NoInit 后，全局变量定义后的值为随机值，没有被初始化，需要自己手动初始化。此处是为了在 PAN1020 休眠唤醒后 RAM 不被重新初始化，唤醒后的 RAM 值依旧保持为休眠前的值。</p>
+<h3 id="配置软件定时器"><a href="#配置软件定时器" class="headerlink" title="配置软件定时器"></a>配置软件定时器</h3><p>按照 SDK 用户手册配置软件定时器后遇到奇怪的问题，但测试发现解决方法，如下注释说明：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">app_proj_template_init</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">memset</span>(&amp;app_proj_template_env, <span class="number">0</span>, <span class="keyword">sizeof</span>(app_proj_template_env));</span><br><span class="line">	</span><br><span class="line">	temper_resetInit();</span><br><span class="line">	<span class="comment">/* 注意：配置定时器放在此函数里没问题，放在appm_init()外部有问题，会导致无法进定时回调！</span></span><br><span class="line"><span class="comment">			函数调用关系：ble_normal_reset_init() -&gt; user_code_start() -&gt; appm_init() -&gt; app_init_ind_func()</span></span><br><span class="line"><span class="comment">			设置定时器放在appm_init()内部没问题，但是放在appm_init()外部就不行，</span></span><br><span class="line"><span class="comment">			甚至把设置定时器放在appm_init()内部的最后一行可以，放在appm_init()执行完出来的下一行不行！*/</span></span><br><span class="line">	((ke_timer_set_handler)SVC_ke_timer_set)(APP_SAMPLE_TEMPER_TIMER, TASK_APP, <span class="number">60</span>*<span class="number">100</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置ATT数据库"><a href="#配置ATT数据库" class="headerlink" title="配置ATT数据库"></a>配置ATT数据库</h3><p>配置att数据库后发现只有数据库的前13条配置生效，后面的att没有生效，在配置att的接口调试发现有条件为满足导致的后面一些att数据库配置没配置进协议栈，一层层向上查后是以下代码，<code>db_cfg-&gt;features = 0x1fff;</code> 导致的，如下配置为 <code>db_cfg-&gt;features = 0xffffffff;</code> 后问题解决。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">app_proj_template_add_server</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">proj_template_server_db_cfg</span>* <span class="title">db_cfg</span>;</span></span><br><span class="line">	</span><br><span class="line">  <span class="comment">// Allocate the BASS_CREATE_DB_REQ</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">gapm_profile_task_add_cmd</span> *<span class="title">req</span> =</span> KE_MSG_ALLOC_DYN(GAPM_PROFILE_TASK_ADD_CMD,</span><br><span class="line">												TASK_GAPM, TASK_APP,</span><br><span class="line">												gapm_profile_task_add_cmd,<span class="keyword">sizeof</span>(<span class="keyword">struct</span> proj_template_server_db_cfg));</span><br><span class="line">	<span class="comment">// Fill message</span></span><br><span class="line">	req-&gt;operation	 = GAPM_PROFILE_TASK_ADD;</span><br><span class="line">	req-&gt;sec_lvl	 = (PERM(SVC_AUTH, DISABLE)| PERM(SVC_UUID_LEN, UUID_16)| PERM(SVC_EKS, DISABLE)|PERM(SVC_DIS, DISABLE));</span><br><span class="line"></span><br><span class="line">	req-&gt;prf_task_id = TASK_ID_PROJ_TEMPLATE_SERVER;</span><br><span class="line">	req-&gt;app_task	 = TASK_APP;</span><br><span class="line">	req-&gt;start_hdl	 = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Set parameters</span></span><br><span class="line">	db_cfg = (<span class="keyword">struct</span> proj_template_server_db_cfg* ) req-&gt;param;</span><br><span class="line">	db_cfg-&gt;features = <span class="number">0xffffffff</span>;	<span class="comment">// 注意：配置了gatt数据库，要配置这个掩码使能，32位都是1可以使能32个数据库配置</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// Send the message</span></span><br><span class="line">	((ke_msg_send_handler)SVC_ke_msg_send)(req);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="电池输出电流不足不问"><a href="#电池输出电流不足不问" class="headerlink" title="电池输出电流不足不问"></a>电池输出电流不足不问</h3><p>电池40mah，放点倍率0.1C，输出电流最大就4ma，射频瞬间最大电流有30多ma，adc采集会开启ldo和运放，最大电流有90ma。</p>
+<p>adc采集的时候电流过大会将电压拉低导致单片机复位，正在通过加电容解决。</p>
+<p>射频需求只需要5m范围内，所以射频的功率也可以配置低一些。</p>
+<p>后面测试解决完这个问题更新……</p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/08/24/230824-AutoSarNVRAM/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1495,91 +1653,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/01/230201-gitee/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/02/01/230201-gitee/" class="post-title-link" itemprop="url">Github静态博客访问速度慢，部署图片资源到其他服务器</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-02-01 16:00:00" itemprop="dateCreated datePublished" datetime="2023-02-01T16:00:00+08:00">2023-02-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-02-11 14:03:38" itemprop="dateModified" datetime="2023-02-11T14:03:38+08:00">2023-02-11</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Hexo/" itemprop="url" rel="index"><span itemprop="name">Hexo</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h3><p>用Github部署静态站访问国内速度慢，主要表现有2个，一是首次请求页面打开慢，二是打开后图片加载慢。问题一原因是域名解析需要访问多个海外的DNS服务器，且Github静态站服务器也在海外，首次请求国内或本地没有缓存。问题二也是访问Github静态站服务器速度受限，图片和文本并发访问，文本比图片数据量小先加载完成显示。</p>
-<p>本想将博客全部移到Gitee上，尝试部署又遇到三个问题，一是不能使用自己的域名解析，二是部署Gitee静态站服务它竟说我有文章不合规，三是每次上传Gitee后不会自动更新静态页面，每次要重新发布审核。</p>
-<p>本人使用的解决办法是将图片上传到gitee，github静态博客上的图片都使用gitee的链接，<a target="_blank" rel="noopener" href="https://gitee.com/hao0527/hao0527/tree/img/">Gitee/blog仓库img分支</a>上传了本博客用到的图片。</p>
-<h3 id="部署方式"><a href="#部署方式" class="headerlink" title="部署方式"></a>部署方式</h3><p>参考：<a target="_blank" rel="noopener" href="https://gitee.com/help/articles/4136#article-header0">Gitee Pages</a></p>
-<p>在Gitee中创建仓库，开然后将博客用到的图片上传到Gitee中，开通仓库的Pages服务更新分支。审核成功后就可以通过Gitee提供的域名，加上图片在仓库中的路径访问了。例如我的静态页面网址是：<code>https://hao0527.gitee.io/</code>，要访问仓库<code>210430-at32</code>文件夹中的<code>210430-at32-1.jpg</code>，访问网址为：<code>https://hao0527.gitee.io/210430-at32/210430-at32-1.jpg</code>。</p>
-<h3 id="使用域名转发"><a href="#使用域名转发" class="headerlink" title="使用域名转发"></a>使用域名转发</h3><p>加入以后我的图床地址变了，但我又不想重新修改每个文章里的图片网址怎么办？</p>
-<p>使用域名转发可以解决此问题，我使用的是易名注册的域名和易名免费的域名解析服务，开启URL隐性转发，转发值为你的静态页面网址，这样就可以通过自己的域名访问了，以后想换个图床的话只需要转发地址更改下就可以了。使用易名域名解析转发到我的静态页面会审核不通过，这是因为静态页面没有内容，只需要加个index.html骗骗审核就行了，审核结束就可以删除。</p>
-<p>遇到一个问题，使用域名转发通过http访问可以，通过https访问不行，暂且文章里的图片网址用http访问吧。</p>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1649,7 +1722,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">69</span>
+          <span class="site-state-item-count">70</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
