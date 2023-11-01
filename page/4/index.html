@@ -185,6 +185,204 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/" class="post-title-link" itemprop="url">Xilinx FPGA 点灯</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-07-08 00:01:00" itemprop="dateCreated datePublished" datetime="2022-07-08T00:01:00+08:00">2022-07-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-02-01 00:01:48" itemprop="dateModified" datetime="2023-02-01T00:01:48+08:00">2023-02-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="好久不见，甚是想念"><a href="#好久不见，甚是想念" class="headerlink" title="好久不见，甚是想念"></a>好久不见，甚是想念</h2><p>一个多月没写博客了，毕业后学习时间少了，白天忙公司的项目，偶尔晚上有空看看自己想学的资料，自己还在做个地质分析仪的项目，每周日会花一天的时间做。为自己加油，2022年我还要完成这块FPGA的学习，感谢那位支持我学这块开发板的人。</p>
+<h2 id="安装Vivado"><a href="#安装Vivado" class="headerlink" title="安装Vivado"></a>安装Vivado</h2><ol>
+<li>下载vivado安装包，资料链接B盘：<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1eM7Sx-RmeYFE1ht_RPqxhw">https://pan.baidu.com/s/1eM7Sx-RmeYFE1ht_RPqxhw</a> 提取码：a8vu</li>
+<li>解压安装包到<strong>无中文路径的目录</strong>下，否则会出现安装包无法打开的情况。打开安装包，我在安装选件的页面取消了K系列、V系列和Soc Zynq的选件，安装空间要70GB左右，因此我还买了个1T的固态。</li>
+<li>激活只需要网上下载对应版本的激活licences，在激活页面load a licences即可。</li>
+</ol>
+<h2 id="软件操作"><a href="#软件操作" class="headerlink" title="软件操作"></a>软件操作</h2><ol>
+<li>Tools -&gt; Settings -&gt; Text Editor中选择编辑器，我选择的是notepad++，需要将编辑器路径加到系统环境变量。</li>
+<li>创建PLL IP核：<img src="https://hao0527.gitee.io/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-2.jpg" alt="220708-XilinxFPGA点灯-2.jpg"></li>
+<li>功能仿真，RTL分析，综合，约束输入，设计实现都在左侧的Flow Navigator中。</li>
+</ol>
+<h2 id="流水灯"><a href="#流水灯" class="headerlink" title="流水灯"></a>流水灯</h2><ol>
+<li>New Project，芯片选择xc7a35tfgg484-2。<img src="https://hao0527.gitee.io/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-1.jpg" alt="220708-XilinxFPGA点灯-1.jpg"></li>
+<li>Add Sources -&gt; Create File，创建led_top.v文件。</li>
+<li>Vivado中打开文件会调用Notepad++编辑器，编写流水灯代码：<img src="https://hao0527.gitee.io/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-5.jpg" alt="220708-XilinxFPGA点灯-5.jpg"></li>
+<li>再功能仿真（可选），再综合、约束输入。</li>
+<li>最后生成bit流下载到开发板：<img src="https://hao0527.gitee.io/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-4.jpg" alt="220708-XilinxFPGA点灯-4.jpg"></li>
+<li>Xilinx的集成开发环境要比Altera的好用不少，就是编译速度较慢。</li>
+</ol>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/" class="post-title-link" itemprop="url">交叉编译工具链的使用</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-22 00:00:00" itemprop="dateCreated datePublished" datetime="2022-05-22T00:00:00+08:00">2022-05-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-02-01 00:01:48" itemprop="dateModified" datetime="2023-02-01T00:01:48+08:00">2023-02-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="交叉编译简介"><a href="#交叉编译简介" class="headerlink" title="交叉编译简介"></a>交叉编译简介</h2><p>交叉编译，是一个和本地编译相对应的概念，交叉编译通俗地讲就是一种平台上编译出的程序能够运行在不同体系结构的平台上，比如在PC平台（X86 CPU）上编译出能运行在ARM CPU的程序。</p>
+<h2 id="使用交叉编译的原因"><a href="#使用交叉编译的原因" class="headerlink" title="使用交叉编译的原因"></a>使用交叉编译的原因</h2><p>主要原因是：嵌入式系统中的资源太少。具体的解释就是：所要运行的目标环境中，各种资源，都相对有限，所以很难进行直接的本地编译。嵌入式开发板的CPU、RAM、Falsh等硬件资源相对比较紧张，在已经运行了嵌入式Linux的前提下，没法方便的进行本地编译。因为编译，开发，都需要相对比较多的CPU，内存，硬盘等资源，而嵌入式开发上的资源，只够嵌入式（Linux）系统运行的，没太多剩余的资源，供你本地编译。</p>
+<h2 id="交叉编译工具链组成"><a href="#交叉编译工具链组成" class="headerlink" title="交叉编译工具链组成"></a>交叉编译工具链组成</h2><p>常用交叉编译工具有交叉编译器、交叉连接器、交叉解释器还有交叉ELF文件工具、交叉反汇编器等工具。交叉编译工具链主要由binutils、gcc和glibc三个部分组成。有时出于减小 libc 库大小的考虑，也可以用别的 c 库来代替 glibc，例如 uClibc、dietlibc 和 newlib。</p>
+<p>编译器能将我们编写的语言转成计算机可以识别的机器语言，解释器能够执行用其他计算机语言编写的程序的系统软件，它是一种翻译程序，转换一行，运行一行，再转换一行，再运行一行。<strong>解释性</strong>语言：Python，JavaScript，<strong>编译性</strong>语言：Java，c，c++。</p>
+<h2 id="交叉工具链命名规则"><a href="#交叉工具链命名规则" class="headerlink" title="交叉工具链命名规则"></a>交叉工具链命名规则</h2><p>交叉编译工具链的命名规则为：arch - vendor - os - (gnu)eabi</p>
+<p>arch – 体系架构，如ARM，MIPS，表示该编译器用于编译哪个目标平台的程序<br>vendor – 工具链提供商，通常是把vendor写成体系架构的值，比如cortex_a8<br>os – 运行编译产生的程序的目标操作系统，一般用linux表示有操作系统，none表示裸系统，uboot编译无os<br>eabi – 嵌入式应用二进制接口（Embedded Application Binary Interface），abi是计算机上的</p>
+<h2 id="编译工具使用（持续更新）"><a href="#编译工具使用（持续更新）" class="headerlink" title="编译工具使用（持续更新）"></a>编译工具使用（持续更新）</h2><p>交叉编译工具使用方法与本地编译工具链基本一样，只是命名不同。</p>
+<h3 id="gcc"><a href="#gcc" class="headerlink" title="gcc"></a>gcc</h3><p>Linux系统下的GCC编译器实际上是GNU编译工具链中的一款软件，可以用它来调用其他不同的工具进行诸如预处理、编译、汇编和链接这样的工作。gcc编译器从拿到一个c源文件到生成一个可执行程序，中间一共经历了四个步骤：</p>
+<p><img src="https://hao0527.gitee.io/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-1.jpg" alt="220522-交叉编译工具链-1.jpg"></p>
+<h3 id="ld"><a href="#ld" class="headerlink" title="ld"></a>ld</h3><p>ld是GNU操作系统上的连接器，把二进制文件连接成可执行文件。<strong>ELF文件</strong>可用于程序的链接，重定位目标文件。用于链接的ELF文件格式：</p>
+<p><img src="https://hao0527.gitee.io/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-2.jpg" alt="220522-交叉编译工具链-2.jpg"></p>
+<p>从编译和链接角度看ELF文件<strong>ELF头</strong>，每个ELF文件都必须存在一个ELF_Header，这里存放了很多重要的信息用来<strong>描述整个文件的组织</strong>，如：版本信息、入口信息、偏移信息等，程序执行也必须依靠其提供的信息。</p>
+<p><strong>段头表</strong>，存放的是所有<strong>不同段将在内存中的位置</strong>。代码段.text section，存放已编译程序的机器代码，一般是只读的。只读数据段.rodata section，此段的数据不可修改，存放常量。数据段.data section，存放已初始化的全局变量。.bss section，未初始化全局变量，仅是占位符，不占据任何实际磁盘空间，目标文件格式区分初始化和非初始化是为了空间效率。</p>
+<p>符号表.symtab section，它存放在程序中定义和引用的函数和全局变量的信息。.text节的重定位信息.rel.txt section，用于重新修改代码段的指令中的地址信息。.data节的重定位信息.rel.data section，用于对被模块使用或定义的全局变量进行重定位的信息。调试用的符号表.debug section。.strtab section，包含symtab和debug节中符号及节名。.line section，存储调试的行号信息，描述源代码和机器码之间的对应关系。</p>
+<p>ELF(Executable and Linkable Format)的完整描述，可以参考这个文档 - <a target="_blank" rel="noopener" href="http://www.uclibc.org/docs/elf-64-gen.pdf">这里</a></p>
+<h3 id="size"><a href="#size" class="headerlink" title="size"></a>size</h3><p><img src="https://hao0527.gitee.io/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-3.jpg" alt="220522-交叉编译工具链-3.jpg"></p>
+<p>用于显示二进制文件各节的大小。</p>
+<p>text段最终是存放在FLASH存储器中的，text段不仅包含函数，还有常量。</p>
+<p>data段是用于初始化数据（全局/外部），既有初始化值的数据。</p>
+<p>bss段包含着所有未初始化（或初始化值为0）的数据（全局/外部）。</p>
+<p>dec（decimal的缩写，即十进制数）是text，data和bss的算术和。</p>
+<h3 id="objcopy"><a href="#objcopy" class="headerlink" title="objcopy"></a>objcopy</h3><p><img src="https://hao0527.gitee.io/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-4.jpg" alt="220522-交叉编译工具链-4.jpg"></p>
+<p>把一种目标文件中的内容复制到另一种类型的目标文件中。</p>
+<p><code>objcopy -O ihex xxxxxx.elf xxxxxx.hex</code> 将编译生成的elf文件转换为hex格式的文件。</p>
+<p><code>objcopy -O srec xxxxxx.elf xxxxxx.srec</code> 将编译生成的elf文件转换为srec格式的文件。</p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/12/220512-Git%E5%92%8CSVN/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1467,338 +1665,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/24/220224-Linux%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/02/24/220224-Linux%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7/" class="post-title-link" itemprop="url">Linux实用工具</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-02-24 11:00:00" itemprop="dateCreated datePublished" datetime="2022-02-24T11:00:00+08:00">2022-02-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-02-01 00:01:48" itemprop="dateModified" datetime="2023-02-01T00:01:48+08:00">2023-02-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="Linux-screen工具"><a href="#Linux-screen工具" class="headerlink" title="Linux screen工具"></a>Linux screen工具</h2><h3 id="功能介绍"><a href="#功能介绍" class="headerlink" title="功能介绍"></a>功能介绍</h3><p>Linux screen命令用于多重视窗管理程序。此处所谓的视窗，是指一个全屏幕的文字模式画面。通常只有在使用telnet登入主机或是使用老式的终端机时，才有可能用到screen程序。</p>
-<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">screen [-AmRvx -ls -wipe][-d &lt;作业名称&gt;][-h &lt;行数&gt;][-r &lt;作业名称&gt;][-s &lt;shell&gt;][-S &lt;作业名称&gt;]</span><br></pre></td></tr></table></figure>
-
-<h3 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明"></a>参数说明</h3><ul>
-<li>-A 　将所有的视窗都调整为目前终端机的大小。</li>
-<li>-d&lt;作业名称&gt; 　将指定的screen作业离线。</li>
-<li>-h&lt;行数&gt; 　指定视窗的缓冲区行数。</li>
-<li>-m 　即使目前已在作业中的screen作业，仍强制建立新的screen作业。</li>
-<li>-r&lt;作业名称&gt; 　恢复离线的screen作业。</li>
-<li>-R 　先试图恢复离线的作业。若找不到离线的作业，即建立新的screen作业。</li>
-<li>-s<shell> 　指定建立新视窗时，所要执行的shell。</shell></li>
-<li>-S&lt;作业名称&gt; 　指定screen作业的名称。</li>
-<li>-v 　显示版本信息。</li>
-<li>-x 　恢复之前离线的screen作业。</li>
-<li>-ls或–list 　显示目前所有的screen作业。</li>
-<li>-wipe 　检查目前所有的screen作业，并删除已经无法使用的screen作业。</li>
-</ul>
-<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">screen -ls  # 显示已创建的screen终端</span><br><span class="line">screen -S &lt;screen name&gt;  # 创建新的screen终端</span><br><span class="line">screen -r &lt;screen name&gt;  # 重连screen终端</span><br><span class="line">screen -d &lt;screen name&gt;  # 断开screen终端</span><br><span class="line">screen -S &lt;screen name&gt; -X quit  # 强制停止命令</span><br></pre></td></tr></table></figure>
-
-<h3 id="screen快捷键"><a href="#screen快捷键" class="headerlink" title="screen快捷键"></a>screen快捷键</h3><ul>
-<li>Ctrl -a c            创建新的视窗</li>
-<li>Ctrl -a d            断开screen终端，任务还在运行</li>
-<li>Ctrl -a k            删除当前视窗</li>
-<li>Ctrl -a 空格      视窗切换</li>
-<li>Ctrl -a ?           快捷键帮助</li>
-<li>Ctrl -a :            命令模式，类似vi</li>
-<li>Ctrl -a [            复制模式，可以移光标上去看上面的打印</li>
-</ul>
-<h3 id="screen配置"><a href="#screen配置" class="headerlink" title="screen配置"></a>screen配置</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/hao0527/hao0527.github.io/blob/main/others/screencfg -O ~/.screenrc  # 一个好用的screen配置文件</span><br></pre></td></tr></table></figure>
-
-<p>上面这个配置指令有些问题，wget下载下来的是html，所以就手动复制下内容到~/.screenrc文件吧。</p>
-<h2 id="Linux-vi-vim工具"><a href="#Linux-vi-vim工具" class="headerlink" title="Linux vi/vim工具"></a>Linux vi/vim工具</h2><h3 id="功能介绍-1"><a href="#功能介绍-1" class="headerlink" title="功能介绍"></a>功能介绍</h3><p>所有的 Unix Like 系统都会内建 vi 文书编辑器，其他的文书编辑器则不一定会存在。vim 具有程序编辑的能力，可以主动的以字体颜色辨别语法的正确性，方便程序设计。</p>
-<h3 id="vi-vim使用"><a href="#vi-vim使用" class="headerlink" title="vi/vim使用"></a>vi/vim使用</h3><p>基本上 vi/vim 共分为三种模式，分别是<strong>命令模式（Command mode）</strong>，<strong>输入模式（Insert mode）</strong>和<strong>底线命令模式（Last line mode）</strong>。</p>
-<h4 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h4><p><img src="https://hao0527.gitee.io/220224-Linux%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7/220224-Linux%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7-1.jpg" alt="220224-Linux实用工具-1.jpg"></p>
-<table>
-<thead>
-<tr>
-<th>输入</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>yy</td>
-<td>复制游标所在的那一行。(常用)</td>
-</tr>
-<tr>
-<td>dd</td>
-<td>剪切游标所在的那一整行(常用)，用 p/P 可以粘贴。</td>
-</tr>
-<tr>
-<td>p/P</td>
-<td>p粘贴在光标行下面，P粘贴在光标行上面。</td>
-</tr>
-<tr>
-<td>u</td>
-<td>复原前一个动作。(常用)</td>
-</tr>
-<tr>
-<td>[Ctrl]+r</td>
-<td>重做上一个动作。(常用)</td>
-</tr>
-<tr>
-<td>/word</td>
-<td>向光标之下寻找一个名称为 word 的字符串。 (常用)</td>
-</tr>
-<tr>
-<td>?word</td>
-<td>向光标之上寻找一个字符串名称为 word 的字符串。</td>
-</tr>
-<tr>
-<td>i, I</td>
-<td>进入输入模式(Insert mode)</td>
-</tr>
-<tr>
-<td>ZZ</td>
-<td>如果修改过，保存当前文件，然后退出！效果等同于保存并退出</td>
-</tr>
-</tbody></table>
-<p>常用的还有替换功能：</p>
-<ul>
-<li><code>:1,$s/word1/word2/g</code> 或 <code>:%s/word1/word2/g</code>，从第一行到最后一行寻找 word1 字符串，并将该字符串取代为 word2 ！(常用)</li>
-<li><code>:1,$s/word1/word2/gc</code> 或 <code>:%s/word1/word2/gc</code>，从第一行到最后一行寻找 word1 字符串，并将该字符串取代为 word2 ，加了c表示取代前显示提示字符给用户确认 (confirm) 是否需要取代。</li>
-</ul>
-<h4 id="输入模式"><a href="#输入模式" class="headerlink" title="输入模式"></a>输入模式</h4><p>输入模式比较简单，可以使用键盘上的Home、End等功能键，按Esc退出输入模式到命令模式</p>
-<h4 id="底线命令模式"><a href="#底线命令模式" class="headerlink" title="底线命令模式"></a>底线命令模式</h4><table>
-<thead>
-<tr>
-<th>输入</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>:w</td>
-<td>将编辑的数据写入硬盘档案中(常用)</td>
-</tr>
-<tr>
-<td>:q</td>
-<td>离开 vi (常用)</td>
-</tr>
-<tr>
-<td>:q!</td>
-<td>若曾修改过档案，又不想储存，使用 ! 为『强制』离开不储存档案。</td>
-</tr>
-<tr>
-<td>:wq</td>
-<td>储存后离开，若为 :wq! 则为强制储存后离开 (常用)</td>
-</tr>
-<tr>
-<td>:w [filename]</td>
-<td>将编辑的数据储存成另一个档案（类似另存新档）</td>
-</tr>
-<tr>
-<td>:r [filename]</td>
-<td>在编辑的数据中，读入另一个档案的数据。亦即将 『filename』 这个档案内容加到游标所在行后面</td>
-</tr>
-<tr>
-<td>:n1,n2 w [filename]</td>
-<td>将 n1 到 n2 的内容储存成 filename 这个档案。</td>
-</tr>
-<tr>
-<td>:! command</td>
-<td>暂时离开 vi 到指令行模式下执行 command 的显示结果！例如<br>『:! ls /home』即可在 vi 当中察看 /home 底下以 ls 输出的档案信息！</td>
-</tr>
-<tr>
-<td>:set nu/nonu</td>
-<td>显示/取消行号</td>
-</tr>
-</tbody></table>
-<h2 id="Linux-tldr工具"><a href="#Linux-tldr工具" class="headerlink" title="Linux tldr工具"></a>Linux tldr工具</h2><h3 id="功能介绍-2"><a href="#功能介绍-2" class="headerlink" title="功能介绍"></a>功能介绍</h3><p>一个比 –help 和 man 好用的查指令手册的工具，<a target="_blank" rel="noopener" href="https://github.com/tldr-pages/tldr">点我跳到tldr(too long don’t read)主页</a>。</p>
-<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>我使用<code>sudo apt install tldr</code>安装，然后<code>mkdir -p ~/.tldr/tldr</code>，再更新字典<code>sudo git clone https://gitclone.com/github.com/tldr-pages/tldr.git ~/.tldr/tldr</code>，国内使用这个镜像快。</p>
-<p>推荐：官网上说可以使用npm或pip3安装。</p>
-<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>使用方式极其简单，<code>tldr tldr</code>你就可以查到tldr的使用手册。</p>
-<h2 id="Linux-Samba工具"><a href="#Linux-Samba工具" class="headerlink" title="Linux Samba工具"></a>Linux Samba工具</h2><h3 id="功能介绍-3"><a href="#功能介绍-3" class="headerlink" title="功能介绍"></a>功能介绍</h3><p>samba 是基于SMB协议（ServerMessage Block，信息服务块）的开源软件，samba也可以是SMB协议的商标。SMB是一种Linux、UNIX系统上可用于共享文件和打印机等资源的协议，这种协议是基于Client\Server型的协议，Client端可以通过SMB访问到Server（服务器）上的共享资源。当Windows是 Client，Ubuntu是服务器时，通过Samba就可以实现window访问Linux的资源，实现两个系统间的数据交互。samba服务程序已经成为在Linux系统和Windows系统之间共享文件的最佳选择，当然在Linux系统与Linux系统之间的文件共享也选择samba。</p>
-<h3 id="安装-1"><a href="#安装-1" class="headerlink" title="安装"></a>安装</h3><p>在Ubuntu中安装<code>sudo apt install samba</code>，会自动安装其依赖组件。</p>
-<p>安装后可用<code>samba -V</code>查看samba版本号，以确认安装完成。</p>
-<h3 id="使用-1"><a href="#使用-1" class="headerlink" title="使用"></a>使用</h3><p>配置文件目录在/etc/samba/smb.conf，配置以下内容可共享home目录下用户文件夹。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Un-comment the following (and tweak the other settings below to suit)</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">to <span class="built_in">enable</span> the default home directory shares. This will share each</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">user<span class="string">&#x27;s home directory as \\server\username</span></span></span><br><span class="line">[homes]</span><br><span class="line">   comment = Home Directories</span><br><span class="line">   browseable = no</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">By default, the home directories are exported read-only. Change the</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">next parameter to &#x27;</span>no<span class="string">&#x27; if you want to be able to write to them.</span></span></span><br><span class="line">   read only = no</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">File creation mask is set to 0700 for security reasons. If you want to</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">create files with group=rw permissions, set next parameter to 0775.</span></span></span><br><span class="line">   create mask = 0775</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">Directory creation mask is set to 0700 for security reasons. If you want to</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">create dirs. with group=rw permissions, set next parameter to 0775.</span></span></span><br><span class="line">   directory mask = 0775</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">By default, \\server\username shares can be connected to by anyone</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">with access to the samba server.</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">Un-comment the following parameter to make sure that only &quot;username&quot;</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">can connect to \\server\username</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">This might need tweaking when using external authentication schemes</span></span></span><br><span class="line">   valid users = %S</span><br></pre></td></tr></table></figure>
-
-<h3 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h3><p>以上配置后需要重启samba服务生效，可以注销用户后重新登录。</p>
-<p>通过<code>sudo smbpasswd -a userName</code>添加一个samba用户，不然直接windows远程访问会拒绝访问。</p>
-<p>userName需要是系统已有的用户名，否则会<code>Failed to add entry for user userName</code>。</p>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/20/220220-%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/02/20/220220-%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B/" class="post-title-link" itemprop="url">进程与线程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-02-20 20:10:00 / 修改时间：22:44:21" itemprop="dateCreated datePublished" datetime="2022-02-20T20:10:00+08:00">2022-02-20</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="再次了解进程与线程"><a href="#再次了解进程与线程" class="headerlink" title="再次了解进程与线程"></a>再次了解进程与线程</h2><ul>
-<li><a href="/2021/06/11/210611-python%E5%BC%82%E6%AD%A5%E4%B8%8E%E7%BA%BF%E7%A8%8B/">Python异步与线程</a>：这是21年6月时对线程、进程、同步、异步的简单了解，最近在做毕设时又用到了，打算重新回顾一遍。</li>
-</ul>
-<h2 id="多线程与多进程的区别"><a href="#多线程与多进程的区别" class="headerlink" title="多线程与多进程的区别"></a>多线程与多进程的区别</h2><p><strong>多线程 threading：</strong> 一个人有与异性聊天和看剧两件事要做。单线程的她可以看完剧再去聊天，但这样子可能就没人陪她聊天了「哼，发消息不回」。我们把她看成一个CPU核心，为她开起多线程——先看一会剧，偶尔看看新消息，在两件事（线程）间来回切换。多线程：单个CPU核心可以同时做几件事，不至于卡在某一步傻等着。</p>
-<p>用处：爬取网站信息（爬虫），等待多个用户输入</p>
-<p><strong>多进程 processing：</strong> 一个人有很多砖需要搬，他领取手套、推车各种物资（向系统申请了资源）然后开始搬砖。然而他身边有很多人，我们让这些人去帮他！（一核有难，八核围观）。于是他们做了分工，砖很快就搬完了。多进程让多个CPU核心可以一起做事，不至于只有一人干活而其他人傻站着。</p>
-<p>用处：进行高性能计算。只有多进程方案设计合理，才能加速计算。</p>
-<h2 id="Python中应用多进程"><a href="#Python中应用多进程" class="headerlink" title="Python中应用多进程"></a>Python中应用多进程</h2><ul>
-<li>毕设的上位机要接收显示图像，我在udp数据接收解码后，写入IO流，通过管道发给另一个进程，另一个进程做图像的处理与显示，这样就不会因为处理时间过长而阻塞下一次接收解码了。</li>
-<li><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3.7/library/multiprocessing.html">multiprocessing — 基于进程的并行</a>：multiprocessing是Python自带的多进程库，这是Python官方的文档对multiprocessing库的介绍。</li>
-<li>Python的线程是操作系统线程，因此要有Python全局解释器锁。一个python解释器进程内有一条<strong>主线程</strong>，以及多条用户程序的<strong>执行线程</strong>。即使在多核CPU平台上，由于GIL的存在，所以禁止多线程的并行执行。Python 3.6 才让multiprocessing逐渐发展成一个能用的Python内置多进程库，可以进行进程间的通信，以及有限的内存共享。</li>
-</ul>
-<h3 id="两种多进程创建方式"><a href="#两种多进程创建方式" class="headerlink" title="两种多进程创建方式"></a>两种多进程创建方式</h3><p>Python多进程可以选择两种创建进程的方式，spawn与fork，实际使用中可以根据子进程具体做什么来选取用fork还是spawn。</p>
-<ol>
-<li>fork：除了必要的启动资源外，其他变量，包，数据等都继承自父进程，并且是copy-on-write的，也就是共享了父进程的一些内存页，因此启动较快，但是由于大部分都用的父进程数据，所以是不安全的进程</li>
-<li>spawn：从头构建一个子进程，父进程的数据等拷贝到子进程空间内，拥有自己的Python解释器，所以需要重新加载一遍父进程的包，因此启动较慢，由于数据都是自己的，安全性较高</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">multiprocessing.set_start_method(<span class="string">&#x27;spawn&#x27;</span>)  <span class="comment"># default on WinOS or MacOS</span></span><br><span class="line">multiprocessing.set_start_method(<span class="string">&#x27;fork&#x27;</span>)   <span class="comment"># default on Linux (UnixOS)</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="四种进程间通信方式"><a href="#四种进程间通信方式" class="headerlink" title="四种进程间通信方式"></a>四种进程间通信方式</h3><p>Python中进程间通信可以采用进程池Pool、管道Pipe、队列Queue，在新版本Python中多了共享内存Manager的方式。</p>
-<ol>
-<li><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3.7/library/multiprocessing.html#module-multiprocessing.pool">进程池Pool</a>：不怎么使用？通常使用另外两个方式通信</li>
-<li><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3.7/library/multiprocessing.html#pipes-and-queues">管道和队列</a>：Queue用于多个进程间实现通信，Pipe是两个进程的通信。Queue通过put和get方法插入读取队列，Pipe通过send和recv方法发送和接收信息，用法可以参考这篇文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/guguobao/p/9398653.html">python进程间通信</a>，如果追求运行更快，那么最好使用管道Pipe而队列Queue，详细查看<a target="_blank" rel="noopener" href="https://www.raspberrypi.org/forums/viewtopic.php?t=141576">Python pipes and queues performance</a></li>
-<li><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/multiprocessing.html#sharing-state-between-processes">共享内存Manager</a>：Pipe Queue 把需要通信的信息从内存里深拷贝了一份给其他线程使用（需要分发的线程越多，其占用的内存越多）。而共享内存会由解释器负责维护一块共享内存（而不用深拷贝），这块内存每个进程都能读取到，读写的时候遵守管理（因此不要以为用了共享内存就一定变快）</li>
-</ol>
-<h3 id="编程中要注意"><a href="#编程中要注意" class="headerlink" title="编程中要注意"></a>编程中要注意</h3><p>为了避免自己调用自己时重复执行主进程，**多进程的主进程一定要写在程序入口if __name__ == ‘__main__’:，否则可能会报错。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">function1</span>(<span class="params"><span class="built_in">id</span></span>):  <span class="comment"># 这里是子进程</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;id <span class="subst">&#123;<span class="built_in">id</span>&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">run__process</span>():  <span class="comment"># 这里是主进程</span></span><br><span class="line">    <span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process</span><br><span class="line">    process = [mp.Process(target=function1, args=(<span class="number">1</span>,)),</span><br><span class="line">               mp.Process(target=function1, args=(<span class="number">2</span>,)), ]</span><br><span class="line">    [p.start() <span class="keyword">for</span> p <span class="keyword">in</span> process]  <span class="comment"># 开启了两个进程</span></span><br><span class="line">    [p.join() <span class="keyword">for</span> p <span class="keyword">in</span> process]   <span class="comment"># 等待两个进程依次结束</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># run__process()  # 主线程不建议写在 if外部。由于这里的例子很简单，你强行这么做可能不会报错</span></span><br><span class="line"><span class="keyword">if</span> __name__ ==<span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    run__process()  <span class="comment"># 正确做法：主线程只能写在 if内部</span></span><br></pre></td></tr></table></figure>
-
-<p>设计高性能的多进程时，遵守以下规则：</p>
-<ul>
-<li>尽可能少传一点数据</li>
-<li>尽可能减少主线程的负担</li>
-<li>尽可能不让某个进程傻等着</li>
-<li>尽可能减少进程间通信的频率</li>
-</ul>
-<h2 id="网上一些好的文档"><a href="#网上一些好的文档" class="headerlink" title="网上一些好的文档"></a>网上一些好的文档</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/340965963">Python程序入口 <strong>name</strong> == ‘<strong>main</strong>‘ 有重要功能（多线程）而非编程习惯</a>：这篇文章讲述了Python中程序入口的作用，Python用这个简单的方法来判断当前的模块是被直接运行还是被调用，这是很重要的功能。</li>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/340657122">在Python中优雅地用多进程</a></li>
-</ul>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1864,7 +1734,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-count">72</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

@@ -185,6 +185,148 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/31/231031-wdg/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/10/31/231031-wdg/" class="post-title-link" itemprop="url">AUTOSAR Wdg Stack 架构</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-10-31 10:30:00" itemprop="dateCreated datePublished" datetime="2023-10-31T10:30:00+08:00">2023-10-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-11-01 21:50:34" itemprop="dateModified" datetime="2023-11-01T21:50:34+08:00">2023-11-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/AUTOSAR/" itemprop="url" rel="index"><span itemprop="name">AUTOSAR</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="Wdg-功能"><a href="#Wdg-功能" class="headerlink" title="Wdg 功能"></a>Wdg 功能</h2><p>看门狗/Wdg模块是一个独立的定时器，它的作用是提供安全功能以确保软件按计划执行，并且CPU不会陷入无限循环或执行意外的代码。如果Wdg模块在一定时间内未被触发/刷新/喂狗，它将复位MCU。</p>
+<p>看门狗功能对于关键安全系统是必须的，对于非关键安全系统也是很有必要的。</p>
+<p>对于汽车上使用的诸多零部件，鉴于汽车环境的恶劣，各类ECU中的软件均有可能遭受如外部电磁干扰，高温等环境因素的影响，从而导致程序“跑飞”或者“死机”现象，此时如果有看门狗的存在，便可以主动触发系统复位机制保证能够再次正常使用。</p>
+<h2 id="硬件看门狗"><a href="#硬件看门狗" class="headerlink" title="硬件看门狗"></a>硬件看门狗</h2><p>硬件看门狗依赖自身定时器来完成看门狗功能，俗称“硬狗”。常见的硬件看门狗比如MCU内部自带的看门狗、外部的独立看门狗。至于选用何种的硬件看门狗，取决于自身系统设计需要。</p>
+<p>在使用硬件看门狗的时候需要特别考虑以下：</p>
+<ul>
+<li>该硬件看门狗的最大超时时间能否满足系统设计需求，如果该超时时间过小，就会导致整个系统的不稳定性，误触发看门狗。</li>
+<li>该硬件看门狗是否可以进行关闭，对于关键安全系统，一般都要求看门狗一旦打开将不允许被关闭。</li>
+<li>该硬件看门狗系统上电后默认处于开狗还是关狗状态，如果是默认开狗，那么对于软件而言，需考虑芯片上电后便要进行喂狗或者重置看门狗行为，同时设计一种在刷软件或者调试软件前的物理关狗动作。</li>
+<li>该硬件看门狗是采用哪种方式进行喂狗，如通过GPIO，IIC或SPI等通讯方式来喂狗。</li>
+</ul>
+<p>UJA1078A手册：</p>
+<p><img src="https://hao0527.gitee.io/231031-wdg/sbc-ds1-en.png" alt="img"></p>
+<p><img src="https://hao0527.gitee.io/231031-wdg/sbc-ds1-cn.png" alt="img"></p>
+<h2 id="软件看门狗"><a href="#软件看门狗" class="headerlink" title="软件看门狗"></a>软件看门狗</h2><p>属于通过软件定时器的方式来实现看门狗功能，俗称“软狗”。软件看门狗的时基本质上也需要依赖硬件定时器。</p>
+<p>比如常见的用systick作时基，通过一个task运行软狗监控的定时器不断递减，其他task程序则是重置软狗定时器，如果软狗监控的某个定时器归零，那么此时可以便可以判断其他task并没有被正常的执行，此时便可以通过主动复位的方式来实现看门狗功能。</p>
+<p>以上可实现软狗对<strong>多个task</strong>的监控，这是硬狗没有的功能。软狗除了实现硬狗timeout和window的两种模式，还可以实现其他模式，取决于软件，监控的花样更多。</p>
+<p>一般而言，运行软狗的主任务的优先级不应设置比被监控的任务优先级低，所以软狗无法检测Hardfault中卡死的问题。<strong>软狗跟硬狗搭配在一起使用</strong>，可以解决硬狗监控模式单一、软狗执行优先级没被监控任务高的问题。</p>
+<h2 id="AUTOSAR-Wdg-架构"><a href="#AUTOSAR-Wdg-架构" class="headerlink" title="AUTOSAR Wdg 架构"></a>AUTOSAR Wdg 架构</h2><h3 id="内部分层"><a href="#内部分层" class="headerlink" title="内部分层"></a>内部分层</h3><p><img src="https://hao0527.gitee.io/231031-wdg/wdg-stack.png" alt="img"></p>
+<p>Watchdog Driver：用于实现针对硬件看门狗的寄存器操作与控制，可以分为MCU内部看门狗(Internal Watchdog)与外部看门狗(External Watchdog)，该外部看门狗可以通过GPIO、IIC或SPI来实现喂狗。</p>
+<p>Watchdog Interface：其主要功能则是为了实现上层Watchdog Manager与底层Watchdog Driver的连接，当然其连接的底层Watchdog Driver可以存在多个。</p>
+<p>Watchdog Manager：作为整个看门狗协议栈中的服务层，主体功能就是为了负责整个程序执行的正确性，并触发相应的硬件看门狗的喂狗动作，扮演了整个监控的核心角色。</p>
+<h3 id="WdgM-依赖"><a href="#WdgM-依赖" class="headerlink" title="WdgM 依赖"></a>WdgM 依赖</h3><p><img src="https://hao0527.gitee.io/231031-wdg/wdgM-dep-en.png" alt="img"></p>
+<p><img src="https://hao0527.gitee.io/231031-wdg/wdgM-dep-cn.png" alt="img"></p>
+<h2 id="AUTOSAR-Wdg-基础知识"><a href="#AUTOSAR-Wdg-基础知识" class="headerlink" title="AUTOSAR Wdg 基础知识"></a>AUTOSAR Wdg 基础知识</h2><h3 id="三种模式"><a href="#三种模式" class="headerlink" title="三种模式"></a>三种模式</h3><p>在AUTOSAR架构中，针对Watchdog Driver而言，定义了看门狗控制模式存在如下三种模式：</p>
+<ul>
+<li>Off Mode：表示看门狗关闭状态，对于关键安全系统，一般不能将其切换至Off状态，即一旦打开，将不能被关闭。</li>
+<li>Slow Mode：表示看门狗的一个长时间喂狗窗口，该模式一般用于系统启动初始化过程中。</li>
+<li>Fast Mode：表示看门狗的正常喂狗模式，该模式运用在系统正常运行的过程中。</li>
+</ul>
+<h2 id="AUTOSAR-Wdg-各层功能"><a href="#AUTOSAR-Wdg-各层功能" class="headerlink" title="AUTOSAR Wdg 各层功能"></a>AUTOSAR Wdg 各层功能</h2><h3 id="Wdg"><a href="#Wdg" class="headerlink" title="Wdg"></a>Wdg</h3><p>Wdg通常有两种，一种是芯片内部自带的片内看门狗；还有一种是在芯片外部通过SPI这种接口连接的片外看门狗。MCAL只负责第一种片内看门狗，片内看门狗的特点是Wdg模块是直接访问相关硬件寄存器。片外看门狗属于板级设备抽象层负责，通常需要使用MCAL提供的其他模块（比如SPI等）来访问/控制外扩看门狗芯片，这种不能直接访问硬件寄存器。</p>
+<p>部分flash不能在写的时候读取，所以该模块代码可以在RAM里面运行。比如在刷写Flash时，Wdg模块可能作为二进制文件里面的一部分在RAM上运行。（到底哪些部分需要放RAM？）</p>
+<h4 id="Wdg-API"><a href="#Wdg-API" class="headerlink" title="Wdg API"></a>Wdg API</h4><p>Wdg 驱动层，主要接口就三个，调用方式如下图：</p>
+<p><img src="https://hao0527.gitee.io/231031-wdg/wdg-1.png" alt="img"></p>
+<ul>
+<li>wdg初始化：通过EcuM模块调用函数Wdg_Init来完成Watchdog的初始化配置。</li>
+<li>触发wdg喂狗：通过WdgM模块调用WdgIf模块提供的函数WdgIf_SetTriggerCondition来触发底层驱动进行喂狗（不是wdg真正的喂狗操作），并设置下次看门狗timeout时间。</li>
+<li>改变wdg模式：通过WdgM模块调用WdgIf模块提供的函数WdgIf_SetMode来实现看门狗模式的改变。</li>
+</ul>
+<h4 id="喂狗"><a href="#喂狗" class="headerlink" title="喂狗"></a>喂狗</h4><p>在AUTOSAR之前的版本中，看门狗服务是<strong>由上层软件来调用</strong>，会导致一些问题：</p>
+<ol>
+<li>很难保证针对窗口式看门狗严格的时间约束。新版对这部分做了优化，优化的基本思想是将<strong>用于维护看门狗硬件时序的服务与逻辑控制分开</strong>，触发看门狗的时基可以通过系统时钟（systick）来提供，而控制看门狗硬件的程序可直接在硬件定时器的中断函数里面实现，这样可确保满足窗口式看门狗的喂狗时间准确。</li>
+<li>很难处理了快和慢两种模式。Wdg模块3种模式其中两种是Slow，Fast模式。很多时候应用层可能并不需要那么严格的时间监控，可能秒级的周期即可。但由于喂狗周期都是固定的且比较短，应用层不断去喂狗会导致性能下降，而且需要到处穿插喂狗函数。</li>
+<li>应用软件频繁修改硬狗寄存器不安全。现在AUTOSAR实现方式，应用层调用喂狗函数（Wdg_SetTriggerCondition）并不是直接去操作硬件看门狗寄存器的，而是去喂软狗。<strong>真正喂硬狗靠硬件定时器</strong>，在定时器中断回调中判断软狗没问题才去操作硬狗寄存器。</li>
+</ol>
+<p>看门狗驱动程序和硬狗操作之间的调用方式如下图：</p>
+<p><img src="https://hao0527.gitee.io/231031-wdg/wdg-2.png" alt="img"></p>
+<h3 id="WdgIf"><a href="#WdgIf" class="headerlink" title="WdgIf"></a>WdgIf</h3><p>和NvM下的MemIf功能相同，可以通过DeviceIndex区分要调用哪个Wdg Driver，可以用宏或函数实现，接口如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Std_ReturnType <span class="title function_">WdgIf_SetMode</span><span class="params">(uint8 DeviceIndex, WdgIf_ModeType WdgMode)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">WdgIf_SetTriggerCondition</span><span class="params">(uint8 DeviceIndex, uint16 Timeout)</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="WdgM"><a href="#WdgM" class="headerlink" title="WdgM"></a>WdgM</h3><p>Watchdog Manager可以理解为一种应用层软狗机制，该软件机制监控的对象被称为<strong>监控实体</strong>（SupervisedEntity, SE），通过在每个监控实体中打上对应的<strong>检查点</strong>（Checkpoint, CP）监控程序是否正常。</p>
+<p>WdgM中可以创建一个或多个SE，每个SE都有对应的SEID。<br>每个SE可以创建一个或多个CP，每个CP都有对应的CheckpointID。<br>每个SE可以选择一个<strong>监控方式</strong>，这个取决于具体的需求，监控方式可以分为如下三种：</p>
+<ol>
+<li>Alive Supervision: 用于监控周期性任务是否周期性运行。</li>
+<li>Deadline Supervision：用于监控事件型任务的运行时间是否超时。</li>
+<li>Logical Supervision: 用于监控任务的执行逻辑/时序是否正确。</li>
+</ol>
+<p>每一个监控实体可以基于上述三种监控方式计算得出监控结果，被称为<strong>Local Status</strong>。<br>当每一个监控实体的状态得到确定，那么整个MCU的监控结果便可以最终确定，这个最终确定的状态被称为<strong>Global Status</strong>。</p>
+<h4 id="WdgM-API"><a href="#WdgM-API" class="headerlink" title="WdgM API"></a>WdgM API</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">WdgM_Init</span><span class="params">(<span class="type">const</span> WdgM_ConfigType *ConfigPtr)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">WdgM_DeInit</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">if</span> (WDGM_VERSION_INFO_API == STD_ON)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> WdgM_GetVersionInfo(_vi) STD_GET_VERSION_INFO(_vi,WDGM)</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">Std_ReturnType <span class="title function_">WdgM_SetMode</span><span class="params">(WdgM_ModeType Mode)</span>;</span><br><span class="line"></span><br><span class="line">Std_ReturnType <span class="title function_">WdgM_GetMode</span><span class="params">(WdgM_ModeType *Mode)</span>;</span><br><span class="line"></span><br><span class="line">Std_ReturnType <span class="title function_">WdgM_CheckpointReached</span><span class="params">(WdgM_SupervisedEntityIdType SEID, WdgM_CheckpointIdType CheckpointID)</span>;</span><br><span class="line"></span><br><span class="line">Std_ReturnType <span class="title function_">WdgM_GetLocalStatus</span><span class="params">(WdgM_SupervisedEntityIdType SEID, WdgM_LocalStatusType *Status)</span>;</span><br><span class="line"></span><br><span class="line">Std_ReturnType <span class="title function_">WdgM_GetGlobalStatus</span><span class="params">(WdgM_GlobalStatusType *Status)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">WdgM_PerformReset</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line">Std_ReturnType <span class="title function_">WdgM_GetFirstExpiredSEID</span><span class="params">(WdgM_SupervisedEntityIdType *SEID)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">WdgM_MainFunction</span><span class="params">(<span class="type">void</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<h4 id="状态转移图"><a href="#状态转移图" class="headerlink" title="状态转移图"></a>状态转移图</h4><p>Figure 2: Local Supervision Status:</p>
+<p><img src="https://hao0527.gitee.io/231031-wdg/wdgM-1.png" alt="img"></p>
+<p>在从其他状态切换至WDGM_LOCAL_STATUS_EXPIRED状态时，Watchdog Manager提供一定的时间保留机制能够允许做一些特别的操作，如设置看门狗模式或者写入NvM数据，复位原因等。</p>
+<p>Figure 3: Global Supervision Status:</p>
+<p><img src="https://hao0527.gitee.io/231031-wdg/wdgM-2.png" alt="img"></p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/20/231020-MemoryStack/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -545,6 +687,112 @@
 <p>adc采集的时候电流过大会将电压拉低导致单片机复位，正在通过加电容解决。</p>
 <p>射频需求只需要5m范围内，所以射频的功率也可以配置低一些。</p>
 <p>后面测试解决完这个问题更新……</p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/14/230914-stm32cmake/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/09/14/230914-stm32cmake/" class="post-title-link" itemprop="url">STM32 CMake 构建工程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-09-14 23:30:00" itemprop="dateCreated datePublished" datetime="2023-09-14T23:30:00+08:00">2023-09-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-11-01 21:42:05" itemprop="dateModified" datetime="2023-11-01T21:42:05+08:00">2023-11-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ol>
+<li><a target="_blank" rel="noopener" href="https://github.com/rxdu/stm32_cmake">STM32 CMake Project Template</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/skb666/stm32l4_demo/tree/dev">stm32l4_demo - skb666</a></li>
+</ol>
+<h3 id="为什么使用-CMake？"><a href="#为什么使用-CMake？" class="headerlink" title="为什么使用 CMake？"></a>为什么使用 CMake？</h3><p>很早就想过用 CMake 来代替 eclipse 构建工程，优点是可以使用 VsCode 编译工程进行开发。另外还方便在 Jenkins 上使用脚本构建工程，目前使用 eclipse 构建工程，需要把生成的 Makefile 和多个 .arg 文件传 SVN，Jenkins 上通过 eclipse 生成的 Makefile 脚本编译工程，需要管控很多 Make 相关的文件，而且工程文件目录调整后，需要重新用 eclipse 生成一份 Makefile 供 Jenkins 使用。</p>
+<h3 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h3><p>一开始使用 CMake 遇到很多问题，主要还是我在使用 Windows 开发环境，有些地方需要注意。我后来使用 WSL 使用CMake 的时候还是很顺利的，而且 Linux 中的包管理器很好用，准备开发环境非常方便，确实比 Windows 开发优秀很多。如果可以的话，我也想拥有一台电脑装 Linux 操作系统做日常软件开发。</p>
+<p>现在改了 CMake 脚本，在 Windows 下也可以完成构建和编译了！，主要是加了 <code>set(CMAKE_SYSTEM_NAME Generic)</code>，<code>CMAKE_SYSTEM_NAME</code> 变量用于指定项目的目标操作系统名称，”Generic” 通常表示你不是针对特定的操作系统进行构建，而是希望以更通用或跨平台的方式构建项目，这通常用于编写可以在多个不同平台上编译和运行的代码。否则链接时会出现以下报错：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[  2%] Linking C executable C:/Users/33110/Projects/stm32l4_demo/output/stm32l4_demo.elf.exe</span><br><span class="line">c:/program files (x86)/gcc-arm-none-eabi-10.3-2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/bin/ld.exe: unrecognized option &#x27;--major-image-version&#x27;</span><br><span class="line">c:/program files (x86)/gcc-arm-none-eabi-10.3-2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/bin/ld.exe: use the --help option for usage information</span><br><span class="line">collect2.exe: error: ld returned 1 exit status</span><br><span class="line">make[2]: *** [CMakeFiles/stm32l4_demo.elf.dir/build.make:764：C:/Users/33110/Projects/stm32l4_demo/output/stm32l4_demo.elf.exe] 错误 1</span><br><span class="line">make[1]: *** [CMakeFiles/Makefile2:83：CMakeFiles/stm32l4_demo.elf.dir/all] 错误 2</span><br><span class="line">make: *** [Makefile:91：all] 错误 2</span><br></pre></td></tr></table></figure>
+
+<h3 id="CMake-脚本"><a href="#CMake-脚本" class="headerlink" title="CMake 脚本"></a>CMake 脚本</h3><p>CMake 脚本分为两个，将不同平台编译工具链相关的抽离出来，在一份 CMake 工程可以编译出不同平台的结果。脚本内容如下：</p>
+<h4 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h4><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.10</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义工程名的变量</span></span><br><span class="line"><span class="keyword">set</span>(PROJECT_NAME <span class="string">&quot;my_ytm32_prj&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">project</span>(<span class="variable">$&#123;PROJECT_NAME&#125;</span> LANGUAGES C CXX)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更详细的编译信息</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_VERBOSE_MAKEFILE <span class="keyword">on</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">MESSAGE</span>(STATUS <span class="string">&quot;PROJECT_NAME: &quot;</span> <span class="variable">$&#123;PROJECT_NAME&#125;</span>)</span><br><span class="line"><span class="keyword">MESSAGE</span>(STATUS <span class="string">&quot;CMAKE_TOOLCHAIN_FILE: &quot;</span> <span class="variable">$&#123;CMAKE_TOOLCHAIN_FILE&#125;</span>)</span><br><span class="line"><span class="keyword">MESSAGE</span>(STATUS <span class="string">&quot;MCU: &quot;</span> <span class="variable">$&#123;MCU&#125;</span>)</span><br><span class="line"><span class="keyword">MESSAGE</span>(STATUS <span class="string">&quot;LD_SCRIPT: &quot;</span> <span class="variable">$&#123;LD_SCRIPT&#125;</span>)</span><br><span class="line"><span class="keyword">MESSAGE</span>(STATUS <span class="string">&quot;ASM_SOURCES: &quot;</span> <span class="variable">$&#123;ASM_SOURCES&#125;</span>)</span><br><span class="line"><span class="keyword">MESSAGE</span>(STATUS <span class="string">&quot;MAP_FILE: &quot;</span> <span class="variable">$&#123;MAP_FILE&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加编译参数</span></span><br><span class="line"><span class="keyword">add_compile_options</span>(-O2 -fmessage-length=<span class="number">0</span> -fsigned-char -ffunction-sections -fdata-sections -fno-strict-aliasing)</span><br><span class="line"><span class="keyword">add_link_options</span>(-T<span class="variable">$&#123;LD_SCRIPT&#125;</span> -Xlinker --gc-sections -Wl,-Map=<span class="variable">$&#123;MAP_FILE&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 递归调用子文件的 CMakeLists.txt</span></span><br><span class="line"><span class="comment"># add_subdirectory(lib)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 汇编文件配置编译选项</span></span><br><span class="line"><span class="keyword">set_property</span>(SOURCE <span class="variable">$&#123;ASM_SOURCES&#125;</span> PROPERTY LANGUAGE C)</span><br><span class="line"><span class="keyword">set_source_files_properties</span>(<span class="variable">$&#123;ASM_SOURCES&#125;</span> PROPERTIES COMPILE_FLAGS <span class="string">&quot;-x assembler-with-cpp -DSTART_FROM_FLASH&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用file命令的GLOB_RECURSE选项递归搜索所有C文件</span></span><br><span class="line"><span class="keyword">file</span>(GLOB_RECURSE SOURCE_FILES <span class="string">&quot;$&#123;CMAKE_SOURCE_DIR&#125;/source/*.c&quot;</span> <span class="string">&quot;$&#123;CMAKE_SOURCE_DIR&#125;/Project_Settings/Startup_Code/*.c&quot;</span>)</span><br><span class="line"><span class="comment"># MESSAGE(STATUS &quot;SOURCE_FILES: &quot; $&#123;SOURCE_FILES&#125;)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 目标所需的源文件</span></span><br><span class="line"><span class="keyword">add_executable</span>(<span class="variable">$&#123;PROJECT_NAME&#125;</span>.elf <span class="variable">$&#123;SOURCE_FILES&#125;</span> <span class="variable">$&#123;ASM_SOURCES&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 目标所需宏定义</span></span><br><span class="line"><span class="keyword">target_compile_definitions</span>(<span class="variable">$&#123;PROJECT_NAME&#125;</span>.elf PUBLIC</span><br><span class="line">    CPU_YTM32B1ME0</span><br><span class="line">    YTM32B1ME0</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 目标所需的库</span></span><br><span class="line"><span class="keyword">target_link_libraries</span>(<span class="variable">$&#123;PROJECT_NAME&#125;</span>.elf PUBLIC m)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 目标所需的头文件路径</span></span><br><span class="line"><span class="keyword">target_include_directories</span>(<span class="variable">$&#123;PROJECT_NAME&#125;</span>.elf PUBLIC</span><br><span class="line">    <span class="string">&quot;$&#123;CMAKE_SOURCE_DIR&#125;/Project_Settings/Startup_Code&quot;</span></span><br><span class="line">    <span class="string">&quot;$&#123;CMAKE_SOURCE_DIR&#125;/Project_Settings/Startup_Code/CMSIS/Core/Include&quot;</span></span><br><span class="line">    <span class="string">&quot;$&#123;CMAKE_SOURCE_DIR&#125;/source/inc&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加预编译目标</span></span><br><span class="line"><span class="keyword">add_custom_target</span>(</span><br><span class="line">    PRE_BUILD_DUMMY ALL</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 目标编译前自定义指令</span></span><br><span class="line"><span class="keyword">add_custom_command</span>(</span><br><span class="line">    <span class="keyword">TARGET</span> PRE_BUILD_DUMMY PRE_BUILD</span><br><span class="line">    <span class="keyword">COMMAND</span> <span class="variable">$&#123;CMAKE_SOURCE_DIR&#125;</span>/../Bin/generate_version.sh</span><br><span class="line">    WORKING_DIRECTORY <span class="variable">$&#123;CMAKE_OUTPUT_DIRECTORY&#125;</span></span><br><span class="line">)</span><br><span class="line"><span class="comment"># 将预编译步骤作为主目标依赖</span></span><br><span class="line"><span class="keyword">add_dependencies</span>(<span class="variable">$&#123;PROJECT_NAME&#125;</span>.elf PRE_BUILD_DUMMY)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 目标编译后自定义指令</span></span><br><span class="line"><span class="keyword">add_custom_command</span>(</span><br><span class="line">    <span class="keyword">TARGET</span> <span class="variable">$&#123;PROJECT_NAME&#125;</span>.elf POST_BUILD</span><br><span class="line">    <span class="keyword">COMMAND</span> <span class="variable">$&#123;CMAKE_SOURCE_DIR&#125;</span>/../Bin/BuildTools/PostBuild.bat <span class="variable">$&#123;PROJECT_NAME&#125;</span> <span class="variable">$&#123;TOOLCHAINS_PATH&#125;</span> <span class="variable">$&#123;TOOLCHAINS_PREFIX&#125;</span></span><br><span class="line">    <span class="keyword">COMMAND</span> <span class="variable">$&#123;TOOLCHAINS_PATH&#125;</span>/<span class="variable">$&#123;TOOLCHAINS_PREFIX&#125;</span>objcopy -O binary -S <span class="variable">$&#123;PROJECT_NAME&#125;</span>.elf <span class="variable">$&#123;PROJECT_NAME&#125;</span>.bin</span><br><span class="line">    <span class="keyword">COMMAND</span> <span class="variable">$&#123;TOOLCHAINS_PATH&#125;</span>/<span class="variable">$&#123;TOOLCHAINS_PREFIX&#125;</span>objcopy -O binary -S <span class="variable">$&#123;PROJECT_NAME&#125;</span>.elf <span class="variable">$&#123;PROJECT_NAME&#125;</span>.srec</span><br><span class="line">    <span class="keyword">COMMAND</span> <span class="variable">$&#123;TOOLCHAINS_PATH&#125;</span>/<span class="variable">$&#123;TOOLCHAINS_PREFIX&#125;</span>objcopy -O binary -S <span class="variable">$&#123;PROJECT_NAME&#125;</span>.elf <span class="variable">$&#123;PROJECT_NAME&#125;</span>.hex</span><br><span class="line">    WORKING_DIRECTORY <span class="variable">$&#123;CMAKE_OUTPUT_DIRECTORY&#125;</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h4 id="toolchains-cmake"><a href="#toolchains-cmake" class="headerlink" title="toolchains.cmake"></a>toolchains.cmake</h4><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span>(CMAKE_SYSTEM_NAME Generic)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_SYSTEM_PROCESSOR ARM)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 选择编译版本（可以通过 vscode 指定）</span></span><br><span class="line"><span class="comment"># set(CMAKE_BUILD_TYPE Release)</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_BUILD_TYPE Debug)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(TOOLCHAINS_PATH <span class="string">&quot;C:/Yuntu/YuntuIDE/tools/bin&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(TOOLCHAINS_PREFIX <span class="string">&quot;arm-none-eabi-&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 交叉编译器（可以通过 vscode 指定）</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_C_COMPILER <span class="string">&quot;$&#123;TOOLCHAINS_PATH&#125;/$&#123;TOOLCHAINS_PREFIX&#125;gcc.exe&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_COMPILER <span class="string">&quot;$&#123;TOOLCHAINS_PATH&#125;/$&#123;TOOLCHAINS_PREFIX&#125;g++.exe&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 跳过编译器检查</span></span><br><span class="line"><span class="comment"># set(CMAKE_C_COMPILER_WORKS 1)</span></span><br><span class="line"><span class="comment"># set(CMAKE_CXX_COMPILER_WORKS 1)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成目标的存放目录</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_OUTPUT_DIRECTORY <span class="variable">$&#123;PROJECT_SOURCE_DIR&#125;</span>/Debug)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_RUNTIME_OUTPUT_DIRECTORY <span class="variable">$&#123;CMAKE_OUTPUT_DIRECTORY&#125;</span>)</span><br><span class="line"><span class="comment"># 默认存放静态库的文件夹位置</span></span><br><span class="line"><span class="comment"># set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY $&#123;CMAKE_OUTPUT_DIRECTORY&#125;/archive)</span></span><br><span class="line"><span class="comment"># 默认存放动态库的文件夹位置</span></span><br><span class="line"><span class="comment"># set(CMAKE_LIBRARY_OUTPUT_DIRECTORY $&#123;CMAKE_OUTPUT_DIRECTORY&#125;/library)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CPU <span class="string">&quot;-mcpu=cortex-m33&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(FPU <span class="string">&quot;&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(FLOAT-ABI <span class="string">&quot;&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(MCU <span class="string">&quot;$&#123;CPU&#125; -mthumb $&#123;FPU&#125; $&#123;FLOAT-ABI&#125;&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_C_STANDARD_REQUIRED <span class="keyword">ON</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_C_STANDARD <span class="number">11</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_C_FLAGS <span class="string">&quot;$&#123;MCU&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_C_FLAGS_DEBUG <span class="string">&quot;-g3&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_C_FLAGS_RELEASE <span class="string">&quot;&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果CMAKE_CXX_STANDARD_REQUIRED设置为ON则必须使用CMAKE_CXX_STANDARD指定的版本</span></span><br><span class="line"><span class="comment"># 如果CMAKE_CXX_STANDARD_REQUIRED设置为OFF则CMAKE_CXX_STANDARD指定版本的为首选版本如果没有会使用上一版本</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_STANDARD_REQUIRED <span class="keyword">ON</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_STANDARD <span class="number">17</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_FLAGS <span class="string">&quot;$&#123;MCU&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_FLAGS_DEBUG <span class="string">&quot;-g3&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_FLAGS_RELEASE <span class="string">&quot;&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(LD_SCRIPT <span class="string">&quot;$&#123;PROJECT_SOURCE_DIR&#125;/Project_Settings/Linker_Files/flash.ld&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(ASM_SOURCES <span class="string">&quot;$&#123;PROJECT_SOURCE_DIR&#125;/Project_Settings/Startup_Code/YTM32B1ME0_startup_gcc.S&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(MAP_FILE <span class="string">&quot;$&#123;CMAKE_OUTPUT_DIRECTORY&#125;/$&#123;PROJECT_NAME&#125;.map&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_EXE_LINKER_FLAGS <span class="string">&quot;--specs=nosys.specs&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)</span><br></pre></td></tr></table></figure>
+
+<h3 id="构建及编译指令"><a href="#构建及编译指令" class="headerlink" title="构建及编译指令"></a>构建及编译指令</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd Project</span><br><span class="line">cmake -G &quot;Unix Makefiles&quot; -S. -BDebug -DCMAKE_TOOLCHAIN_FILE=toolchains.cmake</span><br><span class="line">cmake --build Debug --target all -- -j8</span><br></pre></td></tr></table></figure>
+
+<h3 id="写cmake脚本时遇到的问题"><a href="#写cmake脚本时遇到的问题" class="headerlink" title="写cmake脚本时遇到的问题"></a>写cmake脚本时遇到的问题</h3><ol>
+<li>vscode生成cmake时需要加入指定工具链的命令<code>-DCMAKE_TOOLCHAIN_FILE=toolchains.cmake</code>，这个需在vscode cmake拓展设置中配置。</li>
+<li>vscode生成cmake可以选择是Debug还是Release，还可选择工具链，既然我通过上面一个方案传入工具链的cmake，vscode配置工具链成未指定就可以了。</li>
+<li>cmake生成时会有检查工具链，有些工具链可能会报错，gcc10.5需要加<code>set(CMAKE_EXE_LINKER_FLAGS &quot;--specs=nosys.specs&quot;)</code>。</li>
+<li>gcc4.9就不支持<code>--specs=nosys.specs</code>这个选项，跳过编译器检查需要加 <code>set(CMAKE_C_COMPILER_WORKS 1) set(CMAKE_CXX_COMPILER_WORKS 1)</code>。</li>
+<li>跨平台的编译需要加<code>set(CMAKE_SYSTEM_NAME Generic) set(CMAKE_SYSTEM_PROCESSOR ARM)</code>，否则会链接错误。</li>
+<li>更详细的编译信息<code>set(CMAKE_VERBOSE_MAKEFILE on)</code>需要加在<code>project($&#123;PROJECT_NAME&#125; LANGUAGES C CXX)</code>后面，否则不起作用。</li>
+<li><code>set(CMAKE_SYSTEM_NAME Generic)</code>需要加在<code>project($&#123;PROJECT_NAME&#125; LANGUAGES C CXX)</code>前面，否则不起作用，这类问题还没搞清楚为什么有的需要在project前有的需要在后，解决方法是由于未起作用试出来的。</li>
+</ol>
+<h3 id="待优化"><a href="#待优化" class="headerlink" title="待优化"></a>待优化</h3><ol>
+<li>现在链接顺序和 eclipse 编译出来的不一致，导致二进制不同（经测试，手动改变链接顺序，改成与 eclipse 一致，编译结果 bin 一致）。</li>
+<li>没根据系统选择不同的cmake脚本，linux 下可能不兼容。</li>
+</ol>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
     </div>
@@ -1428,235 +1676,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/03/07/230307-cAsm/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/03/07/230307-cAsm/" class="post-title-link" itemprop="url">分析c语言函数调用时的汇编代码，进出函数时CPU做了什么？</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-03-07 16:00:00" itemprop="dateCreated datePublished" datetime="2023-03-07T16:00:00+08:00">2023-03-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-03-08 08:20:03" itemprop="dateModified" datetime="2023-03-08T08:20:03+08:00">2023-03-08</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">foo</span> &#123;</span><span class="type">int</span> a; <span class="type">int</span> b; <span class="type">int</span> c; <span class="type">int</span> d; <span class="type">int</span> e;&#125; g_stTest;</span><br><span class="line"></span><br><span class="line"><span class="keyword">volatile</span> <span class="keyword">struct</span> foo <span class="title function_">testFun2</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b, <span class="type">int</span> c, <span class="type">int</span> d, <span class="type">int</span> e)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">foo</span> <span class="title">stTest</span>;</span></span><br><span class="line">    stTest.a = a;</span><br><span class="line">    stTest.b = b;</span><br><span class="line">    stTest.c = c;</span><br><span class="line">    stTest.d = d;</span><br><span class="line">    stTest.e = e;</span><br><span class="line">    <span class="keyword">return</span> stTest;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">volatile</span> <span class="type">void</span> <span class="title function_">testFun1</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    g_stTest = testFun2(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="反汇编"><a href="#反汇编" class="headerlink" title="反汇编"></a>反汇编</h3><p>用gcc工具链编译s32k144平台的代码，通过ozone分析elf得到反汇编如下：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">volatile</span> <span class="type">void</span> <span class="title function_">testFun1</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="comment">// 0002C74C   PUSH           &#123;R4-R5, R7, LR&#125;</span></span><br><span class="line"><span class="comment">// 0002C74E   SUB            SP, SP, #32</span></span><br><span class="line"><span class="comment">// 0002C750   ADD            R7, SP, #8</span></span><br><span class="line">    g_stTest = testFun2(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>);</span><br><span class="line">    <span class="comment">// 0002C752   LDR            R4, =g_stTest                 ; [PC, #40] [0x0002C77C] =0x20002318</span></span><br><span class="line">    <span class="comment">// 0002C754   MOV            R2, R7</span></span><br><span class="line">    <span class="comment">// 0002C756   MOVS           R3, #4</span></span><br><span class="line">    <span class="comment">// 0002C758   STR            R3, [SP, #0]</span></span><br><span class="line">    <span class="comment">// 0002C75A   MOVS           R3, #5</span></span><br><span class="line">    <span class="comment">// 0002C75C   STR            R3, [SP, #4]</span></span><br><span class="line">    <span class="comment">// 0002C75E   MOV            R0, R2</span></span><br><span class="line">    <span class="comment">// 0002C760   MOVS           R1, #1</span></span><br><span class="line">    <span class="comment">// 0002C762   MOVS           R2, #2</span></span><br><span class="line">    <span class="comment">// 0002C764   MOVS           R3, #3</span></span><br><span class="line">    <span class="comment">// 0002C766   BL             testFun2                      ; 0x0002C710</span></span><br><span class="line">    <span class="comment">// 0002C76A   MOV            R5, R4</span></span><br><span class="line">    <span class="comment">// 0002C76C   MOV            R4, R7</span></span><br><span class="line">    <span class="comment">// 0002C76E   LDM            R4!, &#123;R0-R3&#125;</span></span><br><span class="line">    <span class="comment">// 0002C770   STM            R5!, &#123;R0-R3&#125;</span></span><br><span class="line">    <span class="comment">// 0002C772   LDR            R3, [R4]</span></span><br><span class="line">    <span class="comment">// 0002C774   STR            R3, [R5]</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 0002C776   ADDS           R7, #24</span></span><br><span class="line"><span class="comment">// 0002C778   MOV            SP, R7</span></span><br><span class="line"><span class="comment">// 0002C77A   POP            &#123;R4-R5, R7, PC&#125;</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">volatile</span> <span class="keyword">struct</span> foo <span class="title function_">testFun2</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b, <span class="type">int</span> c, <span class="type">int</span> d, <span class="type">int</span> e)</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="comment">// 0002C710   PUSH           &#123;R4-R5, R7&#125;</span></span><br><span class="line"><span class="comment">// 0002C712   SUB            SP, SP, #44</span></span><br><span class="line"><span class="comment">// 0002C714   ADD            R7, SP, #0</span></span><br><span class="line"><span class="comment">// 0002C716   STR            R0, [R7, #12]</span></span><br><span class="line"><span class="comment">// 0002C718   STR            R1, [R7, #8]</span></span><br><span class="line"><span class="comment">// 0002C71A   STR            R2, [R7, #4]</span></span><br><span class="line"><span class="comment">// 0002C71C   STR            R3, [R7]</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">foo</span> <span class="title">stTest</span>;</span></span><br><span class="line">    stTest.a = a;</span><br><span class="line">    <span class="comment">// 0002C71E   LDR            R3, [R7, #8]</span></span><br><span class="line">    <span class="comment">// 0002C720   STR            R3, [R7, #20]</span></span><br><span class="line">    stTest.b = b;</span><br><span class="line">    <span class="comment">// 0002C722   LDR            R3, [R7, #4]</span></span><br><span class="line">    <span class="comment">// 0002C724   STR            R3, [R7, #24]</span></span><br><span class="line">    stTest.c = c;</span><br><span class="line">    <span class="comment">// 0002C726   LDR            R3, [R7]</span></span><br><span class="line">    <span class="comment">// 0002C728   STR            R3, [R7, #28]</span></span><br><span class="line">    stTest.d = d;</span><br><span class="line">    <span class="comment">// 0002C72A   LDR            R3, [R7, #56]</span></span><br><span class="line">    <span class="comment">// 0002C72C   STR            R3, [R7, #32]</span></span><br><span class="line">    stTest.e = e;</span><br><span class="line">    <span class="comment">// 0002C72E   LDR            R3, [R7, #60]</span></span><br><span class="line">    <span class="comment">// 0002C730   STR            R3, [R7, #36]</span></span><br><span class="line">    <span class="keyword">return</span> stTest;</span><br><span class="line">    <span class="comment">// 0002C732   LDR            R3, [R7, #12]</span></span><br><span class="line">    <span class="comment">// 0002C734   MOV            R5, R3</span></span><br><span class="line">    <span class="comment">// 0002C736   ADD.W          R4, R7, #20</span></span><br><span class="line">    <span class="comment">// 0002C73A   LDM            R4!, &#123;R0-R3&#125;</span></span><br><span class="line">    <span class="comment">// 0002C73C   STM            R5!, &#123;R0-R3&#125;</span></span><br><span class="line">    <span class="comment">// 0002C73E   LDR            R3, [R4]</span></span><br><span class="line">    <span class="comment">// 0002C740   STR            R3, [R5]</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 0002C742   LDR            R0, [R7, #12]</span></span><br><span class="line"><span class="comment">// 0002C744   ADDS           R7, #44</span></span><br><span class="line"><span class="comment">// 0002C746   MOV            SP, R7</span></span><br><span class="line"><span class="comment">// 0002C748   POP            &#123;R4-R5, R7&#125;</span></span><br><span class="line"><span class="comment">// 0002C74A   BX             LR</span></span><br></pre></td></tr></table></figure>
-<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><ol>
-<li>在进入函数后，首先会将R4, R5, R7寄存器压栈，使用PUSH指令后SP会自动减去压栈空间的大小。</li>
-<li>然后是SP减去一个直接数，是在给局部变量、形参和参数传递开辟栈区空间。</li>
-<li>R7 = SP + 偏移，R7是局部变量所在栈区的地址，偏移的大小是函数内调用函数时，参数传递所需要的空间大小。</li>
-<li><code>g_stTest = testFun2(1, 2, 3, 4, 5);</code>反汇编中，参数4, 5通过栈传递，参数1, 2, 3通过R1~R3寄存器传递。</li>
-<li>在<code>testFun2</code>函数进入后，<code>STR R0, [R7, #12]</code>等指令，会将R0~R3寄存器传递的参数存入（局部变量）栈中，为什么传参的还有R0？</li>
-<li>重新分析<code>g_stTest = testFun2(1, 2, 3, 4, 5);</code>反汇编，R0传入的是R7（局部变量地址），在<code>testFun2</code>函数<code>return stTest;</code>时，将stTest写入R0传入的地址区域。</li>
-<li>在退出函数时，如果函数有return参数，会将return参数写入R0，若大于4字节会将进入函数时R0传入的地址返回。</li>
-<li>在退出函数时，会将SP改回进入函数前的SP，并使用POP指令出栈（POP指令会增加SP），最后跳转出函数（还可以直接POP取出PC跳转）。</li>
-</ol>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/15/230215-git/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/02/15/230215-git/" class="post-title-link" itemprop="url">分享一个学习Git的网站，记录Git一些用法</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-02-15 16:00:00" itemprop="dateCreated datePublished" datetime="2023-02-15T16:00:00+08:00">2023-02-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-07-06 08:46:48" itemprop="dateModified" datetime="2023-07-06T08:46:48+08:00">2023-07-06</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E7%89%88%E6%9C%AC%E7%AE%A1%E6%8E%A7/" itemprop="url" rel="index"><span itemprop="name">版本管控</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="网站：Learn-Git-Branching"><a href="#网站：Learn-Git-Branching" class="headerlink" title="网站：Learn Git Branching"></a>网站：<a target="_blank" rel="noopener" href="https://learngitbranching.js.org/?locale=zh_CN">Learn Git Branching</a></h2><h3 id="分离HEAD"><a href="#分离HEAD" class="headerlink" title="分离HEAD"></a>分离HEAD</h3><p><strong>HEAD 是一个对当前检出记录的符号引用</strong>，也就是指向你正在其基础上进行工作的提交记录。HEAD 总是指向当前分支上最近一次提交记录。大多数修改提交树的 Git 命令都是从改变 HEAD 的指向开始的。HEAD 通常情况下是指向分支名的。在你提交时，改变了分支的状态，这一变化通过 HEAD 变得可见。<br>如果想看 HEAD 指向，可以通过 cat .git/HEAD 查看， 如果 HEAD 指向的是一个引用，还可以用 git symbolic-ref HEAD 查看它的指向。 </p>
-<h3 id="相对引用"><a href="#相对引用" class="headerlink" title="相对引用"></a>相对引用</h3><p>切换至上个版本<code>git checkout HEAD^</code><br>切换至上上上版本<code>git checkout HEAD~3</code></p>
-<h3 id="强制修改分支位置"><a href="#强制修改分支位置" class="headerlink" title="强制修改分支位置"></a>强制修改分支位置</h3><p>我使用相对引用最多的就是移动分支。可以直接使用 -f 选项让分支指向另一个提交。例如:<code>git branch -f main HEAD~3</code>，命令会将 main 分支强制指向 HEAD 的第 3 级父提交。</p>
-<h3 id="撤销变更"><a href="#撤销变更" class="headerlink" title="撤销变更"></a>撤销变更</h3><p><code>git reset</code> 通过把分支记录回退几个提交记录来实现撤销改动。你可以将这想象成“改写历史”。<code>git reset</code> 向上移动分支，原来指向的提交记录就跟从来没有提交过一样。<br>为了撤销更改并分享给别人，我们需要使用 <code>git revert</code>，在我们要撤销的提交记录后面居然多了一个新提交，此次提交是用来撤销上一次提交的，此次提交与上上一次提交状态相同。</p>
-<h3 id="Git-Cherry-pick"><a href="#Git-Cherry-pick" class="headerlink" title="Git Cherry-pick"></a>Git Cherry-pick</h3><p>如果你想<strong>将一些提交复制到当前所在的位置（HEAD）下面</strong>的话， Cherry-pick 是最直接的方式了。命令形式为：<code>git cherry-pick &lt;提交号&gt;...</code></p>
-<h3 id="交互式的-Rebase"><a href="#交互式的-Rebase" class="headerlink" title="交互式的 Rebase"></a>交互式的 Rebase</h3><p>交互式 rebase 指的是使用带参数 –interactive 的 rebase 命令, 简写为 -i。<br>如果你在命令后增加了这个选项, Git 会打开一个 UI 界面并列出将要被复制到目标分支的备选提交记录，它还会显示每个提交记录的哈希值和提交说明，提交说明有助于你理解这个提交进行了哪些更改。Git会自动打开默认的文本编辑器，比如在我本地使用的是vim。在文本编辑器的开始几行会列出所有满足条件的提交记录，每个提交记录对应一行，每行开头单词代表要对这条提交记录实施的操作。</p>
-<table>
-<thead>
-<tr>
-<th>操作</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>pick</td>
-<td>采用该提交（默认行为）</td>
-</tr>
-<tr>
-<td>reword</td>
-<td>采用该提交，但要求修改提交记录的备注</td>
-</tr>
-<tr>
-<td>edit</td>
-<td>采用该提交，但要求修改提交记录的信息，如：作者名称，邮箱地址等</td>
-</tr>
-<tr>
-<td>squash</td>
-<td>采用该提交，但它会被并入前一条提交</td>
-</tr>
-<tr>
-<td>fixup</td>
-<td>类似“squash”，但是会丢弃这条提交记录的日志信息</td>
-</tr>
-<tr>
-<td>exec</td>
-<td>执行指定的shell脚本或命令</td>
-</tr>
-<tr>
-<td>drop</td>
-<td>丢弃该提交</td>
-</tr>
-</tbody></table>
-<h3 id="Git-Describe"><a href="#Git-Describe" class="headerlink" title="Git Describe"></a>Git Describe</h3><p>git describe 的​​语法是：<code>git describe &lt;ref&gt;</code><br><code>&lt;ref&gt;</code> 可以是任何能被 Git 识别成提交记录的引用，如果你没有指定的话，Git 会以你目前所检出的位置（HEAD）。<br>它输出的结果：<code>&lt;tag&gt;_&lt;numCommits&gt;_g&lt;hash&gt;</code><br>tag 表示的是离 ref 最近的标签， numCommits 是表示这个 ref 与 tag 相差有多少个提交记录， hash 表示的是你所给定的 ref 所表示的提交记录哈希值的前几位。当 ref 提交记录上有某个标签时，则只输出标签名称。</p>
-<h3 id="Git-Pull"><a href="#Git-Pull" class="headerlink" title="Git Pull"></a>Git Pull</h3><p>git pull 就是 git fetch 和 git merge 的缩写！</p>
-<h3 id="rebase和merge区别【阅读原文】"><a href="#rebase和merge区别【阅读原文】" class="headerlink" title="rebase和merge区别【阅读原文】"></a>rebase和merge区别【<a target="_blank" rel="noopener" href="https://joyohub.com/2020/04/06/git-rebase/">阅读原文</a>】</h3><p>使用git merge 命令将 master 分支合并到 feature分支中：<code>git merge feature master</code>，git merge 会在 feature 分支中新增一个新的 merge commit，然后将两个分支的历史联系在一起。</p>
-<ul>
-<li>使用 merge 是很好的方式，因为它是一种非破坏性的操作，对现有分支不会以任何方式被更改。</li>
-<li>另一方面，这也意味着 feature 分支每次需要合并上游更改时，它都将产生一个额外的合并提交。</li>
-<li>如果master 提交非常活跃，这可能会严重污染你的 feature 分支历史记录。不过这个问题可以使用高级选项 git log 来缓解。</li>
-</ul>
-<p>使用git rebase 命令将 master 分支合并到 feature分支中：<code>git rebase feature master</code></p>
-<ul>
-<li>rebase 会将整个 feature 分支移动到 master 分支的顶端，从而有效地整合了所有 master 分支上的提交。</li>
-<li>但是，与 merge 提交方式不同，rebase 通过为原始分支中的每个提交创建全新的 commits 来重写项目历史记录,特点是仍然会在feature分支上形成线性提交。</li>
-<li>rebase 的主要好处是可以获得更清晰的项目历史。首先，它消除了 git merge 所需的不必要的合并提交；其次，正如你在上图中所看到的，rebase 会产生完美线性的项目历史记录，你可以在 feature分支上没有任何分叉的情况下一直追寻到项目的初始提交。</li>
-</ul>
-<h3 id="Pull-Request"><a href="#Pull-Request" class="headerlink" title="Pull Request"></a>Pull Request</h3><p>如果你是在一个大的合作团队中工作, 很可能是main被锁定了, 需要一些Pull Request流程来合并修改。如果你直接提交(commit)到本地main, 然后试图推送(push)修改, 你将会收到这样类似的信息:<br><code>! [远程服务器拒绝] main -&gt; main (TF402455: 不允许推送(push)这个分支; 你必须使用pull request来更新这个分支.)</code></p>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1722,7 +1745,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-count">72</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
