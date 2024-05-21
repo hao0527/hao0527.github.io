@@ -185,6 +185,286 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">GPIO输入输出各种模式（推挽、开漏、准双向端口）详解</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-04-26 20:00:00" itemprop="dateCreated datePublished" datetime="2022-04-26T20:00:00+08:00">2022-04-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-02-01 00:01:48" itemprop="dateModified" datetime="2023-02-01T00:01:48+08:00">2023-02-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>此文章是搬运来的，<a target="_blank" rel="noopener" href="https://blog.csdn.net/techexchangeischeap/article/details/72569999">原地址点击此处</a>，写的真好，能看的非常懂，原作者有个地方可能笔误写错了，做了改正。</p>
+<h2 id="输入IO"><a href="#输入IO" class="headerlink" title="输入IO"></a>输入IO</h2><p>这里所说的输入IO，指的是只作为输入，不具有输出功能。此时对于input引脚的要求就是高阻（高阻与三态是同一个概念）。基本输入电路的类型大致可以分为3类：基本输入IO电路、施密特触发输入电路以及弱上拉输入电路。</p>
+<p>先从最基本的基本输入IO电路说起，其电路如图 1所示。</p>
+<p><img src="https://hao0527.gitee.io/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-1.jpg" alt="220426-GPIO输入输出各种模式-1.jpg"></p>
+<p>其中的缓冲器U1是具有控制输入端，且具有高阻抗特性的三态缓冲器。通俗地说就是这个缓冲器对外来说是高阻的，相当于在控制输入端不使能的情况下，物理引脚与内部总线之间是完全隔离的，完全不会影响内部电路。而控制输入端的作用就是可以发出读Pin状态的操作指令。其过程如图 2所示。</p>
+<p><img src="https://hao0527.gitee.io/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-2.jpg" alt="220426-GPIO输入输出各种模式-2.jpg"></p>
+<p>这种基本电路的一个缺点是在读取外部信号的跳变沿时会出现抖动，如下图所示。</p>
+<p><img src="https://hao0527.gitee.io/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-3.jpg" alt="220426-GPIO输入输出各种模式-3.jpg"></p>
+<p>于是施密特触发输入电路就是解决了上述这种抖动的问题，其经过施密特触发器后的信号如图 4所示。</p>
+<p><img src="https://hao0527.gitee.io/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-4.jpg" alt="220426-GPIO输入输出各种模式-4.jpg"></p>
+<p>对于输入电路还存在另外一个问题，就是当输入引脚悬空的时候，输入端检测到的电平是高还是低？当输入信号没有被驱动，即悬空(Floating)时，输入引脚上任何的噪声都会改变输入端检测到的电平，如图 5所示。</p>
+<p><img src="https://hao0527.gitee.io/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-5.jpg" alt="220426-GPIO输入输出各种模式-5.jpg"></p>
+<p>为了解决这个问题，可以在输入引脚处加一个弱上拉电阻，如图 6所示。</p>
+<p><img src="https://hao0527.gitee.io/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-6.jpg" alt="220426-GPIO输入输出各种模式-6.jpg"></p>
+<p>这样，当输入引脚悬空时，会被RP上拉到高电平，在内部总线上就有确定的状态了。</p>
+<p>但是这种结构是有一定问题的。首先很明显的一点是，当输入引脚悬空时读到的是1，当输入引脚被高电平驱动时读到的也是1，只有当输入引脚被低电平驱动时读到的才是0。也就是对于读1采取的方式是”读取非零”的方式。</p>
+<p>另一个问题是该电路对外呈现的不是高阻，某种意义上说也在向外输出，当外部驱动电路不同时可能出现错误的检测结果。例如外部驱动电路是如图 7所示的结构，该电路结构中通过K打到不同端可以输出高电平或者低电平。</p>
+<p><img src="https://hao0527.gitee.io/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-7.jpg" alt="220426-GPIO输入输出各种模式-7.jpg"></p>
+<p>如果将如图 7所示的电路输出低电平，连接到带有弱上拉电阻的输入引脚，其结构如下所示。</p>
+<p><img src="https://hao0527.gitee.io/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-8.jpg" alt="220426-GPIO输入输出各种模式-8.jpg"></p>
+<p>由欧姆定律知，测试点处的电平是4.545V，于是CPU测得的输入信号为高，而外部驱动电路希望输出的电平为低。这种错误的原因就在于这种结构的输入电路并不是真正的高阻，或者说这个输入IO其实也在输出，而且影响了外部输入电路。</p>
+<p>这种情况的发生也说明了：信号前后两级传递，为什么需要输出阻抗小，输入阻抗大的原因。在这个例子中，外围驱动电路的输出阻抗很大，达到了100Kohm;而输入端的阻抗又不够大，只有10Kohm，于是就出现了问题。如果输入端的输入阻抗真正做到高阻（无穷大），如下所示，就不会出现问题。</p>
+<p><img src="https://hao0527.gitee.io/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-9.jpg" alt="220426-GPIO输入输出各种模式-9.jpg"></p>
+<p>上面提到的这个带弱上拉的输入电路，也就是在后续章节会提到的准双向端口的情况。</p>
+<h2 id="输出IO"><a href="#输出IO" class="headerlink" title="输出IO"></a>输出IO</h2><p>IO输出电路最主要的两种模式分别是推挽输出（Push-Pull Output）和开漏输出（Open Drain Output）。</p>
+<h3 id="推挽输出（Push-Pull-Output）"><a href="#推挽输出（Push-Pull-Output）" class="headerlink" title="推挽输出（Push-Pull Output）"></a>推挽输出（Push-Pull Output）</h3><p>推挽输出的结构是由两个三极管或者MOS管受到互补信号的控制，两个管子始终保持一个处于截止，另一个处于导通的状态。如图 10所示。</p>
+<p><img src="https://hao0527.gitee.io/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-10.jpg" alt="220426-GPIO输入输出各种模式-10.jpg"></p>
+<p>推挽输出的最大特点是可以真正能真正的输出高电平和低电平，在两种电平下都具有驱动能力。</p>
+<p><em><strong>补充说明</strong></em>：所谓的驱动能力，就是指输出电流的能力。对于驱动大负载（即负载内阻越小，负载越大）时，例如IO输出为5V，驱动的负载内阻为10ohm，于是根据欧姆定律可以正常情况下负载上的电流为0.5A（推算出功率为2.5W）。显然一般的IO不可能有这么大的驱动能力，也就是没有办法输出这么大的电流。于是造成的结果就是输出电压会被拉下来，达不到标称的5V。</p>
+<p>当然如果只是数字信号的传递，下一级的输入阻抗理论上最好是高阻，也就是只需要传电压，基本没有电流，也就没有功率，于是就不需要很大的驱动能力。</p>
+<p>对于推挽输出，输出高、低电平时电流的流向如图 11所示。所以相比于后面介绍的开漏输出，输出高电平时的驱动能力强很多。</p>
+<p><img src="https://hao0527.gitee.io/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-11.jpg" alt="220426-GPIO输入输出各种模式-11.jpg"></p>
+<p>但推挽输出的一个缺点是，如果当两个推挽输出结构相连在一起，一个输出高电平，即上面的MOS导通，下面的MOS闭合时；同时另一个输出低电平，即上面的MOS闭合，下面的MOS导通时。电流会从第一个引脚的VCC通过上端MOS再经过第二个引脚的下端MOS直接流向GND。整个通路上电阻很小，会发生短路，进而可能造成端口的损害。这也是为什么推挽输出不能实现” 线与”的原因。</p>
+<h3 id="开漏输出（Open-Drain-Output）"><a href="#开漏输出（Open-Drain-Output）" class="headerlink" title="开漏输出（Open Drain Output）"></a>开漏输出（Open Drain Output）</h3><p>常说的与推挽输出相对的就是开漏输出，对于开漏输出和推挽输出的区别最普遍的说法就是开漏输出无法真正输出高电平，即高电平时没有驱动能力，需要借助外部上拉电阻完成对外驱动。下面就从内部结构和原理上说明为什么开漏输出输出高电平时没有驱动能力，以及进一步比较与推挽输出的区别。</p>
+<p>首先需要介绍一些开漏输出和开集输出。这两种输出的原理和特性基本是类似的，区别在于一个是使用MOS管，其中的”漏”指的就是MOS管的漏极；另一个使用三极管，其中的”集”指的就是MOS三极管的集电极。这两者其实都是和推挽输出相对应的输出模式，由于使用MOS管的情况较多，很多时候就用”开漏输出”这个词代替了开漏输出和开集输出。</p>
+<p>介绍就先从开集输出开始，其原理电路结如图 12所示。</p>
+<p><img src="https://hao0527.gitee.io/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-12.jpg" alt="220426-GPIO输入输出各种模式-12.jpg"></p>
+<p>图 12左边的电路是开集（OC）输出最基本的电路，当输入为高电平时，NPN三极管导通，Output被拉到GND，输出为低电平；当输入为低电平时，NPN三极管闭合，Output相当于开路（输出高阻）。高电平时输出高阻（高阻、三态以及floating说的都是一个意思），此时对外没有任何的驱动能力。这就是开漏和开集输出最大的特点，如何利用该特点完成各种功能稍后介绍。这个电路虽然完成了开集输出的功能，但是会出现input为高，输出为低；input为低，输出为高的情况。</p>
+<p>图 12右边的电路中多使用了一个三极管完成了”反相”。当输入为高电平时，第一个三极管导通，此时第二个三极管的输入端会被拉到GND，于是第二个三极管闭合，输出高阻；当输入为低电平时，第一个三极管闭合，此时第二个三极管的输入端会被上拉电阻拉到高电平，于是第二个三极管导通，输出被拉到GND。这样，这个电路的输入与输出是同相的了。</p>
+<p>接下来介绍开漏输出的电路，如图 13所示。原理与开集输出基本相同，只是将三极管换成了MOS而已。</p>
+<p><img src="https://hao0527.gitee.io/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-13.jpg" alt="220426-GPIO输入输出各种模式-13.jpg"></p>
+<p>接着说说开漏、开集输出的特点以及应用，由于两者相似，后文中若无特殊说明，则用开漏表示开漏和开集输出电路。</p>
+<ol>
+<li><p>开漏输出最主要的特性就是高电平没有驱动能力，需要借助外部上拉电阻才能真正输出高电平，其电路如图 14所示。</p>
+<p><img src="https://hao0527.gitee.io/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-14.jpg" alt="220426-GPIO输入输出各种模式-14.jpg"></p>
+</li>
+</ol>
+<p>当MOS管<em><strong>断开</strong></em>时，开漏输出电路输出高电平，且连接着负载时，电流流向是从外部电源，流经上来电阻RPU，流进负载，最后进入GND。</p>
+<ol>
+<li>开漏输出的这一特性一个明显的优势就是可以很方便的调节输出的电平，因为输出电平完全由上拉电阻连接的电源电平决定。所以在需要进行电平转换的地方，非常适合使用开漏输出。</li>
+<li>开漏输出的这一特性另一个好处在于可以实现”线与”功能，所谓的”线与”指的是多个信号线直接连接在一起，只有当所有信号全部为高电平时，合在一起的总线为高电平；只要有任意一个或者多个信号为低电平，则总线为低电平。而推挽输出就不行，如果高电平和低电平连在一起，会出现电流倒灌，损坏器件。</li>
+</ol>
+<h3 id="推挽与开漏输出的区别"><a href="#推挽与开漏输出的区别" class="headerlink" title="推挽与开漏输出的区别"></a>推挽与开漏输出的区别</h3><p><img src="https://hao0527.gitee.io/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-15.jpg" alt="220426-GPIO输入输出各种模式-15.jpg"></p>
+<h2 id="双向IO"><a href="#双向IO" class="headerlink" title="双向IO"></a>双向IO</h2><p>很多处理器的引脚可以设置为双向端口，双向端口的要求就是既可以输出信号，又可以读回外部信号输入。要同时做到这两点从原理上来说有点困难，首先从处理器的开漏输出IO口的内部结构说起，如图 16所示。</p>
+<p><img src="https://hao0527.gitee.io/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-16.jpg" alt="220426-GPIO输入输出各种模式-16.jpg"></p>
+<p>该结构是在图 13的基础上，在三极管之前加入了一个FF，目的是用于控制输出信号的时间。比较常见的一个应用场合是多个IO作为一个总线时，需要总线上的各个引脚同时将数据输出。</p>
+<p>对于开漏输出结构，会将FF的输出Q端连接会输入驱动缓冲器，这样的话执行读操作是读的并不是外部引脚的状态，而是自己输出的状态。</p>
+<h3 id="双向开漏IO"><a href="#双向开漏IO" class="headerlink" title="双向开漏IO"></a>双向开漏IO</h3><p>但是对图 16的结构稍作修改，如图 17所示时，该结构称为双向开漏IO的结构。所做的改动是将输入驱动缓冲器连接到了PIN上。</p>
+<p><img src="https://hao0527.gitee.io/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-17.jpg" alt="220426-GPIO输入输出各种模式-17.jpg"></p>
+<p>该结构输出为”1”时，T1断开，此时pin对外呈现高阻，作为输入引脚没有任何问题。但是如果该结构输出”0”时，T1导通，此时pin对外短路到地，即无论外部输入什么信号，U2读回的全部是低。所以对于这样的结构，如果需要作为输入引脚使用时，必须给U1输出”1”后才能读取外部引脚数据。</p>
+<h3 id="准双向开漏IO"><a href="#准双向开漏IO" class="headerlink" title="准双向开漏IO"></a>准双向开漏IO</h3><p>很多文献中还提到了准双向端口，其实准双向端口就是图 17的结构中加了一个上拉电阻，如图 18所示。</p>
+<p><img src="https://hao0527.gitee.io/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-18.jpg" alt="220426-GPIO输入输出各种模式-18.jpg"></p>
+<p>这个结构与图 17相比有以下相同与不同之处：</p>
+<ol>
+<li>作为输入引脚使用时，也必须先向U1中写”1”，以达到断开T1的目的。所以是否需要提前写”1”并不是双向IO与准双向IO的区别。两者做输入端口时都需要提前写”1”。</li>
+<li>双向端口作为输入时是真正的高阻态，而准双向IO作为输入端口时，输入阻抗不为高阻，于是有可能出现如本文图 8所示的问题。</li>
+<li>准双向端口读取输入状态，默认为高。也就是判断外部输入信号的方法是”非低则为高”。即该结构只能准确的识别外部的低电平，无法区分悬空和真正的高。于是只要读到的不是0，都认为外部为1。</li>
+</ol>
+<h3 id="推挽输出作为双向IO"><a href="#推挽输出作为双向IO" class="headerlink" title="推挽输出作为双向IO"></a>推挽输出作为双向IO</h3><p>如果双向端口中的输出部分采用的是推挽输出结构，那么作为输入时必须将上下两个管子全部端口才能成为高阻，作为输入。</p>
+<h3 id="51单片机的P0端口"><a href="#51单片机的P0端口" class="headerlink" title="51单片机的P0端口"></a>51单片机的P0端口</h3><p>在双向端口的讨论中，比较复杂的就是51单片机的P0端口了。这里就详细讨论一下51单片机的P0端口结构和工作原理。</p>
+<p>P0端口的内部结构如图 19所示。</p>
+<p><img src="https://hao0527.gitee.io/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-19.jpg" alt="220426-GPIO输入输出各种模式-19.jpg"></p>
+<p>内部结构比较复杂，包括以下这些器件：</p>
+<ol>
+<li>U1：与门。一个输入连着控制线，另一个输入连接这地址/数据信号。由于与门的特性，当控制线为1时，与门输出与地址/数据信号的电平保持一致；如果控制线为0，则输出恒为。于是控制信号线相当于与门的使能信号。</li>
+<li>U2：反相器，输出信号为地址/数据信号的反相信号。</li>
+<li>U3和U6都是具有控制输入端且具有高阻抗特性的三态缓冲器，作用是对于外部呈现高阻态。当控制端使能时可以将外部信号的电平读进数据总线。</li>
+<li>U4：为锁存器，目的就是控制引脚输出信号的时间。</li>
+<li>U5：模拟开关，可以控制V2的输入信号是来自锁存器U4的Q非输出还是来自于反相器U2的输出。</li>
+<li>V1和V2分别是两个MOS管。</li>
+</ol>
+<p>了解了各个独立器件之后就开始介绍工作在各个模式下的工作原理：</p>
+<p><strong>P0用于地址/数据线时：</strong></p>
+<p>在P0作为地址/数据线时，是地址、数据复用总线，P0需要输出地址，同时需要读回数据信号。</p>
+<p>当P0需要输出地址信息时，U1的控制信号为0，模拟开关U5接到U2反相器的输出。于是当地址信号线传来的信号为1，与控制线”1”相与之后输出到V1的输入信号为”0”，V1截止。地址信号”1”经反相之后，通过模拟开关输出到V2的输入端为”1”，V2导通，于是情况如图 20所示，pin输出”0”。</p>
+<p><img src="https://hao0527.gitee.io/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-20.jpg" alt="220426-GPIO输入输出各种模式-20.jpg"></p>
+<p>当地址信号线传来的信号为1，与控制线”1”相与之后输出到V1的输入信号为”1”，V1导通。地址信号”0”经反相之后，通过模拟开关输出到V2的输入端为”0”，V2截止，于是情况如图 21所示，pin输出”1”。</p>
+<p><img src="https://hao0527.gitee.io/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-21.jpg" alt="220426-GPIO输入输出各种模式-21.jpg"></p>
+<p>于是在作为地址线输出时，V1、V2两个MOS管均使用了，是推挽输出。</p>
+<p>当P0在输出低8位地址信息后，将变为数据总线，此时CPU的操作是控制端输出0，模拟开关打到锁存器的Q非端，且向锁存器中打入”1”。于是Q非输出为0，V2截止。同时控制线为0使得与门输出为0，V1截止。由于V1和V2都截止，所以此时pin对外完全呈现高阻，作为输入端口，外部数据通过U6进入内部总线，情况如图 22所示。（相当于将推挽输出的两个MOS管全部断开了）此时由于对外呈现高阻，所以是真正的输入引脚。这就解释了为什么说P0是真正的双线端口。</p>
+<p><img src="https://hao0527.gitee.io/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-22.jpg" alt="220426-GPIO输入输出各种模式-22.jpg"></p>
+<p><strong>P0用于普通IO时：</strong></p>
+<p>在P0作为普通IO并作为输出时，控制信号为0，使V1始终处于截止状态。模拟开关连接到Q非输出，当作为输出时，锁存器的输入端直接输入0或者1，Q非将反相信号输入到V2的输入端。即当输出”0”时，V2输入端为”1”，V2导通，pin输出”0”；当输出”1”时，V2输入端为”0”，V2截止，pin输出高阻的0。即当P0工作在普通IO模式下，输出为开漏输出，且内部没有上拉电阻。</p>
+<p>在P0作为普通IO并作为输入时，控制信号为0，使V1始终处于截止状态。模拟开关连接到Q非输出，且CPU自动向锁存器输入端写1，则V2输入端为0，V2截止。与之前在作为地址/数据线，作为输入时一样，也是两个MOS管全部断开，pin直接连接到U6，对外呈现高阻。于是也是真正的输入引脚。</p>
+<p>综上P0无论工作在哪种模式下都是真正的双端口IO。</p>
+<h3 id="51单片机的P1～P3端口"><a href="#51单片机的P1～P3端口" class="headerlink" title="51单片机的P1～P3端口"></a>51单片机的P1～P3端口</h3><p>51单片机的其他三个端口的内部结构如图 23所示，与P0相比简单了很多，没有了顶部的MOS管，也没有了地址/数据信号的选项。作为输出时是带有上拉电阻的的开漏输出，作为输入时是有上拉电阻存在的，于是输入端口对外不是高阻。这就解释了为什么P1～P3只能是准双向端口。</p>
+<p><img src="https://hao0527.gitee.io/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-23.jpg" alt="220426-GPIO输入输出各种模式-23.jpg"></p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/04/220404-C%E7%9A%84%E7%96%91%E6%83%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/04/220404-C%E7%9A%84%E7%96%91%E6%83%91/" class="post-title-link" itemprop="url">C/C++中几个易混淆的点</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-04-04 19:00:00" itemprop="dateCreated datePublished" datetime="2022-04-04T19:00:00+08:00">2022-04-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-02 00:32:42" itemprop="dateModified" datetime="2022-08-02T00:32:42+08:00">2022-08-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="数组指针-amp-指针数组"><a href="#数组指针-amp-指针数组" class="headerlink" title="数组指针&amp;指针数组"></a>数组指针&amp;指针数组</h2><p>参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/mq0036/p/3382732.html%EF%BC%8C%E4%B8%A4%E8%80%85%E5%86%85%E5%AD%98%E5%88%86%E5%B8%83%E5%86%99%E7%9A%84%E5%BE%88%E8%AF%A6%E7%BB%86%E3%80%82">https://www.cnblogs.com/mq0036/p/3382732.html，两者内存分布写的很详细。</a></p>
+<h3 id="数组指针"><a href="#数组指针" class="headerlink" title="数组指针"></a>数组指针</h3><p>定义<code>int (*p)[n];</code></p>
+<p>()优先级比[]高，首先说明p是一个指针，指向一个整型的一维数组，这个一维数组的长度是n，也可以说是p的步长。</p>
+<p>如要将二维数组赋给一指针，应这样赋值：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a[<span class="number">3</span>][<span class="number">4</span>];</span><br><span class="line"><span class="type">int</span> (*p)[<span class="number">4</span>];   <span class="comment">//该语句是定义一个数组指针，指向含4个元素的一维数组。</span></span><br><span class="line">p = a;     <span class="comment">//将该二维数组的首地址赋给p，也就是a[0]或&amp;a[0][0]</span></span><br><span class="line">p++;       <span class="comment">//该语句执行过后，也就是p=p+1;p跨过行a[0][]指向了行a[1][]</span></span><br></pre></td></tr></table></figure>
+
+<p>所以数组指针也称指向一维数组的指针，亦称行指针。</p>
+<h3 id="指针数组"><a href="#指针数组" class="headerlink" title="指针数组"></a>指针数组</h3><p>定义<code>int *p[n];</code></p>
+<p>[]优先级比*高，先与p结合成为一个数组，再由int*说明这是一个整型指针数组，它有n个指针类型的数组元素。这里执行p+1时，则p指向下一个数组元素，这样赋值是错误的：p=a；因为p是个不可知的表示，只存在p[0]、p[1]、p[2]…p[n-1],而且它们分别是指针变量可以用来存放变量地址。但可以这样 <em>p=a; 这里</em>p表示指针数组第一个元素的值，a的首地址的值。<br>如要将二维数组赋给一指针数组：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> *p[<span class="number">3</span>];</span><br><span class="line"><span class="type">int</span> a[<span class="number">3</span>][<span class="number">4</span>];</span><br><span class="line">p++;  <span class="comment">//该语句表示p数组指向下一个数组元素。注：此数组每一个元素都是一个指针</span></span><br><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">3</span>;i++)</span><br><span class="line">    p[i] = a[i];</span><br></pre></td></tr></table></figure>
+
+<p>这里int *p[3] 表示一个一维数组内存放着三个指针变量，分别是p[0]、p[1]、p[2]，所以要分别赋值。</p>
+<h2 id="常量指针-amp-指针常量"><a href="#常量指针-amp-指针常量" class="headerlink" title="常量指针&amp;指针常量"></a>常量指针&amp;指针常量</h2><h3 id="指针常量"><a href="#指针常量" class="headerlink" title="指针常量"></a>指针常量</h3><p>定义<code>int * const p = &amp;a;</code></p>
+<p>p是个常量，p的类型是int*，所以p的值不能改变，但是*p的值可以改变。</p>
+<h3 id="常量指针"><a href="#常量指针" class="headerlink" title="常量指针"></a>常量指针</h3><p>定义<code>const int * p = NULL;</code></p>
+<p>*p是个常量，p的类型是int*，所以*p的值不能改变，但是p的值可以改变。利用这个特性，在函数传参时使用常量指针可以防止函数对变量值的误修改。</p>
+<h3 id="常量指针常量"><a href="#常量指针常量" class="headerlink" title="常量指针常量"></a>常量指针常量</h3><p>定义<code>const int * const p = &amp;a;</code></p>
+<p>p是个常量，*p也是个常量，p的类型是int*，所以*p的值不能改变，p的值也不能改变。</p>
+<h2 id="引用-amp-常量引用"><a href="#引用-amp-常量引用" class="headerlink" title="引用&amp;常量引用"></a>引用&amp;常量引用</h2><h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><p>定义<code>int&amp; r = a;</code></p>
+<p><a target="_blank" rel="noopener" href="https://www.runoob.com/cplusplus/cpp-references.html">C++ 引用</a>，引用变量是一个别名，也就是说，它是某个已存在变量的另一个名字。</p>
+<p>函数可以通过引用传参，<code>void foo(int &amp;a)&#123;a = 1;&#125;</code>修改引用形参可以改变实参。</p>
+<h3 id="常量引用"><a href="#常量引用" class="headerlink" title="常量引用"></a>常量引用</h3><p>定义<code>const int&amp; r = a;</code></p>
+<p>函数可以通过常量引用传参，<code>void foo(const int &amp;a) &#123;;&#125;</code>只能读取a，不能修改a。利用这个特性，在函数传参时使用常量指针可以防止函数对变量值的误修改。</p>
+<h2 id="函数指针-amp-指针函数"><a href="#函数指针-amp-指针函数" class="headerlink" title="函数指针&amp;指针函数"></a>函数指针&amp;指针函数</h2><h3 id="函数指针"><a href="#函数指针" class="headerlink" title="函数指针"></a>函数指针</h3><p>定义函数指针<code>void (*pFun)(int a, int b);</code></p>
+<p>定义函数<code>void Fun(int a, int b) &#123;;&#125;</code></p>
+<p>将Fun函数的首地址赋给指针变量pFun<code>pFun = Fun;</code>也可以是<code>pFun = &amp;Fun;</code></p>
+<p>通过指针函数调用<code>pFun(1, 2);</code>也可以是<code>(*pFun)(1, 2);</code></p>
+<p>函数指针定义时返回值，参数类型，个数都必须与要指向的函数相同。</p>
+<h3 id="指针函数"><a href="#指针函数" class="headerlink" title="指针函数"></a>指针函数</h3><p>指针函数是返回类型为指针的函数。</p>
+<h2 id="C结构体内存对齐"><a href="#C结构体内存对齐" class="headerlink" title="C结构体内存对齐"></a>C结构体内存对齐</h2><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1280,223 +1560,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/19/211219-fpga%E4%B9%8Bsdram/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/19/211219-fpga%E4%B9%8Bsdram/" class="post-title-link" itemprop="url">FPGA之SDRAM学习</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-12-19 20:00:00" itemprop="dateCreated datePublished" datetime="2021-12-19T20:00:00+08:00">2021-12-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-02-01 00:01:48" itemprop="dateModified" datetime="2023-02-01T00:01:48+08:00">2023-02-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E7%A1%AC%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">硬件</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="学习视频"><a href="#学习视频" class="headerlink" title="学习视频"></a>学习视频</h3><ul>
-<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV194411f7GD?p=57">【正点原子】手把手教你学FPGA系列视频——SDRAM</a></li>
-</ul>
-<h3 id="SDRAM介绍"><a href="#SDRAM介绍" class="headerlink" title="SDRAM介绍"></a>SDRAM介绍</h3><ul>
-<li><p><strong>同步动态随机存取内存</strong>（synchronous dynamic random-access memory，简称SDRAM）是有一个<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%90%8C%E6%AD%A5%E6%8E%A5%E5%8F%A3">同步接口</a>的<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%8A%A8%E6%80%81%E9%9A%8F%E6%9C%BA%E5%AD%98%E5%8F%96%E5%86%85%E5%AD%98/1681939">动态随机存取内存</a>（<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/DRAM">DRAM</a>）。通常DRAM是有一个异步接口的，这样它可以随时响应控制输入的变化。而SDRAM有一个同步接口，在响应控制<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E8%BE%93%E5%85%A5">输入</a>前会等待一个<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%97%B6%E9%92%9F%E4%BF%A1%E5%8F%B7">时钟信号</a>，这样就能和计算机的<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%B3%BB%E7%BB%9F%E6%80%BB%E7%BA%BF">系统总线</a>同步。时钟被用来驱动一个<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/2081914">有限状态机</a>，对进入的指令进行<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%AE%A1%E7%BA%BF">管线</a>(Pipeline)操作。这使得SDRAM与没有同步接口的异步DRAM(asynchronous DRAM)相比，可以有一个更复杂的操作模式。</p>
-</li>
-<li><p>SDRAM从发展到现在已经经历了五代，分别是：第一代SDR SDRAM，第二代DDR SDRAM，第三代DDR2 SDRAM，第四代DDR3 SDRAM，第五代，DDR4 SDRAM。</p>
-</li>
-</ul>
-<h3 id="SDRAM操作时序"><a href="#SDRAM操作时序" class="headerlink" title="SDRAM操作时序"></a>SDRAM操作时序</h3><ul>
-<li>在对 SDRAM进行读写操作之前需要先对芯片进行初始化；SDRAM读写是一个较为复杂的控制流 程，其中包括行激活、列读写、预充电、刷新等一系列操作。</li>
-</ul>
-<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><ul>
-<li><p>初始化流程如下<br><img src="https://hao0527.gitee.io/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-1.jpg" alt="211219-fpga之sdram-1.jpg"><br>SDRAM上电后要有200us的输入稳定期，在这个时间内不可以对SDRAM的接口做任何操作； 200us结束以后给所有L-Bank预充电，然后是连续8次刷新操作；最后设置模式寄存器。初始化 最关键的阶段就在于模式寄存器（MR，Mode Register）的设置，简称MRS（MR Set）。</p>
-</li>
-<li><p>模式寄存器如下<br><img src="https://hao0527.gitee.io/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-2.jpg" alt="211219-fpga之sdram-2.jpg"><br>如上图所示，用于配置模式寄存器的参数由地址线提供，地址线不同的位分别用于表示不 同的参数。SDRAM通过配置模式寄存器来确定芯片的工作方式，包括突发长度（Burst Length）、 潜伏期（CAS Latency）以及操作模式等。<br>需要注意的是，在模式寄存器设置指令发出之后，需要等待一段时间才能够向SDRAM发送 新的指令，这个时间我们称之为模式寄存器设置周期tRSC（Register Set Cycle）。</p>
-</li>
-</ul>
-<h4 id="行激活"><a href="#行激活" class="headerlink" title="行激活"></a>行激活</h4><ul>
-<li>行激活时序图<br><img src="https://hao0527.gitee.io/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-3.jpg" alt="211219-fpga之sdram-3.jpg"><br>初始化完成后，无论是读操作还是写操作，都要先激活（Active）SDRAM中的一行，使之 处于活动状态（又称行有效）。在此之前还要进行SDRAM芯片的片选和L-Bank的定址，不过它 们与行激活可以同时进行。<br>在片选CS#（#表示低电平有效）、L-Bank定址的同时，RAS（Row Address Strobe，行地址选通脉冲）也处于有效状态。此时An地址线则发送具体的行地址。如图中是A0-A11，共有12个地址线，由于是二进制表示法，所以共有4096个行（2^12=4096），A0-A11的不同数值就确定了具体的行地址。由于行激活的同时也是相应L-Bank有效，所以行激活也可称为L-Bank有效。</li>
-</ul>
-<h4 id="列读写"><a href="#列读写" class="headerlink" title="列读写"></a>列读写</h4><ul>
-<li>列选通与读操作时序图<br><img src="https://hao0527.gitee.io/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-4.jpg" alt="211219-fpga之sdram-4.jpg"><br>由于在SDRAM中，地址线是行列共用的，因此列寻址时地址线仍然是A0-A11。在寻址时，利用RAS（Row Address Strobe，行地址选通脉冲）与CAS（Column Address Strobe，列地址选通脉冲）来区分行寻址与列寻址。</li>
-<li>在发送列读写命令时必须要与行激活命令有一个时间间隔，这个间隔被定义为tRCD， 即RAS to CAS Delay（RAS至CAS延迟）。这是因为在行激活命令发出之后，芯片存储阵列电子 元件响应需要一定的时间。tRCD是SDRAM的一个重要时序参数，广义的tRCD以时钟周期（tCK， Clock Time）数为单位，比如tRCD=3，就代表RAS至CAS延迟为三个时钟周期，如图 33.1.8所 示。具体到确切的时间，则要根据时钟频率而定。</li>
-</ul>
-<h4 id="数据输出（读）"><a href="#数据输出（读）" class="headerlink" title="数据输出（读）"></a>数据输出（读）</h4><ul>
-<li>在选定列地址后，就已经确定了具体的存储单元，剩下的事情就是数据通过数据I/O通道（DQ）输出到内存总线上了。但是在CAS发出之后，仍要经过一定的时间才能有数据输出，从CAS与读取命令发出到第一笔数据输出的这段时间，被定义为CL（CAS Latency，CAS潜伏期）。CL时间越短，读数据时SDRAM响应就越快。由于CL只在读取时出现，所以CL又被称为读取潜伏期（RL，Read Latency）。CL的单位与tRCD一样，为时钟周期数，具体耗时由时钟频率决定。</li>
-</ul>
-<h4 id="数据输出（写）"><a href="#数据输出（写）" class="headerlink" title="数据输出（写）"></a>数据输出（写）</h4><ul>
-<li>数据写入时序图<br><img src="https://hao0527.gitee.io/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-5.jpg" alt="211219-fpga之sdram-5.jpg"><br>数据写入的操作也是在tRCD之后进行，但此时没有了CL（记住，CL只出现在读取操作中）， 行寻址与列寻址的时序图和上文一样，只是在列寻址时，WE#为有效状态。<br>数据与写指令同时发送。不过，数据并不是即时地写入存储单元，数据的 真正写入需要一定的周期。为了保证数据的可靠写入，都会留出足够的写入/校正时间（tWR， Write Recovery Time），这个操作也被称作写回（Write Back）。tWR至少占用一个时钟周期 或再多一点（时钟频率越高，tWR占用周期越多）。</li>
-</ul>
-<h4 id="此外"><a href="#此外" class="headerlink" title="此外"></a>此外</h4><ul>
-<li>除上述操作之外，还有突发长度、预充电、刷新、数据掩码常用操作，具体可以查阅《开拓者FPGA开发指南》SDRAM读写测试实验。</li>
-</ul>
-<h3 id="实验仿真"><a href="#实验仿真" class="headerlink" title="实验仿真"></a>实验仿真</h3><p><img src="https://hao0527.gitee.io/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-6.jpg" alt="211219-fpga之sdram-6.jpg"><br><img src="https://hao0527.gitee.io/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-7.jpg" alt="211219-fpga之sdram-7.jpg"><br><img src="https://hao0527.gitee.io/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-8.jpg" alt="211219-fpga之sdram-8.jpg"><br><img src="https://hao0527.gitee.io/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-9.jpg" alt="211219-fpga之sdram-9.jpg"></p>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/17/211217-ltecat1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/17/211217-ltecat1/" class="post-title-link" itemprop="url">LTE Cat.1模块和阿里云物联网平台使用</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-12-17 08:00:00" itemprop="dateCreated datePublished" datetime="2021-12-17T08:00:00+08:00">2021-12-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-02-01 00:01:48" itemprop="dateModified" datetime="2023-02-01T00:01:48+08:00">2023-02-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="学习资料"><a href="#学习资料" class="headerlink" title="学习资料"></a>学习资料</h3><ul>
-<li><a target="_blank" rel="noopener" href="https://help.aliyun.com/product/30520.html">阿里云物联网平台-产品文档</a></li>
-</ul>
-<h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3><ul>
-<li>在博世实习，同事想要远程调试，打印log到终端功能（代替出差去现场调试），于是我就决定用LTE Cat.1模块，配合阿里云物联网平台，使用MQTT传输日志文件。</li>
-</ul>
-<h3 id="阿里云物联网平台使用"><a href="#阿里云物联网平台使用" class="headerlink" title="阿里云物联网平台使用"></a>阿里云物联网平台使用</h3><ol>
-<li><p>打开<a target="_blank" rel="noopener" href="https://iot.console.aliyun.com/lk/summary/new">阿里云物联网平台</a>，使用公共实例，<a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/73728.html">创建产品</a>，数据格式选择<strong>（透传/自定义）</strong>，以便将上行的自定义格式的数据转换为Alink JSON格式，连网方式这里选择<strong>蜂窝（2G/3G/4G/5G）</strong>，所属品类选择<strong>自定义品类</strong>，其它配置默认即可。配置完在产品详情界面图如下：<img src="https://hao0527.gitee.io/211217-ltecat1/211217-ltecat1-1.jpg" alt="211217-ltecat1-1.jpg"></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/89271.html">创建设备</a>，创建设备成功后，将自动弹出<strong>添加完成</strong>对话框。您可以查看、复制设备证书信息。设备证书由设备的ProductKey、DeviceName和DeviceSecret组成，是设备与物联网平台进行通信的重要身份认证，建议您妥善保管。配置完在设备详情界面图如下：<img src="https://hao0527.gitee.io/211217-ltecat1/211217-ltecat1-2.jpg" alt="211217-ltecat1-2.jpg"></p>
-</li>
-<li><p>接下来就是在产品详情界面中的功能定义，可以查看<a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/213906.html">物模型概述</a>，设置MQTT需要上传的变量。我设置了一些调试时用到的变量，如下图：<img src="https://hao0527.gitee.io/211217-ltecat1/211217-ltecat1-3.jpg" alt="211217-ltecat1-3.jpg"></p>
-</li>
-<li><p>在产品详情界面中的数据解析可以设置<a target="_blank" rel="noopener" href="https://iot.console.aliyun.com/product/productDetail/gecgSxxbl6Q?current=4">物模型数据解析</a>，通过物模型数据解析我们可以将自定义帧结构的数据解析成Alink JSON格式，注意：产品的<strong>数据格式</strong>选择为<strong>透传/自定义</strong>（这个坑我一天，最后找阿里云客服解决）。写完数据解析后，选择模拟类型为<strong>设备上报数据</strong>，执行与提交。</p>
-</li>
-<li><p>接下来就是mcu使用LTE Cat.1模块给阿里云平台发数据了！在设备详情的物模型数据中可以看见，通过物模型数据上报的topic发送来的调试变量。我们也可以通过设备详情中的日志服务看见，阿里云上的数据收发记录和解析记录。</p>
-</li>
-<li><p>阿里云平台上还有很多其他功能，比如说把平台收到的数据再MQTT发给自己服务器做个数据处理与显示等，本次我没有用到，可以查看<a target="_blank" rel="noopener" href="https://help.aliyun.com/product/30520.html">阿里云物联网平台-产品文档</a>了解更多功能。</p>
-</li>
-</ol>
-<h3 id="LTE-Cat-1模块介绍"><a href="#LTE-Cat-1模块介绍" class="headerlink" title="LTE Cat.1模块介绍"></a>LTE Cat.1模块介绍</h3><ol>
-<li><p>Luat Air724UG LTE Cat.1 模块，淘宝链接：<a target="_blank" rel="noopener" href="https://item.taobao.com/item.htm?spm=a1z0d.6639537.1997196601.315.6b537484HESeeA&id=620804223790">Air724UG DTU透传4G模块Cat.1全网通TTL转LTE FS704UM阿里云MQTT</a></p>
-</li>
-<li><p>模块是串口输入，走4G网发送数据。模块可以一键配置阿里云MQTT服务，然后就能实现透传的功能。MCU也可以使用AT指令控制模块，可以有更丰富的操作。</p>
-</li>
-<li><p>连接阿里云流程可以看模块资料《Air724UG_软件设计手册V1.5》，连阿里云首先HTTP获取MQTT密码，然后连接MQTT，阿里云物联网会比较安全。</p>
-</li>
-</ol>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1566,7 +1629,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">75</span>
+          <span class="site-state-item-count">77</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
