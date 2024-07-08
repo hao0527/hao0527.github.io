@@ -216,7 +216,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-09 00:05:40" itemprop="dateModified" datetime="2024-07-09T00:05:40+08:00">2024-07-09</time>
+                <time title="修改时间：2024-07-09 00:21:23" itemprop="dateModified" datetime="2024-07-09T00:21:23+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -246,48 +246,48 @@
           <h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>此文章是搬运来的，<a target="_blank" rel="noopener" href="https://blog.csdn.net/techexchangeischeap/article/details/72569999">原地址点击此处</a>，写的真好，能看的非常懂，原作者有个地方可能笔误写错了，做了改正。</p>
 <h2 id="输入IO"><a href="#输入IO" class="headerlink" title="输入IO"></a>输入IO</h2><p>这里所说的输入IO，指的是只作为输入，不具有输出功能。此时对于input引脚的要求就是高阻（高阻与三态是同一个概念）。基本输入电路的类型大致可以分为3类：基本输入IO电路、施密特触发输入电路以及弱上拉输入电路。</p>
 <p>先从最基本的基本输入IO电路说起，其电路如图 1所示。</p>
-<p><img src="httphttps://gitee.com/hao0527/hao0527/raw/img/26-GPIO输入输出各种模式/220426-GPIO输入输出各种模式-1.jpg" alt="220426-GPIO输入输出各种模式-1.jpg"></p>
+<p><img src="httphttpPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-1.jpg" alt="220426-GPIO输入输出各种模式-1.jpg"></p>
 <p>其中的缓冲器U1是具有控制输入端，且具有高阻抗特性的三态缓冲器。通俗地说就是这个缓冲器对外来说是高阻的，相当于在控制输入端不使能的情况下，物理引脚与内部总线之间是完全隔离的，完全不会影响内部电路。而控制输入端的作用就是可以发出读Pin状态的操作指令。其过程如图 2所示。</p>
-<p><img src="httphttps://gitee.com/hao0527/hao0527/raw/img/26-GPIO输入输出各种模式/220426-GPIO输入输出各种模式-2.jpg" alt="220426-GPIO输入输出各种模式-2.jpg"></p>
+<p><img src="httphttpPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-2.jpg" alt="220426-GPIO输入输出各种模式-2.jpg"></p>
 <p>这种基本电路的一个缺点是在读取外部信号的跳变沿时会出现抖动，如下图所示。</p>
-<p><img src="httphttps://gitee.com/hao0527/hao0527/raw/img/26-GPIO输入输出各种模式/220426-GPIO输入输出各种模式-3.jpg" alt="220426-GPIO输入输出各种模式-3.jpg"></p>
+<p><img src="httphttpPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-3.jpg" alt="220426-GPIO输入输出各种模式-3.jpg"></p>
 <p>于是施密特触发输入电路就是解决了上述这种抖动的问题，其经过施密特触发器后的信号如图 4所示。</p>
-<p><img src="httphttps://gitee.com/hao0527/hao0527/raw/img/26-GPIO输入输出各种模式/220426-GPIO输入输出各种模式-4.jpg" alt="220426-GPIO输入输出各种模式-4.jpg"></p>
+<p><img src="httphttpPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-4.jpg" alt="220426-GPIO输入输出各种模式-4.jpg"></p>
 <p>对于输入电路还存在另外一个问题，就是当输入引脚悬空的时候，输入端检测到的电平是高还是低？当输入信号没有被驱动，即悬空(Floating)时，输入引脚上任何的噪声都会改变输入端检测到的电平，如图 5所示。</p>
-<p><img src="httphttps://gitee.com/hao0527/hao0527/raw/img/26-GPIO输入输出各种模式/220426-GPIO输入输出各种模式-5.jpg" alt="220426-GPIO输入输出各种模式-5.jpg"></p>
+<p><img src="httphttpPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-5.jpg" alt="220426-GPIO输入输出各种模式-5.jpg"></p>
 <p>为了解决这个问题，可以在输入引脚处加一个弱上拉电阻，如图 6所示。</p>
-<p><img src="httphttps://gitee.com/hao0527/hao0527/raw/img/26-GPIO输入输出各种模式/220426-GPIO输入输出各种模式-6.jpg" alt="220426-GPIO输入输出各种模式-6.jpg"></p>
+<p><img src="httphttpPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-6.jpg" alt="220426-GPIO输入输出各种模式-6.jpg"></p>
 <p>这样，当输入引脚悬空时，会被RP上拉到高电平，在内部总线上就有确定的状态了。</p>
 <p>但是这种结构是有一定问题的。首先很明显的一点是，当输入引脚悬空时读到的是1，当输入引脚被高电平驱动时读到的也是1，只有当输入引脚被低电平驱动时读到的才是0。也就是对于读1采取的方式是”读取非零”的方式。</p>
 <p>另一个问题是该电路对外呈现的不是高阻，某种意义上说也在向外输出，当外部驱动电路不同时可能出现错误的检测结果。例如外部驱动电路是如图 7所示的结构，该电路结构中通过K打到不同端可以输出高电平或者低电平。</p>
-<p><img src="httphttps://gitee.com/hao0527/hao0527/raw/img/26-GPIO输入输出各种模式/220426-GPIO输入输出各种模式-7.jpg" alt="220426-GPIO输入输出各种模式-7.jpg"></p>
+<p><img src="httphttpPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-7.jpg" alt="220426-GPIO输入输出各种模式-7.jpg"></p>
 <p>如果将如图 7所示的电路输出低电平，连接到带有弱上拉电阻的输入引脚，其结构如下所示。</p>
-<p><img src="httphttps://gitee.com/hao0527/hao0527/raw/img/26-GPIO输入输出各种模式/220426-GPIO输入输出各种模式-8.jpg" alt="220426-GPIO输入输出各种模式-8.jpg"></p>
+<p><img src="httphttpPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-8.jpg" alt="220426-GPIO输入输出各种模式-8.jpg"></p>
 <p>由欧姆定律知，测试点处的电平是4.545V，于是CPU测得的输入信号为高，而外部驱动电路希望输出的电平为低。这种错误的原因就在于这种结构的输入电路并不是真正的高阻，或者说这个输入IO其实也在输出，而且影响了外部输入电路。</p>
 <p>这种情况的发生也说明了：信号前后两级传递，为什么需要输出阻抗小，输入阻抗大的原因。在这个例子中，外围驱动电路的输出阻抗很大，达到了100Kohm;而输入端的阻抗又不够大，只有10Kohm，于是就出现了问题。如果输入端的输入阻抗真正做到高阻（无穷大），如下所示，就不会出现问题。</p>
-<p><img src="httphttps://gitee.com/hao0527/hao0527/raw/img/26-GPIO输入输出各种模式/220426-GPIO输入输出各种模式-9.jpg" alt="220426-GPIO输入输出各种模式-9.jpg"></p>
+<p><img src="httphttpPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-9.jpg" alt="220426-GPIO输入输出各种模式-9.jpg"></p>
 <p>上面提到的这个带弱上拉的输入电路，也就是在后续章节会提到的准双向端口的情况。</p>
 <h2 id="输出IO"><a href="#输出IO" class="headerlink" title="输出IO"></a>输出IO</h2><p>IO输出电路最主要的两种模式分别是推挽输出（Push-Pull Output）和开漏输出（Open Drain Output）。</p>
 <h3 id="推挽输出（Push-Pull-Output）"><a href="#推挽输出（Push-Pull-Output）" class="headerlink" title="推挽输出（Push-Pull Output）"></a>推挽输出（Push-Pull Output）</h3><p>推挽输出的结构是由两个三极管或者MOS管受到互补信号的控制，两个管子始终保持一个处于截止，另一个处于导通的状态。如图 10所示。</p>
-<p><img src="httphttps://gitee.com/hao0527/hao0527/raw/img/26-GPIO输入输出各种模式/220426-GPIO输入输出各种模式-10.jpg" alt="220426-GPIO输入输出各种模式-10.jpg"></p>
+<p><img src="httphttpPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-10.jpg" alt="220426-GPIO输入输出各种模式-10.jpg"></p>
 <p>推挽输出的最大特点是可以真正能真正的输出高电平和低电平，在两种电平下都具有驱动能力。</p>
 <p><em><strong>补充说明</strong></em>：所谓的驱动能力，就是指输出电流的能力。对于驱动大负载（即负载内阻越小，负载越大）时，例如IO输出为5V，驱动的负载内阻为10ohm，于是根据欧姆定律可以正常情况下负载上的电流为0.5A（推算出功率为2.5W）。显然一般的IO不可能有这么大的驱动能力，也就是没有办法输出这么大的电流。于是造成的结果就是输出电压会被拉下来，达不到标称的5V。</p>
 <p>当然如果只是数字信号的传递，下一级的输入阻抗理论上最好是高阻，也就是只需要传电压，基本没有电流，也就没有功率，于是就不需要很大的驱动能力。</p>
 <p>对于推挽输出，输出高、低电平时电流的流向如图 11所示。所以相比于后面介绍的开漏输出，输出高电平时的驱动能力强很多。</p>
-<p><img src="httphttps://gitee.com/hao0527/hao0527/raw/img/26-GPIO输入输出各种模式/220426-GPIO输入输出各种模式-11.jpg" alt="220426-GPIO输入输出各种模式-11.jpg"></p>
+<p><img src="httphttpPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-11.jpg" alt="220426-GPIO输入输出各种模式-11.jpg"></p>
 <p>但推挽输出的一个缺点是，如果当两个推挽输出结构相连在一起，一个输出高电平，即上面的MOS导通，下面的MOS闭合时；同时另一个输出低电平，即上面的MOS闭合，下面的MOS导通时。电流会从第一个引脚的VCC通过上端MOS再经过第二个引脚的下端MOS直接流向GND。整个通路上电阻很小，会发生短路，进而可能造成端口的损害。这也是为什么推挽输出不能实现” 线与”的原因。</p>
 <h3 id="开漏输出（Open-Drain-Output）"><a href="#开漏输出（Open-Drain-Output）" class="headerlink" title="开漏输出（Open Drain Output）"></a>开漏输出（Open Drain Output）</h3><p>常说的与推挽输出相对的就是开漏输出，对于开漏输出和推挽输出的区别最普遍的说法就是开漏输出无法真正输出高电平，即高电平时没有驱动能力，需要借助外部上拉电阻完成对外驱动。下面就从内部结构和原理上说明为什么开漏输出输出高电平时没有驱动能力，以及进一步比较与推挽输出的区别。</p>
 <p>首先需要介绍一些开漏输出和开集输出。这两种输出的原理和特性基本是类似的，区别在于一个是使用MOS管，其中的”漏”指的就是MOS管的漏极；另一个使用三极管，其中的”集”指的就是MOS三极管的集电极。这两者其实都是和推挽输出相对应的输出模式，由于使用MOS管的情况较多，很多时候就用”开漏输出”这个词代替了开漏输出和开集输出。</p>
 <p>介绍就先从开集输出开始，其原理电路结如图 12所示。</p>
-<p><img src="httphttps://gitee.com/hao0527/hao0527/raw/img/26-GPIO输入输出各种模式/220426-GPIO输入输出各种模式-12.jpg" alt="220426-GPIO输入输出各种模式-12.jpg"></p>
+<p><img src="httphttpPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-12.jpg" alt="220426-GPIO输入输出各种模式-12.jpg"></p>
 <p>图 12左边的电路是开集（OC）输出最基本的电路，当输入为高电平时，NPN三极管导通，Output被拉到GND，输出为低电平；当输入为低电平时，NPN三极管闭合，Output相当于开路（输出高阻）。高电平时输出高阻（高阻、三态以及floating说的都是一个意思），此时对外没有任何的驱动能力。这就是开漏和开集输出最大的特点，如何利用该特点完成各种功能稍后介绍。这个电路虽然完成了开集输出的功能，但是会出现input为高，输出为低；input为低，输出为高的情况。</p>
 <p>图 12右边的电路中多使用了一个三极管完成了”反相”。当输入为高电平时，第一个三极管导通，此时第二个三极管的输入端会被拉到GND，于是第二个三极管闭合，输出高阻；当输入为低电平时，第一个三极管闭合，此时第二个三极管的输入端会被上拉电阻拉到高电平，于是第二个三极管导通，输出被拉到GND。这样，这个电路的输入与输出是同相的了。</p>
 <p>接下来介绍开漏输出的电路，如图 13所示。原理与开集输出基本相同，只是将三极管换成了MOS而已。</p>
-<p><img src="httphttps://gitee.com/hao0527/hao0527/raw/img/26-GPIO输入输出各种模式/220426-GPIO输入输出各种模式-13.jpg" alt="220426-GPIO输入输出各种模式-13.jpg"></p>
+<p><img src="httphttpPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-13.jpg" alt="220426-GPIO输入输出各种模式-13.jpg"></p>
 <p>接着说说开漏、开集输出的特点以及应用，由于两者相似，后文中若无特殊说明，则用开漏表示开漏和开集输出电路。</p>
 <ol>
 <li><p>开漏输出最主要的特性就是高电平没有驱动能力，需要借助外部上拉电阻才能真正输出高电平，其电路如图 14所示。</p>
-<p><img src="httphttps://gitee.com/hao0527/hao0527/raw/img/26-GPIO输入输出各种模式/220426-GPIO输入输出各种模式-14.jpg" alt="220426-GPIO输入输出各种模式-14.jpg"></p>
+<p><img src="httphttpPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-14.jpg" alt="220426-GPIO输入输出各种模式-14.jpg"></p>
 </li>
 </ol>
 <p>当MOS管<em><strong>断开</strong></em>时，开漏输出电路输出高电平，且连接着负载时，电流流向是从外部电源，流经上来电阻RPU，流进负载，最后进入GND。</p>
@@ -295,16 +295,16 @@
 <li>开漏输出的这一特性一个明显的优势就是可以很方便的调节输出的电平，因为输出电平完全由上拉电阻连接的电源电平决定。所以在需要进行电平转换的地方，非常适合使用开漏输出。</li>
 <li>开漏输出的这一特性另一个好处在于可以实现”线与”功能，所谓的”线与”指的是多个信号线直接连接在一起，只有当所有信号全部为高电平时，合在一起的总线为高电平；只要有任意一个或者多个信号为低电平，则总线为低电平。而推挽输出就不行，如果高电平和低电平连在一起，会出现电流倒灌，损坏器件。</li>
 </ol>
-<h3 id="推挽与开漏输出的区别"><a href="#推挽与开漏输出的区别" class="headerlink" title="推挽与开漏输出的区别"></a>推挽与开漏输出的区别</h3><p><img src="httphttps://gitee.com/hao0527/hao0527/raw/img/26-GPIO输入输出各种模式/220426-GPIO输入输出各种模式-15.jpg" alt="220426-GPIO输入输出各种模式-15.jpg"></p>
+<h3 id="推挽与开漏输出的区别"><a href="#推挽与开漏输出的区别" class="headerlink" title="推挽与开漏输出的区别"></a>推挽与开漏输出的区别</h3><p><img src="httphttpPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-15.jpg" alt="220426-GPIO输入输出各种模式-15.jpg"></p>
 <h2 id="双向IO"><a href="#双向IO" class="headerlink" title="双向IO"></a>双向IO</h2><p>很多处理器的引脚可以设置为双向端口，双向端口的要求就是既可以输出信号，又可以读回外部信号输入。要同时做到这两点从原理上来说有点困难，首先从处理器的开漏输出IO口的内部结构说起，如图 16所示。</p>
-<p><img src="httphttps://gitee.com/hao0527/hao0527/raw/img/26-GPIO输入输出各种模式/220426-GPIO输入输出各种模式-16.jpg" alt="220426-GPIO输入输出各种模式-16.jpg"></p>
+<p><img src="httphttpPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-16.jpg" alt="220426-GPIO输入输出各种模式-16.jpg"></p>
 <p>该结构是在图 13的基础上，在三极管之前加入了一个FF，目的是用于控制输出信号的时间。比较常见的一个应用场合是多个IO作为一个总线时，需要总线上的各个引脚同时将数据输出。</p>
 <p>对于开漏输出结构，会将FF的输出Q端连接会输入驱动缓冲器，这样的话执行读操作是读的并不是外部引脚的状态，而是自己输出的状态。</p>
 <h3 id="双向开漏IO"><a href="#双向开漏IO" class="headerlink" title="双向开漏IO"></a>双向开漏IO</h3><p>但是对图 16的结构稍作修改，如图 17所示时，该结构称为双向开漏IO的结构。所做的改动是将输入驱动缓冲器连接到了PIN上。</p>
-<p><img src="httphttps://gitee.com/hao0527/hao0527/raw/img/26-GPIO输入输出各种模式/220426-GPIO输入输出各种模式-17.jpg" alt="220426-GPIO输入输出各种模式-17.jpg"></p>
+<p><img src="httphttpPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-17.jpg" alt="220426-GPIO输入输出各种模式-17.jpg"></p>
 <p>该结构输出为”1”时，T1断开，此时pin对外呈现高阻，作为输入引脚没有任何问题。但是如果该结构输出”0”时，T1导通，此时pin对外短路到地，即无论外部输入什么信号，U2读回的全部是低。所以对于这样的结构，如果需要作为输入引脚使用时，必须给U1输出”1”后才能读取外部引脚数据。</p>
 <h3 id="准双向开漏IO"><a href="#准双向开漏IO" class="headerlink" title="准双向开漏IO"></a>准双向开漏IO</h3><p>很多文献中还提到了准双向端口，其实准双向端口就是图 17的结构中加了一个上拉电阻，如图 18所示。</p>
-<p><img src="httphttps://gitee.com/hao0527/hao0527/raw/img/26-GPIO输入输出各种模式/220426-GPIO输入输出各种模式-18.jpg" alt="220426-GPIO输入输出各种模式-18.jpg"></p>
+<p><img src="httphttpPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-18.jpg" alt="220426-GPIO输入输出各种模式-18.jpg"></p>
 <p>这个结构与图 17相比有以下相同与不同之处：</p>
 <ol>
 <li>作为输入引脚使用时，也必须先向U1中写”1”，以达到断开T1的目的。所以是否需要提前写”1”并不是双向IO与准双向IO的区别。两者做输入端口时都需要提前写”1”。</li>
@@ -314,7 +314,7 @@
 <h3 id="推挽输出作为双向IO"><a href="#推挽输出作为双向IO" class="headerlink" title="推挽输出作为双向IO"></a>推挽输出作为双向IO</h3><p>如果双向端口中的输出部分采用的是推挽输出结构，那么作为输入时必须将上下两个管子全部端口才能成为高阻，作为输入。</p>
 <h3 id="51单片机的P0端口"><a href="#51单片机的P0端口" class="headerlink" title="51单片机的P0端口"></a>51单片机的P0端口</h3><p>在双向端口的讨论中，比较复杂的就是51单片机的P0端口了。这里就详细讨论一下51单片机的P0端口结构和工作原理。</p>
 <p>P0端口的内部结构如图 19所示。</p>
-<p><img src="httphttps://gitee.com/hao0527/hao0527/raw/img/26-GPIO输入输出各种模式/220426-GPIO输入输出各种模式-19.jpg" alt="220426-GPIO输入输出各种模式-19.jpg"></p>
+<p><img src="httphttpPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-19.jpg" alt="220426-GPIO输入输出各种模式-19.jpg"></p>
 <p>内部结构比较复杂，包括以下这些器件：</p>
 <ol>
 <li>U1：与门。一个输入连着控制线，另一个输入连接这地址/数据信号。由于与门的特性，当控制线为1时，与门输出与地址/数据信号的电平保持一致；如果控制线为0，则输出恒为。于是控制信号线相当于与门的使能信号。</li>
@@ -328,18 +328,18 @@
 <p><strong>P0用于地址/数据线时：</strong></p>
 <p>在P0作为地址/数据线时，是地址、数据复用总线，P0需要输出地址，同时需要读回数据信号。</p>
 <p>当P0需要输出地址信息时，U1的控制信号为0，模拟开关U5接到U2反相器的输出。于是当地址信号线传来的信号为1，与控制线”1”相与之后输出到V1的输入信号为”0”，V1截止。地址信号”1”经反相之后，通过模拟开关输出到V2的输入端为”1”，V2导通，于是情况如图 20所示，pin输出”0”。</p>
-<p><img src="httphttps://gitee.com/hao0527/hao0527/raw/img/26-GPIO输入输出各种模式/220426-GPIO输入输出各种模式-20.jpg" alt="220426-GPIO输入输出各种模式-20.jpg"></p>
+<p><img src="httphttpPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-20.jpg" alt="220426-GPIO输入输出各种模式-20.jpg"></p>
 <p>当地址信号线传来的信号为1，与控制线”1”相与之后输出到V1的输入信号为”1”，V1导通。地址信号”0”经反相之后，通过模拟开关输出到V2的输入端为”0”，V2截止，于是情况如图 21所示，pin输出”1”。</p>
-<p><img src="httphttps://gitee.com/hao0527/hao0527/raw/img/26-GPIO输入输出各种模式/220426-GPIO输入输出各种模式-21.jpg" alt="220426-GPIO输入输出各种模式-21.jpg"></p>
+<p><img src="httphttpPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-21.jpg" alt="220426-GPIO输入输出各种模式-21.jpg"></p>
 <p>于是在作为地址线输出时，V1、V2两个MOS管均使用了，是推挽输出。</p>
 <p>当P0在输出低8位地址信息后，将变为数据总线，此时CPU的操作是控制端输出0，模拟开关打到锁存器的Q非端，且向锁存器中打入”1”。于是Q非输出为0，V2截止。同时控制线为0使得与门输出为0，V1截止。由于V1和V2都截止，所以此时pin对外完全呈现高阻，作为输入端口，外部数据通过U6进入内部总线，情况如图 22所示。（相当于将推挽输出的两个MOS管全部断开了）此时由于对外呈现高阻，所以是真正的输入引脚。这就解释了为什么说P0是真正的双线端口。</p>
-<p><img src="httphttps://gitee.com/hao0527/hao0527/raw/img/26-GPIO输入输出各种模式/220426-GPIO输入输出各种模式-22.jpg" alt="220426-GPIO输入输出各种模式-22.jpg"></p>
+<p><img src="httphttpPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-22.jpg" alt="220426-GPIO输入输出各种模式-22.jpg"></p>
 <p><strong>P0用于普通IO时：</strong></p>
 <p>在P0作为普通IO并作为输出时，控制信号为0，使V1始终处于截止状态。模拟开关连接到Q非输出，当作为输出时，锁存器的输入端直接输入0或者1，Q非将反相信号输入到V2的输入端。即当输出”0”时，V2输入端为”1”，V2导通，pin输出”0”；当输出”1”时，V2输入端为”0”，V2截止，pin输出高阻的0。即当P0工作在普通IO模式下，输出为开漏输出，且内部没有上拉电阻。</p>
 <p>在P0作为普通IO并作为输入时，控制信号为0，使V1始终处于截止状态。模拟开关连接到Q非输出，且CPU自动向锁存器输入端写1，则V2输入端为0，V2截止。与之前在作为地址/数据线，作为输入时一样，也是两个MOS管全部断开，pin直接连接到U6，对外呈现高阻。于是也是真正的输入引脚。</p>
 <p>综上P0无论工作在哪种模式下都是真正的双端口IO。</p>
 <h3 id="51单片机的P1～P3端口"><a href="#51单片机的P1～P3端口" class="headerlink" title="51单片机的P1～P3端口"></a>51单片机的P1～P3端口</h3><p>51单片机的其他三个端口的内部结构如图 23所示，与P0相比简单了很多，没有了顶部的MOS管，也没有了地址/数据信号的选项。作为输出时是带有上拉电阻的的开漏输出，作为输入时是有上拉电阻存在的，于是输入端口对外不是高阻。这就解释了为什么P1～P3只能是准双向端口。</p>
-<p><img src="httphttps://gitee.com/hao0527/hao0527/raw/img/26-GPIO输入输出各种模式/220426-GPIO输入输出各种模式-23.jpg" alt="220426-GPIO输入输出各种模式-23.jpg"></p>
+<p><img src="httphttpPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-23.jpg" alt="220426-GPIO输入输出各种模式-23.jpg"></p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
     </div>
@@ -496,7 +496,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-09 00:05:40" itemprop="dateModified" datetime="2024-07-09T00:05:40+08:00">2024-07-09</time>
+                <time title="修改时间：2024-07-09 00:21:23" itemprop="dateModified" datetime="2024-07-09T00:21:23+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -534,7 +534,7 @@
 </li>
 <li><p>计算机工作方式：取址执行，取CS和PC指针指向内存中的指令，在CPU执行</p>
 </li>
-<li><p>操作系统引导：启动引导时内核在内存中的位置和移动后的位置情况图<img src="https://gitee.com/hao0527/hao0527/raw/img/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-1.jpg" alt="220326-操作系统-1.jpg"></p>
+<li><p>操作系统引导：启动引导时内核在内存中的位置和移动后的位置情况图<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-1.jpg" alt="220326-操作系统-1.jpg"></p>
 <p>开机时，CS=0xffff，IP=0x0000，CPU处于实模式。实模式寻址CS&lt;&lt;4+IP，CS存放段地址，IP存放4位段偏移量，共20位。0xffff0地址属于BIOS映射区，在BIOS里检查硬件（RAM，键盘，…）；</p>
 <p>将磁盘0磁道0扇区（引导扇区）读到内存0x7c00，引导扇区代码存放在bootsect.s；</p>
 <p>将引导扇区代码从内存0x7c00处移动到0x90000处；</p>
@@ -548,19 +548,19 @@
 </ol>
 <h3 id="L4-L7"><a href="#L4-L7" class="headerlink" title="L4~L7"></a>L4~L7</h3><ol>
 <li>操作系统接口：接口表现为函数调用，又由系统提供，所以称为系统调用，可移植操作系统接口(Portable Operating System Interface of uniX, POSIX)</li>
-<li>系统调用的实现：应用层要通过接口访问内核，不能直接读内核内存，内核是受保护的。中断是进入内核的唯一方法；<img src="https://gitee.com/hao0527/hao0527/raw/img/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-2.jpg" alt="220326-操作系统-2.jpg"><img src="https://gitee.com/hao0527/hao0527/raw/img/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-3.jpg" alt="220326-操作系统-3.jpg"></li>
+<li>系统调用的实现：应用层要通过接口访问内核，不能直接读内核内存，内核是受保护的。中断是进入内核的唯一方法；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-2.jpg" alt="220326-操作系统-2.jpg"><img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-3.jpg" alt="220326-操作系统-3.jpg"></li>
 <li>课程任务：操作系统要学习CPU管理、内存管理、文件管理；</li>
 </ol>
 <h3 id="L8-L19"><a href="#L8-L19" class="headerlink" title="L8~L19"></a>L8~L19</h3><ol>
 <li><p>CPU管理：多道程序，交替执行（并发）。运行的程序是进程，多进程切换时要保存现场。通过进程控制块(Process Control Block, PCB)来记录进程信息。操作系统要把这些进程记录好，要按照合理的次序分配资源、调度；</p>
 </li>
-<li><p>进程状态图：<img src="https://gitee.com/hao0527/hao0527/raw/img/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-4.jpg" alt="220326-操作系统-4.jpg"></p>
+<li><p>进程状态图：<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-4.jpg" alt="220326-操作系统-4.jpg"></p>
 </li>
 <li><p>通过进程内存映射表来实现内存分离，切换进程时要切换内存映射表；通过上锁，来保证共享内存的正确被读写；</p>
 </li>
 <li><p>用户级线程和核心级线程区别：用户级线程创建、切换无需进内核，一个线程阻塞进程会被切换；</p>
 </li>
-<li><p>线程的优点：线程切换无需切换内存映射表。<img src="https://gitee.com/hao0527/hao0527/raw/img/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-5.jpg" alt="220326-操作系统-5.jpg"></p>
+<li><p>线程的优点：线程切换无需切换内存映射表。<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-5.jpg" alt="220326-操作系统-5.jpg"></p>
 </li>
 <li><p>用户级线程切换通过Yield()，要先切换栈，栈会存在TCB（线程控制块）中，每个线程对应一个TCB；</p>
 </li>
@@ -580,27 +580,27 @@
 </li>
 </ol>
 <h3 id="L20-L25"><a href="#L20-L25" class="headerlink" title="L20~L25"></a>L20~L25</h3><ol>
-<li><p>内存使用：将程序放到内存中，PC指向开始的地址。将程序从硬盘载入内存需要重定位，物理地址=基址+逻辑地址。重定位可以在编译时（静态系统）、载入时执行、<strong>运行时执行</strong>。编译时重定位的程序只能放在内存固定位，载入时重定位的程序一旦载入内存就不能动了；<img src="https://gitee.com/hao0527/hao0527/raw/img/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-6.jpg" alt="220326-操作系统-6.jpg"></p>
+<li><p>内存使用：将程序放到内存中，PC指向开始的地址。将程序从硬盘载入内存需要重定位，物理地址=基址+逻辑地址。重定位可以在编译时（静态系统）、载入时执行、<strong>运行时执行</strong>。编译时重定位的程序只能放在内存固定位，载入时重定位的程序一旦载入内存就不能动了；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-6.jpg" alt="220326-操作系统-6.jpg"></p>
 </li>
 <li><p>程序载入后还需要移动，引入<strong>交换</strong>（swap）概念，可以把暂时不用的内存搬到交换分区，充分利用内存。</p>
 </li>
-<li><p>引入分段，程序由若干部分(段)组成，每个段有各自的特点、用途：主程序（只读）、变量集（可写、不会动态增长）、函数集、动态数组（会动态增长）、栈。使用分段思想可以让用户分治每个段，可以让内存更高效使用。定位具体指令<code>mov [es:bx], ax</code>。地址组成：&lt;段号，段内偏移&gt;。进程段表存放在LDT表，系统段表存放在GDT表，LDT存放在PCB中；<img src="https://gitee.com/hao0527/hao0527/raw/img/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-7.jpg" alt="220326-操作系统-7.jpg"></p>
+<li><p>引入分段，程序由若干部分(段)组成，每个段有各自的特点、用途：主程序（只读）、变量集（可写、不会动态增长）、函数集、动态数组（会动态增长）、栈。使用分段思想可以让用户分治每个段，可以让内存更高效使用。定位具体指令<code>mov [es:bx], ax</code>。地址组成：&lt;段号，段内偏移&gt;。进程段表存放在LDT表，系统段表存放在GDT表，LDT存放在PCB中；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-7.jpg" alt="220326-操作系统-7.jpg"></p>
 </li>
 <li><p><strong>内存分区</strong>可分为固定分区和可变分区。可变分区的管理：空闲分区表、已分配分区表。可变分区分配内存算法：首先适配（最快）、最佳适配和申请空间长度最接近（会导致内存碎片）、最差适配；</p>
 </li>
-<li><p>实际物理内存采用<strong>分页</strong>来管理，分区是对虚拟内存（交换分区）的管理方法。分区会造成内存碎片，分页会将物理内存分割（比如每4k分割），程序也会被分页，每段都会被分页，分页会使内存存储离散化。地址翻译有专门的硬件内存管理单元（MMU）执行；<img src="https://gitee.com/hao0527/hao0527/raw/img/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-8.jpg" alt="220326-操作系统-8.jpg"></p>
+<li><p>实际物理内存采用<strong>分页</strong>来管理，分区是对虚拟内存（交换分区）的管理方法。分区会造成内存碎片，分页会将物理内存分割（比如每4k分割），程序也会被分页，每段都会被分页，分页会使内存存储离散化。地址翻译有专门的硬件内存管理单元（MMU）执行；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-8.jpg" alt="220326-操作系统-8.jpg"></p>
 </li>
 <li><p>为了提高内存空间利用率，页应该小，但是页小了页表就大了。如果页表只存放用到的页，则需要顺序查找页表，速度慢。采用多级页表可兼顾速度和空间，即页目录表+页表，地址组成&lt;10bits页目录号，10bits页号，12bits偏移&gt;，12bits偏移刚好是4K。</p>
 </li>
-<li><p>多级页表增加了访存的次数，尤其是64位系统。硬件上引入转译后备缓冲区（Translation Look-aside Buffer，TLB，快表），快表能存放最近查过多级页表的逻辑页和物理页，可以根据页号直接查物理页号；<img src="https://gitee.com/hao0527/hao0527/raw/img/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-9.jpg" alt="220326-操作系统-9.jpg"></p>
+<li><p>多级页表增加了访存的次数，尤其是64位系统。硬件上引入转译后备缓冲区（Translation Look-aside Buffer，TLB，快表），快表能存放最近查过多级页表的逻辑页和物理页，可以根据页号直接查物理页号；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-9.jpg" alt="220326-操作系统-9.jpg"></p>
 </li>
-<li><p>段页结合：段面向用户，页面向硬件。实际的段页内存管理，程序如何载入内存，fork后内存做了什么可以看<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1d4411v7u7?p=23">L23 段页结合的实际内存管理</a>；<img src="https://gitee.com/hao0527/hao0527/raw/img/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-10.jpg" alt="220326-操作系统-10.jpg"></p>
+<li><p>段页结合：段面向用户，页面向硬件。实际的段页内存管理，程序如何载入内存，fork后内存做了什么可以看<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1d4411v7u7?p=23">L23 段页结合的实际内存管理</a>；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-10.jpg" alt="220326-操作系统-10.jpg"></p>
 </li>
 <li><p>用内存换入换出实现“大内存”，虚拟内存4G，物理内存可以只有1G。当程序运行缺页时， page fault中断请求do_no_page调页（读磁盘），这就是换入；</p>
 </li>
 <li><p>内存换出：将内存中不用的页换出到磁盘。如何找不用的页？换出算法：FIFO（先来的先被换出，不太行）、MIN（将未来最远要使用的页淘汰，是最优方案，但无法预测未来）、LRU（Least Recently Used，最近最少使用）；</p>
 </li>
-<li><p>LUR的准确实现：可以用时间戳，每次地址访问都需要修改时间戳，需维护一个全局时钟，实现代价较较大，可以用页码栈，选择栈底淘汰，代价也太大。在实际中内存换出算法采用LUR的近似实现：时钟算法（环形队列）<img src="https://gitee.com/hao0527/hao0527/raw/img/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-11.jpg" alt="220326-操作系统-11.jpg"><img src="https://gitee.com/hao0527/hao0527/raw/img/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-12.jpg" alt="220326-操作系统-12.jpg"></p>
+<li><p>LUR的准确实现：可以用时间戳，每次地址访问都需要修改时间戳，需维护一个全局时钟，实现代价较较大，可以用页码栈，选择栈底淘汰，代价也太大。在实际中内存换出算法采用LUR的近似实现：时钟算法（环形队列）<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-11.jpg" alt="220326-操作系统-11.jpg"><img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-12.jpg" alt="220326-操作系统-12.jpg"></p>
 </li>
 <li><p>给进程分配多少页框？分配多了，请求调页导致的内存高效利用就没有了。分配少了，会频繁请求调页导致系统低效。系统低效解释：系统内进程增多多，每个进程的缺页率增大大，缺页率增大到一定程度，进程总等待调页完成，CPU利用率降低低，进程进一步增多，缺页率更大，称这一现象为颠簸(thrashing)；</p>
 </li>
@@ -608,15 +608,15 @@
 <h3 id="L26-L32"><a href="#L26-L32" class="headerlink" title="L26~L32"></a>L26~L32</h3><ol>
 <li><p>IO设备、显示器、键盘，让这些外设工作的基本思想就是往外设硬件寄存器写值，外设处理完再产生中断，CPU处理。在Linux中无论什么设备都用文件接口open、read、write、close，例如<code>int fd = open(&quot;/dev/xxx&quot;);</code>到最后是通过out写对应寄存器；</p>
 </li>
-<li><p>生磁盘的使用：磁盘驱动负责从盘块号（block）计算出柱面（cgl）、磁头（head）、扇区号（sec）。从CHS到扇区号，从扇区到盘块（第一层抽象）：<strong>扇区号 = C×H×S+H×S+S</strong> 。<img src="https://gitee.com/hao0527/hao0527/raw/img/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-13.jpg" alt="220326-操作系统-13.jpg"></p>
+<li><p>生磁盘的使用：磁盘驱动负责从盘块号（block）计算出柱面（cgl）、磁头（head）、扇区号（sec）。从CHS到扇区号，从扇区到盘块（第一层抽象）：<strong>扇区号 = C×H×S+H×S+S</strong> 。<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-13.jpg" alt="220326-操作系统-13.jpg"></p>
 </li>
-<li><p>多个进程通过<strong>请求队列</strong>使用磁盘（第二层抽象）；<img src="https://gitee.com/hao0527/hao0527/raw/img/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-14.jpg" alt="220326-操作系统-14.jpg"></p>
+<li><p>多个进程通过<strong>请求队列</strong>使用磁盘（第二层抽象）；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-14.jpg" alt="220326-操作系统-14.jpg"></p>
 </li>
 <li><p><strong>访问磁盘时间 = 写入控制器时间 + 寻道时间（8~12ms）+ 旋转时间（7200rmp，半周4ms）+ 传输时间（50MB/s，约0.3ms）</strong>。可见访问磁盘主要时间花在寻道，block相邻的盘块可以快速读出，因此需要考虑寻道算法。寻道调度算法有FCFS（先来先服务）、SSTF（短寻道优先算法，可能有磁道长时间访问不到）、SCAN（SSTF+中途不折回）、C-SCAN（SCAN+直接移动到另一端，电梯算法）；</p>
 </li>
 <li><p>引入文件（第三层抽象），文件是建立字符流在磁盘块集合的映射关系，每个文件都对应一个文件控制块（FCB），连续结构存储FCB包含文件名、起始块、块数的信息，链式结构存储FCB包含文件名、起始块的信息，链式结构存储顺序访问慢、可靠性差，<strong>索引结构</strong>存储文件是连续和链式的有效折中，FCB包含文件名、索引块的信息。在实际系统中采用的是<strong>多级索引结构</strong>，根据不同大小文件分成不同级索引通过<strong>inode</strong>一级级查询访问，因此可以标识很大的文件，很小的文件可以高效访问，中等大小的文件访问速度也不慢；</p>
 </li>
-<li><p>引入文件系统（第四层抽象），文件系统引入目录树，文件目录也是个文件，存放目录下其他文件名和对应文件的FCB指针。inode位图：哪些inode空闲，哪些被占用。盘块位图：哪些盘块是空闲的，硬盘大小不同这个位图的大小也不同。超级块：存放i节点位图和盘块位图的大小，因此可以计算出i节点起始地址；<img src="https://gitee.com/hao0527/hao0527/raw/img/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-15.jpg" alt="220326-操作系统-15.jpg"><img src="https://gitee.com/hao0527/hao0527/raw/img/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-16.jpg" alt="220326-操作系统-16.jpg"><img src="https://gitee.com/hao0527/hao0527/raw/img/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-17.jpg" alt="220326-操作系统-17.jpg"></p>
+<li><p>引入文件系统（第四层抽象），文件系统引入目录树，文件目录也是个文件，存放目录下其他文件名和对应文件的FCB指针。inode位图：哪些inode空闲，哪些被占用。盘块位图：哪些盘块是空闲的，硬盘大小不同这个位图的大小也不同。超级块：存放i节点位图和盘块位图的大小，因此可以计算出i节点起始地址；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-15.jpg" alt="220326-操作系统-15.jpg"><img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-16.jpg" alt="220326-操作系统-16.jpg"><img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-17.jpg" alt="220326-操作系统-17.jpg"></p>
 </li>
 </ol>
 <h2 id="课程总结"><a href="#课程总结" class="headerlink" title="课程总结"></a>课程总结</h2><p>通过本次操作系统的学习，了解了操作系统全图（CPU、内存、文件设备），学习了多进程视图、文件视图。哈工大的几个实验非常的难，Study OS by coding !!!</p>
@@ -836,7 +836,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-09 00:05:40" itemprop="dateModified" datetime="2024-07-09T00:05:40+08:00">2024-07-09</time>
+                <time title="修改时间：2024-07-09 00:21:23" itemprop="dateModified" datetime="2024-07-09T00:21:23+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -863,7 +863,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="今晨的日出"><a href="#今晨的日出" class="headerlink" title="今晨的日出"></a>今晨的日出</h2><p><img src="https://gitee.com/hao0527/hao0527/raw/img/220225-asmInC/220225-asmInC-1.jpg" alt="220225-asmInC-1.jpg"></p>
+          <h2 id="今晨的日出"><a href="#今晨的日出" class="headerlink" title="今晨的日出"></a>今晨的日出</h2><p><img src="/2022/02/25/220225-asmInC/220225-asmInC-1.jpg" alt="220225-asmInC-1.jpg"></p>
 <p>早晨学习操作系统，看到系统调用实现时，遇到了C内嵌汇编，所以补了下相关知识。</p>
 <h2 id="asm"><a href="#asm" class="headerlink" title="__asm__"></a>__asm__</h2><p>补充资料：<a target="_blank" rel="noopener" href="https://dirtysalt.github.io/html/gcc-asm.html">https://dirtysalt.github.io/html/gcc-asm.html</a></p>
 <p>在内嵌汇编中，可以将C语言表达式指定为汇编指令的操作数，而且不用去管如何将C语言表达式的值读入哪个寄存器，以及如何将计算结果写回C 变量，你只要告诉程序中C语言表达式与汇编指令操作数之间的对应关系即可，GCC会自动插入代码完成必要的操作。</p>
@@ -960,7 +960,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-09 00:05:40" itemprop="dateModified" datetime="2024-07-09T00:05:40+08:00">2024-07-09</time>
+                <time title="修改时间：2024-07-09 00:21:23" itemprop="dateModified" datetime="2024-07-09T00:21:23+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1020,7 +1020,7 @@
 <p>上面这个配置指令有些问题，wget下载下来的是html，所以就手动复制下内容到~/.screenrc文件吧。</p>
 <h2 id="Linux-vi-vim工具"><a href="#Linux-vi-vim工具" class="headerlink" title="Linux vi/vim工具"></a>Linux vi/vim工具</h2><h3 id="功能介绍-1"><a href="#功能介绍-1" class="headerlink" title="功能介绍"></a>功能介绍</h3><p>所有的 Unix Like 系统都会内建 vi 文书编辑器，其他的文书编辑器则不一定会存在。vim 具有程序编辑的能力，可以主动的以字体颜色辨别语法的正确性，方便程序设计。</p>
 <h3 id="vi-vim使用"><a href="#vi-vim使用" class="headerlink" title="vi/vim使用"></a>vi/vim使用</h3><p>基本上 vi/vim 共分为三种模式，分别是<strong>命令模式（Command mode）</strong>，<strong>输入模式（Insert mode）</strong>和<strong>底线命令模式（Last line mode）</strong>。</p>
-<h4 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h4><p><img src="hthttps://gitee.com/hao0527/hao0527/raw/img/0224-Linux实用工具/220224-Linux实用工具-1.jpg" alt="220224-Linux实用工具-1.jpg"></p>
+<h4 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h4><p><img src="/2022/02/24/220224-Linux%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7/220224-Linux%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7-1.jpg" alt="220224-Linux实用工具-1.jpg"></p>
 <table>
 <thead>
 <tr>
@@ -1375,7 +1375,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-09 00:05:40" itemprop="dateModified" datetime="2024-07-09T00:05:40+08:00">2024-07-09</time>
+                <time title="修改时间：2024-07-09 00:21:23" itemprop="dateModified" datetime="2024-07-09T00:21:23+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1405,22 +1405,22 @@
           <h3 id="学习视频"><a href="#学习视频" class="headerlink" title="学习视频"></a>学习视频</h3><ul>
 <li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV194411f7GD?p=80">【正点原子】手把手教你学FPGA系列视频——以太网通信实验</a></li>
 </ul>
-<h3 id="以太网的介绍"><a href="#以太网的介绍" class="headerlink" title="以太网的介绍"></a>以太网的介绍</h3><h4 id="网络体系结构"><a href="#网络体系结构" class="headerlink" title="网络体系结构"></a>网络体系结构</h4><p><img src="https://gitee.com/hao0527/hao0527/raw/img/220113-fpga%E4%B9%8Beth/220113-fpga%E4%B9%8Beth-1.jpg" alt="220113-fpga之eth-1.jpg"></p>
+<h3 id="以太网的介绍"><a href="#以太网的介绍" class="headerlink" title="以太网的介绍"></a>以太网的介绍</h3><h4 id="网络体系结构"><a href="#网络体系结构" class="headerlink" title="网络体系结构"></a>网络体系结构</h4><p><img src="/2022/01/13/220113-fpga%E4%B9%8Beth/220113-fpga%E4%B9%8Beth-1.jpg" alt="220113-fpga之eth-1.jpg"></p>
 <ul>
 <li>物理层：在物理层上所传数据的单位是比特。发送方发送1(或0)时，接收方应当收到1(或0)而不是0 (或1)，因此物理层要考虑用多大的电压代表”1”或”0”，以及接收方如何识别出发送方所发送的比特。物理层还要确定连接电缆的插头应当有多少根引脚以及各引脚应如何连接。当然，解释比特代表的意思，就不是物理层的任务。请注意，传递信息所利用的-些物理媒体，如双绞线、同轴电缆、光缆、无线信道等，并不在物理层协议之内而是在物理层协议的下面。</li>
 <li>数据链路层：数据链路层常简称为链路层。我们知道，两台主机之间的数据传输，总是在一段一段的链路上传送的，这就需要使用专门的链路层的协议。在两个相邻结点之间传送数据时，数据链路层将网络层交下来的IP数据报组装成帧(framing)，在两个相邻结点间的链路上传送帧(frame)，每一帧包括数据和必要的控制信息(如同步信息、地址信息、差错控制等)。在接收数据时，控制信息使接收端能够知道一个帧从哪个比特开始和到哪个比特结·束。这样，数据链路层在收到一个帧后，就可从中提取出数据部分，上交给网络层。控制信息还使接收端能够检测到所收到的帧中有无差错。如发现有差错，数据链路层就简单地丢弃这个出了差错的帧，以免继续在网络中传送下去白白浪费网络资源。如果需要改正数据在数据链路层传输时出现的差错(这就是说，数据链路层不仅要检错，而且要纠错)，那么就要采用可靠传输协议来纠正出现的差错。这种方法会使数据链路层的协议复杂些。</li>
 <li>网络层、运输层、应用层见《计算机网络》书籍；fpga跑eth主要用到了phy层、数据链路mac层、网络层、udp传输层；</li>
 </ul>
 <h4 id="FPGA数据包内容"><a href="#FPGA数据包内容" class="headerlink" title="FPGA数据包内容"></a>FPGA数据包内容</h4><p>下面放出fpga发送的以太网数据包的组层图，图片来自《开拓者FPGA 开发指南V1.3》，相关介绍也可以查看PDF。</p>
-<h5 id="以太网数据包格式"><a href="#以太网数据包格式" class="headerlink" title="以太网数据包格式"></a>以太网数据包格式</h5><p><img src="https://gitee.com/hao0527/hao0527/raw/img/220113-fpga%E4%B9%8Beth/220113-fpga%E4%B9%8Beth-2.jpg" alt="220113-fpga之eth-2.jpg"></p>
-<h5 id="以太网帧格式"><a href="#以太网帧格式" class="headerlink" title="以太网帧格式"></a>以太网帧格式</h5><p><img src="https://gitee.com/hao0527/hao0527/raw/img/220113-fpga%E4%B9%8Beth/220113-fpga%E4%B9%8Beth-3.jpg" alt="220113-fpga之eth-3.jpg"></p>
-<h5 id="IP数据包格式"><a href="#IP数据包格式" class="headerlink" title="IP数据包格式"></a>IP数据包格式</h5><p><img src="https://gitee.com/hao0527/hao0527/raw/img/220113-fpga%E4%B9%8Beth/220113-fpga%E4%B9%8Beth-4.jpg" alt="220113-fpga之eth-4.jpg"></p>
-<h5 id="UDP数据格式"><a href="#UDP数据格式" class="headerlink" title="UDP数据格式"></a>UDP数据格式</h5><p><img src="https://gitee.com/hao0527/hao0527/raw/img/220113-fpga%E4%B9%8Beth/220113-fpga%E4%B9%8Beth-5.jpg" alt="220113-fpga之eth-5.jpg"></p>
+<h5 id="以太网数据包格式"><a href="#以太网数据包格式" class="headerlink" title="以太网数据包格式"></a>以太网数据包格式</h5><p><img src="/2022/01/13/220113-fpga%E4%B9%8Beth/220113-fpga%E4%B9%8Beth-2.jpg" alt="220113-fpga之eth-2.jpg"></p>
+<h5 id="以太网帧格式"><a href="#以太网帧格式" class="headerlink" title="以太网帧格式"></a>以太网帧格式</h5><p><img src="/2022/01/13/220113-fpga%E4%B9%8Beth/220113-fpga%E4%B9%8Beth-3.jpg" alt="220113-fpga之eth-3.jpg"></p>
+<h5 id="IP数据包格式"><a href="#IP数据包格式" class="headerlink" title="IP数据包格式"></a>IP数据包格式</h5><p><img src="/2022/01/13/220113-fpga%E4%B9%8Beth/220113-fpga%E4%B9%8Beth-4.jpg" alt="220113-fpga之eth-4.jpg"></p>
+<h5 id="UDP数据格式"><a href="#UDP数据格式" class="headerlink" title="UDP数据格式"></a>UDP数据格式</h5><p><img src="/2022/01/13/220113-fpga%E4%B9%8Beth/220113-fpga%E4%B9%8Beth-5.jpg" alt="220113-fpga之eth-5.jpg"></p>
 <h4 id="千兆以太网物理层"><a href="#千兆以太网物理层" class="headerlink" title="千兆以太网物理层"></a>千兆以太网物理层</h4><ul>
 <li>下面这个是我开发板图和板上的千兆以太网原理图，设计的非常好，板子上的IO基本上都是等长线。  </li>
 </ul>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/220113-fpga%E4%B9%8Beth/220113-fpga%E4%B9%8Beth-6.jpg" alt="220113-fpga之eth-6.jpg"></p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/220113-fpga%E4%B9%8Beth/220113-fpga%E4%B9%8Beth-7.jpg" alt="220113-fpga之eth-7.jpg"></p>
+<p><img src="/2022/01/13/220113-fpga%E4%B9%8Beth/220113-fpga%E4%B9%8Beth-6.jpg" alt="220113-fpga之eth-6.jpg"></p>
+<p><img src="/2022/01/13/220113-fpga%E4%B9%8Beth/220113-fpga%E4%B9%8Beth-7.jpg" alt="220113-fpga之eth-7.jpg"></p>
 <ul>
 <li>物理层的设计和学习还有个非常重要的学习资料就是《RTL8211数据手册》，这个手册上竟然写着不对外公布。</li>
 </ul>

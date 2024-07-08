@@ -731,7 +731,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-09 00:05:40" itemprop="dateModified" datetime="2024-07-09T00:05:40+08:00">2024-07-09</time>
+                <time title="修改时间：2024-07-09 00:21:23" itemprop="dateModified" datetime="2024-07-09T00:21:23+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -770,18 +770,18 @@
 <li>该硬件看门狗是采用哪种方式进行喂狗，如通过GPIO，IIC或SPI等通讯方式来喂狗。</li>
 </ul>
 <p>UJA1078A手册：</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/231031-wdg/sbc-ds1-en.png" alt="img"></p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/231031-wdg/sbc-ds1-cn.png" alt="img"></p>
+<p><img src="/2023/10/31/231031-wdg/sbc-ds1-en.png" alt="img"></p>
+<p><img src="/2023/10/31/231031-wdg/sbc-ds1-cn.png" alt="img"></p>
 <h2 id="软件看门狗"><a href="#软件看门狗" class="headerlink" title="软件看门狗"></a>软件看门狗</h2><p>属于通过软件定时器的方式来实现看门狗功能，俗称“软狗”。软件看门狗的时基本质上也需要依赖硬件定时器。</p>
 <p>比如常见的用systick作时基，通过一个task运行软狗监控的定时器不断递减，其他task程序则是重置软狗定时器，如果软狗监控的某个定时器归零，那么此时可以便可以判断其他task并没有被正常的执行，此时便可以通过主动复位的方式来实现看门狗功能。</p>
 <p>以上可实现软狗对<strong>多个task</strong>的监控，这是硬狗没有的功能。软狗除了实现硬狗timeout和window的两种模式，还可以实现其他模式，取决于软件，监控的花样更多。</p>
 <p>一般而言，运行软狗的主任务的优先级不应设置比被监控的任务优先级低，所以软狗无法检测Hardfault中卡死的问题。<strong>软狗跟硬狗搭配在一起使用</strong>，可以解决硬狗监控模式单一、软狗执行优先级没被监控任务高的问题。</p>
-<h2 id="AUTOSAR-Wdg-架构"><a href="#AUTOSAR-Wdg-架构" class="headerlink" title="AUTOSAR Wdg 架构"></a>AUTOSAR Wdg 架构</h2><h3 id="内部分层"><a href="#内部分层" class="headerlink" title="内部分层"></a>内部分层</h3><p><img src="https://gitee.com/hao0527/hao0527/raw/img/231031-wdg/wdg-stack.png" alt="img"></p>
+<h2 id="AUTOSAR-Wdg-架构"><a href="#AUTOSAR-Wdg-架构" class="headerlink" title="AUTOSAR Wdg 架构"></a>AUTOSAR Wdg 架构</h2><h3 id="内部分层"><a href="#内部分层" class="headerlink" title="内部分层"></a>内部分层</h3><p><img src="/2023/10/31/231031-wdg/wdg-stack.png" alt="img"></p>
 <p>Watchdog Driver：用于实现针对硬件看门狗的寄存器操作与控制，可以分为MCU内部看门狗(Internal Watchdog)与外部看门狗(External Watchdog)，该外部看门狗可以通过GPIO、IIC或SPI来实现喂狗。</p>
 <p>Watchdog Interface：其主要功能则是为了实现上层Watchdog Manager与底层Watchdog Driver的连接，当然其连接的底层Watchdog Driver可以存在多个。</p>
 <p>Watchdog Manager：作为整个看门狗协议栈中的服务层，主体功能就是为了负责整个程序执行的正确性，并触发相应的硬件看门狗的喂狗动作，扮演了整个监控的核心角色。</p>
-<h3 id="WdgM-依赖"><a href="#WdgM-依赖" class="headerlink" title="WdgM 依赖"></a>WdgM 依赖</h3><p><img src="https://gitee.com/hao0527/hao0527/raw/img/231031-wdg/wdgM-dep-en.png" alt="img"></p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/231031-wdg/wdgM-dep-cn.png" alt="img"></p>
+<h3 id="WdgM-依赖"><a href="#WdgM-依赖" class="headerlink" title="WdgM 依赖"></a>WdgM 依赖</h3><p><img src="/2023/10/31/231031-wdg/wdgM-dep-en.png" alt="img"></p>
+<p><img src="/2023/10/31/231031-wdg/wdgM-dep-cn.png" alt="img"></p>
 <h2 id="AUTOSAR-Wdg-基础知识"><a href="#AUTOSAR-Wdg-基础知识" class="headerlink" title="AUTOSAR Wdg 基础知识"></a>AUTOSAR Wdg 基础知识</h2><h3 id="三种模式"><a href="#三种模式" class="headerlink" title="三种模式"></a>三种模式</h3><p>在AUTOSAR架构中，针对Watchdog Driver而言，定义了看门狗控制模式存在如下三种模式：</p>
 <ul>
 <li>Off Mode：表示看门狗关闭状态，对于关键安全系统，一般不能将其切换至Off状态，即一旦打开，将不能被关闭。</li>
@@ -791,7 +791,7 @@
 <h2 id="AUTOSAR-Wdg-各层功能"><a href="#AUTOSAR-Wdg-各层功能" class="headerlink" title="AUTOSAR Wdg 各层功能"></a>AUTOSAR Wdg 各层功能</h2><h3 id="Wdg"><a href="#Wdg" class="headerlink" title="Wdg"></a>Wdg</h3><p>Wdg通常有两种，一种是芯片内部自带的片内看门狗；还有一种是在芯片外部通过SPI这种接口连接的片外看门狗。MCAL只负责第一种片内看门狗，片内看门狗的特点是Wdg模块是直接访问相关硬件寄存器。片外看门狗属于板级设备抽象层负责，通常需要使用MCAL提供的其他模块（比如SPI等）来访问/控制外扩看门狗芯片，这种不能直接访问硬件寄存器。</p>
 <p>部分flash不能在写的时候读取，所以该模块代码可以在RAM里面运行。比如在刷写Flash时，Wdg模块可能作为二进制文件里面的一部分在RAM上运行。（到底哪些部分需要放RAM？）</p>
 <h4 id="Wdg-API"><a href="#Wdg-API" class="headerlink" title="Wdg API"></a>Wdg API</h4><p>Wdg 驱动层，主要接口就三个，调用方式如下图：</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/231031-wdg/wdg-1.png" alt="img"></p>
+<p><img src="/2023/10/31/231031-wdg/wdg-1.png" alt="img"></p>
 <ul>
 <li>wdg初始化：通过EcuM模块调用函数Wdg_Init来完成Watchdog的初始化配置。</li>
 <li>触发wdg喂狗：通过WdgM模块调用WdgIf模块提供的函数WdgIf_SetTriggerCondition来触发底层驱动进行喂狗（不是wdg真正的喂狗操作），并设置下次看门狗timeout时间。</li>
@@ -804,7 +804,7 @@
 <li>应用软件频繁修改硬狗寄存器不安全。现在AUTOSAR实现方式，应用层调用喂狗函数（Wdg_SetTriggerCondition）并不是直接去操作硬件看门狗寄存器的，而是去喂软狗。<strong>真正喂硬狗靠硬件定时器</strong>，在定时器中断回调中判断软狗没问题才去操作硬狗寄存器。</li>
 </ol>
 <p>看门狗驱动程序和硬狗操作之间的调用方式如下图：</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/231031-wdg/wdg-2.png" alt="img"></p>
+<p><img src="/2023/10/31/231031-wdg/wdg-2.png" alt="img"></p>
 <h3 id="WdgIf"><a href="#WdgIf" class="headerlink" title="WdgIf"></a>WdgIf</h3><p>和NvM下的MemIf功能相同，可以通过DeviceIndex区分要调用哪个Wdg Driver，可以用宏或函数实现，接口如下：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Std_ReturnType <span class="title function_">WdgIf_SetMode</span><span class="params">(uint8 DeviceIndex, WdgIf_ModeType WdgMode)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">WdgIf_SetTriggerCondition</span><span class="params">(uint8 DeviceIndex, uint16 Timeout)</span>;</span><br></pre></td></tr></table></figure>
 
@@ -819,10 +819,10 @@
 <h4 id="WdgM-API"><a href="#WdgM-API" class="headerlink" title="WdgM API"></a>WdgM API</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">WdgM_Init</span><span class="params">(<span class="type">const</span> WdgM_ConfigType *ConfigPtr)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">WdgM_DeInit</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">if</span> (WDGM_VERSION_INFO_API == STD_ON)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> WdgM_GetVersionInfo(_vi) STD_GET_VERSION_INFO(_vi,WDGM)</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">Std_ReturnType <span class="title function_">WdgM_SetMode</span><span class="params">(WdgM_ModeType Mode)</span>;</span><br><span class="line"></span><br><span class="line">Std_ReturnType <span class="title function_">WdgM_GetMode</span><span class="params">(WdgM_ModeType *Mode)</span>;</span><br><span class="line"></span><br><span class="line">Std_ReturnType <span class="title function_">WdgM_CheckpointReached</span><span class="params">(WdgM_SupervisedEntityIdType SEID, WdgM_CheckpointIdType CheckpointID)</span>;</span><br><span class="line"></span><br><span class="line">Std_ReturnType <span class="title function_">WdgM_GetLocalStatus</span><span class="params">(WdgM_SupervisedEntityIdType SEID, WdgM_LocalStatusType *Status)</span>;</span><br><span class="line"></span><br><span class="line">Std_ReturnType <span class="title function_">WdgM_GetGlobalStatus</span><span class="params">(WdgM_GlobalStatusType *Status)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">WdgM_PerformReset</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line">Std_ReturnType <span class="title function_">WdgM_GetFirstExpiredSEID</span><span class="params">(WdgM_SupervisedEntityIdType *SEID)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">WdgM_MainFunction</span><span class="params">(<span class="type">void</span>)</span>;</span><br></pre></td></tr></table></figure>
 
 <h4 id="状态转移图"><a href="#状态转移图" class="headerlink" title="状态转移图"></a>状态转移图</h4><p>Figure 2: Local Supervision Status:</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/231031-wdg/wdgM-1.png" alt="img"></p>
+<p><img src="/2023/10/31/231031-wdg/wdgM-1.png" alt="img"></p>
 <p>在从其他状态切换至WDGM_LOCAL_STATUS_EXPIRED状态时，Watchdog Manager提供一定的时间保留机制能够允许做一些特别的操作，如设置看门狗模式或者写入NvM数据，复位原因等。</p>
 <p>Figure 3: Global Supervision Status:</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/231031-wdg/wdgM-2.png" alt="img"></p>
+<p><img src="/2023/10/31/231031-wdg/wdgM-2.png" alt="img"></p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
     </div>
@@ -873,7 +873,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-09 00:05:40" itemprop="dateModified" datetime="2024-07-09T00:05:40+08:00">2024-07-09</time>
+                <time title="修改时间：2024-07-09 00:21:23" itemprop="dateModified" datetime="2024-07-09T00:21:23+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -927,7 +927,7 @@
 
 <p>由于要封模块，并且要做成可重入，所以需要由用户在配置代码中定义每个实例的管理ram，并配置到config常量中。</p>
 <h5 id="线性地址"><a href="#线性地址" class="headerlink" title="线性地址"></a>线性地址</h5><p>从零开始的线性地址如何实现？看了上面的<code>Fls_SectorType</code>配置可以想到，Flash的地址映射关系就是映射到的“扇区列表配置”中。当时有个问题，假如有多个Flash，是不是映射成一个从零开始的地址？这样的话上层调用无需体现实例号的，因为根据地址映射关系就能找到要操作的Flash。后来想想还是不行，需要每个Flash的地址都分开从零开始，因为不同Flash的扇区大小等不同，上层不好只通过地址分辨是哪个Flash然后操作。</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/231020-MemoryStack/231020-MemoryStack-3.png" alt="img"></p>
+<p><img src="/2023/10/20/231020-MemoryStack/231020-MemoryStack-3.png" alt="img"></p>
 <h5 id="多实例同时运行"><a href="#多实例同时运行" class="headerlink" title="多实例同时运行"></a>多实例同时运行</h5><p>这个特性也是需要支持的，不能让一个Flash阻塞的时候另一个Flash无法使用。如何实现这个特性呢？为每个Fls实例开一个<code>Fls_JobInfoType</code>管理实例的运行状态，每次Fls_main都把不同实例都执行一遍。这里有个可改善点，每次Fls_main只执行一个实例，让Fls_main的周期短一些，可以把多个Fls实例执行的阻塞时间打散一些，整个系统的最大阻塞时间会缩短。</p>
 <h5 id="对外接口"><a href="#对外接口" class="headerlink" title="对外接口"></a>对外接口</h5><p>对外接口大致遵循AUTOSAR规范，增加了实例号和是否同步的参数。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">Fls_Init</span><span class="params">(<span class="type">const</span> Fls_ConfigType *ConfigPtr, boolean IsSync)</span>;</span><br><span class="line">Std_ReturnType <span class="title function_">Fls_Erase</span><span class="params">(Fls_AddressType TargetAddress, Fls_LengthType Length, uint8 FlsInstanceId, boolean IsSync)</span>;</span><br><span class="line">Std_ReturnType <span class="title function_">Fls_Write</span><span class="params">(Fls_AddressType TargetAddress, <span class="type">const</span> uint8 *SourceAddressPtr, Fls_LengthType Length, uint8 FlsInstanceId, boolean IsSync)</span>;</span><br><span class="line">Std_ReturnType <span class="title function_">Fls_Read</span><span class="params">(Fls_AddressType SourceAddress, uint8 *TargetAddressPtr, Fls_LengthType Length, uint8 FlsInstanceId, boolean IsSync)</span>;</span><br><span class="line">Std_ReturnType <span class="title function_">Fls_Compare</span><span class="params">(Fls_AddressType SourceAddress, <span class="type">const</span> uint8 *TargetAddressPtr, Fls_LengthType Length, uint8 FlsInstanceId, boolean IsSync)</span>;</span><br><span class="line">Std_ReturnType <span class="title function_">Fls_BlankCheck</span><span class="params">(Fls_AddressType TargetAddress, Fls_LengthType Length, uint8 FlsInstanceId, boolean IsSync)</span>;</span><br><span class="line"></span><br><span class="line">MemIf_StatusType <span class="title function_">Fls_GetStatus</span><span class="params">(uint8 FlsInstanceId)</span>;</span><br><span class="line">MemIf_JobResultType <span class="title function_">Fls_GetJobResult</span><span class="params">(uint8 FlsInstanceId)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">Fls_SetMode</span><span class="params">(MemIf_ModeType Mode, uint8 FlsInstanceId)</span>;</span><br><span class="line">uint64 <span class="title function_">Fls_GetErrorCode</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">Fls_MainFunction</span><span class="params">(<span class="type">void</span>)</span>;</span><br></pre></td></tr></table></figure>
@@ -981,7 +981,7 @@
 <li>当前操作的Cluster状态为FULL，执行SWAP任务，将最老的Cluster上有效的Block搬到新的Cluster上，SWAP成功后将当前操作的Cluster改为新的Cluster，新Cluster状态设为ACTIVE。</li>
 </ol>
 <p><strong>Cluster 状态转移图如下</strong>：</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/231020-MemoryStack/231020-MemoryStack-2.png" alt="img"></p>
+<p><img src="/2023/10/20/231020-MemoryStack/231020-MemoryStack-2.png" alt="img"></p>
 <h5 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h5><p>对外接口：<code>void Fee_Init(const Fee_ConfigType* ConfigPtr, boolean IsSync)</code><br>内部初始化Job接口：<code>static Std_ReturnType Fee_InitJob(uint8 FeeInstanceId)</code></p>
 <p>初始化Job中需要处理各种不同的Cluster状态，查找ACTIVE状态的Cluster和最老的Cluster，从最老的Cluster开始索引Block。</p>
 <p>考虑在换页时断电和Cluster损坏的可能性，初始化处理Cluster状态有如下几种情况：（每种情况处理方式不描述了）</p>
@@ -1035,7 +1035,7 @@
 <p>下电写入接口：<code>static void NvM_PoweroffWrite(void)</code><br>流程：检测到预下电RTE信号上升沿，会对所有配置了周期写入的Block置写入标志位。</p>
 <p>事件触发写入接口：<code>static void NvM_EventWrite(void)</code><br>流程：检测到对应Block事件触发信号上升沿，会对此Block置写入标志位。</p>
 <p>执行任务接口：<code>static void NvM_ExecuteJob(void)</code><br>流程：执行写入任务，调用一次ExecuteJob，最多只会写入1个Block。</p>
-<h5 id="NvM存储各层数据结构"><a href="#NvM存储各层数据结构" class="headerlink" title="NvM存储各层数据结构"></a>NvM存储各层数据结构</h5><p><img src="https://gitee.com/hao0527/hao0527/raw/img/231020-MemoryStack/231020-MemoryStack-1.png" alt="img"></p>
+<h5 id="NvM存储各层数据结构"><a href="#NvM存储各层数据结构" class="headerlink" title="NvM存储各层数据结构"></a>NvM存储各层数据结构</h5><p><img src="/2023/10/20/231020-MemoryStack/231020-MemoryStack-1.png" alt="img"></p>
 <h3 id="待改进点"><a href="#待改进点" class="headerlink" title="待改进点"></a>待改进点</h3><ol>
 <li>Fls写入使用异步非阻塞，每写入一个页挂起，需要os支持。</li>
 <li>Fee异常时的擦除也可以挂起，减少阻塞时处理器性能浪费。</li>
@@ -1094,7 +1094,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-09 00:05:40" itemprop="dateModified" datetime="2024-07-09T00:05:40+08:00">2024-07-09</time>
+                <time title="修改时间：2024-07-09 00:21:23" itemprop="dateModified" datetime="2024-07-09T00:21:23+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1190,7 +1190,7 @@
 <h3 id="开启低功耗模式"><a href="#开启低功耗模式" class="headerlink" title="开启低功耗模式"></a>开启低功耗模式</h3><p>如需开启低功耗模式，只需在 <code>panip_config.h</code> 中 <code>#define SLEEP_EN (1)</code>。</p>
 <p>PAN1020 SDK 定义的全局变量在使用前都必须要在函数中初始化，如果定义的时候就初始化，当前初始化的值是不生效的。</p>
 <p>因为<strong>开启低功耗模式需配置编译器将 RAM 设置为 NoInit</strong>，如图所示：</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/230923-ble/230923-ble-1.jpg" alt="img"></p>
+<p><img src="/2023/09/23/230923-ble/230923-ble-1.jpg" alt="img"></p>
 <p>设为 NoInit 后，全局变量定义后的值为随机值，没有被初始化，需要自己手动初始化。此处是为了在 PAN1020 休眠唤醒后 RAM 不被重新初始化，唤醒后的 RAM 值依旧保持为休眠前的值。</p>
 <h3 id="配置软件定时器"><a href="#配置软件定时器" class="headerlink" title="配置软件定时器"></a>配置软件定时器</h3><p>按照 SDK 用户手册配置软件定时器后遇到奇怪的问题，但测试发现解决方法，如下注释说明：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">app_proj_template_init</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">memset</span>(&amp;app_proj_template_env, <span class="number">0</span>, <span class="keyword">sizeof</span>(app_proj_template_env));</span><br><span class="line">	</span><br><span class="line">	temper_resetInit();</span><br><span class="line">	<span class="comment">/* 注意：配置定时器放在此函数里没问题，放在appm_init()外部有问题，会导致无法进定时回调！</span></span><br><span class="line"><span class="comment">			函数调用关系：ble_normal_reset_init() -&gt; user_code_start() -&gt; appm_init() -&gt; app_init_ind_func()</span></span><br><span class="line"><span class="comment">			设置定时器放在appm_init()内部没问题，但是放在appm_init()外部就不行，</span></span><br><span class="line"><span class="comment">			甚至把设置定时器放在appm_init()内部的最后一行可以，放在appm_init()执行完出来的下一行不行！*/</span></span><br><span class="line">	((ke_timer_set_handler)SVC_ke_timer_set)(APP_SAMPLE_TEMPER_TIMER, TASK_APP, <span class="number">60</span>*<span class="number">100</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -1358,7 +1358,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-09 00:05:40" itemprop="dateModified" datetime="2024-07-09T00:05:40+08:00">2024-07-09</time>
+                <time title="修改时间：2024-07-09 00:21:23" itemprop="dateModified" datetime="2024-07-09T00:21:23+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1402,7 +1402,7 @@
 <li>地址映射：虚拟地址到物理地址的映射</li>
 </ol>
 <p>AUTOSAR的内存协议栈为应用层和基础软件(BSW)模块提供访问非易失性存储器的服务（例如读写）。使用AUTOSAR MemStack API，应用层中的软件组件(SWC)和BSW模块可以从NV Memory读取数据并将数据写入NV Memory，例如诊断事件管理器(DEM)使用MemStack服务将冻结帧数据写入NV Memory。</p>
-<h3 id="存储协议栈架构"><a href="#存储协议栈架构" class="headerlink" title="存储协议栈架构"></a>存储协议栈架构</h3><p><img src="https://gitee.com/hao0527/hao0527/raw/img/230824-AutoSarNVRAM/230824-AutoSarNVRAM-1.jpg" alt="img"></p>
+<h3 id="存储协议栈架构"><a href="#存储协议栈架构" class="headerlink" title="存储协议栈架构"></a>存储协议栈架构</h3><p><img src="/2023/08/24/230824-AutoSarNVRAM/230824-AutoSarNVRAM-1.jpg" alt="img"></p>
 <p>NvM访问内存抽象接口(MemIf)，该接口抽象了Flash模拟Eep模块(Fee)和EEPROM抽象模块(Ea)。因此，NvM是硬件无关的。</p>
 <p>应用程序通常不直接访问BSW模块的服务。它们通过RTE和BSW模块提供的服务端口进行连接。应用程序SWC或NV SWC可以从NV Memory读取或写入数据。NvM将调用传递给MemIf，调用将传递给内存驱动模块，驱动模块将数据写入NV Memory。如果是外部Flash（通过SPI连接）的情况下，将使用SPI驱动程序。</p>
 <h4 id="NvM（NVRAM-Manager）"><a href="#NvM（NVRAM-Manager）" class="headerlink" title="NvM（NVRAM Manager）"></a>NvM（NVRAM Manager）</h4><p>NvM模块提供了数据存储和数据维护的服务。NvM模块位于AUTOSAR堆栈的服务层中，并向用户（即SWC）提供从NV Memory读取数据或写入数据的服务。NvM是访问NV Memory的唯一方式，或者我们可以说NvM是SWC访问NV Memory的网关。</p>

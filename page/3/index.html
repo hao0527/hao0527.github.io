@@ -303,7 +303,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-09 00:05:40" itemprop="dateModified" datetime="2024-07-09T00:05:40+08:00">2024-07-09</time>
+                <time title="修改时间：2024-07-09 00:21:23" itemprop="dateModified" datetime="2024-07-09T00:21:23+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -334,9 +334,9 @@
 <h3 id="SAE-J1939与CAN2-0的关系"><a href="#SAE-J1939与CAN2-0的关系" class="headerlink" title="SAE-J1939与CAN2.0的关系"></a>SAE-J1939与CAN2.0的关系</h3><p>CAN2.0是一种总线规范，是数据链路层的技术。J1939是SAE（美国汽车协会）基于CAN总线定义的的规范，主要用于解决不同发动机厂商、不同ECU厂商之间的兼容性问题。J1939定义了一系列的PGN和SPN，这些PGN包含了发动机、变速器、车轴等汽车上各部件的信息；对参数的表示方法（状态和值）又定义了SLOT（Scaling—比例、Limit—界限、Offset—偏移、Transfer—传送）。ECU厂商开发设备时都应该遵循这个规范。ECU模块的功能不同，厂商不同，在J1939的基础上，又表现出其多样性：支持或者不支持某些PGN、SPN和SLOT；新增了某些J1939未定义的PGN和SPN。</p>
 <h3 id="SAE-J1939消息帧格式"><a href="#SAE-J1939消息帧格式" class="headerlink" title="SAE-J1939消息帧格式"></a>SAE-J1939消息帧格式</h3><p>CAN2.0规范包括CAN2.0A（标准帧格式），CAN2.0B（扩展帧格式），二者使用不同的帧格式位码。J1939是在CAN2.0B的基础上进一步封装，对仲裁场部分的29位ID的重新定义。SAE-J1939中只为扩展帧格式定义了标准化的通信，因此，<strong>SAE-1939设备必须使用扩展帧格式</strong>。</p>
 <h3 id="SAE-J1939数据帧结构"><a href="#SAE-J1939数据帧结构" class="headerlink" title="SAE-J1939数据帧结构"></a>SAE-J1939数据帧结构</h3><p>SAE-J1939将每个协议数据单元（PDU）融合进一个CAN2.0B数据帧中，其结构如下：</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/221129-j1939/221129-j1939-1.png" alt="img"></p>
+<p><img src="/2022/11/29/221129-j1939/221129-j1939-1.png" alt="img"></p>
 <p>参数群编号（PGN）对于制定基于SAE-J1939的CAN协议来说十分重要，很多ECU厂商规定在接受CAN报文时识别的就是PGN而不是整个报文的ID。参数群编号是由24位组成的（其实是18位），主要包括下面几个部分：保留位（R，1bit，默认为：0），数据页位（DP，1bit，多数情况下为：0），PDU格式（PF，8bit）和特定PDU（PS，8bit，目标地址是否群扩展）。当PF值为：0~239之前时PGN的低字节将被设置为：0；当PF值为240~254之时，PGN的低字节为PS的值。PGN结构如下：</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/221129-j1939/221129-j1939-2.png" alt="img"></p>
+<p><img src="/2022/11/29/221129-j1939/221129-j1939-2.png" alt="img"></p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
     </div>
@@ -482,7 +482,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-09 00:05:40" itemprop="dateModified" datetime="2024-07-09T00:05:40+08:00">2024-07-09</time>
+                <time title="修改时间：2024-07-09 00:21:23" itemprop="dateModified" datetime="2024-07-09T00:21:23+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -517,7 +517,7 @@
 <li><a target="_blank" rel="noopener" href="https://www.arm.com/zh-TW/resource-library">ARM资源图书馆</a>，可以下载白皮书、ARM编程手册</li>
 <li><a target="_blank" rel="noopener" href="https://sourceware.org/binutils/docs/">Documentation for binutils</a>，binutils工具链(ld, as…)的官方文档</li>
 </ol>
-<h2 id="启动程序和启动过程"><a href="#启动程序和启动过程" class="headerlink" title="启动程序和启动过程"></a>启动程序和启动过程</h2><h3 id="常用指令"><a href="#常用指令" class="headerlink" title="常用指令"></a>常用指令</h3><p><img src="https://https//gitee.com/hao0527/hao0527/raw/img/mcustartup/2020032320502673.png" alt="启动文件使用的 ARM 汇编指令汇总"></p>
+<h2 id="启动程序和启动过程"><a href="#启动程序和启动过程" class="headerlink" title="启动程序和启动过程"></a>启动程序和启动过程</h2><h3 id="常用指令"><a href="#常用指令" class="headerlink" title="常用指令"></a>常用指令</h3><p><img src="https://https/tup/2020032320502673.png" alt="启动文件使用的 ARM 汇编指令汇总"></p>
 <h3 id="startup-stm32f40-41xxx-s-代码分析"><a href="#startup-stm32f40-41xxx-s-代码分析" class="headerlink" title="startup_stm32f40_41xxx.s 代码分析"></a>startup_stm32f40_41xxx.s 代码分析</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Stack_Size      EQU     0x00000400</span><br><span class="line">                AREA    STACK, NOINIT, READWRITE, ALIGN=3</span><br><span class="line">Stack_Mem       SPACE   Stack_Size</span><br><span class="line">__initial_sp</span><br><span class="line"></span><br><span class="line">Heap_Size       EQU     0x00000200</span><br><span class="line">                AREA    HEAP, NOINIT, READWRITE, ALIGN=3</span><br><span class="line">__heap_base</span><br><span class="line">Heap_Mem        SPACE   Heap_Size</span><br><span class="line">__heap_limit</span><br></pre></td></tr></table></figure>
 
 <p>第1行：EQU 是表示宏定义的伪指令，类似于 C 语言中的#define。伪指令的意思是指这个“指令”并不会生成二进制程序代码，也不会引起变量空间分配。0x00000400 表示栈大小，字节为单位。0x00000400 =1024字节=1KB。</p>
@@ -589,7 +589,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-09 00:05:40" itemprop="dateModified" datetime="2024-07-09T00:05:40+08:00">2024-07-09</time>
+                <time title="修改时间：2024-07-09 00:21:23" itemprop="dateModified" datetime="2024-07-09T00:21:23+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -627,21 +627,21 @@
 <p><strong>奇偶校验位</strong>：数据位加上这一位后，使得”1”的位数应为偶数(偶校验)或奇数(奇校验)，以此来校验数据传送的正确性。</p>
 <p><strong>停止位</strong>：它是一个字符数据的结束标志。可以是1位、1.5位、2位的高电平。 由于数据是在传输线上定时的，并且每一个设备有其自己的时钟，很可能在通信中两台设备间出现了小小的不同步。<strong>因此停止位不仅仅是表示传输的结束，并且提供计算机校正时钟同步的机会</strong>。<strong>适用于停止位的位数越多，不同时钟同步的容忍程度越大，但是数据传输率同时也越慢</strong>。</p>
 <p><strong>空闲位</strong>：处于逻辑”1”状态，表示当前线路上没有数据传送。</p>
-<p><img src="hhttps://gitee.com/hao0527/hao0527/raw/img/21017-232485422/0.jpg" alt="图片"></p>
+<p><img src="/2022/10/17/221017-232485422/0.jpg" alt="图片"></p>
 <h3 id="波特率与比特率"><a href="#波特率与比特率" class="headerlink" title="波特率与比特率"></a>波特率与比特率</h3><p><strong>比特率</strong>在数字信道中，比特率是数字信号的传输速率，它用单位时间内传输的二进制代码的有效位（bit）数来表示，其单位为每秒比特数bit/s（bps）、每秒千比特数（Kbps）或每秒兆比特数（Mbps）来表示（此处K和M分别为1000和1000000，而不是涉及计算机存储器容量时的1024和1048576）。</p>
 <p><strong>波特率</strong>指数据信号对载波的调制速率，它用单位时间内载波调制状态改变次数来表示，其单位为波特（Baud）。波特率与比特率的关系为：比特率=波特率X单个调制状态对应的二进制位数。</p>
 <p><strong>如何区分两者？</strong>显然，两相调制（单个调制状态对应1个二进制位）的比特率等于波特率；四相调制（单个调制状态对应2个二进制位）的比特率为波特率的两倍；八相调制（单个调制状态对应3个二进制位）的比特率为波特率的三倍；依次类推。</p>
 <h2 id="232"><a href="#232" class="headerlink" title="232"></a>232</h2><p>232 通信主要是由RX,TX,GND三根线组成。RX与TX，TX接RX，GND接GND。因为发送和接收分别是由不同的线处理的，也就是能同时发送数据和接收数据，这就是所谓的全双工。</p>
-<p><img src="hhttps://gitee.com/hao0527/hao0527/raw/img/21017-232485422/640-1666051381273.jfif" alt="图片"></p>
+<p><img src="/2022/10/17/221017-232485422/640-1666051381273.jfif" alt="图片"></p>
 <p>在这里扩展一下，串口通信还有一个功能叫做<strong>全功能串口通信</strong>，也叫标准串口。因为在两个设备间进行数据传输，有些设备处理速度比较快，有些数据比较慢。为了保证数据能正常传输，在RX,TX的基础上，还增加了几个控制引脚，本来好端端就R，T，G，三根线，凑着就凑齐了9个引脚，召唤出了DB9这个东西。</p>
-<p><img src="hhttps://gitee.com/hao0527/hao0527/raw/img/21017-232485422/1.jpg" alt="图片"></p>
+<p><img src="/2022/10/17/221017-232485422/1.jpg" alt="图片"></p>
 <p>这要怪就怪当时使用电脑的时候，还没有互联网这个概念，但是又想在两台电脑间进行通信。所以才有这样一个东西。在后来的设备，很多控制器，人机界面，PLC等使用串口通信中，基本上就不使用标准串口，而是就直接使用RX，TX，GND三根线来通信了。但是这里为什么要提到这个呢。因为只是很多设备这样用，也就是还存在少数设备还保留了标准串口的功能。这就是为什么会遇到明明电脑通信是好的，换成触摸屏通信就不行了。因为很多触摸屏只使用了RX，TX，GND通信，遇到一些还保留标准串口功能的就比较讨厌了。</p>
 <h2 id="485"><a href="#485" class="headerlink" title="485"></a>485</h2><p>485是为了解决232通信距离的问题。原理什么之类的就不多讲了。反正232通信距离就是不长。485主要是以一种差分信号进行传输，只需要两根线，+,-两根线，或者也叫A，B两根线。A，B两根线的差分电平信号就是作为数据信号传输。</p>
 <p>那么问题来了，那是不是就没有RX和TX的概念了。是的，发送和接收就不能分开了。发送和接收都是靠这两根的来传输，也就是每次只能作发送或者只能作接收，这就是半双工的概念了，这在效率上就比232弱很多了。就像对讲机一样，经常是某个人讲完之后，都要说一个over，确保当前说完了，等待对方回复。</p>
-<p><img src="hhttps://gitee.com/hao0527/hao0527/raw/img/21017-232485422/640-1666051910756.jfif" alt="图片"></p>
+<p><img src="/2022/10/17/221017-232485422/640-1666051910756.jfif" alt="图片"></p>
 <p>485就是这样牺牲了232全双工的效率来达到自己传输距离远的代价。那有没有即保留了232的全双工，又可以像485这样提高传输距离呢，于是，422出来了。</p>
 <h2 id="422"><a href="#422" class="headerlink" title="422"></a>422</h2><p>422呢，有些标注为485-4。而485就标注为485-2。有什么区别呢。就是为了好记呢。485-2就是2根线。485-4就是4根线。</p>
-<p><img src="hhttps://gitee.com/hao0527/hao0527/raw/img/21017-232485422/640-1666051950808.jfif" alt="图片"></p>
+<p><img src="/2022/10/17/221017-232485422/640-1666051950808.jfif" alt="图片"></p>
 <p>422就是把232的RX分成两根线，RX+，RX-，把TX分成TX+,TX-。这样就可以同时发送和同时接收了，还可以像485这样，有较远的传输距离。可是这样一种很有优势的通信方式，为什么用的不多呢。我个人的答案和理解就是：线太多了。特别是像我这样懒得接线的人，超过3根线就头晕的。搞个通信还需要接这么多线，什么TX,RX，正啊负啊。交换来交换去。</p>
 <p>因为在很多设备通信中，基本上是属于一问一答式的，因此，232的全双工通信优势其实也并没有发挥出来。就像现在打电话，虽然两个人可以同时说话，但是两个人同时说话，叽叽歪歪的，谁知道说什么呀。特别是一个主站与多个从站通信的时候，485的接线就就方便多了，反正大家就两根线，把+都接一块，把-都接一块。如果是<strong>422作一主多从</strong>，接线上还要理半天呢，而且通信异常了也不好解决。</p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
@@ -898,7 +898,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-09 00:05:40" itemprop="dateModified" datetime="2024-07-09T00:05:40+08:00">2024-07-09</time>
+                <time title="修改时间：2024-07-09 00:21:23" itemprop="dateModified" datetime="2024-07-09T00:21:23+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -951,13 +951,13 @@
 <p>CAN-FD协议在原有的CAN协议基础上，增加了可变波特率、扩大数据场、提升校验算法安全性等改进。</p>
 <p>本文主要讲述CAN的数据通信，CAN-FD的区别会在其他文章单独讲解。</p>
 <h2 id="CAN的物理通信形式"><a href="#CAN的物理通信形式" class="headerlink" title="CAN的物理通信形式"></a>CAN的物理通信形式</h2><p>通过两条通信线（双绞线）产生的电压差传输数据，一个CAN网络里的所有节点都挂在这两条通信线上，使用差分信号半双工通信。</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/220927-CAN/v2-23d364e14ef20208bac9b47fed047ada_r.jpg" alt="img"></p>
+<p><img src="/2022/09/27/220927-CAN/v2-23d364e14ef20208bac9b47fed047ada_r.jpg" alt="img"></p>
 <p>CAN 使用称为 CANH / CANL 的通信线路执行传输和接收。没有电位差的信号称为隐性(Recessive)信号，其逻辑值为1。具有电位差的信号称为显性（Dominant）信号，其逻辑值0。如果通信总线上发生显性和隐性(Recessive)冲突，则显性（Dominant）优先。总线空闲时保持隐性。</p>
 <p>CAN总线的物理层逻辑电平，分为高速ISO11898标准（125kbps ~ 1Mbps）和低速ISO11519标准（10kbps ~ 125kbps）；</p>
 <p>低速的物理层电平如图：</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/220927-CAN/v2-3667818bfa85894c20ee09fb428f363d_r.jpg" alt="img"></p>
+<p><img src="/2022/09/27/220927-CAN/v2-3667818bfa85894c20ee09fb428f363d_r.jpg" alt="img"></p>
 <p>而我们现在通常使用的CAN2.0，都是使用高速CAN标准，其物理层电平如图：</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/220927-CAN/v2-aabdb0a85b5bc7446840ed2b8c4d788e_r.jpg" alt="img"></p>
+<p><img src="/2022/09/27/220927-CAN/v2-aabdb0a85b5bc7446840ed2b8c4d788e_r.jpg" alt="img"></p>
 <p>对于高速CAN，总结一下，也就是：</p>
 <ul>
 <li>CAN_H-CAN_L &lt; 0.5V 时候为隐性的，逻辑信号表现为”逻辑1”- 高电平。</li>
@@ -967,7 +967,7 @@
 <p>CAN总线在电平传输上，具有仲裁判断逻辑，优先级为：显性（低电平）&gt;隐形（高电平）！</p>
 <p>在理解CAN总线传输的整个过程中，主要就是清楚这一规则在传输时的灵活运用，并定义的各种帧形式。</p>
 <h2 id="CAN的数据格式"><a href="#CAN的数据格式" class="headerlink" title="CAN的数据格式"></a>CAN的数据格式</h2><p>CAN的数据定义了有5种帧类型：</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/220927-CAN/v2-1f0d94451bb01c75375b4c912012e39d_r.jpg" alt="img"></p>
+<p><img src="/2022/09/27/220927-CAN/v2-1f0d94451bb01c75375b4c912012e39d_r.jpg" alt="img"></p>
 <p>其中，遥控帧也常被称为远程帧。CAN的应用开发者只能使用“数据帧”和“遥控帧”，其他的3种帧类型是由CAN的底层固件自动帮我们在特定场景下进行收发，开发者无需担心也无法直接参与控制。</p>
 <p>所以，本文把“数据帧”和“遥控帧”与其他的3种帧类型分别进行介绍。</p>
 <h3 id="数据帧与遥控帧"><a href="#数据帧与遥控帧" class="headerlink" title="数据帧与遥控帧"></a>数据帧与遥控帧</h3><p>关于数据帧，也就是我们最常用的帧类型，用于数据的收发；也是CAN通信里最主要的内容。</p>
@@ -985,37 +985,37 @@
 <p>— CRC field;</p>
 <p>— ACK field;</p>
 <p>— EOF.</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/220927-CAN/v2-94586126c0989e25599b758d8ecc5295_r.jpg" alt="img"></p>
+<p><img src="/2022/09/27/220927-CAN/v2-94586126c0989e25599b758d8ecc5295_r.jpg" alt="img"></p>
 <p>这7个段，每个段里又都有自己的格式细分，有两种格式：标准格式和扩展格式。</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/220927-CAN/v2-f58bfd8f6bb42cf469dfb4c2243750ca_r.jpg" alt="img"></p>
+<p><img src="/2022/09/27/220927-CAN/v2-f58bfd8f6bb42cf469dfb4c2243750ca_r.jpg" alt="img"></p>
 <p><strong>CAN的应用开发者只使用其中的仲裁段、控制段和数据段。其他部分都由CAN底层固件自动封装！</strong></p>
 <p>由上图可以看到，对于仲裁段和控制段在标准帧与扩展帧里有不同的定义，其他段一致。</p>
 <h3 id="帧起始与帧结束"><a href="#帧起始与帧结束" class="headerlink" title="帧起始与帧结束"></a>帧起始与帧结束</h3><p>SOF帧起始：由一个显性位（低电平）组成，发送节点发送帧起始，其他节点同步于帧起始；</p>
 <p>EOF帧结束：由7个隐形位（高电平）组成。</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/220927-CAN/v2-5d0c0aa1ef7750f0620e92407a09f4b8_r.jpg" alt="img"></p>
+<p><img src="/2022/09/27/220927-CAN/v2-5d0c0aa1ef7750f0620e92407a09f4b8_r.jpg" alt="img"></p>
 <h3 id="仲裁段"><a href="#仲裁段" class="headerlink" title="仲裁段"></a>仲裁段</h3><h4 id="仲裁机制"><a href="#仲裁机制" class="headerlink" title="仲裁机制"></a>仲裁机制</h4><p>只要总线空闲，总线上任何节点都可以发送报文，如果有两个或两个以上的节点开始传送报文，那么就会存在总线访问冲突的可能。但是CAN使用了标识符的逐位仲裁方法可以解决这个问题。帧ID越小，优先级越高。</p>
 <p>CAN总线控制器在发送数据的同时监控总线电平，如果电平不同，则停止发送并做其他处理。如果该位位于仲裁段，则退出总线竞争；如果位于其他段，则产生错误事件。</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/220927-CAN/v2-b31c6be2bf95f5553e9b236fd5f8a562_r.jpg" alt="img"></p>
+<p><img src="/2022/09/27/220927-CAN/v2-b31c6be2bf95f5553e9b236fd5f8a562_r.jpg" alt="img"></p>
 <h4 id="仲裁段内容"><a href="#仲裁段内容" class="headerlink" title="仲裁段内容"></a>仲裁段内容</h4><p>RTR位：用于指示这包数据是遥控帧还是数据帧，数据帧的RTR位为显性电平，远程帧为隐性电平。</p>
 <p>所以帧格式和帧ID相同的情况下，数据帧优先于远程帧。</p>
 <p>IDE位：用于指示这包数据是标准帧还是扩展帧，标准帧的IDE位为显性电平，扩展帧的IDE位为隐形电平。</p>
 <p>对于前11位ID相同的标准帧（RTR为显性的遥控帧）和扩展帧，标准帧优先级比扩展帧高。</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/220927-CAN/v2-c1baaa702dd521f883248bf5d69357ce_r.jpg" alt="img"></p>
+<p><img src="/2022/09/27/220927-CAN/v2-c1baaa702dd521f883248bf5d69357ce_r.jpg" alt="img"></p>
 <p>可以看到，在标准格式里，仲裁段没有IDE位，其实这个位在标准格式里是放在控制段的第一位的，这样就正好可以和扩展格式的IDE位对应上进行仲裁了。</p>
 <h3 id="控制段"><a href="#控制段" class="headerlink" title="控制段"></a>控制段</h3><p>仲裁段之后紧跟控制段，控制段共6位，标准帧的控制段由IDE、保留位r0和数据长度代码DLC组成；扩展帧控制段则由保留位r1、r0和DLC组成，如图：</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/220927-CAN/v2-d7b37d72e67ba4fdc89dc6374a640754_r.jpg" alt="img"></p>
+<p><img src="/2022/09/27/220927-CAN/v2-d7b37d72e67ba4fdc89dc6374a640754_r.jpg" alt="img"></p>
 <p>在这里可以看到，在标准格式里，IDE位放到了控制段的第一位来了，对应前文仲裁段的内容，就可以使标准格式与扩展格式进行仲裁了。</p>
 <p>保留位（ r0 、 r1 ）：保留位必须全部以显性电平发送。</p>
 <p>数据长度码（ DLC ）：数据的字节数必须为 0 ～ 8 字节。数据帧的DLC表示的就是当前包数据段所带的字节数，遥控帧的DLC表示的是请求返回的数据长度。</p>
 <h3 id="数据段"><a href="#数据段" class="headerlink" title="数据段"></a>数据段</h3><p>一个数据帧传输的数据量为0~8个字节。遥控帧的数据段长度固定为0。</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/220927-CAN/v2-ea717bbfd46d990dffefa9d6d78e7b88_r.jpg" alt="img"></p>
+<p><img src="/2022/09/27/220927-CAN/v2-ea717bbfd46d990dffefa9d6d78e7b88_r.jpg" alt="img"></p>
 <h3 id="CRC段"><a href="#CRC段" class="headerlink" title="CRC段"></a>CRC段</h3><p>CAN-bus使用CRC校验进行数据检错，CRC校验值存放于CRC段。 CRC校验段由15位CRC值和1位CRC界定符构成如图：</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/220927-CAN/v2-d153142849cef02d8701015681d3ef9b_r.jpg" alt="img"></p>
+<p><img src="/2022/09/27/220927-CAN/v2-d153142849cef02d8701015681d3ef9b_r.jpg" alt="img"></p>
 <h3 id="ACK段"><a href="#ACK段" class="headerlink" title="ACK段"></a>ACK段</h3><p>当一个接收节点接收的帧起始到CRC段之间的内容没发生错误时，它将在ACK段发送一个显性电平如图：</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/220927-CAN/v2-123b6f8079ca6645f96c0a4b0379933d_r.jpg" alt="img"></p>
+<p><img src="/2022/09/27/220927-CAN/v2-123b6f8079ca6645f96c0a4b0379933d_r.jpg" alt="img"></p>
 <h2 id="位填充"><a href="#位填充" class="headerlink" title="位填充"></a>位填充</h2><p>CAN数据在收发上除了会遵循以上数据格式定义之外，还有一个“位填充”的底层规则（类似通信协议里的“转义符”），这个操作是在CAN的底层固件中自动判断执行的，其目的是为了增强数据正确性，以便识别错误信号。</p>
 <p>为防止突发错误而设定，CAN协议中规定，当相同极性的电平持续五位时，则添加一个极性相反的位。填充位的添加和删除是由发送节点和接收节点完成的，CAN-BUS只负责传输，不会操纵信号。</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/220927-CAN/v2-1886bf7c09fedcdb6d34a025e4f63d9d_r.jpg" alt="img"></p>
+<p><img src="/2022/09/27/220927-CAN/v2-1886bf7c09fedcdb6d34a025e4f63d9d_r.jpg" alt="img"></p>
 <ul>
 <li>对于发送节点而言：</li>
 </ul>
@@ -1026,13 +1026,13 @@
 <p>在接收数据帧和遥控帧时，对于SOF~CRC(除去CRC界定符)之间的位流，相同极性的电平如果持续5位，那么需要删除下一位再接收。如果这个第 6 个位的电平与前 5 位相同，将被视为错误并发送<strong>位填充错误帧</strong>。</p>
 <h2 id="错误帧、过载帧与帧间隔"><a href="#错误帧、过载帧与帧间隔" class="headerlink" title="错误帧、过载帧与帧间隔"></a>错误帧、过载帧与帧间隔</h2><p>对于这三种帧，都是在使用数据帧或遥控帧的过程当中进行错误、时序管理的辅助信号，并不会单独出现在CAN网络中；如前文所述是由CAN的底层固件自动判断并执行他们收发的，但是CAN的开发人员有必要对它们进行了解，以对CAN网络有一个整体的认识。</p>
 <h3 id="错误帧"><a href="#错误帧" class="headerlink" title="错误帧"></a>错误帧</h3><p>尽管CAN-bus是可靠性很高的总线，但依然可能出现错误；CAN-bus的错误类型共有5种：</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/220927-CAN/v2-873a92aa91e65481dc812b1bc85a3841_r.jpg" alt="img"></p>
+<p><img src="/2022/09/27/220927-CAN/v2-873a92aa91e65481dc812b1bc85a3841_r.jpg" alt="img"></p>
 <p>当出现5种错误类型之一时，发送或接收节点将发送错误帧。但是错误帧又有两种格式：主动错误格式和被动错误格式。</p>
 <p>主动错误和被动错误，指的并不是发送方与接收方。而是指某一CAN节点的“错误状态”，无论发送方还是接收方，都会处于自己的错误状态，并根据自身的状态来决定自己要发送主动错误格式还是被动错误格式：</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/220927-CAN/v2-32a00c5310f9ddb0f89f391b60fbd1ae_r.jpg" alt="img"></p>
+<p><img src="/2022/09/27/220927-CAN/v2-32a00c5310f9ddb0f89f391b60fbd1ae_r.jpg" alt="img"></p>
 <p>由上图可知，6个连续的显性或隐性电平位，正好违反了之前所提及的“位填充”规则，CAN总线设计上就是利用了自己的这一规则对错误数据进行刻意的覆盖破坏，使总线上其他节点都知道错误的发生。</p>
 <h4 id="错误状态"><a href="#错误状态" class="headerlink" title="错误状态"></a>错误状态</h4><p>在CAN节点内，有两个计数器：发送错误计数器（TEC）和接收错误计数器（REC），当该节点检测到错误后，内部REC/TEC计数器会相应的增加，基于REC/TEC的值判定节点状态，CAN的错误状态如图：</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/220927-CAN/v2-fddf34e76afc765a8030e7ec7feac111_r.jpg" alt="img"></p>
+<p><img src="/2022/09/27/220927-CAN/v2-fddf34e76afc765a8030e7ec7feac111_r.jpg" alt="img"></p>
 <p>节点错误状态的转换就是一个 “量变”到“质变” 的过程：</p>
 <ul>
 <li><strong>主动错误状态：【REC&lt;127 且TEC&lt;127】</strong></li>
@@ -1062,7 +1062,7 @@
 <blockquote>
 <p>由于发送节点发送6个连续的显性位会破坏位填充规则，触发接收节点发送主动错误标志，发送节点和接收节点的结合是形成错误标志叠加部分的原因。</p>
 </blockquote>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/220927-CAN/v2-2266e218b6061b77c37b34e3eb58c723_r.jpg" alt="img"></p>
+<p><img src="/2022/09/27/220927-CAN/v2-2266e218b6061b77c37b34e3eb58c723_r.jpg" alt="img"></p>
 <p><strong>【位错误】举例（情况2）：</strong></p>
 <ul>
 <li>假设发送节点处于被动错误状态，接收节点处于主动错误状态；</li>
@@ -1071,25 +1071,25 @@
 <li>发送节点发送完被动错误标志后，开始监控总线是否为隐性位，当总线为隐性位时，开始发送错误界定符（8个连续的隐性位）；</li>
 <li>接收节点发送完主动错误标志后，开始监控总线是否为隐性位，当总线为隐性位时，开始发送错误界定符（8个连续的隐性位）；</li>
 </ul>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/220927-CAN/v2-bc7b7162a61a7861ebf895c765122302_r.jpg" alt="img"></p>
+<p><img src="/2022/09/27/220927-CAN/v2-bc7b7162a61a7861ebf895c765122302_r.jpg" alt="img"></p>
 <h3 id="过载帧与帧间隔"><a href="#过载帧与帧间隔" class="headerlink" title="过载帧与帧间隔"></a>过载帧与帧间隔</h3><p>过载帧与主动错误帧非常相似，甚至可以把过载帧直接理解成也是一种错误帧，只是它的错误触发条件不同罢了。</p>
 <p>当某个接收节点没有做好接收下一帧数据的准备时，将发送过载帧以通知发送节点；过载帧由过载标志和过载帧界定符组成，如图所示：</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/220927-CAN/v2-ae4660f6be52518c6ca8f24b9a5b39ce_r.jpg" alt="img"></p>
+<p><img src="/2022/09/27/220927-CAN/v2-ae4660f6be52518c6ca8f24b9a5b39ce_r.jpg" alt="img"></p>
 <p>由于存在多个节点同时过载且过载帧发送有时间差问题，可能出现过载标志叠加后超过6个位的现象，如图所示：</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/220927-CAN/v2-443d97a46a841c5bb2900f0304414ac1_r.jpg" alt="img"></p>
+<p><img src="/2022/09/27/220927-CAN/v2-443d97a46a841c5bb2900f0304414ac1_r.jpg" alt="img"></p>
 <p>过载帧是用于接收单元通知发送单元它尚未完成接收准备的帧。在两种情况下，节点会发送过载帧：</p>
 <ul>
 <li>接收单元条件的制约，要求发送节点延缓下一个数据帧或远程帧的传输；</li>
 <li>帧间隔（Intermission）的 <em><strong>3 bit</strong></em> 内检测到显性位</li>
 </ul>
 <p>帧间隔是用于分隔数据帧、遥控帧这些有效数据的帧。数据帧和遥控帧可通过插入帧间隔将本帧与前面的任何帧（数据帧、 遥控帧、错误帧、过载帧）分开。</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/220927-CAN/v2-09da8cc2f7158aeb3e7ab5a05aed0bff_r.jpg" alt="img"></p>
+<p><img src="/2022/09/27/220927-CAN/v2-09da8cc2f7158aeb3e7ab5a05aed0bff_r.jpg" alt="img"></p>
 <p>注意，过载帧和错误帧由于要按照发送条件立即执行，前不能插入帧间隔</p>
 <h2 id="CAN的采样点与波特率"><a href="#CAN的采样点与波特率" class="headerlink" title="CAN的采样点与波特率"></a>CAN的采样点与波特率</h2><p>根据前文描述，由于CAN总线在通信时，每个节点都会不断的监控总线上的实际电平用于仲裁、判断错误等功能，因此CAN定义了采样点这一概念指明节点对总线的监控时间点。</p>
 <p>因为CAN要对总线上特定数据里的每一个位都要进行一次单独的监控，所以这个监控的时间点，指的是在一个“位”的时间范围之内的一个“相对时间”，比如：一个位时间的中间时刻，就把它称为50%采样点（率）。这个解释只是让读者直接理解它的大体概念，实际情况并不是这么简单。</p>
 <p>实际的CAN采样点的位时间划分如下：</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/220927-CAN/v2-40e0a834157ea339143219a350f88373_r.jpg" alt="img"></p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/220927-CAN/v2-88bed791a65bcd50ec1eee089c1f067f_r.jpg" alt="img"></p>
+<p><img src="/2022/09/27/220927-CAN/v2-40e0a834157ea339143219a350f88373_r.jpg" alt="img"></p>
+<p><img src="/2022/09/27/220927-CAN/v2-88bed791a65bcd50ec1eee089c1f067f_r.jpg" alt="img"></p>
 <p>由上图可知，CAN每发送一个位，需要涉及的内容有：</p>
 <p><strong>时间单元（Tq）：</strong>指的是CAN模块时钟提供的单位时间，与其他的芯片外设一样，任何外设模块都需要提供合适的时钟才能正常工作，在很多芯片里CAN时钟还会配合一个分频器，也就是：CAN时钟= CAN时钟源（如图中的晶振时钟） / CAN_Prescaler。<strong>时间单元</strong>指的就是分频后的实际<strong>CAN时钟</strong>的单位时间。</p>
 <p><strong>位时间：</strong>就是我们理解的<strong>CAN波特率</strong>里一位的时间，由上图可知，CAN每发送一个位都由几个“段”组成，而每个段又需要占用几个“时间单元（Tq）”，所以我们在使用CAN的时候，就需要通过指定这些段的Tq个数来得到CAN的波特率。</p>
@@ -1099,9 +1099,9 @@
 <p><strong>相位缓冲段2（PBS2：Phase Buffer Segment 2）：</strong>用于补偿节点间的晶振误差，允许通过<strong>重同步（SJW）</strong>对该段<strong>缩短。</strong></p>
 <p>不同的控制器，PBS1/PBS2 的取值范围不完全一致，一般 PS1 为 1 – 8 TQ，PS2 为 2 – 8 TQ。</p>
 <p>在有的控制器里，把传播段与相位缓冲段1合并称为“<strong>时间段1</strong>”,而相位缓冲段2称为“<strong>时间段2</strong>”，如图：</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/220927-CAN/v2-0ddb4086a6638f5d70a106bc583e55f6_r.jpg" alt="img"></p>
+<p><img src="/2022/09/27/220927-CAN/v2-0ddb4086a6638f5d70a106bc583e55f6_r.jpg" alt="img"></p>
 <p><strong>重同步（SJW）：</strong>在<strong>时间段1</strong>而不是在<strong>同步段(SS)<strong>检测到有效跳变，那么</strong>相位缓冲段1(PBS1)</strong> 的时间就被延长最多SJW那么长，从而采样点被延迟了。相反如果在<strong>时间段2</strong>而不是在<strong>同步段(SS)<strong>检测到有效跳变，那么</strong>相位缓冲段2(PBS2)</strong> 的时间就被缩短最多SJW那么长，从而采样点被提前了。如图：</p>
-<p><img src="https://gitee.com/hao0527/hao0527/raw/img/220927-CAN/v2-e731e178deca7a637b6e36e6976f9d5f_r.jpg" alt="img"></p>
+<p><img src="/2022/09/27/220927-CAN/v2-e731e178deca7a637b6e36e6976f9d5f_r.jpg" alt="img"></p>
 <p>综上所述：</p>
 <p>CAN时钟 = CAN时钟源 / 分频值CAN_Prescaler；</p>
 <p>CAN波特率 = CAN时钟 / (SS(1Tq) + PTS + PBS1 + PBS2)的Tq总个数；</p>
