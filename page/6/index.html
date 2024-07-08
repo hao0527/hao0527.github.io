@@ -216,7 +216,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-02-01 00:01:48" itemprop="dateModified" datetime="2023-02-01T00:01:48+08:00">2023-02-01</time>
+                <time title="修改时间：2024-07-09 00:05:40" itemprop="dateModified" datetime="2024-07-09T00:05:40+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -256,28 +256,28 @@
 <li>在对 SDRAM进行读写操作之前需要先对芯片进行初始化；SDRAM读写是一个较为复杂的控制流 程，其中包括行激活、列读写、预充电、刷新等一系列操作。</li>
 </ul>
 <h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><ul>
-<li><p>初始化流程如下<br><img src="https://hao0527.gitee.io/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-1.jpg" alt="211219-fpga之sdram-1.jpg"><br>SDRAM上电后要有200us的输入稳定期，在这个时间内不可以对SDRAM的接口做任何操作； 200us结束以后给所有L-Bank预充电，然后是连续8次刷新操作；最后设置模式寄存器。初始化 最关键的阶段就在于模式寄存器（MR，Mode Register）的设置，简称MRS（MR Set）。</p>
+<li><p>初始化流程如下<br><img src="https://gitee.com/hao0527/hao0527/raw/img/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-1.jpg" alt="211219-fpga之sdram-1.jpg"><br>SDRAM上电后要有200us的输入稳定期，在这个时间内不可以对SDRAM的接口做任何操作； 200us结束以后给所有L-Bank预充电，然后是连续8次刷新操作；最后设置模式寄存器。初始化 最关键的阶段就在于模式寄存器（MR，Mode Register）的设置，简称MRS（MR Set）。</p>
 </li>
-<li><p>模式寄存器如下<br><img src="https://hao0527.gitee.io/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-2.jpg" alt="211219-fpga之sdram-2.jpg"><br>如上图所示，用于配置模式寄存器的参数由地址线提供，地址线不同的位分别用于表示不 同的参数。SDRAM通过配置模式寄存器来确定芯片的工作方式，包括突发长度（Burst Length）、 潜伏期（CAS Latency）以及操作模式等。<br>需要注意的是，在模式寄存器设置指令发出之后，需要等待一段时间才能够向SDRAM发送 新的指令，这个时间我们称之为模式寄存器设置周期tRSC（Register Set Cycle）。</p>
+<li><p>模式寄存器如下<br><img src="https://gitee.com/hao0527/hao0527/raw/img/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-2.jpg" alt="211219-fpga之sdram-2.jpg"><br>如上图所示，用于配置模式寄存器的参数由地址线提供，地址线不同的位分别用于表示不 同的参数。SDRAM通过配置模式寄存器来确定芯片的工作方式，包括突发长度（Burst Length）、 潜伏期（CAS Latency）以及操作模式等。<br>需要注意的是，在模式寄存器设置指令发出之后，需要等待一段时间才能够向SDRAM发送 新的指令，这个时间我们称之为模式寄存器设置周期tRSC（Register Set Cycle）。</p>
 </li>
 </ul>
 <h4 id="行激活"><a href="#行激活" class="headerlink" title="行激活"></a>行激活</h4><ul>
-<li>行激活时序图<br><img src="https://hao0527.gitee.io/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-3.jpg" alt="211219-fpga之sdram-3.jpg"><br>初始化完成后，无论是读操作还是写操作，都要先激活（Active）SDRAM中的一行，使之 处于活动状态（又称行有效）。在此之前还要进行SDRAM芯片的片选和L-Bank的定址，不过它 们与行激活可以同时进行。<br>在片选CS#（#表示低电平有效）、L-Bank定址的同时，RAS（Row Address Strobe，行地址选通脉冲）也处于有效状态。此时An地址线则发送具体的行地址。如图中是A0-A11，共有12个地址线，由于是二进制表示法，所以共有4096个行（2^12=4096），A0-A11的不同数值就确定了具体的行地址。由于行激活的同时也是相应L-Bank有效，所以行激活也可称为L-Bank有效。</li>
+<li>行激活时序图<br><img src="https://gitee.com/hao0527/hao0527/raw/img/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-3.jpg" alt="211219-fpga之sdram-3.jpg"><br>初始化完成后，无论是读操作还是写操作，都要先激活（Active）SDRAM中的一行，使之 处于活动状态（又称行有效）。在此之前还要进行SDRAM芯片的片选和L-Bank的定址，不过它 们与行激活可以同时进行。<br>在片选CS#（#表示低电平有效）、L-Bank定址的同时，RAS（Row Address Strobe，行地址选通脉冲）也处于有效状态。此时An地址线则发送具体的行地址。如图中是A0-A11，共有12个地址线，由于是二进制表示法，所以共有4096个行（2^12=4096），A0-A11的不同数值就确定了具体的行地址。由于行激活的同时也是相应L-Bank有效，所以行激活也可称为L-Bank有效。</li>
 </ul>
 <h4 id="列读写"><a href="#列读写" class="headerlink" title="列读写"></a>列读写</h4><ul>
-<li>列选通与读操作时序图<br><img src="https://hao0527.gitee.io/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-4.jpg" alt="211219-fpga之sdram-4.jpg"><br>由于在SDRAM中，地址线是行列共用的，因此列寻址时地址线仍然是A0-A11。在寻址时，利用RAS（Row Address Strobe，行地址选通脉冲）与CAS（Column Address Strobe，列地址选通脉冲）来区分行寻址与列寻址。</li>
+<li>列选通与读操作时序图<br><img src="https://gitee.com/hao0527/hao0527/raw/img/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-4.jpg" alt="211219-fpga之sdram-4.jpg"><br>由于在SDRAM中，地址线是行列共用的，因此列寻址时地址线仍然是A0-A11。在寻址时，利用RAS（Row Address Strobe，行地址选通脉冲）与CAS（Column Address Strobe，列地址选通脉冲）来区分行寻址与列寻址。</li>
 <li>在发送列读写命令时必须要与行激活命令有一个时间间隔，这个间隔被定义为tRCD， 即RAS to CAS Delay（RAS至CAS延迟）。这是因为在行激活命令发出之后，芯片存储阵列电子 元件响应需要一定的时间。tRCD是SDRAM的一个重要时序参数，广义的tRCD以时钟周期（tCK， Clock Time）数为单位，比如tRCD=3，就代表RAS至CAS延迟为三个时钟周期，如图 33.1.8所 示。具体到确切的时间，则要根据时钟频率而定。</li>
 </ul>
 <h4 id="数据输出（读）"><a href="#数据输出（读）" class="headerlink" title="数据输出（读）"></a>数据输出（读）</h4><ul>
 <li>在选定列地址后，就已经确定了具体的存储单元，剩下的事情就是数据通过数据I/O通道（DQ）输出到内存总线上了。但是在CAS发出之后，仍要经过一定的时间才能有数据输出，从CAS与读取命令发出到第一笔数据输出的这段时间，被定义为CL（CAS Latency，CAS潜伏期）。CL时间越短，读数据时SDRAM响应就越快。由于CL只在读取时出现，所以CL又被称为读取潜伏期（RL，Read Latency）。CL的单位与tRCD一样，为时钟周期数，具体耗时由时钟频率决定。</li>
 </ul>
 <h4 id="数据输出（写）"><a href="#数据输出（写）" class="headerlink" title="数据输出（写）"></a>数据输出（写）</h4><ul>
-<li>数据写入时序图<br><img src="https://hao0527.gitee.io/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-5.jpg" alt="211219-fpga之sdram-5.jpg"><br>数据写入的操作也是在tRCD之后进行，但此时没有了CL（记住，CL只出现在读取操作中）， 行寻址与列寻址的时序图和上文一样，只是在列寻址时，WE#为有效状态。<br>数据与写指令同时发送。不过，数据并不是即时地写入存储单元，数据的 真正写入需要一定的周期。为了保证数据的可靠写入，都会留出足够的写入/校正时间（tWR， Write Recovery Time），这个操作也被称作写回（Write Back）。tWR至少占用一个时钟周期 或再多一点（时钟频率越高，tWR占用周期越多）。</li>
+<li>数据写入时序图<br><img src="https://gitee.com/hao0527/hao0527/raw/img/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-5.jpg" alt="211219-fpga之sdram-5.jpg"><br>数据写入的操作也是在tRCD之后进行，但此时没有了CL（记住，CL只出现在读取操作中）， 行寻址与列寻址的时序图和上文一样，只是在列寻址时，WE#为有效状态。<br>数据与写指令同时发送。不过，数据并不是即时地写入存储单元，数据的 真正写入需要一定的周期。为了保证数据的可靠写入，都会留出足够的写入/校正时间（tWR， Write Recovery Time），这个操作也被称作写回（Write Back）。tWR至少占用一个时钟周期 或再多一点（时钟频率越高，tWR占用周期越多）。</li>
 </ul>
 <h4 id="此外"><a href="#此外" class="headerlink" title="此外"></a>此外</h4><ul>
 <li>除上述操作之外，还有突发长度、预充电、刷新、数据掩码常用操作，具体可以查阅《开拓者FPGA开发指南》SDRAM读写测试实验。</li>
 </ul>
-<h3 id="实验仿真"><a href="#实验仿真" class="headerlink" title="实验仿真"></a>实验仿真</h3><p><img src="https://hao0527.gitee.io/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-6.jpg" alt="211219-fpga之sdram-6.jpg"><br><img src="https://hao0527.gitee.io/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-7.jpg" alt="211219-fpga之sdram-7.jpg"><br><img src="https://hao0527.gitee.io/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-8.jpg" alt="211219-fpga之sdram-8.jpg"><br><img src="https://hao0527.gitee.io/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-9.jpg" alt="211219-fpga之sdram-9.jpg"></p>
+<h3 id="实验仿真"><a href="#实验仿真" class="headerlink" title="实验仿真"></a>实验仿真</h3><p><img src="https://gitee.com/hao0527/hao0527/raw/img/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-6.jpg" alt="211219-fpga之sdram-6.jpg"><br><img src="https://gitee.com/hao0527/hao0527/raw/img/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-7.jpg" alt="211219-fpga之sdram-7.jpg"><br><img src="https://gitee.com/hao0527/hao0527/raw/img/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-8.jpg" alt="211219-fpga之sdram-8.jpg"><br><img src="https://gitee.com/hao0527/hao0527/raw/img/211219-fpga%E4%B9%8Bsdram/211219-fpga%E4%B9%8Bsdram-9.jpg" alt="211219-fpga之sdram-9.jpg"></p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
     </div>
@@ -328,7 +328,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-02-01 00:01:48" itemprop="dateModified" datetime="2023-02-01T00:01:48+08:00">2023-02-01</time>
+                <time title="修改时间：2024-07-09 00:05:40" itemprop="dateModified" datetime="2024-07-09T00:05:40+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -362,11 +362,11 @@
 <li>在博世实习，同事想要远程调试，打印log到终端功能（代替出差去现场调试），于是我就决定用LTE Cat.1模块，配合阿里云物联网平台，使用MQTT传输日志文件。</li>
 </ul>
 <h3 id="阿里云物联网平台使用"><a href="#阿里云物联网平台使用" class="headerlink" title="阿里云物联网平台使用"></a>阿里云物联网平台使用</h3><ol>
-<li><p>打开<a target="_blank" rel="noopener" href="https://iot.console.aliyun.com/lk/summary/new">阿里云物联网平台</a>，使用公共实例，<a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/73728.html">创建产品</a>，数据格式选择<strong>（透传/自定义）</strong>，以便将上行的自定义格式的数据转换为Alink JSON格式，连网方式这里选择<strong>蜂窝（2G/3G/4G/5G）</strong>，所属品类选择<strong>自定义品类</strong>，其它配置默认即可。配置完在产品详情界面图如下：<img src="https://hao0527.gitee.io/211217-ltecat1/211217-ltecat1-1.jpg" alt="211217-ltecat1-1.jpg"></p>
+<li><p>打开<a target="_blank" rel="noopener" href="https://iot.console.aliyun.com/lk/summary/new">阿里云物联网平台</a>，使用公共实例，<a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/73728.html">创建产品</a>，数据格式选择<strong>（透传/自定义）</strong>，以便将上行的自定义格式的数据转换为Alink JSON格式，连网方式这里选择<strong>蜂窝（2G/3G/4G/5G）</strong>，所属品类选择<strong>自定义品类</strong>，其它配置默认即可。配置完在产品详情界面图如下：![211217-ltecat1-1.jpg](<a target="_blank" rel="noopener" href="https://hao0527.gitee.io/211217-ltecat1/211217-ltecat1-1.https://gitee.com/hao0527/hao0527/raw/img/">https://hao0527.gitee.io/211217-ltecat1/211217-ltecat1-1.https://gitee.com/hao0527/hao0527/raw/img/</a></p>
 </li>
-<li><p><a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/89271.html">创建设备</a>，创建设备成功后，将自动弹出<strong>添加完成</strong>对话框。您可以查看、复制设备证书信息。设备证书由设备的ProductKey、DeviceName和DeviceSecret组成，是设备与物联网平台进行通信的重要身份认证，建议您妥善保管。配置完在设备详情界面图如下：<img src="https://hao0527.gitee.io/211217-ltecat1/211217-ltecat1-2.jpg" alt="211217-ltecat1-2.jpg"></p>
+<li><p><a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/89271.html">创建设备</a>，创建设备成功后，将自动弹出<strong>添加完成</strong>对话框。您可以查看、复制设备证书信息。设备证书由设备的ProductKey、DeviceName和DeviceSecret组成，是设备与物联网平台进行通信的重要身份认证，建议您妥善保管。配置完在设备详情界面图如下：![211217-ltecat1-2.jpg](<a target="_blank" rel="noopener" href="https://hao0527.gitee.io/211217-ltecat1/211217-lthttps://gitee.com/hao0527/hao0527/raw/img/">https://hao0527.gitee.io/211217-ltecat1/211217-lthttps://gitee.com/hao0527/hao0527/raw/img/</a></p>
 </li>
-<li><p>接下来就是在产品详情界面中的功能定义，可以查看<a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/213906.html">物模型概述</a>，设置MQTT需要上传的变量。我设置了一些调试时用到的变量，如下图：<img src="https://hao0527.gitee.io/211217-ltecat1/211217-ltecat1-3.jpg" alt="211217-ltecat1-3.jpg"></p>
+<li><p>接下来就是在产品详情界面中的功能定义，可以查看<a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/213906.html">物模型概述</a>，设置MQTT需要上传的变量。我设置了一些调试时用到的变量，如下图：<img src="https://hao0527.gitee.io/211https://gitee.com/hao0527/hao0527/raw/img/1-3.jpg" alt="211217-ltecat1-3.jpg"></p>
 </li>
 <li><p>在产品详情界面中的数据解析可以设置<a target="_blank" rel="noopener" href="https://iot.console.aliyun.com/product/productDetail/gecgSxxbl6Q?current=4">物模型数据解析</a>，通过物模型数据解析我们可以将自定义帧结构的数据解析成Alink JSON格式，注意：产品的<strong>数据格式</strong>选择为<strong>透传/自定义</strong>（这个坑我一天，最后找阿里云客服解决）。写完数据解析后，选择模拟类型为<strong>设备上报数据</strong>，执行与提交。</p>
 </li>
@@ -544,7 +544,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-02-01 00:01:48" itemprop="dateModified" datetime="2023-02-01T00:01:48+08:00">2023-02-01</time>
+                <time title="修改时间：2024-07-09 00:05:40" itemprop="dateModified" datetime="2024-07-09T00:05:40+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -573,23 +573,23 @@
       
           <h1 id="电机位置反馈"><a href="#电机位置反馈" class="headerlink" title="电机位置反馈"></a>电机位置反馈</h1><h2 id="霍尔传感器"><a href="#霍尔传感器" class="headerlink" title="霍尔传感器"></a>霍尔传感器</h2><ul>
 <li>马达轴上连有磁体，传感器为三个间隔60°的开关霍尔，霍尔会按照【001 - 101 - 100 - 110 - 010 - 011】六个状态变换，根据三相霍尔信号可以检测出电机转子位置所处的扇区，然后控制MOS或IGBT实现六步换向控制。</li>
-<li>三路霍尔信号图<br><img src="https://hao0527.gitee.io/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86-1.jpg" alt="210924-电机控制部分-1.JPG"></li>
-<li>120°霍尔换相真值表<br><img src="https://hao0527.gitee.io/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86-2.jpg" alt="210924-电机控制部分-2.JPG">  </li>
+<li>三路霍尔信号图<br><img src="htthttps://gitee.com/hao0527/hao0527/raw/img/924-电机控制部分/210924-电机控制部分-1.jpg" alt="210924-电机控制部分-1.JPG"></li>
+<li>120°霍尔换相真值表<br><img src="htthttps://gitee.com/hao0527/hao0527/raw/img/924-电机控制部分/210924-电机控制部分-2.jpg" alt="210924-电机控制部分-2.JPG">  </li>
 </ul>
 <h2 id="无霍尔传感器"><a href="#无霍尔传感器" class="headerlink" title="无霍尔传感器"></a>无霍尔传感器</h2><ul>
 <li>传感器很有用，但会增加成本，增加复杂性（由于需要附加绕组），并降低了可靠性（部分原因是传感器连接更容易受到灰尘和潮湿环境的污染），无传感器控制方式解决了这些不足。</li>
-<li>无传感器利用电机反电动势确定转子角度，下图为三相反电动势波形和霍尔波形比较图<br><img src="https://hao0527.gitee.io/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86-3.jpg" alt="210924-电机控制部分-3.JPG"><br>可见，传统BLDC电机中单个霍尔传感器变化输出，与无传感器电机中单个线圈的反电动势零交叉点之间有一个30度的相位差。因此，在检测到零交叉点之后，我们会在无传感器电机电路的固件中内置一个30度相位延迟，然后再激活激励序列中的下一个动作。  </li>
+<li>无传感器利用电机反电动势确定转子角度，下图为三相反电动势波形和霍尔波形比较图<br><img src="htthttps://gitee.com/hao0527/hao0527/raw/img/924-电机控制部分/210924-电机控制部分-3.jpg" alt="210924-电机控制部分-3.JPG"><br>可见，传统BLDC电机中单个霍尔传感器变化输出，与无传感器电机中单个线圈的反电动势零交叉点之间有一个30度的相位差。因此，在检测到零交叉点之后，我们会在无传感器电机电路的固件中内置一个30度相位延迟，然后再激活激励序列中的下一个动作。  </li>
 </ul>
 <h2 id="检测反电动势方法"><a href="#检测反电动势方法" class="headerlink" title="检测反电动势方法"></a>检测反电动势方法</h2><ol>
-<li>最简单的方法就是用比较器将反电动势与一半的直流总线电压比较<br><img src="https://hao0527.gitee.io/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86-4.jpg" alt="210924-电机控制部分-4.JPG"><br>在此图中，线圈A正向激励，线圈C反向激励，而线圈B则开路。当实现此相位的激励序列时，反电动势就会上升和下降。这一简单比较器方法主要缺点就是三个绕组可能没有相同的特征，造成实际零交叉点的正负相移。电机仍可能在运转，但可能消耗过多电流。</li>
-<li>上面问题解决方法就是通过使用与电机绕组并接的三个电阻网络来产生一个虚拟中性点，反电动势然后就会与虚拟中性点进行比较。<br><img src="https://hao0527.gitee.io/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86-5.jpg" alt="210924-电机控制部分-5.JPG"></li>
-<li>第三种方法是采用模数转换器 (ADC)。为BLDC电机控制提供的许多MCU包括适合作此用途的高速ADC。采用这种方法后，反电动势就会衰减，以便可以直接馈送给MCU。信号被ADC采样后就会同与零点对应的数字值比较。当这两个值匹配时，线圈激励序列就会变址到下一步。这种技术具有一定优势，如允许使用数字滤波器来清除反电动势信号中的高频切换成份。<br><img src="https://hao0527.gitee.io/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86-6.jpg" alt="210924-电机控制部分-6.JPG">  </li>
+<li>最简单的方法就是用比较器将反电动势与一半的直流总线电压比较<br><img src="htthttps://gitee.com/hao0527/hao0527/raw/img/924-电机控制部分/210924-电机控制部分-4.jpg" alt="210924-电机控制部分-4.JPG"><br>在此图中，线圈A正向激励，线圈C反向激励，而线圈B则开路。当实现此相位的激励序列时，反电动势就会上升和下降。这一简单比较器方法主要缺点就是三个绕组可能没有相同的特征，造成实际零交叉点的正负相移。电机仍可能在运转，但可能消耗过多电流。</li>
+<li>上面问题解决方法就是通过使用与电机绕组并接的三个电阻网络来产生一个虚拟中性点，反电动势然后就会与虚拟中性点进行比较。<br><img src="htthttps://gitee.com/hao0527/hao0527/raw/img/924-电机控制部分/210924-电机控制部分-5.jpg" alt="210924-电机控制部分-5.JPG"></li>
+<li>第三种方法是采用模数转换器 (ADC)。为BLDC电机控制提供的许多MCU包括适合作此用途的高速ADC。采用这种方法后，反电动势就会衰减，以便可以直接馈送给MCU。信号被ADC采样后就会同与零点对应的数字值比较。当这两个值匹配时，线圈激励序列就会变址到下一步。这种技术具有一定优势，如允许使用数字滤波器来清除反电动势信号中的高频切换成份。<br><img src="htthttps://gitee.com/hao0527/hao0527/raw/img/924-电机控制部分/210924-电机控制部分-6.jpg" alt="210924-电机控制部分-6.JPG">  </li>
 </ol>
 <h2 id="无感缺点"><a href="#无感缺点" class="headerlink" title="无感缺点"></a>无感缺点</h2><pre><code>无传感器BLDC电机控制有一大不足，就是当电机静止时，不会产生反电动势，这样MCU就无法知道定子和转子位置信息。  
 解决方法就是通过以预定序列激励线圈来启动处于开环配置的电机。当电机看似运转效率不高时，就会开始循环该序列。最终，速度将足以产生足够的反电动势，供控制系统切换到正常闭环运行状态（有效状态）。  
 由于反电机势与旋转速度成正比，因此在需要较低速度的应用中，无传感器BLDC电机可能不是一个好的选择。此时带有霍尔效应传感器的BLDC电机可能是更好的选择。  
 </code></pre>
-<h2 id="示波器测霍尔角"><a href="#示波器测霍尔角" class="headerlink" title="示波器测霍尔角"></a>示波器测霍尔角</h2><p><img src="https://hao0527.gitee.io/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86/210924-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E9%83%A8%E5%88%86-7.jpg" alt="210924-电机控制部分-7.JPG"></p>
+<h2 id="示波器测霍尔角"><a href="#示波器测霍尔角" class="headerlink" title="示波器测霍尔角"></a>示波器测霍尔角</h2><p><img src="htthttps://gitee.com/hao0527/hao0527/raw/img/924-电机控制部分/210924-电机控制部分-7.jpg" alt="210924-电机控制部分-7.JPG"></p>
 <h2 id="FOC"><a href="#FOC" class="headerlink" title="FOC"></a>FOC</h2><p>​    <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/147659820">【自制FOC驱动器】深入浅出讲解FOC算法与SVPWM技术</a></p>
 <h1 id="MCU外围电路设计"><a href="#MCU外围电路设计" class="headerlink" title="MCU外围电路设计"></a>MCU外围电路设计</h1><h2 id="复位电路二极管"><a href="#复位电路二极管" class="headerlink" title="复位电路二极管"></a>复位电路二极管</h2><p>​    <a target="_blank" rel="noopener" href="https://blog.csdn.net/cs_ing/article/details/9839661">复位电路为什么要加二极管</a>,断电后瞬间放掉电容的电荷，复位，使断电瞬间RC充分放电。</p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
@@ -642,7 +642,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-02-01 00:01:48" itemprop="dateModified" datetime="2023-02-01T00:01:48+08:00">2023-02-01</time>
+                <time title="修改时间：2024-07-09 00:05:40" itemprop="dateModified" datetime="2024-07-09T00:05:40+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -672,15 +672,15 @@
           <h1 id="逆变"><a href="#逆变" class="headerlink" title="逆变"></a>逆变</h1><h2 id="单相逆变"><a href="#单相逆变" class="headerlink" title="单相逆变"></a>单相逆变</h2><ol>
 <li>需要4个NMOS或者IGBT控制</li>
 <li>正弦脉宽调制SPWM，在输出加电感电容滤波，电感电容值需要足够大（6mH 20uF）</li>
-<li>在mos桥驱动中，用PNP三极管挂在MOS的GS上，作用是用三极管形成放电回路，否则GS电容的电过二极管往驱动芯片内部下管释放<br><img src="https://hao0527.gitee.io/210917-%E9%A9%B1%E5%8A%A8%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1/210917-%E9%A9%B1%E5%8A%A8%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1-1.jpg" alt="210917-驱动部分设计-1.JPG"></li>
-<li>在PCB布线时要注意让MOS开关部分的高频回流面积最小；功率地需要单点接地，高频开关环流路径不要铺地，以减小地干扰<br><img src="https://hao0527.gitee.io/210917-%E9%A9%B1%E5%8A%A8%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1/210917-%E9%A9%B1%E5%8A%A8%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1-2.jpg" alt="210917-驱动部分设计-2.JPG"></li>
+<li>在mos桥驱动中，用PNP三极管挂在MOS的GS上，作用是用三极管形成放电回路，否则GS电容的电过二极管往驱动芯片内部下管释放<br><img src="htthttps://gitee.com/hao0527/hao0527/raw/img/917-驱动部分设计/210917-驱动部分设计-1.jpg" alt="210917-驱动部分设计-1.JPG"></li>
+<li>在PCB布线时要注意让MOS开关部分的高频回流面积最小；功率地需要单点接地，高频开关环流路径不要铺地，以减小地干扰<br><img src="htthttps://gitee.com/hao0527/hao0527/raw/img/917-驱动部分设计/210917-驱动部分设计-2.jpg" alt="210917-驱动部分设计-2.JPG"></li>
 <li>反馈到单片机的信号需要隔离（电流电压互感器），低通或带通滤波</li>
 <li>先直流升压再逆变的效率比先逆变再工频变压器升压的效率高很多</li>
 </ol>
 <h2 id="三相逆变"><a href="#三相逆变" class="headerlink" title="三相逆变"></a>三相逆变</h2><ol>
 <li>需要6个NMOS或者IGBT控制</li>
-<li>负载有星形负载和三角形负载<br><img src="https://hao0527.gitee.io/210917-%E9%A9%B1%E5%8A%A8%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1/210917-%E9%A9%B1%E5%8A%A8%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1-3.jpg" alt="210917-驱动部分设计-3.JPG"></li>
-<li>三相桥式逆变器可控器件导通顺序<br><img src="https://hao0527.gitee.io/210917-%E9%A9%B1%E5%8A%A8%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1/210917-%E9%A9%B1%E5%8A%A8%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1-4.jpg" alt="210917-驱动部分设计-4.JPG"></li>
+<li>负载有星形负载和三角形负载<br><img src="htthttps://gitee.com/hao0527/hao0527/raw/img/917-驱动部分设计/210917-驱动部分设计-3.jpg" alt="210917-驱动部分设计-3.JPG"></li>
+<li>三相桥式逆变器可控器件导通顺序<br><img src="htthttps://gitee.com/hao0527/hao0527/raw/img/917-驱动部分设计/210917-驱动部分设计-4.jpg" alt="210917-驱动部分设计-4.JPG"></li>
 </ol>
 <h1 id="驱动系统"><a href="#驱动系统" class="headerlink" title="驱动系统"></a>驱动系统</h1><h2 id="高铁"><a href="#高铁" class="headerlink" title="高铁"></a>高铁</h2><ol>
 <li>接触网上传输高压交流电（25kV），通过变压器降压和四象限整流器转换成直流电，在经过逆变器降至六点转换成可调压调频的交流电，输入三相异步、同步牵引电动机，通过传动系统带动车轮运行</li>
@@ -691,7 +691,7 @@
 <h1 id="PFC功率因数校正"><a href="#PFC功率因数校正" class="headerlink" title="PFC功率因数校正"></a>PFC功率因数校正</h1><h2 id="什么是PFC"><a href="#什么是PFC" class="headerlink" title="什么是PFC"></a>什么是PFC</h2><p>PFC的英文全称为”Power Factor Correction” ，意思是“功率因数校正”，功率因数指的是有效功率与总耗电量(视在功率)之间的关系，也就是有效功率除以总耗电量(视在功率)的比值。基本上功率因数可以衡量电力被有效利用的程度，当功率因数值越大，代表其电力利用率越高。功率因数是用来衡量用电设备用电效率的参数，低功率因数代表低电力效能。为了提高用电设备功率因数的技术就称为功率因数校正。（大于70瓦就必须使用功率因数校正PFC）</p>
 <h2 id="被动式PFC"><a href="#被动式PFC" class="headerlink" title="被动式PFC"></a>被动式PFC</h2><p>被动式PFC一般分“电感补偿式”和“填谷电路式(Valley Fill Circuit)”<br>“电感补偿式”是使交流输入的基波电流与电压之间相位差减小来提高功率因数，“电感补偿式”包括静音式和非静音式。“电感补偿式”的功率因数只能达到0.7～0.8，它一般在高压滤波电容附近。<br>“填谷电路式”属于一种新型无源功率因数校正电路，其特点是利用整流桥后面的填谷电路来大幅度增加整流管的导通角，通过填平谷点，使输入电流从尖峰脉冲变为接近于正弦波的波形，将功率因数提高到0.9左右，显著降低总谐波失真。与传统的电感式无源功率因数校正电路相比，其优点是电路简单，功率因数补偿效果显著，并且在输入电路中不需要使用体积大重量沉的大电感器。</p>
 <h2 id="主动式PFC"><a href="#主动式PFC" class="headerlink" title="主动式PFC"></a>主动式PFC</h2><p>主动式PFC则由电感电容及电子元器件组成，体积小、通过专用IC去调整电流的波形，对电流电压间的相位差进行补偿。主动式PFC可以达到较高的功率因数──通常可达98%以上，但成本也相对较高。此外，主动式PFC还可用作辅助电源，因此在使用主动式PFC电路中，往往不需要待机变压器，而且主动式PFC输出直流电压的纹波很小，这种电源不必采用很大容量的滤波电容。</p>
-<h2 id="Boost-PFC变换器"><a href="#Boost-PFC变换器" class="headerlink" title="Boost PFC变换器"></a>Boost PFC变换器</h2><p><img src="https://hao0527.gitee.io/210917-%E9%A9%B1%E5%8A%A8%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1/210917-%E9%A9%B1%E5%8A%A8%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1-5.jpg" alt="210917-驱动部分设计-5.JPG"></p>
+<h2 id="Boost-PFC变换器"><a href="#Boost-PFC变换器" class="headerlink" title="Boost PFC变换器"></a>Boost PFC变换器</h2><p><img src="htthttps://gitee.com/hao0527/hao0527/raw/img/917-驱动部分设计/210917-驱动部分设计-5.jpg" alt="210917-驱动部分设计-5.JPG"></p>
 <h2 id="PFC参考"><a href="#PFC参考" class="headerlink" title="PFC参考"></a>PFC参考</h2><ol>
 <li><a target="_blank" rel="noopener" href="https://www.sohu.com/a/436812131_100281310">一文搞懂PFC（功率因数校正）</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1ko4y1C7km?spm_id_from=333.999.0.0">电赛必备之PFC电路，2006年B题功率因数监测与补偿系统</a></li>
@@ -746,7 +746,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-02-01 00:01:48" itemprop="dateModified" datetime="2023-02-01T00:01:48+08:00">2023-02-01</time>
+                <time title="修改时间：2024-07-09 00:05:40" itemprop="dateModified" datetime="2024-07-09T00:05:40+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -773,7 +773,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="电源部分"><a href="#电源部分" class="headerlink" title="电源部分"></a>电源部分</h1><h2 id="AC-DC"><a href="#AC-DC" class="headerlink" title="AC/DC"></a>AC/DC</h2><p><img src="https://hao0527.gitee.io/210913-%E7%94%B5%E6%BA%90%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1/210913-%E7%94%B5%E6%BA%90%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1-1.jpg" alt="210913-电源部分设计-1.JPG"></p>
+          <h1 id="电源部分"><a href="#电源部分" class="headerlink" title="电源部分"></a>电源部分</h1><h2 id="AC-DC"><a href="#AC-DC" class="headerlink" title="AC/DC"></a>AC/DC</h2><p><img src="htthttps://gitee.com/hao0527/hao0527/raw/img/913-电源部分设计/210913-电源部分设计-1.jpg" alt="210913-电源部分设计-1.JPG"></p>
 <ol>
 <li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/366532046">共模干扰和差模干扰</a></li>
 <li>共模电感上流过共模电流时磁环中的磁通相互叠加，从而具有相当大的电感量，对共模电流起到抑制作用</li>
@@ -781,24 +781,24 @@
 <li>压敏电阻是一种限压型保护器件，利用压敏电阻的非线性特性，当过电压出现在压敏电阻的两极间，压敏电阻可以将电压钳位到一个相对固定的电压值，从而实现对后级电路的保护</li>
 <li>聚丙烯膜电容（CBB电容 MKP电容）做直流母线电容效果更好</li>
 </ol>
-<h2 id="Buck"><a href="#Buck" class="headerlink" title="Buck"></a>Buck</h2><p><img src="https://hao0527.gitee.io/210913-%E7%94%B5%E6%BA%90%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1/210913-%E7%94%B5%E6%BA%90%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1-2.jpg" alt="210913-电源部分设计-2.JPG"></p>
+<h2 id="Buck"><a href="#Buck" class="headerlink" title="Buck"></a>Buck</h2><p><img src="htthttps://gitee.com/hao0527/hao0527/raw/img/913-电源部分设计/210913-电源部分设计-2.jpg" alt="210913-电源部分设计-2.JPG"></p>
 <ol>
 <li>AC-DC芯片采用MP174，SOURCE引脚是VCC和FB引脚的参考地</li>
-<li>VCC供电电压是哪里来的？根据DataSheet，当Vout&lt;7V的时候，芯片空载功率较小，内部供电足够，当Vout&gt;7V时，需要添加外部辅助电源<br><img src="https://hao0527.gitee.io/210913-%E7%94%B5%E6%BA%90%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1/210913-%E7%94%B5%E6%BA%90%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1-6.jpg" alt="210913-电源部分设计-6.JPG"></li>
+<li>VCC供电电压是哪里来的？根据DataSheet，当Vout&lt;7V的时候，芯片空载功率较小，内部供电足够，当Vout&gt;7V时，需要添加外部辅助电源<br><img src="htthttps://gitee.com/hao0527/hao0527/raw/img/913-电源部分设计/210913-电源部分设计-6.jpg" alt="210913-电源部分设计-6.JPG"></li>
 <li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1ef4y1n7x1?spm_id_from=333.999.0.0">电源大师6——BUCK 降压电路降低EMI与EMC设计，开关电源PCB layout宝典</a></li>
 <li>小信号地连一起（FB分压电阻，comp，ss）然后再与PGND单点相连，或者通过过孔连到背面</li>
 <li>电感两个引脚间距京可能大，非一体成型电感底部不铺铜，让敏感电路（FB）和回路远离电感</li>
 </ol>
-<h2 id="LDO"><a href="#LDO" class="headerlink" title="LDO"></a>LDO</h2><p><img src="https://hao0527.gitee.io/210913-%E7%94%B5%E6%BA%90%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1/210913-%E7%94%B5%E6%BA%90%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1-3.jpg" alt="210913-电源部分设计-3.JPG"></p>
+<h2 id="LDO"><a href="#LDO" class="headerlink" title="LDO"></a>LDO</h2><p><img src="htthttps://gitee.com/hao0527/hao0527/raw/img/913-电源部分设计/210913-电源部分设计-3.jpg" alt="210913-电源部分设计-3.JPG"></p>
 <ol>
 <li>LDO输入串阻，限流作用</li>
 <li>LDO输出加TVS保护</li>
 </ol>
-<h1 id="采样部分"><a href="#采样部分" class="headerlink" title="采样部分"></a>采样部分</h1><h2 id="电压采样"><a href="#电压采样" class="headerlink" title="电压采样"></a>电压采样</h2><p><img src="https://hao0527.gitee.io/210913-%E7%94%B5%E6%BA%90%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1/210913-%E7%94%B5%E6%BA%90%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1-4.jpg" alt="210913-电源部分设计-4.JPG"></p>
+<h1 id="采样部分"><a href="#采样部分" class="headerlink" title="采样部分"></a>采样部分</h1><h2 id="电压采样"><a href="#电压采样" class="headerlink" title="电压采样"></a>电压采样</h2><p><img src="htthttps://gitee.com/hao0527/hao0527/raw/img/913-电源部分设计/210913-电源部分设计-4.jpg" alt="210913-电源部分设计-4.JPG"></p>
 <ol>
 <li>整流桥前和后的采样区别：整流桥前电压更稳定，一般采样用来测各种功率参数；整流桥后面的电压不稳定，会受到马达反冲等影响，整流桥后电压采样应用于过压和欠压保护</li>
 </ol>
-<h2 id="电流采样与过压保护"><a href="#电流采样与过压保护" class="headerlink" title="电流采样与过压保护"></a>电流采样与过压保护</h2><p><img src="https://hao0527.gitee.io/210913-%E7%94%B5%E6%BA%90%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1/210913-%E7%94%B5%E6%BA%90%E9%83%A8%E5%88%86%E8%AE%BE%E8%AE%A1-5.jpg" alt="210913-电源部分设计-5.JPG"></p>
+<h2 id="电流采样与过压保护"><a href="#电流采样与过压保护" class="headerlink" title="电流采样与过压保护"></a>电流采样与过压保护</h2><p><img src="htthttps://gitee.com/hao0527/hao0527/raw/img/913-电源部分设计/210913-电源部分设计-5.jpg" alt="210913-电源部分设计-5.JPG"></p>
 <ol>
 <li>差分放大，迟滞比较器，电平反转，三极管自锁</li>
 <li>在差分运放中电容并电阻微分作用，电容串电阻积分作用</li>
@@ -854,7 +854,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-02-01 00:01:48" itemprop="dateModified" datetime="2023-02-01T00:01:48+08:00">2023-02-01</time>
+                <time title="修改时间：2024-07-09 00:05:40" itemprop="dateModified" datetime="2024-07-09T00:05:40+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -899,7 +899,7 @@
 <li><p>不适合应用在JPEG图传</p>
 </li>
 </ul>
-<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p><img src="https://hao0527.gitee.io/210831-esp32%E4%BC%A0%E8%BE%93%E6%B5%8B%E8%AF%95/210831-esp32%E4%BC%A0%E8%BE%93%E6%B5%8B%E8%AF%95-1.jpg" alt="210831-esp32传输测试-1.jpg"></p>
+<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p><img src="https://gitee.com/hao0527/hao0527/raw/img/210831-esp32%E4%BC%A0%E8%BE%93%E6%B5%8B%E8%AF%95/210831-esp32%E4%BC%A0%E8%BE%93%E6%B5%8B%E8%AF%95-1.jpg" alt="210831-esp32传输测试-1.jpg"></p>
 <ul>
 <li><p>由于本人技术原因，无法达到官方测试的速率，大家使用需要亲自测试后才能做结论，可以参考iperf例程后再进行测试</p>
 </li>

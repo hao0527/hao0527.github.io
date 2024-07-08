@@ -27,20 +27,20 @@
 <meta property="og:site_name" content="永恆博客网">
 <meta property="og:description" content="Wdg 功能看门狗&#x2F;Wdg模块是一个独立的定时器，它的作用是提供安全功能以确保软件按计划执行，并且CPU不会陷入无限循环或执行意外的代码。如果Wdg模块在一定时间内未被触发&#x2F;刷新&#x2F;喂狗，它将复位MCU。 看门狗功能对于关键安全系统是必须的，对于非关键安全系统也是很有必要的。 对于汽车上使用的诸多零部件，鉴于汽车环境的恶劣，各类ECU中的软件均有可能遭受如外部电磁干扰，高温等环境因素的影响，从而导致">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://hao0527.gitee.io/231031-wdg/sbc-ds1-en.png">
-<meta property="og:image" content="https://hao0527.gitee.io/231031-wdg/sbc-ds1-cn.png">
-<meta property="og:image" content="https://hao0527.gitee.io/231031-wdg/wdg-stack.png">
-<meta property="og:image" content="https://hao0527.gitee.io/231031-wdg/wdgM-dep-en.png">
-<meta property="og:image" content="https://hao0527.gitee.io/231031-wdg/wdgM-dep-cn.png">
-<meta property="og:image" content="https://hao0527.gitee.io/231031-wdg/wdg-1.png">
-<meta property="og:image" content="https://hao0527.gitee.io/231031-wdg/wdg-2.png">
-<meta property="og:image" content="https://hao0527.gitee.io/231031-wdg/wdgM-1.png">
-<meta property="og:image" content="https://hao0527.gitee.io/231031-wdg/wdgM-2.png">
+<meta property="og:image" content="https://gitee.com/hao0527/hao0527/raw/img/231031-wdg/sbc-ds1-en.png">
+<meta property="og:image" content="https://gitee.com/hao0527/hao0527/raw/img/231031-wdg/sbc-ds1-cn.png">
+<meta property="og:image" content="https://gitee.com/hao0527/hao0527/raw/img/231031-wdg/wdg-stack.png">
+<meta property="og:image" content="https://gitee.com/hao0527/hao0527/raw/img/231031-wdg/wdgM-dep-en.png">
+<meta property="og:image" content="https://gitee.com/hao0527/hao0527/raw/img/231031-wdg/wdgM-dep-cn.png">
+<meta property="og:image" content="https://gitee.com/hao0527/hao0527/raw/img/231031-wdg/wdg-1.png">
+<meta property="og:image" content="https://gitee.com/hao0527/hao0527/raw/img/231031-wdg/wdg-2.png">
+<meta property="og:image" content="https://gitee.com/hao0527/hao0527/raw/img/231031-wdg/wdgM-1.png">
+<meta property="og:image" content="https://gitee.com/hao0527/hao0527/raw/img/231031-wdg/wdgM-2.png">
 <meta property="article:published_time" content="2023-10-31T02:30:00.000Z">
-<meta property="article:modified_time" content="2023-11-01T13:50:34.534Z">
+<meta property="article:modified_time" content="2024-07-08T16:05:40.389Z">
 <meta property="article:author" content="Hao">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://hao0527.gitee.io/231031-wdg/sbc-ds1-en.png">
+<meta name="twitter:image" content="https://gitee.com/hao0527/hao0527/raw/img/231031-wdg/sbc-ds1-en.png">
 
 <link rel="canonical" href="http://example.com/2023/10/31/231031-wdg/">
 
@@ -228,7 +228,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-11-01 21:50:34" itemprop="dateModified" datetime="2023-11-01T21:50:34+08:00">2023-11-01</time>
+                <time title="修改时间：2024-07-09 00:05:40" itemprop="dateModified" datetime="2024-07-09T00:05:40+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -267,18 +267,18 @@
 <li>该硬件看门狗是采用哪种方式进行喂狗，如通过GPIO，IIC或SPI等通讯方式来喂狗。</li>
 </ul>
 <p>UJA1078A手册：</p>
-<p><img src="https://hao0527.gitee.io/231031-wdg/sbc-ds1-en.png" alt="img"></p>
-<p><img src="https://hao0527.gitee.io/231031-wdg/sbc-ds1-cn.png" alt="img"></p>
+<p><img src="https://gitee.com/hao0527/hao0527/raw/img/231031-wdg/sbc-ds1-en.png" alt="img"></p>
+<p><img src="https://gitee.com/hao0527/hao0527/raw/img/231031-wdg/sbc-ds1-cn.png" alt="img"></p>
 <h2 id="软件看门狗"><a href="#软件看门狗" class="headerlink" title="软件看门狗"></a>软件看门狗</h2><p>属于通过软件定时器的方式来实现看门狗功能，俗称“软狗”。软件看门狗的时基本质上也需要依赖硬件定时器。</p>
 <p>比如常见的用systick作时基，通过一个task运行软狗监控的定时器不断递减，其他task程序则是重置软狗定时器，如果软狗监控的某个定时器归零，那么此时可以便可以判断其他task并没有被正常的执行，此时便可以通过主动复位的方式来实现看门狗功能。</p>
 <p>以上可实现软狗对<strong>多个task</strong>的监控，这是硬狗没有的功能。软狗除了实现硬狗timeout和window的两种模式，还可以实现其他模式，取决于软件，监控的花样更多。</p>
 <p>一般而言，运行软狗的主任务的优先级不应设置比被监控的任务优先级低，所以软狗无法检测Hardfault中卡死的问题。<strong>软狗跟硬狗搭配在一起使用</strong>，可以解决硬狗监控模式单一、软狗执行优先级没被监控任务高的问题。</p>
-<h2 id="AUTOSAR-Wdg-架构"><a href="#AUTOSAR-Wdg-架构" class="headerlink" title="AUTOSAR Wdg 架构"></a>AUTOSAR Wdg 架构</h2><h3 id="内部分层"><a href="#内部分层" class="headerlink" title="内部分层"></a>内部分层</h3><p><img src="https://hao0527.gitee.io/231031-wdg/wdg-stack.png" alt="img"></p>
+<h2 id="AUTOSAR-Wdg-架构"><a href="#AUTOSAR-Wdg-架构" class="headerlink" title="AUTOSAR Wdg 架构"></a>AUTOSAR Wdg 架构</h2><h3 id="内部分层"><a href="#内部分层" class="headerlink" title="内部分层"></a>内部分层</h3><p><img src="https://gitee.com/hao0527/hao0527/raw/img/231031-wdg/wdg-stack.png" alt="img"></p>
 <p>Watchdog Driver：用于实现针对硬件看门狗的寄存器操作与控制，可以分为MCU内部看门狗(Internal Watchdog)与外部看门狗(External Watchdog)，该外部看门狗可以通过GPIO、IIC或SPI来实现喂狗。</p>
 <p>Watchdog Interface：其主要功能则是为了实现上层Watchdog Manager与底层Watchdog Driver的连接，当然其连接的底层Watchdog Driver可以存在多个。</p>
 <p>Watchdog Manager：作为整个看门狗协议栈中的服务层，主体功能就是为了负责整个程序执行的正确性，并触发相应的硬件看门狗的喂狗动作，扮演了整个监控的核心角色。</p>
-<h3 id="WdgM-依赖"><a href="#WdgM-依赖" class="headerlink" title="WdgM 依赖"></a>WdgM 依赖</h3><p><img src="https://hao0527.gitee.io/231031-wdg/wdgM-dep-en.png" alt="img"></p>
-<p><img src="https://hao0527.gitee.io/231031-wdg/wdgM-dep-cn.png" alt="img"></p>
+<h3 id="WdgM-依赖"><a href="#WdgM-依赖" class="headerlink" title="WdgM 依赖"></a>WdgM 依赖</h3><p><img src="https://gitee.com/hao0527/hao0527/raw/img/231031-wdg/wdgM-dep-en.png" alt="img"></p>
+<p><img src="https://gitee.com/hao0527/hao0527/raw/img/231031-wdg/wdgM-dep-cn.png" alt="img"></p>
 <h2 id="AUTOSAR-Wdg-基础知识"><a href="#AUTOSAR-Wdg-基础知识" class="headerlink" title="AUTOSAR Wdg 基础知识"></a>AUTOSAR Wdg 基础知识</h2><h3 id="三种模式"><a href="#三种模式" class="headerlink" title="三种模式"></a>三种模式</h3><p>在AUTOSAR架构中，针对Watchdog Driver而言，定义了看门狗控制模式存在如下三种模式：</p>
 <ul>
 <li>Off Mode：表示看门狗关闭状态，对于关键安全系统，一般不能将其切换至Off状态，即一旦打开，将不能被关闭。</li>
@@ -288,7 +288,7 @@
 <h2 id="AUTOSAR-Wdg-各层功能"><a href="#AUTOSAR-Wdg-各层功能" class="headerlink" title="AUTOSAR Wdg 各层功能"></a>AUTOSAR Wdg 各层功能</h2><h3 id="Wdg"><a href="#Wdg" class="headerlink" title="Wdg"></a>Wdg</h3><p>Wdg通常有两种，一种是芯片内部自带的片内看门狗；还有一种是在芯片外部通过SPI这种接口连接的片外看门狗。MCAL只负责第一种片内看门狗，片内看门狗的特点是Wdg模块是直接访问相关硬件寄存器。片外看门狗属于板级设备抽象层负责，通常需要使用MCAL提供的其他模块（比如SPI等）来访问/控制外扩看门狗芯片，这种不能直接访问硬件寄存器。</p>
 <p>部分flash不能在写的时候读取，所以该模块代码可以在RAM里面运行。比如在刷写Flash时，Wdg模块可能作为二进制文件里面的一部分在RAM上运行。（到底哪些部分需要放RAM？）</p>
 <h4 id="Wdg-API"><a href="#Wdg-API" class="headerlink" title="Wdg API"></a>Wdg API</h4><p>Wdg 驱动层，主要接口就三个，调用方式如下图：</p>
-<p><img src="https://hao0527.gitee.io/231031-wdg/wdg-1.png" alt="img"></p>
+<p><img src="https://gitee.com/hao0527/hao0527/raw/img/231031-wdg/wdg-1.png" alt="img"></p>
 <ul>
 <li>wdg初始化：通过EcuM模块调用函数Wdg_Init来完成Watchdog的初始化配置。</li>
 <li>触发wdg喂狗：通过WdgM模块调用WdgIf模块提供的函数WdgIf_SetTriggerCondition来触发底层驱动进行喂狗（不是wdg真正的喂狗操作），并设置下次看门狗timeout时间。</li>
@@ -301,7 +301,7 @@
 <li>应用软件频繁修改硬狗寄存器不安全。现在AUTOSAR实现方式，应用层调用喂狗函数（Wdg_SetTriggerCondition）并不是直接去操作硬件看门狗寄存器的，而是去喂软狗。<strong>真正喂硬狗靠硬件定时器</strong>，在定时器中断回调中判断软狗没问题才去操作硬狗寄存器。</li>
 </ol>
 <p>看门狗驱动程序和硬狗操作之间的调用方式如下图：</p>
-<p><img src="https://hao0527.gitee.io/231031-wdg/wdg-2.png" alt="img"></p>
+<p><img src="https://gitee.com/hao0527/hao0527/raw/img/231031-wdg/wdg-2.png" alt="img"></p>
 <h3 id="WdgIf"><a href="#WdgIf" class="headerlink" title="WdgIf"></a>WdgIf</h3><p>和NvM下的MemIf功能相同，可以通过DeviceIndex区分要调用哪个Wdg Driver，可以用宏或函数实现，接口如下：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Std_ReturnType <span class="title function_">WdgIf_SetMode</span><span class="params">(uint8 DeviceIndex, WdgIf_ModeType WdgMode)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">WdgIf_SetTriggerCondition</span><span class="params">(uint8 DeviceIndex, uint16 Timeout)</span>;</span><br></pre></td></tr></table></figure>
 
@@ -316,10 +316,10 @@
 <h4 id="WdgM-API"><a href="#WdgM-API" class="headerlink" title="WdgM API"></a>WdgM API</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">WdgM_Init</span><span class="params">(<span class="type">const</span> WdgM_ConfigType *ConfigPtr)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">WdgM_DeInit</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">if</span> (WDGM_VERSION_INFO_API == STD_ON)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> WdgM_GetVersionInfo(_vi) STD_GET_VERSION_INFO(_vi,WDGM)</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">Std_ReturnType <span class="title function_">WdgM_SetMode</span><span class="params">(WdgM_ModeType Mode)</span>;</span><br><span class="line"></span><br><span class="line">Std_ReturnType <span class="title function_">WdgM_GetMode</span><span class="params">(WdgM_ModeType *Mode)</span>;</span><br><span class="line"></span><br><span class="line">Std_ReturnType <span class="title function_">WdgM_CheckpointReached</span><span class="params">(WdgM_SupervisedEntityIdType SEID, WdgM_CheckpointIdType CheckpointID)</span>;</span><br><span class="line"></span><br><span class="line">Std_ReturnType <span class="title function_">WdgM_GetLocalStatus</span><span class="params">(WdgM_SupervisedEntityIdType SEID, WdgM_LocalStatusType *Status)</span>;</span><br><span class="line"></span><br><span class="line">Std_ReturnType <span class="title function_">WdgM_GetGlobalStatus</span><span class="params">(WdgM_GlobalStatusType *Status)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">WdgM_PerformReset</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line">Std_ReturnType <span class="title function_">WdgM_GetFirstExpiredSEID</span><span class="params">(WdgM_SupervisedEntityIdType *SEID)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">WdgM_MainFunction</span><span class="params">(<span class="type">void</span>)</span>;</span><br></pre></td></tr></table></figure>
 
 <h4 id="状态转移图"><a href="#状态转移图" class="headerlink" title="状态转移图"></a>状态转移图</h4><p>Figure 2: Local Supervision Status:</p>
-<p><img src="https://hao0527.gitee.io/231031-wdg/wdgM-1.png" alt="img"></p>
+<p><img src="https://gitee.com/hao0527/hao0527/raw/img/231031-wdg/wdgM-1.png" alt="img"></p>
 <p>在从其他状态切换至WDGM_LOCAL_STATUS_EXPIRED状态时，Watchdog Manager提供一定的时间保留机制能够允许做一些特别的操作，如设置看门狗模式或者写入NvM数据，复位原因等。</p>
 <p>Figure 3: Global Supervision Status:</p>
-<p><img src="https://hao0527.gitee.io/231031-wdg/wdgM-2.png" alt="img"></p>
+<p><img src="https://gitee.com/hao0527/hao0527/raw/img/231031-wdg/wdgM-2.png" alt="img"></p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
     </div>
 

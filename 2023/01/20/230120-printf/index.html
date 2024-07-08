@@ -27,12 +27,12 @@
 <meta property="og:site_name" content="永恆博客网">
 <meta property="og:description" content="printf函数函数原型：int printf(const char *format, ...)调用格式为：printf(&quot;&lt;格式化字符串&gt;&quot;, &lt;参量表&gt;);功能：发送格式化输出到标准输出 stdout 变长参数实现思路C语言支持变长参数函数(Variable Argument Functions)，即参数的个数可以是不定个，在函数定义的时候用...表">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://hao0527.gitee.io/230120-printf/230120-printf-1.jpg">
+<meta property="og:image" content="https://gitee.com/hao0527/hao0527/raw/img/230120-printf/230120-printf-1.jpg">
 <meta property="article:published_time" content="2023-01-20T09:00:00.000Z">
-<meta property="article:modified_time" content="2023-01-31T15:40:51.485Z">
+<meta property="article:modified_time" content="2024-07-08T16:05:40.401Z">
 <meta property="article:author" content="Hao">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://hao0527.gitee.io/230120-printf/230120-printf-1.jpg">
+<meta name="twitter:image" content="https://gitee.com/hao0527/hao0527/raw/img/230120-printf/230120-printf-1.jpg">
 
 <link rel="canonical" href="http://example.com/2023/01/20/230120-printf/">
 
@@ -220,7 +220,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-01-31 23:40:51" itemprop="dateModified" datetime="2023-01-31T23:40:51+08:00">2023-01-31</time>
+                <time title="修改时间：2024-07-09 00:05:40" itemprop="dateModified" datetime="2024-07-09T00:05:40+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -254,7 +254,7 @@
 <p>实现一个可变长参数的sum函数，第一个参数<code>num</code>传递变长参数中有参数的数量，紧接着后面会传递<code>num</code>个整型变量，具体实现如下：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">sum</span><span class="params">(<span class="type">int</span> num, ...)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> i, val = <span class="number">0</span>;</span><br><span class="line">    va_list ap;	<span class="comment">//定义一个具有va_list型的变量，这个变量是指向参数的指针</span></span><br><span class="line">    va_start(ap, num);	<span class="comment">//始化变量刚定义的va_list变量,使其指向第一个可变参数的地址,地址自动增加</span></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; num; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        val += va_arg(ap, <span class="type">int</span>);	<span class="comment">//va_arg返回va_list中的参数，并增加指针偏移</span></span><br><span class="line">    &#125;</span><br><span class="line">    va_end(ap);	<span class="comment">//结束可变参数列表</span></span><br><span class="line">    <span class="keyword">return</span> val;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;16+38+53=%d\n&quot;</span>, sum(<span class="number">3</span>, <span class="number">16</span>, <span class="number">38</span>, <span class="number">53</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="变长参数实现原理"><a href="#变长参数实现原理" class="headerlink" title="变长参数实现原理"></a>变长参数实现原理</h3><p>上面的sum函数也可以不使用va_list等宏，通过其他方法实现。<br>当我们调用：<code>int n = sum(3, 16, 38, 53);</code><br>参数在栈上会形成如下布局：<br><img src="https://hao0527.gitee.io/230120-printf/230120-printf-1.jpg" alt="img"></p>
+<h3 id="变长参数实现原理"><a href="#变长参数实现原理" class="headerlink" title="变长参数实现原理"></a>变长参数实现原理</h3><p>上面的sum函数也可以不使用va_list等宏，通过其他方法实现。<br>当我们调用：<code>int n = sum(3, 16, 38, 53);</code><br>参数在栈上会形成如下布局：<br><img src="https://gitee.com/hao0527/hao0527/raw/img/230120-printf/230120-printf-1.jpg" alt="img"></p>
 <p>在函数内部，函数可以使用变量<code>num</code>来访问数字3，但无法使用任何名称访问其他的几个不定参数。但此时由于栈上其他的几个参数实际恰好依序排列在参数<code>num</code>的高地址方向，因此可以很简单地通过<code>num</code>的地址计算出其他参数的地址，sum函数的另一种实现如下：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">sum</span><span class="params">(<span class="type">int</span> num, ...)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span>* p = &amp;num + <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(num--)</span><br><span class="line">        ret += *p++;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;   </span><br></pre></td></tr></table></figure>
 
