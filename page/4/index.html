@@ -466,7 +466,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-09 00:21:23" itemprop="dateModified" datetime="2024-07-09T00:21:23+08:00">2024-07-09</time>
+                <time title="修改时间：2024-07-09 07:50:03" itemprop="dateModified" datetime="2024-07-09T07:50:03+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -494,7 +494,7 @@
 
       
           <h2 id="使用DMA发送串口数据问题"><a href="#使用DMA发送串口数据问题" class="headerlink" title="使用DMA发送串口数据问题"></a>使用DMA发送串口数据问题</h2><ol>
-<li>CubeMX生成的代码初始化DMA和UART顺序问题，应该先初始化DMA再UART，可以在CubeMX中调整生成初始化代码的顺序。![2207031-CubeMX-1.jpg](<a target="_blank" rel="noopener" href="https://hao0527.githttps//gitee.com/h">https://hao0527.githttps://gitee.com/h</a></li>
+<li>CubeMX生成的代码初始化DMA和UART顺序问题，应该先初始化DMA再UART，可以在CubeMX中调整生成初始化代码的顺序。<img src="/2022/07/31/220731-CubeMX/2207031-CubeMX-1.jpg" alt="2207031-CubeMX-1.jpg"></li>
 <li>CubeMX生成的代码使用<code>HAL_UART_Transmit_DMA()</code>后需要手动将串口状态配置成空闲状态，可以在DMA传输完成中断中加<code>(&amp;huart1)-&gt;gState = HAL_UART_STATE_READY;</code></li>
 </ol>
 <h2 id="串口接收溢出后接收不到数据"><a href="#串口接收溢出后接收不到数据" class="headerlink" title="串口接收溢出后接收不到数据"></a>串口接收溢出后接收不到数据</h2><ol>
@@ -638,7 +638,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-09 00:21:23" itemprop="dateModified" datetime="2024-07-09T00:21:23+08:00">2024-07-09</time>
+                <time title="修改时间：2024-07-09 08:24:37" itemprop="dateModified" datetime="2024-07-09T08:24:37+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -672,7 +672,7 @@
 <p><img src="/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-2.jpg" alt="2207010-RC与晶体振荡器-2.jpg"></p>
 <h2 id="晶体振荡器"><a href="#晶体振荡器" class="headerlink" title="晶体振荡器"></a>晶体振荡器</h2><p>只要在晶体板级上施加交变电压，就会是晶片产生机械变形振动，此现象即所谓逆压电效应。当外加电压频率等于晶体谐振器的固有频率时，就会发生压电谐振，从而导致机械变形的振幅突然增大。一般而言，晶振的振荡频率比较稳定。但是价格稍微高点，还有用晶体振荡器一般还要接两个15-33pF起振电容。</p>
 <p>有源晶振（Oscillator，晶振）只需要供电自身就能起振，无源晶振（Crystal，晶体）最高精度为5ppm，而有源晶振的精度则可以达到0.1ppm。有源晶振的信号电平是固定，所以需要选择好合适输出电平，灵活性较差。无源晶振单片机可以配置振荡输出电压。</p>
-<p><img src="/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-3.jpg" alt="有源晶振"><img src="https://hahttps//gi010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-4.jpg" alt="无源晶振"></p>
+<p><img src="/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-3.jpg" alt="有源晶振"><br><img src="/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-4.jpg" alt="无源晶振"></p>
 <h2 id="STM32CubeMX中的时钟配置"><a href="#STM32CubeMX中的时钟配置" class="headerlink" title="STM32CubeMX中的时钟配置"></a>STM32CubeMX中的时钟配置</h2><p><img src="/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-5.jpg" alt="STM32中的时钟配置"></p>
 <p>BYPASS Clock Source：使用有源晶振的话，则只需要给它加上电源，即可输出时钟到MCU的时钟输入端，绕过MCU的OSC模块，时钟直接供MCU使用。</p>
 <p>Crystal/Ceramic Resonator：使用晶体的话，除了外部需要加上谐振电容（有些会加上MΩ的反馈电阻）之外，还需要<strong>MCU内部的OSC振荡电路辅助</strong>才能正常产生所需时钟。</p>
@@ -726,7 +726,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-09 00:21:23" itemprop="dateModified" datetime="2024-07-09T00:21:23+08:00">2024-07-09</time>
+                <time title="修改时间：2024-07-09 08:24:06" itemprop="dateModified" datetime="2024-07-09T08:24:06+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -765,11 +765,11 @@
 <li>功能仿真，RTL分析，综合，约束输入，设计实现都在左侧的Flow Navigator中。</li>
 </ol>
 <h2 id="流水灯"><a href="#流水灯" class="headerlink" title="流水灯"></a>流水灯</h2><ol>
-<li>New Project，芯片选择xc7a35tfgg484-2。<img src="httpshttpsinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-1.jpg" alt="220708-XilinxFPGA点灯-1.jpg"></li>
+<li>New Project，芯片选择xc7a35tfgg484-2。<img src="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-1.jpg" alt="220708-XilinxFPGA点灯-1.jpg"></li>
 <li>Add Sources -&gt; Create File，创建led_top.v文件。</li>
-<li>Vivado中打开文件会调用Notepad++编辑器，编写流水灯代码：<img src="https://haohttps//git0708-XilinxFPGA%E7%82%B9%E7%81%AF-5.jpg" alt="220708-XilinxFPGA点灯-5.jpg"></li>
+<li>Vivado中打开文件会调用Notepad++编辑器，编写流水灯代码：<img src="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-5.jpg" alt="220708-XilinxFPGA点灯-5.jpg"></li>
 <li>再功能仿真（可选），再综合、约束输入。</li>
-<li>最后生成bit流下载到开发板：<img src="https://https//A%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-4.jpg" alt="220708-XilinxFPGA点灯-4.jpg"></li>
+<li>最后生成bit流下载到开发板：<img src="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-4.jpg" alt="220708-XilinxFPGA点灯-4.jpg"></li>
 <li>Xilinx的集成开发环境要比Altera的好用不少，就是编译速度较慢。</li>
 </ol>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
@@ -822,7 +822,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-09 00:21:23" itemprop="dateModified" datetime="2024-07-09T00:21:23+08:00">2024-07-09</time>
+                <time title="修改时间：2024-07-09 07:58:52" itemprop="dateModified" datetime="2024-07-09T07:58:52+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -857,20 +857,20 @@
 <p>arch – 体系架构，如ARM，MIPS，表示该编译器用于编译哪个目标平台的程序<br>vendor – 工具链提供商，通常是把vendor写成体系架构的值，比如cortex_a8<br>os – 运行编译产生的程序的目标操作系统，一般用linux表示有操作系统，none表示裸系统，uboot编译无os<br>eabi – 嵌入式应用二进制接口（Embedded Application Binary Interface），abi是计算机上的</p>
 <h2 id="编译工具使用（持续更新）"><a href="#编译工具使用（持续更新）" class="headerlink" title="编译工具使用（持续更新）"></a>编译工具使用（持续更新）</h2><p>交叉编译工具使用方法与本地编译工具链基本一样，只是命名不同。</p>
 <h3 id="gcc"><a href="#gcc" class="headerlink" title="gcc"></a>gcc</h3><p>Linux系统下的GCC编译器实际上是GNU编译工具链中的一款软件，可以用它来调用其他不同的工具进行诸如预处理、编译、汇编和链接这样的工作。gcc编译器从拿到一个c源文件到生成一个可执行程序，中间一共经历了四个步骤：</p>
-<p><img src="httphttp%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-1.jpg" alt="220522-交叉编译工具链-1.jpg"></p>
+<p><img src="/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-1.jpg" alt="220522-交叉编译工具链-1.jpg"></p>
 <h3 id="ld"><a href="#ld" class="headerlink" title="ld"></a>ld</h3><p>ld是GNU操作系统上的连接器，把二进制文件连接成可执行文件。<strong>ELF文件</strong>可用于程序的链接，重定位目标文件。用于链接的ELF文件格式：</p>
-<p><img src="httphttp%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-2.jpg" alt="220522-交叉编译工具链-2.jpg"></p>
+<p><img src="/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-2.jpg" alt="220522-交叉编译工具链-2.jpg"></p>
 <p>从编译和链接角度看ELF文件<strong>ELF头</strong>，每个ELF文件都必须存在一个ELF_Header，这里存放了很多重要的信息用来<strong>描述整个文件的组织</strong>，如：版本信息、入口信息、偏移信息等，程序执行也必须依靠其提供的信息。</p>
 <p><strong>段头表</strong>，存放的是所有<strong>不同段将在内存中的位置</strong>。代码段.text section，存放已编译程序的机器代码，一般是只读的。只读数据段.rodata section，此段的数据不可修改，存放常量。数据段.data section，存放已初始化的全局变量。.bss section，未初始化全局变量，仅是占位符，不占据任何实际磁盘空间，目标文件格式区分初始化和非初始化是为了空间效率。</p>
 <p>符号表.symtab section，它存放在程序中定义和引用的函数和全局变量的信息。.text节的重定位信息.rel.txt section，用于重新修改代码段的指令中的地址信息。.data节的重定位信息.rel.data section，用于对被模块使用或定义的全局变量进行重定位的信息。调试用的符号表.debug section。.strtab section，包含symtab和debug节中符号及节名。.line section，存储调试的行号信息，描述源代码和机器码之间的对应关系。</p>
 <p>ELF(Executable and Linkable Format)的完整描述，可以参考这个文档 - <a target="_blank" rel="noopener" href="http://www.uclibc.org/docs/elf-64-gen.pdf">这里</a></p>
-<h3 id="size"><a href="#size" class="headerlink" title="size"></a>size</h3><p><img src="httphttp%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-3.jpg" alt="220522-交叉编译工具链-3.jpg"></p>
+<h3 id="size"><a href="#size" class="headerlink" title="size"></a>size</h3><p><img src="/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-3.jpg" alt="220522-交叉编译工具链-3.jpg"></p>
 <p>用于显示二进制文件各节的大小。</p>
 <p>text段最终是存放在FLASH存储器中的，text段不仅包含函数，还有常量。</p>
 <p>data段是用于初始化数据（全局/外部），既有初始化值的数据。</p>
 <p>bss段包含着所有未初始化（或初始化值为0）的数据（全局/外部）。</p>
 <p>dec（decimal的缩写，即十进制数）是text，data和bss的算术和。</p>
-<h3 id="objcopy"><a href="#objcopy" class="headerlink" title="objcopy"></a>objcopy</h3><p><img src="httphttp%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-4.jpg" alt="220522-交叉编译工具链-4.jpg"></p>
+<h3 id="objcopy"><a href="#objcopy" class="headerlink" title="objcopy"></a>objcopy</h3><p><img src="/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-4.jpg" alt="220522-交叉编译工具链-4.jpg"></p>
 <p>把一种目标文件中的内容复制到另一种类型的目标文件中。</p>
 <p><code>objcopy -O ihex xxxxxx.elf xxxxxx.hex</code> 将编译生成的elf文件转换为hex格式的文件。</p>
 <p><code>objcopy -O srec xxxxxx.elf xxxxxx.srec</code> 将编译生成的elf文件转换为srec格式的文件。</p>
@@ -1327,7 +1327,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-09 00:21:23" itemprop="dateModified" datetime="2024-07-09T00:21:23+08:00">2024-07-09</time>
+                <time title="修改时间：2024-07-09 07:58:52" itemprop="dateModified" datetime="2024-07-09T07:58:52+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">

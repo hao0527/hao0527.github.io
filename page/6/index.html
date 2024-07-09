@@ -328,7 +328,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-09 00:21:23" itemprop="dateModified" datetime="2024-07-09T00:21:23+08:00">2024-07-09</time>
+                <time title="修改时间：2024-07-09 07:47:09" itemprop="dateModified" datetime="2024-07-09T07:47:09+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -362,11 +362,11 @@
 <li>在博世实习，同事想要远程调试，打印log到终端功能（代替出差去现场调试），于是我就决定用LTE Cat.1模块，配合阿里云物联网平台，使用MQTT传输日志文件。</li>
 </ul>
 <h3 id="阿里云物联网平台使用"><a href="#阿里云物联网平台使用" class="headerlink" title="阿里云物联网平台使用"></a>阿里云物联网平台使用</h3><ol>
-<li><p>打开<a target="_blank" rel="noopener" href="https://iot.console.aliyun.com/lk/summary/new">阿里云物联网平台</a>，使用公共实例，<a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/73728.html">创建产品</a>，数据格式选择<strong>（透传/自定义）</strong>，以便将上行的自定义格式的数据转换为Alink JSON格式，连网方式这里选择<strong>蜂窝（2G/3G/4G/5G）</strong>，所属品类选择<strong>自定义品类</strong>，其它配置默认即可。配置完在产品详情界面图如下：![211217-ltecat1-1.jpg](<a target="_blank" rel="noopener" href="https://hao0527.gitee.io/211217-ltecat1/211217-ltecat1-1.https://gitee.com/hao0527/hao0527/raw/img/">https://hao0527.gitee.io/211217-ltecat1/211217-ltecat1-1.https://gitee.com/hao0527/hao0527/raw/img/</a></p>
+<li><p>打开<a target="_blank" rel="noopener" href="https://iot.console.aliyun.com/lk/summary/new">阿里云物联网平台</a>，使用公共实例，<a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/73728.html">创建产品</a>，数据格式选择<strong>（透传/自定义）</strong>，以便将上行的自定义格式的数据转换为Alink JSON格式，连网方式这里选择<strong>蜂窝（2G/3G/4G/5G）</strong>，所属品类选择<strong>自定义品类</strong>，其它配置默认即可。配置完在产品详情界面图如下：<img src="/2021/12/17/211217-ltecat1/211217-ltecat1-1.jpg" alt="211217-ltecat1-1.jpg"></p>
 </li>
-<li><p><a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/89271.html">创建设备</a>，创建设备成功后，将自动弹出<strong>添加完成</strong>对话框。您可以查看、复制设备证书信息。设备证书由设备的ProductKey、DeviceName和DeviceSecret组成，是设备与物联网平台进行通信的重要身份认证，建议您妥善保管。配置完在设备详情界面图如下：![211217-ltecat1-2.jpg](<a target="_blank" rel="noopener" href="https://hao0527.gitee.io/211217-ltecat1/211217-lthttps://gitee.com/hao0527/hao0527/raw/img/">https://hao0527.gitee.io/211217-ltecat1/211217-lthttps://gitee.com/hao0527/hao0527/raw/img/</a></p>
+<li><p><a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/89271.html">创建设备</a>，创建设备成功后，将自动弹出<strong>添加完成</strong>对话框。您可以查看、复制设备证书信息。设备证书由设备的ProductKey、DeviceName和DeviceSecret组成，是设备与物联网平台进行通信的重要身份认证，建议您妥善保管。配置完在设备详情界面图如下：<img src="/2021/12/17/211217-ltecat1/211217-ltecat1-2.jpg" alt="211217-ltecat1-2.jpg"></p>
 </li>
-<li><p>接下来就是在产品详情界面中的功能定义，可以查看<a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/213906.html">物模型概述</a>，设置MQTT需要上传的变量。我设置了一些调试时用到的变量，如下图：![211217-ltecat1-3.jpg](<a target="_blank" rel="noopener" href="https://hao0527.gitee.io/211https://gitee.com/hao0527/ha">https://hao0527.gitee.io/211https://gitee.com/hao0527/ha</a></p>
+<li><p>接下来就是在产品详情界面中的功能定义，可以查看<a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/213906.html">物模型概述</a>，设置MQTT需要上传的变量。我设置了一些调试时用到的变量，如下图：<img src="/2021/12/17/211217-ltecat1/211217-ltecat1-3.jpg" alt="211217-ltecat1-3.jpg"></p>
 </li>
 <li><p>在产品详情界面中的数据解析可以设置<a target="_blank" rel="noopener" href="https://iot.console.aliyun.com/product/productDetail/gecgSxxbl6Q?current=4">物模型数据解析</a>，通过物模型数据解析我们可以将自定义帧结构的数据解析成Alink JSON格式，注意：产品的<strong>数据格式</strong>选择为<strong>透传/自定义</strong>（这个坑我一天，最后找阿里云客服解决）。写完数据解析后，选择模拟类型为<strong>设备上报数据</strong>，执行与提交。</p>
 </li>
@@ -544,7 +544,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-09 00:21:23" itemprop="dateModified" datetime="2024-07-09T00:21:23+08:00">2024-07-09</time>
+                <time title="修改时间：2024-07-09 07:58:52" itemprop="dateModified" datetime="2024-07-09T07:58:52+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -642,7 +642,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-09 00:21:23" itemprop="dateModified" datetime="2024-07-09T00:21:23+08:00">2024-07-09</time>
+                <time title="修改时间：2024-07-09 07:58:52" itemprop="dateModified" datetime="2024-07-09T07:58:52+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -746,7 +746,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-09 00:21:23" itemprop="dateModified" datetime="2024-07-09T00:21:23+08:00">2024-07-09</time>
+                <time title="修改时间：2024-07-09 07:52:55" itemprop="dateModified" datetime="2024-07-09T07:52:55+08:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
