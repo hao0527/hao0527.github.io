@@ -185,6 +185,117 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/20/240820-canfd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/08/20/240820-canfd/" class="post-title-link" itemprop="url">云途单片机CAN FD调试记录</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-08-20 18:00:00" itemprop="dateCreated datePublished" datetime="2024-08-20T18:00:00+08:00">2024-08-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-04-08 21:03:41" itemprop="dateModified" datetime="2025-04-08T21:03:41+08:00">2025-04-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="云途-CAN-FD-介绍"><a href="#云途-CAN-FD-介绍" class="headerlink" title="云途 CAN FD 介绍"></a>云途 CAN FD 介绍</h2><h3 id="MailBox"><a href="#MailBox" class="headerlink" title="MailBox"></a>MailBox</h3><p>之前对MB理解有误，在芯片参考手册中，MB有两种意思，一种是MessageBuff，一种是Mailbox。云途ME0芯片CAN0~2有64MBs，CAN3~5有32MBs，这里的MB指的是MailBox。另外此芯片CAN0~2有20个ERF（Ehanced RX FIFO），而且每个都是64Bytes Payload的，在FD模式下要用Rx Fifo 必须用它。</p>
+<blockquote>
+<p>The Legacy Rx FIFOs cannot be used in CAN FD mode. The Enhanced Rx FIFO, if implemented, can be used in CAN FD mode</p>
+</blockquote>
+<p><img src="/2024/08/20/240820-canfd/240820-canfd-6.jpg"></p>
+<p>8Byte Payload MailBox每个邮箱占用16字节，此芯片CAN0~2由两个512Bytes RAM Block组成，所以总共是64个 8 Byte Payload MailBox。</p>
+<p><img src="/2024/08/20/240820-canfd/240820-canfd-5.jpg"></p>
+<p>邮箱是RAM区域，在使用前需要初始化邮箱（写初始值），防止首次读取时ECC错误。在CAN模块中除了邮箱还有很多其他的寄存器也是在RAM中，需要先写再读防止ECC错误，参考文档中介绍了RAM Initialization，这些RAM区域都是从寄存器的地址被访问到，我主要用的是两种如下，一个是标准CAN，一个是CANFD开启ERF：</p>
+<p><img src="/2024/08/20/240820-canfd/240820-canfd-7.jpg"><br><img src="/2024/08/20/240820-canfd/240820-canfd-8.jpg"></p>
+<h3 id="Message-Buffer"><a href="#Message-Buffer" class="headerlink" title="Message Buffer"></a>Message Buffer</h3><p>MessageBuffer是CAN中发送或接收一帧存放的消息缓冲区，MessageBuffer是由一个或多个MailBox组成，发送还是接收需要配置MessageBuffer中的Code，Code描述如下图：</p>
+<p><img src="/2024/08/20/240820-canfd/240820-canfd-1.jpg"><br><img src="/2024/08/20/240820-canfd/240820-canfd-2.jpg"><br><img src="/2024/08/20/240820-canfd/240820-canfd-3.jpg"><br><img src="/2024/08/20/240820-canfd/240820-canfd-4.jpg"></p>
+<p>在初始化MessageBuffer过程中，要设置为发送就将code初始化为8，要设为接收就初始化为4。</p>
+<p><strong>那么我们要如何分配MailBox，配成各种MessageBuffer呢？</strong></p>
+<p>在S32K1中，开启了FD不能使用RX FIFO，为了设计简单，且能防止接收到多帧报文在读取时顺序错误，所以就只配置了1个MessageBuffer用于接收，其余用于发送。</p>
+<p>其实也可以根据MessageBuffer中的时间戳来分析哪个先收到，目前还没做，每次MB中断时还要看看其他MB时间戳，感觉效率不是很高。</p>
+<p>以下是初始化MessageBuffer的代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CanFdMb = (CANFD_MB_TYPE *)p_mcuCanTable[channel].p_can-&gt;RAMn;</span><br><span class="line">CanFdMb[<span class="number">0</span>].mb.t_cs.cs_mb.code = <span class="number">0x4</span>; <span class="comment">//RX EMPTY — MB is active and empty</span></span><br><span class="line"><span class="comment">//剩下全部mb用于发送</span></span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">1</span>; i &lt; MailBox; i++)&#123;</span><br><span class="line">    CanFdMb[i].mb.t_cs.cs_mb.code = <span class="number">0x8</span>; <span class="comment">//TX INACTIVE — MB is not active</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>云途芯片CAN资源比S32K1丰富很多，开启FD后还能使用ERF，可缓存20个64Bytes Payload的报文并通过FIFO读取没有顺序错误问题。MailBox总共可以配14个64Bytes Payload的MessageBuffer全部用于发送报文，两块MailBox的RAM也可以配置成不同长度的MessageBuffer，如下FDCTRL寄存器：</p>
+<p><img src="/2024/08/20/240820-canfd/240820-canfd-9.jpg"></p>
+<h3 id="Rx-Filter-Elements"><a href="#Rx-Filter-Elements" class="headerlink" title="Rx Filter Elements"></a>Rx Filter Elements</h3><p>云途的ERF必须要配置Filter才可以用，因为默认就会开1个Filter，不配置的话可能收不到拓展帧，于是我配置了1个标准帧Filter（占4字节）和1个拓展帧Filter（占8字节），配置为Mask模式，Mask都为0，就是都不过滤。代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">p_mcuCanTable[channel].p_can-&gt;ERFCR |= CAN_ERFCR_NEXIF(<span class="number">1</span>) | CAN_ERFCR_NFE(<span class="number">1</span>); <span class="comment">// 1 extended id filter element, 1 standard id filter element</span></span><br><span class="line">p_mcuCanTable[channel].p_can-&gt;ERFFELn[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">p_mcuCanTable[channel].p_can-&gt;ERFFELn[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">p_mcuCanTable[channel].p_can-&gt;ERFFELn[<span class="number">2</span>] = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+
+<p>标准帧和拓展帧的 Rx Filter Elements 结构体定义如下：</p>
+<p><img src="/2024/08/20/240820-canfd/240820-canfd-10.jpg"><br><img src="/2024/08/20/240820-canfd/240820-canfd-11.jpg"></p>
+<h2 id="CAN-FD-调试问题"><a href="#CAN-FD-调试问题" class="headerlink" title="CAN FD 调试问题"></a>CAN FD 调试问题</h2><ol>
+<li>MessageBuffer 配成64Bytes Payload时，RAM区最后一个MessageBuffer结束地址和下一个MessageBuffer起始地址不连续，导致发送，初始化时操作部分MessageBuff时地址不对。</li>
+<li>发送存在错误帧，波特率配置对，但采样率不对。</li>
+<li>接收不到，手册说ERF写0使能，找FAE确认没问题，但就是写1使能。</li>
+<li>初始化28个MessageBuffer进Hardfault，实际没28个，FAE确认说有28个，最后在应用笔记上找到是14个。</li>
+<li>接收不到拓展帧，需要配ERF Filter，1个拓展帧，1个标准帧。</li>
+<li>要使用pll后时钟，配时钟源无效。</li>
+<li>发送使用14个MessageBuffer，会导致发送的时候顺序乱，使用7个正常，可能是因为2个ram block不同步。</li>
+</ol>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/05/20/240520-cache/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -604,7 +715,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/12/20/231220-qac%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/11/14/231114-mcal/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -618,7 +729,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2023/12/20/231220-qac%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" class="post-title-link" itemprop="url">QAC代码静态分析软件使用记录</a>
+            <a href="/2023/11/14/231114-mcal/" class="post-title-link" itemprop="url">Autosar MCAL初步认知</a>
         </h2>
 
         <div class="post-meta">
@@ -628,14 +739,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2023-12-20 18:30:00" itemprop="dateCreated datePublished" datetime="2023-12-20T18:30:00+08:00">2023-12-20</time>
+              <time title="创建时间：2023-11-14 18:00:00" itemprop="dateCreated datePublished" datetime="2023-11-14T18:00:00+08:00">2023-11-14</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-02-02 16:37:08" itemprop="dateModified" datetime="2024-02-02T16:37:08+08:00">2024-02-02</time>
+                <time title="修改时间：2025-04-08 21:04:19" itemprop="dateModified" datetime="2025-04-08T21:04:19+08:00">2025-04-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -647,7 +758,7 @@
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
                 </span>
             </span>
 
@@ -662,28 +773,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="软件安装"><a href="#软件安装" class="headerlink" title="软件安装"></a>软件安装</h2><ol>
-<li>安装<code>RepriseLicenseManager-15.0-Win-64Bit.exe</code>，授权服务器。</li>
-<li>安装<code>Helix-QAC-2023.3-3943-Win.exe</code>，QAC软件。</li>
-<li>安装<code>M3CM-5.3.0-Win.exe</code>、<code>ASCM-4.3.0-Win.exe</code>，规则包。</li>
-<li><code>Helix-QAC-Dashboard-2023.3-Win.exe</code>，暂时还未使用过。</li>
-</ol>
-<h2 id="软件使用"><a href="#软件使用" class="headerlink" title="软件使用"></a>软件使用</h2><ol>
-<li>RLM授权服务器，双击打开<code>rlm.exe</code>即可使用。</li>
-<li>QAC首次打开需配置授权服务器地址和端口，我本机开的授权服务器，选择127.0.0.1:5055。</li>
-<li>创建新工程（规则配置.rcf文件、分析配置.acf文件、编译器兼容模板.cct文件）。</li>
-<li>同步，使用监控编译监测的方式同步用到的.c和.h文件。</li>
-<li>工程属性-&gt;分析配置-&gt;分析工具<code>qac 11.3.0</code>的<code>-i</code>选项需要增加编译工具链中的头文件路径。</li>
-<li>分析，没有Hard Error就成功了，有则说明配置还有问题。</li>
-<li>生成报告，可以选择不同的报告生成，代码分析报告，MISRA报告等。</li>
-</ol>
-<h2 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h2><h3 id="示例工程分析问题"><a href="#示例工程分析问题" class="headerlink" title="示例工程分析问题"></a>示例工程分析问题</h3><p>问题现象：分析报错Parse Error，所有.c都有这个问题，看报错好像是解析乱码，错误指向代码的第一行。<br>解决措施：IT解密策略更新。</p>
-<p>问题现象：分析报错CIP file invalid or missing，所有.cpp文件有这个问题。<br>解决措施：找QAC技术解决，回复：QAC未能自动执行脚本生成CIP文件，让我执行一个Python脚本手动生成CIP。<br>命令：<code>python -E &quot;%localappdata%\Perforce\Helix-QAC-2023.3\samples\sample_cgicc_diff-2023.3\prqa\configs\Initial\config\DATA\Helix_Generic_C++\Script\Helix_Generic_C++.py&quot; &quot;%localappdata%\Perforce\Helix-QAC-2023.3\samples\sample_cgicc_diff-2023.3\prqa\configs\Initial\config\Helix_Generic_C++.cct&quot;</code></p>
-<h3 id="自己建工程同步问题"><a href="#自己建工程同步问题" class="headerlink" title="自己建工程同步问题"></a>自己建工程同步问题</h3><p>问题现象：同步时qac监控编译进程，执行.bat脚本调用make报错。<br>解决措施：找QAC技术解决，一顿尝试最后回复：make进程不在cct自动生成列表中，让我脚本直接调用编译器编译。<br>原本在工程Debug目录下执行make命令就可以编译程序，现在需要手动调编译器，这自己写脚本不写死人？最后把make的日志信息保存，写个Python脚本将<code>arm-none-eabi-</code>开头的行提取了出来，作为bat脚本编译工程，在bat脚本的开头设环境变量选择编译工具链，<code>Path C:\Yuntu\YuntuIDE\tools\bin;%Path%</code>。</p>
-<p>问题现象：同步时勾选自动生成cct，报错。<br>解决措施：找QAC技术解决，回复：gcc属于开源编译器，无法自动生成cct，然后给我一个。</p>
-<h3 id="自己建工程分析问题"><a href="#自己建工程分析问题" class="headerlink" title="自己建工程分析问题"></a>自己建工程分析问题</h3><p>问题现象：分析的时候报错，没有生成cct。<br>解决措施：将编译器兼容模块cct文件不要选择Auto_generate_C/C++，注意有两个C和C++的都不能选择自动生成。<br>C选择QAC技术给的arm-none-eabi-gcc_6.3.1的cct，C++技术没有给cct，要选择通用的Helix_Generic_C++的cct。</p>
-<p>问题现象：分析的时候报错Parse Error，我还以为又是有啥IT解密策略不对，一看报错好像缺libc的头文件。<br>解决措施：工程属性-&gt;分析配置-&gt;分析工具<code>qac 11.3.0</code>的<code>-i</code>选项需要增加编译工具链中的头文件路径。<br>C:/Yuntu/YuntuIDE/tools/arm-none-eabi/include<br>C:/Yuntu/YuntuIDE/tools/lib/gcc/arm-none-eabi/10.3.1/include<br>C:/Yuntu/YuntuIDE/tools/lib/gcc/arm-none-eabi/10.3.1/include-fixed<br>添加以上三个路径后问题解决。</p>
-<h3 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h3><p>这种商业软件网上资料不多，出了问题要找技术支持，有些配置自己配不来，需要联系技术直接要个配好的包。售后技术支持每年还要交钱，换个平台、工具链可能必须要找技术支持，得交钱。</p>
+          <h1 id="MCAL介绍"><a href="#MCAL介绍" class="headerlink" title="MCAL介绍"></a>MCAL介绍</h1><h2 id="Autosar整体架构-Classic-Autosar"><a href="#Autosar整体架构-Classic-Autosar" class="headerlink" title="Autosar整体架构(Classic Autosar)"></a>Autosar整体架构(Classic Autosar)</h2><p>AUTOSAR体系结构在最高抽象级别上区分了三个软件层：应用软件层(ASW)、运行时环境(RTE)、运行在微控制器(Microcontroller)上的基础软基层(BSW)。</p>
+<ul>
+<li>ASW（Application Software）层包含若干个软件组件(SWC)，软件组件间通过端口(Port)进行交互。每个软件组件可以包含一个或者多个运行实体(RE)，运行实体中封装了相关控制算法，其可由RTE事件(RTE Event)触发。</li>
+<li>RTE（Run-Time Environment）层作为应用软件层与基础软件层交互的桥梁，为软硬件分离提供了可能。RTE可以实现软件组件间、基础软件间以及软件组件与基础软件之间的通信。RTE封装了基础软基层的通信和服务，使得应用层可以通过RTE接口函数调用基础软件的服务。除此之外，RTE抽象了ECU之间的通信，即RTE通过使用标准化的接口将其统一为软件组件之间的通信。由于RTE的实现与具体的ECU相关，所以必须为每个ECU分别实现。</li>
+<li>BSW（Basic Software）层负责提供基础软件功能支持。</li>
+</ul>
+<h2 id="MCAL层所在位置"><a href="#MCAL层所在位置" class="headerlink" title="MCAL层所在位置"></a>MCAL层所在位置</h2><ul>
+<li>MCAL是MicroController Abstraction Layer（微控制器抽象层）的缩写。如下图所示，MCAL位于基本软件（Basic Software，BSW）的底层，是可以直接访问MCU寄存器和内部外设的底层驱动。这样划分的目的是使上层软件（如ECU抽象层、系统服务层等）独立于MCU硬件平台，保证上层软件的标准化和通用性。</li>
+<li>ECU抽象层对MCAL所包含的驱动进行封装，同时它还包含片外设备(板上设备)的驱动。ECU抽象层提供访问各种设备的接口，不管这些设备的位置在哪里(是MCU内部还是MCU外部)，也不管它们是如何与MCU进行连接的(端口还是串行通信)。它的任务是让上层软件(服务层)独立于ECU硬件设备。</li>
+<li>复杂驱动层跨越MCAL、ECU抽象层和服务层，是AUTOSAR标准之外的基础软件模块。一般是通过特定中断或复杂的MCU外设，用来实现传感器处理和执行器驱动，比如电机控制、电磁阀控制、位置检测等。复杂驱动高度依赖于MCU、ECU和应用软件。</li>
+<li>服务层是BSW的最高层，为上层的应用软件提供各种服务（存储、通讯、诊断、ECU状态管理等服务）。</li>
+</ul>
+<h2 id="MCAL内部划分"><a href="#MCAL内部划分" class="headerlink" title="MCAL内部划分"></a>MCAL内部划分</h2><p>AUTOSAR规范根据MCU底层驱动功能的相似性，把MCAL抽象为6个驱动组，分别是微控制器驱动（Microcontroller Drivers）、存储器驱动（Memory Drivers）、加密驱动（Crypto Drivers）、无线通讯驱动（Wireless Communication Drivers）、通信驱动（Communication Drivers）、输入/输出驱动组（I/O Drivers）。</p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
     </div>
@@ -1326,110 +1428,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/08/24/230824-AutoSarNVRAM/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/08/24/230824-AutoSarNVRAM/" class="post-title-link" itemprop="url">AUTOSAR Memory Stack 架构</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-08-24 16:00:00" itemprop="dateCreated datePublished" datetime="2023-08-24T16:00:00+08:00">2023-08-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-09 00:21:23" itemprop="dateModified" datetime="2024-07-09T00:21:23+08:00">2024-07-09</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/AUTOSAR/" itemprop="url" rel="index"><span itemprop="name">AUTOSAR</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ol>
-<li><a target="_blank" rel="noopener" href="https://www.fer.unizg.hr/_download/repository/3._Vjestine_AUTOSAR_MemStack._v3.pdf">AUTOSAR Memory Stack(MemStack)</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.autosar.org/fileadmin/standards/R20-11/CP/AUTOSAR_SWS_NVRAMManager.pdf">Specification of NVRAM Manager</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.autosar.org/fileadmin/standards/R21-11/CP/AUTOSAR_EXP_NVDataHandling.pdf">NV Data Handling Guideline</a></li>
-</ol>
-<h3 id="功能简介"><a href="#功能简介" class="headerlink" title="功能简介"></a>功能简介</h3><p>为了管理汽车领域中的非易失性存储器(NV Memory)，在AUTOSAR环境中使用了内存协议栈(MemStack)。</p>
-<p>AUTOSAR中的MemStack主要有以下功能：</p>
-<ol>
-<li>数据检索：以结构化方式存储数据</li>
-<li>数据存储：对NV Memory的读取与写入</li>
-<li>抽象层：对不同的内部或外部NV Memory提供抽象</li>
-<li>耐久性管理：管理内存写入周期</li>
-<li>错误处理和纠正：管理NV Memory的纠错和错误检测机制</li>
-<li>内存块管理：管理内存块(Memory Block)</li>
-<li>地址映射：虚拟地址到物理地址的映射</li>
-</ol>
-<p>AUTOSAR的内存协议栈为应用层和基础软件(BSW)模块提供访问非易失性存储器的服务（例如读写）。使用AUTOSAR MemStack API，应用层中的软件组件(SWC)和BSW模块可以从NV Memory读取数据并将数据写入NV Memory，例如诊断事件管理器(DEM)使用MemStack服务将冻结帧数据写入NV Memory。</p>
-<h3 id="存储协议栈架构"><a href="#存储协议栈架构" class="headerlink" title="存储协议栈架构"></a>存储协议栈架构</h3><p><img src="/2023/08/24/230824-AutoSarNVRAM/230824-AutoSarNVRAM-1.jpg" alt="img"></p>
-<p>NvM访问内存抽象接口(MemIf)，该接口抽象了Flash模拟Eep模块(Fee)和EEPROM抽象模块(Ea)。因此，NvM是硬件无关的。</p>
-<p>应用程序通常不直接访问BSW模块的服务。它们通过RTE和BSW模块提供的服务端口进行连接。应用程序SWC或NV SWC可以从NV Memory读取或写入数据。NvM将调用传递给MemIf，调用将传递给内存驱动模块，驱动模块将数据写入NV Memory。如果是外部Flash（通过SPI连接）的情况下，将使用SPI驱动程序。</p>
-<h4 id="NvM（NVRAM-Manager）"><a href="#NvM（NVRAM-Manager）" class="headerlink" title="NvM（NVRAM Manager）"></a>NvM（NVRAM Manager）</h4><p>NvM模块提供了数据存储和数据维护的服务。NvM模块位于AUTOSAR堆栈的服务层中，并向用户（即SWC）提供从NV Memory读取数据或写入数据的服务。NvM是访问NV Memory的唯一方式，或者我们可以说NvM是SWC访问NV Memory的网关。</p>
-<p>NvM执行存储器的初始化、NV Block的错误更正和错误检测。</p>
-<h4 id="MemIf-Fee-Ea（Memory-Abstraction-Interface）"><a href="#MemIf-Fee-Ea（Memory-Abstraction-Interface）" class="headerlink" title="MemIf/Fee/Ea（Memory Abstraction Interface）"></a>MemIf/Fee/Ea（Memory Abstraction Interface）</h4><p>MemIf提供了对底层Fee或Ea模块的抽象，因此上层模块（例如NVRAM管理器）会请求MemIf模块进行读/写操作，然后MemIf模块将请求传递给底层的Fee或Ea模块。</p>
-<p>Fee和Ea提供虚拟32位地址空间，并抽象出设备特定的寻址方案。Fee和Ea将虚拟地址转换为物理地址。</p>
-<h4 id="Fls-EEP（Memory-Driver）"><a href="#Fls-EEP（Memory-Driver）" class="headerlink" title="Fls/EEP（Memory Driver）"></a>Fls/EEP（Memory Driver）</h4><p>存储器驱动程序用于访问mcu的内部flash或外部存储器。存储器驱动程序提供从EEPROM或Flash存储器读取、写入和擦除的功能。Fls驱动程序与Flash存储器相关联，EEP驱动程序与EEPROM存储器相关联。</p>
-<p>用于外部EEPROM的驱动程序使用处理程序（在大多数情况下为SPI）或驱动程序来访问外部EEPROM设备，它位于ECU抽象层中。</p>
-<h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><p>今年的一项PBC：仿照AUTOSAR的存储器协议栈，开发一套适合自己公司使用的存储器协议栈。经过大半年零散的、自下而上的开发与测试，我的软件终于上量产车使用了，这几天整理下资料和回顾下开发过程，后续再写些文章。</p>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1499,7 +1497,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">77</span>
+          <span class="site-state-item-count">78</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1533,7 +1531,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2024</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

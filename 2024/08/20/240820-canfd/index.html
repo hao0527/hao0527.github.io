@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/heng32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/heng16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="云途 CAN FD 介绍MailBox之前对MB理解有误，在芯片参考手册中，MB有两种意思，一种是MessageBuff，一种是Mailbox。云途ME0芯片CAN0~2有64MBs，CAN3~5有32MBs，这里的MB指的是MailBox。另外此芯片CAN0~2有20个ERF（Ehanced RX FIFO），而且每个都是64Bytes Payload的，在FD模式下要用Rx Fifo 必须用它">
+<meta property="og:type" content="article">
+<meta property="og:title" content="云途单片机CAN FD调试记录">
+<meta property="og:url" content="http://example.com/2024/08/20/240820-canfd/index.html">
+<meta property="og:site_name" content="永恆博客网">
+<meta property="og:description" content="云途 CAN FD 介绍MailBox之前对MB理解有误，在芯片参考手册中，MB有两种意思，一种是MessageBuff，一种是Mailbox。云途ME0芯片CAN0~2有64MBs，CAN3~5有32MBs，这里的MB指的是MailBox。另外此芯片CAN0~2有20个ERF（Ehanced RX FIFO），而且每个都是64Bytes Payload的，在FD模式下要用Rx Fifo 必须用它">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2024/08/20/240820-canfd/240820-canfd-6.jpg">
+<meta property="og:image" content="http://example.com/2024/08/20/240820-canfd/240820-canfd-5.jpg">
+<meta property="og:image" content="http://example.com/2024/08/20/240820-canfd/240820-canfd-7.jpg">
+<meta property="og:image" content="http://example.com/2024/08/20/240820-canfd/240820-canfd-8.jpg">
+<meta property="og:image" content="http://example.com/2024/08/20/240820-canfd/240820-canfd-1.jpg">
+<meta property="og:image" content="http://example.com/2024/08/20/240820-canfd/240820-canfd-2.jpg">
+<meta property="og:image" content="http://example.com/2024/08/20/240820-canfd/240820-canfd-3.jpg">
+<meta property="og:image" content="http://example.com/2024/08/20/240820-canfd/240820-canfd-4.jpg">
+<meta property="og:image" content="http://example.com/2024/08/20/240820-canfd/240820-canfd-9.jpg">
+<meta property="og:image" content="http://example.com/2024/08/20/240820-canfd/240820-canfd-10.jpg">
+<meta property="og:image" content="http://example.com/2024/08/20/240820-canfd/240820-canfd-11.jpg">
+<meta property="article:published_time" content="2024-08-20T10:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-08T13:03:41.805Z">
+<meta property="article:author" content="Hao">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2024/08/20/240820-canfd/240820-canfd-6.jpg">
+
+<link rel="canonical" href="http://example.com/2024/08/20/240820-canfd/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>云途单片机CAN FD调试记录 | 永恆博客网</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">永恆博客网</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/20/240820-canfd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          云途单片机CAN FD调试记录
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-08-20 18:00:00" itemprop="dateCreated datePublished" datetime="2024-08-20T18:00:00+08:00">2024-08-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-04-08 21:03:41" itemprop="dateModified" datetime="2025-04-08T21:03:41+08:00">2025-04-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="云途-CAN-FD-介绍"><a href="#云途-CAN-FD-介绍" class="headerlink" title="云途 CAN FD 介绍"></a>云途 CAN FD 介绍</h2><h3 id="MailBox"><a href="#MailBox" class="headerlink" title="MailBox"></a>MailBox</h3><p>之前对MB理解有误，在芯片参考手册中，MB有两种意思，一种是MessageBuff，一种是Mailbox。云途ME0芯片CAN0~2有64MBs，CAN3~5有32MBs，这里的MB指的是MailBox。另外此芯片CAN0~2有20个ERF（Ehanced RX FIFO），而且每个都是64Bytes Payload的，在FD模式下要用Rx Fifo 必须用它。</p>
+<blockquote>
+<p>The Legacy Rx FIFOs cannot be used in CAN FD mode. The Enhanced Rx FIFO, if implemented, can be used in CAN FD mode</p>
+</blockquote>
+<p><img src="/2024/08/20/240820-canfd/240820-canfd-6.jpg"></p>
+<p>8Byte Payload MailBox每个邮箱占用16字节，此芯片CAN0~2由两个512Bytes RAM Block组成，所以总共是64个 8 Byte Payload MailBox。</p>
+<p><img src="/2024/08/20/240820-canfd/240820-canfd-5.jpg"></p>
+<p>邮箱是RAM区域，在使用前需要初始化邮箱（写初始值），防止首次读取时ECC错误。在CAN模块中除了邮箱还有很多其他的寄存器也是在RAM中，需要先写再读防止ECC错误，参考文档中介绍了RAM Initialization，这些RAM区域都是从寄存器的地址被访问到，我主要用的是两种如下，一个是标准CAN，一个是CANFD开启ERF：</p>
+<p><img src="/2024/08/20/240820-canfd/240820-canfd-7.jpg"><br><img src="/2024/08/20/240820-canfd/240820-canfd-8.jpg"></p>
+<h3 id="Message-Buffer"><a href="#Message-Buffer" class="headerlink" title="Message Buffer"></a>Message Buffer</h3><p>MessageBuffer是CAN中发送或接收一帧存放的消息缓冲区，MessageBuffer是由一个或多个MailBox组成，发送还是接收需要配置MessageBuffer中的Code，Code描述如下图：</p>
+<p><img src="/2024/08/20/240820-canfd/240820-canfd-1.jpg"><br><img src="/2024/08/20/240820-canfd/240820-canfd-2.jpg"><br><img src="/2024/08/20/240820-canfd/240820-canfd-3.jpg"><br><img src="/2024/08/20/240820-canfd/240820-canfd-4.jpg"></p>
+<p>在初始化MessageBuffer过程中，要设置为发送就将code初始化为8，要设为接收就初始化为4。</p>
+<p><strong>那么我们要如何分配MailBox，配成各种MessageBuffer呢？</strong></p>
+<p>在S32K1中，开启了FD不能使用RX FIFO，为了设计简单，且能防止接收到多帧报文在读取时顺序错误，所以就只配置了1个MessageBuffer用于接收，其余用于发送。</p>
+<p>其实也可以根据MessageBuffer中的时间戳来分析哪个先收到，目前还没做，每次MB中断时还要看看其他MB时间戳，感觉效率不是很高。</p>
+<p>以下是初始化MessageBuffer的代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CanFdMb = (CANFD_MB_TYPE *)p_mcuCanTable[channel].p_can-&gt;RAMn;</span><br><span class="line">CanFdMb[<span class="number">0</span>].mb.t_cs.cs_mb.code = <span class="number">0x4</span>; <span class="comment">//RX EMPTY — MB is active and empty</span></span><br><span class="line"><span class="comment">//剩下全部mb用于发送</span></span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">1</span>; i &lt; MailBox; i++)&#123;</span><br><span class="line">    CanFdMb[i].mb.t_cs.cs_mb.code = <span class="number">0x8</span>; <span class="comment">//TX INACTIVE — MB is not active</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>云途芯片CAN资源比S32K1丰富很多，开启FD后还能使用ERF，可缓存20个64Bytes Payload的报文并通过FIFO读取没有顺序错误问题。MailBox总共可以配14个64Bytes Payload的MessageBuffer全部用于发送报文，两块MailBox的RAM也可以配置成不同长度的MessageBuffer，如下FDCTRL寄存器：</p>
+<p><img src="/2024/08/20/240820-canfd/240820-canfd-9.jpg"></p>
+<h3 id="Rx-Filter-Elements"><a href="#Rx-Filter-Elements" class="headerlink" title="Rx Filter Elements"></a>Rx Filter Elements</h3><p>云途的ERF必须要配置Filter才可以用，因为默认就会开1个Filter，不配置的话可能收不到拓展帧，于是我配置了1个标准帧Filter（占4字节）和1个拓展帧Filter（占8字节），配置为Mask模式，Mask都为0，就是都不过滤。代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">p_mcuCanTable[channel].p_can-&gt;ERFCR |= CAN_ERFCR_NEXIF(<span class="number">1</span>) | CAN_ERFCR_NFE(<span class="number">1</span>); <span class="comment">// 1 extended id filter element, 1 standard id filter element</span></span><br><span class="line">p_mcuCanTable[channel].p_can-&gt;ERFFELn[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">p_mcuCanTable[channel].p_can-&gt;ERFFELn[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">p_mcuCanTable[channel].p_can-&gt;ERFFELn[<span class="number">2</span>] = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+
+<p>标准帧和拓展帧的 Rx Filter Elements 结构体定义如下：</p>
+<p><img src="/2024/08/20/240820-canfd/240820-canfd-10.jpg"><br><img src="/2024/08/20/240820-canfd/240820-canfd-11.jpg"></p>
+<h2 id="CAN-FD-调试问题"><a href="#CAN-FD-调试问题" class="headerlink" title="CAN FD 调试问题"></a>CAN FD 调试问题</h2><ol>
+<li>MessageBuffer 配成64Bytes Payload时，RAM区最后一个MessageBuffer结束地址和下一个MessageBuffer起始地址不连续，导致发送，初始化时操作部分MessageBuff时地址不对。</li>
+<li>发送存在错误帧，波特率配置对，但采样率不对。</li>
+<li>接收不到，手册说ERF写0使能，找FAE确认没问题，但就是写1使能。</li>
+<li>初始化28个MessageBuffer进Hardfault，实际没28个，FAE确认说有28个，最后在应用笔记上找到是14个。</li>
+<li>接收不到拓展帧，需要配ERF Filter，1个拓展帧，1个标准帧。</li>
+<li>要使用pll后时钟，配时钟源无效。</li>
+<li>发送使用14个MessageBuffer，会导致发送的时候顺序乱，使用7个正常，可能是因为2个ram block不同步。</li>
+</ol>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/05/20/240520-cache/" rel="prev" title="S32K344 Cache 调试记录">
+      <i class="fa fa-chevron-left"></i> S32K344 Cache 调试记录
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%91%E9%80%94-CAN-FD-%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">云途 CAN FD 介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MailBox"><span class="nav-number">1.1.</span> <span class="nav-text">MailBox</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Message-Buffer"><span class="nav-number">1.2.</span> <span class="nav-text">Message Buffer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Rx-Filter-Elements"><span class="nav-number">1.3.</span> <span class="nav-text">Rx Filter Elements</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CAN-FD-%E8%B0%83%E8%AF%95%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">CAN FD 调试问题</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Hao</p>
+  <div class="site-description" itemprop="description">保持热爱，奔赴山海。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">78</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hao</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
