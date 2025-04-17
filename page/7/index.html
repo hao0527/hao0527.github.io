@@ -185,6 +185,113 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/09/210809-%E4%BF%A1%E5%8F%B7%E5%AE%8C%E6%95%B4%E6%80%A7%E4%B8%8E%E7%94%B5%E6%BA%90%E5%AE%8C%E6%95%B4%E6%80%A7%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/08/09/210809-%E4%BF%A1%E5%8F%B7%E5%AE%8C%E6%95%B4%E6%80%A7%E4%B8%8E%E7%94%B5%E6%BA%90%E5%AE%8C%E6%95%B4%E6%80%A7%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">《信号完整性与电源完整性分析》</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-09 11:00:00" itemprop="dateCreated datePublished" datetime="2021-08-09T11:00:00+08:00">2021-08-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-08-11 10:05:01" itemprop="dateModified" datetime="2021-08-11T10:05:01+08:00">2021-08-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E7%A1%AC%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">硬件</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="书籍介绍"><a href="#书籍介绍" class="headerlink" title="书籍介绍"></a>书籍介绍</h3><p>作者: [美] Eric Bogatin<br>出版社: 电子工业出版社<br>原作名: Signal and Power Integrity：Simplified， Third Edition<br>译者: <a target="_blank" rel="noopener" href="https://book.douban.com/search/%E6%9D%8E%E7%8E%89%E5%B1%B1">李玉山</a> / <a target="_blank" rel="noopener" href="https://book.douban.com/search/%E5%88%98%E6%B4%8B">刘洋</a> / <a target="_blank" rel="noopener" href="https://book.douban.com/search/%E5%88%9D%E7%A7%80%E7%90%B4">初秀琴</a> / <a target="_blank" rel="noopener" href="https://book.douban.com/search/%E8%B7%AF%E5%BB%BA%E6%B0%91">路建民</a></p>
+<h3 id="第一版前言"><a href="#第一版前言" class="headerlink" title="第一版前言"></a>第一版前言</h3><p>“一切都应该尽可能简单，而不只是简单一点。”        ——阿尔伯特·爱因斯坦</p>
+<h3 id="信号完整性问题的10个基本原则"><a href="#信号完整性问题的10个基本原则" class="headerlink" title="信号完整性问题的10个基本原则"></a>信号完整性问题的10个基本原则</h3><ol>
+<li><p>提高高速产品设计的关键是：充分利用分析工具实现准确的性能预估，使用测量手段验证设计过程，降低风险并提高所采用设计工具的可信度。</p>
+</li>
+<li><p>将问题的实质与表面现象剥离开的唯一可行途径是：采用经验法则，解析近似，数值仿真工具或测量工具获得数据，这是工程实践的本质要素。</p>
+</li>
+<li><p>任何一段互联，无论线长和形状，也无论信号的上升边如何，都是一个由信号路径和返回路径构成的传输线。一个信号在沿着互联前进的每一步，都会感受到一个瞬时阻抗。如果<strong>阻抗恒定</strong>为常数，比如具有均匀横截面传输线的情况，那么其信号质量将会获得奇迹般的改善。</p>
+</li>
+<li><p><strong>把“接地”这个术语忘掉</strong>，由于它所造成的问题比用它解决问题还要多。每一路都有返回路径。抓住“返回路径”，像对待信号路径一样去寻找并处理返回路径，这样有助于培养解决问题的直觉能力。</p>
+</li>
+<li><p>当电压变化时，电容器上就有电流流动。对于快速变化的前沿，即<strong>使印制电路板边沿和悬空导线之间的空气间隙形成的边缘线电容</strong>，都有可能拥有较低的阻抗。</p>
+</li>
+<li><p>电感与阻扰电流周围的磁力线匝数有本质的联系。只要电流与磁力线的匝数发生改变，在导线的两端就会产生电压。这一电压是导致反射噪声，串扰，开关噪声，地弹，轨道塌陷及电磁干扰的根源之一。</p>
+</li>
+<li><p>当流经地回路电感上的电流发生变化时，在接地回路导线上产生的电压称为是地弹。它是造成开关噪声和电磁干扰的内在机理。</p>
+</li>
+<li><p>以同频率的方法作为参照，信号带宽是指的有效正弦波分量的最高频率值。互联模型的带宽是指在这个最高的正弦频率上，模型仍然准确的预估互联的实际性能。在使用模型进行分析时，一定不要让信号的带宽超过模型的带宽。</p>
+</li>
+<li><p>除了少数情况之外，信号完整性公式中给出的是定义或者近似。在特别需要准确的场合就不使用近似。</p>
+</li>
+<li><p>有损传输线引起的问题是上升边退化。由于集肤深度和介质损耗，损耗随着频率的升高而增加。如果损耗随着频率的升高而保持不变，上升边就不会发生变化，这时的有损线只是增添了一些不便而已。</p>
+</li>
+</ol>
+<h3 id="100条使信号完整性问题最小化的通用设计规则"><a href="#100条使信号完整性问题最小化的通用设计规则" class="headerlink" title="100条使信号完整性问题最小化的通用设计规则"></a>100条使信号完整性问题最小化的通用设计规则</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qwertyuj/article/details/8460438">100条使信号完整性问题最小化的通用设计原则</a></li>
+</ul>
+<h3 id="100条估计信号完整性效应的经验法则"><a href="#100条估计信号完整性效应的经验法则" class="headerlink" title="100条估计信号完整性效应的经验法则"></a>100条估计信号完整性效应的经验法则</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qwertyuj/article/details/8460440">100条估计信号完整性效应的经验法则</a></li>
+</ul>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/05/210805-fpga%E9%A2%91%E7%8E%87%E8%AE%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1124,105 +1231,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/" class="post-title-link" itemprop="url">十六届智能车基础四轮方案</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-05-17 20:00:00" itemprop="dateCreated datePublished" datetime="2021-05-17T20:00:00+08:00">2021-05-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-09 00:21:23" itemprop="dateModified" datetime="2024-07-09T00:21:23+08:00">2024-07-09</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%99%BA%E8%83%BD%E8%BD%A6/" itemprop="url" rel="index"><span itemprop="name">智能车</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>不会吧，不会吧，我又参加飞卡了？</p>
-<h3 id="基础四轮组规则"><a href="#基础四轮组规则" class="headerlink" title="基础四轮组规则"></a>基础四轮组规则</h3><ul>
-<li><p>车模：B车模，车模宽度不超过25厘米，高度不超过20厘米，长度没有限制，如果安装摄像头传感器，摄像头镜片中心的高度距离地面不超过10厘米</p>
-</li>
-<li><p>MCU：指定使用 Infineon系列单片机，允许使用各类电磁、红外光电、摄像头、激光、超声传感器</p>
-</li>
-<li><p>赛道元素：进出库、三岔路口（进出口120°，路口间直线距离&lt;3m）、环岛（R&lt;0.5m）、坡道（坡度&lt;=20°）、十字路口（需直行）、弯道（曲率半径&lt;0.5m）</p>
-</li>
-</ul>
-<h3 id="电机驱动"><a href="#电机驱动" class="headerlink" title="电机驱动"></a>电机驱动</h3><p>IR2184老方案，B车电机比较猛，可能有11.7A，试一下加RDC释放电路来提高刹车性能</p>
-<p><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-%E9%A3%9E%E5%8D%A1-1.jpg" alt="210517-飞卡-1.jpg"></p>
-<p><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-%E9%A3%9E%E5%8D%A1-2.jpg" alt="210517-飞卡-2.jpg"></p>
-<ul>
-<li><input checked disabled type="checkbox"> 电机驱动加上ina240测电机电流(21.6.11前)</li>
-</ul>
-<p><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-%E9%A3%9E%E5%8D%A1-7.jpg" alt="210517-飞卡-7.jpg"></p>
-<p><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-%E9%A3%9E%E5%8D%A1-8.jpg" alt="210517-飞卡-8.jpg"></p>
-<p>（21.6.11）程序员通过电机反转来刹车，未加驱动死区时间，导致锂电池保护板保护。</p>
-<h3 id="电磁运放"><a href="#电磁运放" class="headerlink" title="电磁运放"></a>电磁运放</h3><p>采用逐飞方案，opa4377，单端放大，检波，二极管使用了压降小的肖特基二极管</p>
-<p><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-%E9%A3%9E%E5%8D%A1-3.jpg" alt="210517-飞卡-3.jpg"></p>
-<p><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-%E9%A3%9E%E5%8D%A1-4.jpg" alt="210517-飞卡-4.jpg"></p>
-<h3 id="tc377主控"><a href="#tc377主控" class="headerlink" title="tc377主控"></a>tc377主控</h3><p>考虑到DC-DC负载响应速率不如LDO，继续使用LM1084-ADJ给舵机供6.3v电<br><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-%E9%A3%9E%E5%8D%A1-5.jpg" alt="210517-飞卡-5.jpg"><br><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-%E9%A3%9E%E5%8D%A1-6.jpg" alt="210517-飞卡-6.jpg"></p>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1292,7 +1300,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">78</span>
+          <span class="site-state-item-count">79</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

@@ -185,6 +185,163 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/04/16/250416-mcalspi/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/04/16/250416-mcalspi/" class="post-title-link" itemprop="url">MCAL SPI 学习</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-04-16 21:00:00" itemprop="dateCreated datePublished" datetime="2025-04-16T21:00:00+08:00">2025-04-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-04-17 21:07:48" itemprop="dateModified" datetime="2025-04-17T21:07:48+08:00">2025-04-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="Autosar-中-SPI-关键概念"><a href="#Autosar-中-SPI-关键概念" class="headerlink" title="Autosar 中 SPI 关键概念"></a>Autosar 中 SPI 关键概念</h2><p><img src="/2025/04/16/250416-mcalspi/250416-mcalspi-1.jpg"></p>
+<h3 id="Autosar-中的描述"><a href="#Autosar-中的描述" class="headerlink" title="Autosar 中的描述"></a>Autosar 中的描述</h3><table>
+<thead>
+<tr>
+<th>Definition</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Sequences</td>
+<td>Channel是使用相同标准定义的数据的软件交换介质：参数配置，具有相同大小和数据指针（源和目标）或位置的数据元素数量。</td>
+</tr>
+<tr>
+<td>Job</td>
+<td>Job由具有相同片选的一个或多个Channel组成（在处理Job期间不会释放）。 一个Job被视为原子作业，因此不能被另一个Job打断。Job具有分配的优先级。</td>
+</tr>
+<tr>
+<td>Channel</td>
+<td>Sequence是要传输的多个连续Job，但是可以使用优先级机制在Job之间重新安排Sequence。 Sequence传输是可中断的（通过另一Sequence传输）或不可中断，这取决于静态配置。</td>
+</tr>
+</tbody></table>
+<h2 id="关键-API-使用"><a href="#关键-API-使用" class="headerlink" title="关键 API 使用"></a>关键 API 使用</h2><h3 id="读写-Channel-Buffer"><a href="#读写-Channel-Buffer" class="headerlink" title="读写 Channel Buffer"></a>读写 Channel Buffer</h3><p>在 SPI 通信中，<strong>在开始传输之前</strong> ，必须先准备好发送的数据；<strong>传输完成后</strong> ，则需要读取接收到的数据。这就涉及到对 <strong>读写缓冲区</strong>  的操作。</p>
+<ul>
+<li><strong>IB 模式</strong> 下，缓冲区由驱动内部维护，因此需要调用专用接口进行读写：<ul>
+<li>写入待发送数据：<code>Std_ReturnType Spi_WriteIB(Spi_ChannelType Channel, const Spi_DataBufferType* DataBufferPtr);</code></li>
+<li>读取接收到的数据：<code>Std_ReturnType Spi_ReadIB(Spi_ChannelType Channel, Spi_DataBufferType* DataBufferPointer);</code></li>
+</ul>
+</li>
+<li><strong>EB 模式</strong> 下，用户自行提供发送和接收缓冲区，在配置阶段通过以下接口设置发送数据地址、接收数据地址、数据长度：<ul>
+<li>配置缓冲地址和长度：<code>Std_ReturnType Spi_SetupEB(Spi_ChannelType Channel, const Spi_DataBufferType* SrcDataBufferPtr, Spi_DataBufferType* DesDataBufferPtr, Spi_NumberOfDataType Length);</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="IB-EB"><a href="#IB-EB" class="headerlink" title="IB / EB"></a>IB / EB</h4><p>Autosar 标准下的 SPI Channel 有 IB / EB 两种类型：<br>IB 通道由驱动内部提供缓冲区，适用于短数据传输（如 &lt;10 字节）和 daisy-chain 场景。优点是简单易用，能利用硬件缓冲提升效率（如果硬件支持），但不适合大数据传输。<br>EB 通道需要用户提供缓冲区，适合大数据通信或控制复杂外设。优点是灵活高效、支持从 ROM 发送常量数据，缺点是实现复杂，对上层要求高。</p>
+<h3 id="开始传输-Sequence"><a href="#开始传输-Sequence" class="headerlink" title="开始传输 Sequence"></a>开始传输 Sequence</h3><p>完成 Buffer 设置后（无论是 IB 还是 EB），SPI 通信需要通过 <strong>传输接口</strong> 来启动传输。Autosar SPI 支持两种传输方式：</p>
+<ul>
+<li><strong>同步传输（Sync）</strong> ：调用后会 <strong>阻塞等待</strong> 传输完成：<code>Std_ReturnType Spi_SyncTransmit(Spi_SequenceType Sequence);</code></li>
+<li><strong>异步传输（Async）</strong> ：调用后 <strong>立即返回</strong> ，传输在后台进行，完成后通过回调函数通知：<code>Std_ReturnType Spi_AsyncTransmit(Spi_SequenceType Sequence);</code></li>
+</ul>
+<h3 id="获取状态-结果"><a href="#获取状态-结果" class="headerlink" title="获取状态 / 结果"></a>获取状态 / 结果</h3><p>在 SPI 异步传输中，为了判断传输是否完成以及传输是否成功，Autosar 提供了多种状态获取接口：</p>
+<ul>
+<li>获取 SPI 驱动的整体状态，如未初始化（UNINIT）、空闲（IDLE）、忙（BUSY）：<code>Spi_StatusType Spi_GetStatus(void)</code></li>
+<li>查询某个具体 SPI 硬件单元的当前状态是否空闲。适用于多个 SpiDevice 通过不同片选挂在同一路 SpiPhyUni 系统：<code>Spi_StatusType Spi_GetHWUnitStatus(Spi_HWUnitType HWUnit)</code></li>
+<li>获取指定 Job 的最近一次传输结果，如成功（OK）、失败（FAILED）、进行中（PENDING）、取消（CANCELED）：<code>Spi_JobResultType Spi_GetJobResult(Spi_JobType Job)</code></li>
+<li>获取指定 Sequence 的最近一次传输结果，如成功（OK）、失败（FAILED）、进行中（PENDING）、排队中（QUEUED）：<code>Spi_SeqResultType Spi_GetSequenceResult(Spi_SequenceType Sequence)</code></li>
+</ul>
+<h3 id="取消传输"><a href="#取消传输" class="headerlink" title="取消传输"></a>取消传输</h3><p><code>void Spi_Cancel(Spi_SequenceType Sequence);</code> 接口仅在异步传输模式下使用，并且只有在一个 <strong>Sequence</strong>  包含多个 <strong>Job</strong>  时才会涉及。<br><strong>注意</strong>：这是个异步接口，调用后传输 Sequence 会等当前的 Job 传输完成后取消剩余其他的 Job。</p>
+<blockquote>
+<p><strong>使用场景</strong> ：当你有多个 <strong>Job</strong>  在同一个 <strong>Sequence</strong>  中异步执行，且突然需要优先传输其他重要的 <strong>Sequence</strong>  时，可以调用此接口取消当前的传输，然后立即启动新的传输。</p>
+</blockquote>
+<h2 id="调用时序图"><a href="#调用时序图" class="headerlink" title="调用时序图"></a>调用时序图</h2><h3 id="Write-AsyncTransmit-Read-IB-One-Channel-one-Job-then-one-Sequence"><a href="#Write-AsyncTransmit-Read-IB-One-Channel-one-Job-then-one-Sequence" class="headerlink" title="Write/AsyncTransmit/Read (IB), One Channel, one Job then one Sequence"></a>Write/AsyncTransmit/Read (IB), One Channel, one Job then one Sequence</h3><p><img src="/2025/04/16/250416-mcalspi/250416-mcalspi-2.jpg"></p>
+<h2 id="关键配置"><a href="#关键配置" class="headerlink" title="关键配置"></a>关键配置</h2><p><img src="/2025/04/16/250416-mcalspi/250416-mcalspi-3.png"></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SpiChannelBuffersAllowed</td>
+<td>指定支持的 Channel 缓冲区类型： <br> 0 - 仅允许内部缓冲（IB） <br> 1 - 仅允许外部缓冲（EB） <br> 2 - 同时支持内部（IB）和外部（EB）缓冲</td>
+</tr>
+<tr>
+<td>SpiInterruptibleSeqAllowed</td>
+<td>是否允许中断 Sequence： <br> 0 - 不可中断，已启动的 Sequence 传输期间不会被挂起  <br> 1 - 允许中断，具体是否中断由配置决定，Handler/Driver 可在两个连续 Job 之间中断 Sequence</td>
+</tr>
+<tr>
+<td>SpiLevelDelivered</td>
+<td>驱动提供的功能等级： <br> 0 - 仅支持简单同步传输  <br> 1 - 支持基本异步传输  <br> 2 - 支持增强型传输行为</td>
+</tr>
+<tr>
+<td>SpiSupportConcurrentSyncTransmit</td>
+<td>是否支持多个不同 Sequence 的 Spi_SyncTransmit() 同时并发调用（配置项是否允许并发） <br> <strong>注意</strong>：如果不勾选这项，即使不是同一路 SPI 的两个设备也不能同时传输</td>
+</tr>
+</tbody></table>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.autosar.org/fileadmin/standards/R21-11/CP/AUTOSAR_SWS_SPIHandlerDriver.pdf">Spec­i­fi­ca­tion of SPI Handler/Driver</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.autosar.org/fileadmin/standards/R21-11/CP/AUTOSAR_SRS_SPIHandlerDriver.pdf">Require­ments on SPI Handler/Driver</a></li>
+</ul>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/20/240820-canfd/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1322,112 +1479,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/14/230914-stm32cmake/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/09/14/230914-stm32cmake/" class="post-title-link" itemprop="url">STM32 CMake 构建工程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-09-14 23:30:00" itemprop="dateCreated datePublished" datetime="2023-09-14T23:30:00+08:00">2023-09-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-11-01 21:42:05" itemprop="dateModified" datetime="2023-11-01T21:42:05+08:00">2023-11-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ol>
-<li><a target="_blank" rel="noopener" href="https://github.com/rxdu/stm32_cmake">STM32 CMake Project Template</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/skb666/stm32l4_demo/tree/dev">stm32l4_demo - skb666</a></li>
-</ol>
-<h3 id="为什么使用-CMake？"><a href="#为什么使用-CMake？" class="headerlink" title="为什么使用 CMake？"></a>为什么使用 CMake？</h3><p>很早就想过用 CMake 来代替 eclipse 构建工程，优点是可以使用 VsCode 编译工程进行开发。另外还方便在 Jenkins 上使用脚本构建工程，目前使用 eclipse 构建工程，需要把生成的 Makefile 和多个 .arg 文件传 SVN，Jenkins 上通过 eclipse 生成的 Makefile 脚本编译工程，需要管控很多 Make 相关的文件，而且工程文件目录调整后，需要重新用 eclipse 生成一份 Makefile 供 Jenkins 使用。</p>
-<h3 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h3><p>一开始使用 CMake 遇到很多问题，主要还是我在使用 Windows 开发环境，有些地方需要注意。我后来使用 WSL 使用CMake 的时候还是很顺利的，而且 Linux 中的包管理器很好用，准备开发环境非常方便，确实比 Windows 开发优秀很多。如果可以的话，我也想拥有一台电脑装 Linux 操作系统做日常软件开发。</p>
-<p>现在改了 CMake 脚本，在 Windows 下也可以完成构建和编译了！，主要是加了 <code>set(CMAKE_SYSTEM_NAME Generic)</code>，<code>CMAKE_SYSTEM_NAME</code> 变量用于指定项目的目标操作系统名称，”Generic” 通常表示你不是针对特定的操作系统进行构建，而是希望以更通用或跨平台的方式构建项目，这通常用于编写可以在多个不同平台上编译和运行的代码。否则链接时会出现以下报错：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[  2%] Linking C executable C:/Users/33110/Projects/stm32l4_demo/output/stm32l4_demo.elf.exe</span><br><span class="line">c:/program files (x86)/gcc-arm-none-eabi-10.3-2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/bin/ld.exe: unrecognized option &#x27;--major-image-version&#x27;</span><br><span class="line">c:/program files (x86)/gcc-arm-none-eabi-10.3-2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/bin/ld.exe: use the --help option for usage information</span><br><span class="line">collect2.exe: error: ld returned 1 exit status</span><br><span class="line">make[2]: *** [CMakeFiles/stm32l4_demo.elf.dir/build.make:764：C:/Users/33110/Projects/stm32l4_demo/output/stm32l4_demo.elf.exe] 错误 1</span><br><span class="line">make[1]: *** [CMakeFiles/Makefile2:83：CMakeFiles/stm32l4_demo.elf.dir/all] 错误 2</span><br><span class="line">make: *** [Makefile:91：all] 错误 2</span><br></pre></td></tr></table></figure>
-
-<h3 id="CMake-脚本"><a href="#CMake-脚本" class="headerlink" title="CMake 脚本"></a>CMake 脚本</h3><p>CMake 脚本分为两个，将不同平台编译工具链相关的抽离出来，在一份 CMake 工程可以编译出不同平台的结果。脚本内容如下：</p>
-<h4 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h4><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.10</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义工程名的变量</span></span><br><span class="line"><span class="keyword">set</span>(PROJECT_NAME <span class="string">&quot;my_ytm32_prj&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">project</span>(<span class="variable">$&#123;PROJECT_NAME&#125;</span> LANGUAGES C CXX)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更详细的编译信息</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_VERBOSE_MAKEFILE <span class="keyword">on</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">MESSAGE</span>(STATUS <span class="string">&quot;PROJECT_NAME: &quot;</span> <span class="variable">$&#123;PROJECT_NAME&#125;</span>)</span><br><span class="line"><span class="keyword">MESSAGE</span>(STATUS <span class="string">&quot;CMAKE_TOOLCHAIN_FILE: &quot;</span> <span class="variable">$&#123;CMAKE_TOOLCHAIN_FILE&#125;</span>)</span><br><span class="line"><span class="keyword">MESSAGE</span>(STATUS <span class="string">&quot;MCU: &quot;</span> <span class="variable">$&#123;MCU&#125;</span>)</span><br><span class="line"><span class="keyword">MESSAGE</span>(STATUS <span class="string">&quot;LD_SCRIPT: &quot;</span> <span class="variable">$&#123;LD_SCRIPT&#125;</span>)</span><br><span class="line"><span class="keyword">MESSAGE</span>(STATUS <span class="string">&quot;ASM_SOURCES: &quot;</span> <span class="variable">$&#123;ASM_SOURCES&#125;</span>)</span><br><span class="line"><span class="keyword">MESSAGE</span>(STATUS <span class="string">&quot;MAP_FILE: &quot;</span> <span class="variable">$&#123;MAP_FILE&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加编译参数</span></span><br><span class="line"><span class="keyword">add_compile_options</span>(-O2 -fmessage-length=<span class="number">0</span> -fsigned-char -ffunction-sections -fdata-sections -fno-strict-aliasing)</span><br><span class="line"><span class="keyword">add_link_options</span>(-T<span class="variable">$&#123;LD_SCRIPT&#125;</span> -Xlinker --gc-sections -Wl,-Map=<span class="variable">$&#123;MAP_FILE&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 递归调用子文件的 CMakeLists.txt</span></span><br><span class="line"><span class="comment"># add_subdirectory(lib)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 汇编文件配置编译选项</span></span><br><span class="line"><span class="keyword">set_property</span>(SOURCE <span class="variable">$&#123;ASM_SOURCES&#125;</span> PROPERTY LANGUAGE C)</span><br><span class="line"><span class="keyword">set_source_files_properties</span>(<span class="variable">$&#123;ASM_SOURCES&#125;</span> PROPERTIES COMPILE_FLAGS <span class="string">&quot;-x assembler-with-cpp -DSTART_FROM_FLASH&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用file命令的GLOB_RECURSE选项递归搜索所有C文件</span></span><br><span class="line"><span class="keyword">file</span>(GLOB_RECURSE SOURCE_FILES <span class="string">&quot;$&#123;CMAKE_SOURCE_DIR&#125;/source/*.c&quot;</span> <span class="string">&quot;$&#123;CMAKE_SOURCE_DIR&#125;/Project_Settings/Startup_Code/*.c&quot;</span>)</span><br><span class="line"><span class="comment"># MESSAGE(STATUS &quot;SOURCE_FILES: &quot; $&#123;SOURCE_FILES&#125;)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 目标所需的源文件</span></span><br><span class="line"><span class="keyword">add_executable</span>(<span class="variable">$&#123;PROJECT_NAME&#125;</span>.elf <span class="variable">$&#123;SOURCE_FILES&#125;</span> <span class="variable">$&#123;ASM_SOURCES&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 目标所需宏定义</span></span><br><span class="line"><span class="keyword">target_compile_definitions</span>(<span class="variable">$&#123;PROJECT_NAME&#125;</span>.elf PUBLIC</span><br><span class="line">    CPU_YTM32B1ME0</span><br><span class="line">    YTM32B1ME0</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 目标所需的库</span></span><br><span class="line"><span class="keyword">target_link_libraries</span>(<span class="variable">$&#123;PROJECT_NAME&#125;</span>.elf PUBLIC m)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 目标所需的头文件路径</span></span><br><span class="line"><span class="keyword">target_include_directories</span>(<span class="variable">$&#123;PROJECT_NAME&#125;</span>.elf PUBLIC</span><br><span class="line">    <span class="string">&quot;$&#123;CMAKE_SOURCE_DIR&#125;/Project_Settings/Startup_Code&quot;</span></span><br><span class="line">    <span class="string">&quot;$&#123;CMAKE_SOURCE_DIR&#125;/Project_Settings/Startup_Code/CMSIS/Core/Include&quot;</span></span><br><span class="line">    <span class="string">&quot;$&#123;CMAKE_SOURCE_DIR&#125;/source/inc&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加预编译目标</span></span><br><span class="line"><span class="keyword">add_custom_target</span>(</span><br><span class="line">    PRE_BUILD_DUMMY ALL</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 目标编译前自定义指令</span></span><br><span class="line"><span class="keyword">add_custom_command</span>(</span><br><span class="line">    <span class="keyword">TARGET</span> PRE_BUILD_DUMMY PRE_BUILD</span><br><span class="line">    <span class="keyword">COMMAND</span> <span class="variable">$&#123;CMAKE_SOURCE_DIR&#125;</span>/../Bin/generate_version.sh</span><br><span class="line">    WORKING_DIRECTORY <span class="variable">$&#123;CMAKE_OUTPUT_DIRECTORY&#125;</span></span><br><span class="line">)</span><br><span class="line"><span class="comment"># 将预编译步骤作为主目标依赖</span></span><br><span class="line"><span class="keyword">add_dependencies</span>(<span class="variable">$&#123;PROJECT_NAME&#125;</span>.elf PRE_BUILD_DUMMY)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 目标编译后自定义指令</span></span><br><span class="line"><span class="keyword">add_custom_command</span>(</span><br><span class="line">    <span class="keyword">TARGET</span> <span class="variable">$&#123;PROJECT_NAME&#125;</span>.elf POST_BUILD</span><br><span class="line">    <span class="keyword">COMMAND</span> <span class="variable">$&#123;CMAKE_SOURCE_DIR&#125;</span>/../Bin/BuildTools/PostBuild.bat <span class="variable">$&#123;PROJECT_NAME&#125;</span> <span class="variable">$&#123;TOOLCHAINS_PATH&#125;</span> <span class="variable">$&#123;TOOLCHAINS_PREFIX&#125;</span></span><br><span class="line">    <span class="keyword">COMMAND</span> <span class="variable">$&#123;TOOLCHAINS_PATH&#125;</span>/<span class="variable">$&#123;TOOLCHAINS_PREFIX&#125;</span>objcopy -O binary -S <span class="variable">$&#123;PROJECT_NAME&#125;</span>.elf <span class="variable">$&#123;PROJECT_NAME&#125;</span>.bin</span><br><span class="line">    <span class="keyword">COMMAND</span> <span class="variable">$&#123;TOOLCHAINS_PATH&#125;</span>/<span class="variable">$&#123;TOOLCHAINS_PREFIX&#125;</span>objcopy -O binary -S <span class="variable">$&#123;PROJECT_NAME&#125;</span>.elf <span class="variable">$&#123;PROJECT_NAME&#125;</span>.srec</span><br><span class="line">    <span class="keyword">COMMAND</span> <span class="variable">$&#123;TOOLCHAINS_PATH&#125;</span>/<span class="variable">$&#123;TOOLCHAINS_PREFIX&#125;</span>objcopy -O binary -S <span class="variable">$&#123;PROJECT_NAME&#125;</span>.elf <span class="variable">$&#123;PROJECT_NAME&#125;</span>.hex</span><br><span class="line">    WORKING_DIRECTORY <span class="variable">$&#123;CMAKE_OUTPUT_DIRECTORY&#125;</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-
-<h4 id="toolchains-cmake"><a href="#toolchains-cmake" class="headerlink" title="toolchains.cmake"></a>toolchains.cmake</h4><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span>(CMAKE_SYSTEM_NAME Generic)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_SYSTEM_PROCESSOR ARM)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 选择编译版本（可以通过 vscode 指定）</span></span><br><span class="line"><span class="comment"># set(CMAKE_BUILD_TYPE Release)</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_BUILD_TYPE Debug)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(TOOLCHAINS_PATH <span class="string">&quot;C:/Yuntu/YuntuIDE/tools/bin&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(TOOLCHAINS_PREFIX <span class="string">&quot;arm-none-eabi-&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 交叉编译器（可以通过 vscode 指定）</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_C_COMPILER <span class="string">&quot;$&#123;TOOLCHAINS_PATH&#125;/$&#123;TOOLCHAINS_PREFIX&#125;gcc.exe&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_COMPILER <span class="string">&quot;$&#123;TOOLCHAINS_PATH&#125;/$&#123;TOOLCHAINS_PREFIX&#125;g++.exe&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 跳过编译器检查</span></span><br><span class="line"><span class="comment"># set(CMAKE_C_COMPILER_WORKS 1)</span></span><br><span class="line"><span class="comment"># set(CMAKE_CXX_COMPILER_WORKS 1)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成目标的存放目录</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_OUTPUT_DIRECTORY <span class="variable">$&#123;PROJECT_SOURCE_DIR&#125;</span>/Debug)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_RUNTIME_OUTPUT_DIRECTORY <span class="variable">$&#123;CMAKE_OUTPUT_DIRECTORY&#125;</span>)</span><br><span class="line"><span class="comment"># 默认存放静态库的文件夹位置</span></span><br><span class="line"><span class="comment"># set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY $&#123;CMAKE_OUTPUT_DIRECTORY&#125;/archive)</span></span><br><span class="line"><span class="comment"># 默认存放动态库的文件夹位置</span></span><br><span class="line"><span class="comment"># set(CMAKE_LIBRARY_OUTPUT_DIRECTORY $&#123;CMAKE_OUTPUT_DIRECTORY&#125;/library)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CPU <span class="string">&quot;-mcpu=cortex-m33&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(FPU <span class="string">&quot;&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(FLOAT-ABI <span class="string">&quot;&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(MCU <span class="string">&quot;$&#123;CPU&#125; -mthumb $&#123;FPU&#125; $&#123;FLOAT-ABI&#125;&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_C_STANDARD_REQUIRED <span class="keyword">ON</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_C_STANDARD <span class="number">11</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_C_FLAGS <span class="string">&quot;$&#123;MCU&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_C_FLAGS_DEBUG <span class="string">&quot;-g3&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_C_FLAGS_RELEASE <span class="string">&quot;&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果CMAKE_CXX_STANDARD_REQUIRED设置为ON则必须使用CMAKE_CXX_STANDARD指定的版本</span></span><br><span class="line"><span class="comment"># 如果CMAKE_CXX_STANDARD_REQUIRED设置为OFF则CMAKE_CXX_STANDARD指定版本的为首选版本如果没有会使用上一版本</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_STANDARD_REQUIRED <span class="keyword">ON</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_STANDARD <span class="number">17</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_FLAGS <span class="string">&quot;$&#123;MCU&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_FLAGS_DEBUG <span class="string">&quot;-g3&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_FLAGS_RELEASE <span class="string">&quot;&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(LD_SCRIPT <span class="string">&quot;$&#123;PROJECT_SOURCE_DIR&#125;/Project_Settings/Linker_Files/flash.ld&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(ASM_SOURCES <span class="string">&quot;$&#123;PROJECT_SOURCE_DIR&#125;/Project_Settings/Startup_Code/YTM32B1ME0_startup_gcc.S&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(MAP_FILE <span class="string">&quot;$&#123;CMAKE_OUTPUT_DIRECTORY&#125;/$&#123;PROJECT_NAME&#125;.map&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_EXE_LINKER_FLAGS <span class="string">&quot;--specs=nosys.specs&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)</span><br></pre></td></tr></table></figure>
-
-<h3 id="构建及编译指令"><a href="#构建及编译指令" class="headerlink" title="构建及编译指令"></a>构建及编译指令</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd Project</span><br><span class="line">cmake -G &quot;Unix Makefiles&quot; -S. -BDebug -DCMAKE_TOOLCHAIN_FILE=toolchains.cmake</span><br><span class="line">cmake --build Debug --target all -- -j8</span><br></pre></td></tr></table></figure>
-
-<h3 id="写cmake脚本时遇到的问题"><a href="#写cmake脚本时遇到的问题" class="headerlink" title="写cmake脚本时遇到的问题"></a>写cmake脚本时遇到的问题</h3><ol>
-<li>vscode生成cmake时需要加入指定工具链的命令<code>-DCMAKE_TOOLCHAIN_FILE=toolchains.cmake</code>，这个需在vscode cmake拓展设置中配置。</li>
-<li>vscode生成cmake可以选择是Debug还是Release，还可选择工具链，既然我通过上面一个方案传入工具链的cmake，vscode配置工具链成未指定就可以了。</li>
-<li>cmake生成时会有检查工具链，有些工具链可能会报错，gcc10.5需要加<code>set(CMAKE_EXE_LINKER_FLAGS &quot;--specs=nosys.specs&quot;)</code>。</li>
-<li>gcc4.9就不支持<code>--specs=nosys.specs</code>这个选项，跳过编译器检查需要加 <code>set(CMAKE_C_COMPILER_WORKS 1) set(CMAKE_CXX_COMPILER_WORKS 1)</code>。</li>
-<li>跨平台的编译需要加<code>set(CMAKE_SYSTEM_NAME Generic) set(CMAKE_SYSTEM_PROCESSOR ARM)</code>，否则会链接错误。</li>
-<li>更详细的编译信息<code>set(CMAKE_VERBOSE_MAKEFILE on)</code>需要加在<code>project($&#123;PROJECT_NAME&#125; LANGUAGES C CXX)</code>后面，否则不起作用。</li>
-<li><code>set(CMAKE_SYSTEM_NAME Generic)</code>需要加在<code>project($&#123;PROJECT_NAME&#125; LANGUAGES C CXX)</code>前面，否则不起作用，这类问题还没搞清楚为什么有的需要在project前有的需要在后，解决方法是由于未起作用试出来的。</li>
-</ol>
-<h3 id="待优化"><a href="#待优化" class="headerlink" title="待优化"></a>待优化</h3><ol>
-<li>现在链接顺序和 eclipse 编译出来的不一致，导致二进制不同（经测试，手动改变链接顺序，改成与 eclipse 一致，编译结果 bin 一致）。</li>
-<li>没根据系统选择不同的cmake脚本，linux 下可能不兼容。</li>
-</ol>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1497,7 +1548,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">78</span>
+          <span class="site-state-item-count">79</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
