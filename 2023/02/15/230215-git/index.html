@@ -250,7 +250,8 @@
 <h3 id="强制修改分支位置"><a href="#强制修改分支位置" class="headerlink" title="强制修改分支位置"></a>强制修改分支位置</h3><p>我使用相对引用最多的就是移动分支。可以直接使用 -f 选项让分支指向另一个提交。例如:<code>git branch -f main HEAD~3</code>，命令会将 main 分支强制指向 HEAD 的第 3 级父提交。</p>
 <h3 id="撤销变更"><a href="#撤销变更" class="headerlink" title="撤销变更"></a>撤销变更</h3><p><code>git reset</code> 通过把分支记录回退几个提交记录来实现撤销改动。你可以将这想象成“改写历史”。<code>git reset</code> 向上移动分支，原来指向的提交记录就跟从来没有提交过一样。<br>为了撤销更改并分享给别人，我们需要使用 <code>git revert</code>，在我们要撤销的提交记录后面居然多了一个新提交，此次提交是用来撤销上一次提交的，此次提交与上上一次提交状态相同。</p>
 <h3 id="Git-Cherry-pick"><a href="#Git-Cherry-pick" class="headerlink" title="Git Cherry-pick"></a>Git Cherry-pick</h3><p>如果你想<strong>将一些提交复制到当前所在的位置（HEAD）下面</strong>的话， Cherry-pick 是最直接的方式了。命令形式为：<code>git cherry-pick &lt;提交号&gt;...</code></p>
-<h3 id="交互式的-Rebase"><a href="#交互式的-Rebase" class="headerlink" title="交互式的 Rebase"></a>交互式的 Rebase</h3><p>交互式 rebase 指的是使用带参数 –interactive 的 rebase 命令, 简写为 -i。<br>如果你在命令后增加了这个选项, Git 会打开一个 UI 界面并列出将要被复制到目标分支的备选提交记录，它还会显示每个提交记录的哈希值和提交说明，提交说明有助于你理解这个提交进行了哪些更改。Git会自动打开默认的文本编辑器，比如在我本地使用的是vim。在文本编辑器的开始几行会列出所有满足条件的提交记录，每个提交记录对应一行，每行开头单词代表要对这条提交记录实施的操作。</p>
+<h3 id="交互式的-Rebase"><a href="#交互式的-Rebase" class="headerlink" title="交互式的 Rebase"></a>交互式的 Rebase</h3><p>交互式 rebase 指的是使用带参数 —interactive 的 rebase 命令, 简写为 -i。<br>如果你在命令后增加了这个选项, Git 会打开一个 UI 界面并列出将要被复制到目标分支的备选提交记录，它还会显示每个提交记录的哈希值和提交说明，提交说明有助于你理解这个提交进行了哪些更改。Git会自动打开默认的文本编辑器，比如在我本地使用的是vim。在文本编辑器的开始几行会列出所有满足条件的提交记录，每个提交记录对应一行，每行开头单词代表要对这条提交记录实施的操作。</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -258,7 +259,8 @@
 <th>说明</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>pick</td>
 <td>采用该提交（默认行为）</td>
 </tr>
@@ -286,7 +288,9 @@
 <td>drop</td>
 <td>丢弃该提交</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h3 id="Git-Describe"><a href="#Git-Describe" class="headerlink" title="Git Describe"></a>Git Describe</h3><p>git describe 的​​语法是：<code>git describe &lt;ref&gt;</code><br><code>&lt;ref&gt;</code> 可以是任何能被 Git 识别成提交记录的引用，如果你没有指定的话，Git 会以你目前所检出的位置（HEAD）。<br>它输出的结果：<code>&lt;tag&gt;_&lt;numCommits&gt;_g&lt;hash&gt;</code><br>tag 表示的是离 ref 最近的标签， numCommits 是表示这个 ref 与 tag 相差有多少个提交记录， hash 表示的是你所给定的 ref 所表示的提交记录哈希值的前几位。当 ref 提交记录上有某个标签时，则只输出标签名称。</p>
 <h3 id="Git-Pull"><a href="#Git-Pull" class="headerlink" title="Git Pull"></a>Git Pull</h3><p>git pull 就是 git fetch 和 git merge 的缩写！</p>
 <h3 id="rebase和merge区别【阅读原文】"><a href="#rebase和merge区别【阅读原文】" class="headerlink" title="rebase和merge区别【阅读原文】"></a>rebase和merge区别【<a target="_blank" rel="noopener" href="https://joyohub.com/2020/04/06/git-rebase/">阅读原文</a>】</h3><p>使用git merge 命令将 master 分支合并到 feature分支中：<code>git merge feature master</code>，git merge 会在 feature 分支中新增一个新的 merge commit，然后将两个分支的历史联系在一起。</p>
@@ -396,7 +400,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-count">80</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -489,6 +493,8 @@
 
 
 
+
+  
 
   
 

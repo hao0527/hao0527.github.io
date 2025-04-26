@@ -246,7 +246,7 @@
 
       
         <h3 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h3><p>在学习FPGA时使用了DDR3，最近学ARM处理器也用到了DDR3的外设，在FPGA是使用 MIG(Memory Interface Generators)IP核驱动DDR3，ARM处理器是通过配置MMDC(Multi Mode DDR Controller)模块驱动DDR3，这编博客将会介绍使用DDR需配置的几个关键参数。</p>
-<p>SRAM操作流程、时序图可以浏览我之前的文章，<a href="/2021/12/19/211219-fpga%E4%B9%8Bsdram/">FPGA之SDRAM学习</a>。</p>
+<p>SRAM操作流程、时序图可以浏览我之前的文章，<a href="/2021/12/19/211219-fpga之sdram/">FPGA之SDRAM学习</a>。</p>
 <h3 id="关键参数"><a href="#关键参数" class="headerlink" title="关键参数"></a>关键参数</h3><h4 id="传输速率"><a href="#传输速率" class="headerlink" title="传输速率"></a>传输速率</h4><p>传输速率的单位是MT/s(Mega Transfer Per Second)，即每秒传输的百万次数，常见DDR3有800MT/s、1066MT/s、1333MT/s、1600MT/s等，这是首先需要考虑的，该参数决定了DDR的最高数据传输速率。</p>
 <h4 id="tRCD-参数"><a href="#tRCD-参数" class="headerlink" title="tRCD 参数"></a>tRCD 参数</h4><p>tRCD 全称是 RAS-to-CAS Delay，也就是<strong>行寻址到列寻址之间的延迟</strong>。 DDR 的寻址流程是先指定 BANK 地址，然后在指定行地址，最后指定列地址确定最终要寻址的单元。 BANK 地址和行地址是同时发出的，这个命令叫做<strong>行激活</strong>(Row Active)。行激活以后就发送列地址和具体的操作命令(读还是写)，这两个是同时发出的，因此一般也用<strong>读/写命令</strong>表示<strong>列寻址</strong>。在行有效(行激活)到读/写命令发出的这段时间间隔叫做 tRCD。</p>
 <h4 id="CL-参数"><a href="#CL-参数" class="headerlink" title="CL 参数"></a>CL 参数</h4><p>当列地址发出以后就会触发数据传输，但是从数据从存储单元到内存芯片 IO 接口上还需要一段时间，这段时间就是非常著名的 CL(CAS Latency)，也就是<strong>列地址选通潜伏期</strong>。</p>
@@ -349,7 +349,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-count">80</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -442,6 +442,8 @@
 
 
 
+
+  
 
   
 

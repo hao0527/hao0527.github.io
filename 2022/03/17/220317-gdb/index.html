@@ -254,24 +254,22 @@
 </ul>
 <h3 id="GDB支持哪些语言"><a href="#GDB支持哪些语言" class="headerlink" title="GDB支持哪些语言"></a>GDB支持哪些语言</h3><p>GDB主要来调试C/C++语言写的程序，当然也就可以调试其他语言程序，另外的语言没了解过。</p>
 <h2 id="GDB使用"><a href="#GDB使用" class="headerlink" title="GDB使用"></a>GDB使用</h2><h3 id="在Ubuntu中安装GDB"><a href="#在Ubuntu中安装GDB" class="headerlink" title="在Ubuntu中安装GDB"></a>在Ubuntu中安装GDB</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt install gdb</span><br></pre></td></tr></table></figure>
-
 <h3 id="补一下GCC的知识"><a href="#补一下GCC的知识" class="headerlink" title="补一下GCC的知识"></a>补一下GCC的知识</h3><p><a target="_blank" rel="noopener" href="https://www.runoob.com/w3cnote/gcc-parameter-detail.html">GCC参数详解</a>，gcc 与 g++ 分别是 gnu 的 c &amp; c++ 编译器 gcc/g++ 在执行编译工作的时候，总共需要4步：</p>
 <ul>
 <li><p>预处理,生成 .i 的文件[预处理器cpp]，指令：-E</p>
 </li>
 <li><p>将预处理后的文件转换成汇编语言, 生成文件 .s [编译器egcs]，指令：-S</p>
 </li>
-<li><p>由汇编变为目标代码(机器代码)生成 .o 的文件[汇编器as]，指令：-c</p>
-</li>
-<li><p>连接目标代码, 生成可执行程序 [链接器ld]，指令：-o FILE</p>
-</li>
+<li>由汇编变为目标代码(机器代码)生成 .o 的文件[汇编器as]，指令：-c</li>
+<li>连接目标代码, 生成可执行程序 [链接器ld]，指令：-o FILE</li>
 </ul>
 <p>在配合GDB时，gcc的指令选项有：</p>
 <ul>
 <li>-g（生成调试信息，GNU 调试器可利用该信息）</li>
 <li>-ggdb（此选项将尽可能的生成 gdb 的可以使用的调试信息）</li>
 </ul>
-<h3 id="GDB中的基本调试命令"><a href="#GDB中的基本调试命令" class="headerlink" title="GDB中的基本调试命令"></a>GDB中的基本调试命令</h3><table>
+<h3 id="GDB中的基本调试命令"><a href="#GDB中的基本调试命令" class="headerlink" title="GDB中的基本调试命令"></a>GDB中的基本调试命令</h3><div class="table-container">
+<table>
 <thead>
 <tr>
 <th><strong>命令</strong></th>
@@ -279,7 +277,8 @@
 <th><strong>命令说明</strong></th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>set args</td>
 <td></td>
 <td>设置主程序的参数。例如：./test 1 2设置参数的方法是：gdb test(gdb) set args 1 2</td>
@@ -324,15 +323,13 @@
 <td>q</td>
 <td>退出gdb环境。</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h3 id="进入GDB调试"><a href="#进入GDB调试" class="headerlink" title="进入GDB调试"></a>进入GDB调试</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gcc test.c -g -o test</span><br><span class="line">gdb test # 进入gdb，指定test为可执行文件</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">也可以只执行gdb，在gdb中用file命令指定可执行文件</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">接下来就可以使用GDB的基本调试命令调试程序了</span></span><br></pre></td></tr></table></figure>
-
 <h3 id="调试正在运行的程序"><a href="#调试正在运行的程序" class="headerlink" title="调试正在运行的程序"></a>调试正在运行的程序</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">通过ps获取程序进程号</span></span><br><span class="line">gdb test -p [进程号]</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">进入gdb后，程序会被暂停</span></span><br><span class="line">(gdb)bt # 使用bt查看程序的调用栈</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Print backtrace of all stack frames, or innermost COUNT frames.</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">退出后，程序继续执行</span></span><br></pre></td></tr></table></figure>
-
 <h3 id="调试多进程程序"><a href="#调试多进程程序" class="headerlink" title="调试多进程程序"></a>调试多进程程序</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(gdb)set follow-fork-mode [parent|child]</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">（缺省是parent）调试父|子进程，父|子进程不受影响</span></span><br><span class="line">(gdb)set datach-on-fork [on|off]</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">（缺省是on）on表示调试当前进程时，其他进程继续运行，off表示调试当前进程时，其他进程被GDB挂起</span></span><br><span class="line">(gdb)info inferiors # 查看调试的进程</span><br><span class="line">(gdb)inferior # 切换当前调试的进程，进程id是查看调试的进程返回的Num值</span><br></pre></td></tr></table></figure>
-
 <h3 id="调试多线程程序"><a href="#调试多线程程序" class="headerlink" title="调试多线程程序"></a>调试多线程程序</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ps aux|grep test # 查看当前运行的进程，查找符合&quot;test&quot;的字符串</span><br><span class="line">ps -aL|grep test # 查看当前运行的轻量级进程</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">轻量级进程(LWP)是建立在内核之上并由内核支持的用户线程，它是内核线程的高度抽象，每一个轻量级进程都与一个特定的内核线程关联。</span></span><br><span class="line">pstree -p [主线程ID] # 查看主线程和新线程的关系</span><br><span class="line">(gdb)info threads # 查看线程</span><br><span class="line">(gdb)thread [线程ID] # 切换线程，线程ID是查看线程返回的Num值</span><br><span class="line">(gdb)set scheduler-locking [on|off] # on：只运行当前线程，off：运行全部的线程</span><br><span class="line">(gdb)thread apply [线程ID|all] [cmd] # 让某个|全部线程执行某GDB命令</span><br></pre></td></tr></table></figure>
-
 <h3 id="服务程序运行日志"><a href="#服务程序运行日志" class="headerlink" title="服务程序运行日志"></a>服务程序运行日志</h3><p>设置断点或单步跟踪可能会严重干扰多进程、多线程之间的竞争状态，导致我们看到一个假象。一旦我们在某个线程设置了断点，该线程在断点处挺住了，只剩下另一个线程在跑。这时候，并发的场景已经完全被破坏了，通过调试器看到的只是一个和谐的场景（理想状态）。<strong>输出Log日志</strong>可以避免断点和单步跟踪所导致的副作用。</p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
     </div>
@@ -428,7 +425,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-count">80</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -521,6 +518,8 @@
 
 
 
+
+  
 
   
 

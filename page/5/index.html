@@ -185,6 +185,256 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/12/220512-Git%E5%92%8CSVN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/12/220512-Git%E5%92%8CSVN/" class="post-title-link" itemprop="url">Git和SVN</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-12 21:00:00" itemprop="dateCreated datePublished" datetime="2022-05-12T21:00:00+08:00">2022-05-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-07-09 00:21:23" itemprop="dateModified" datetime="2024-07-09T00:21:23+08:00">2024-07-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="Git和SVN"><a href="#Git和SVN" class="headerlink" title="Git和SVN"></a>Git和SVN</h2><p>公司里常用的两种版本控制工具：Git和SVN，两者最大的区别就是Git是分布式，SVN是集中式。<strong>集中式</strong>的版本控制系统都有一个单一的集中管理的服务器，保存所有文件的修订版本，而协同工作的人们都通过客户端连到这台服务器，取出最新的文件或者提交更新。 <strong>分布式</strong>的版本控制系统都有一个单一的集中管理的服务器，保存所有文件的修订版本，而协同工作的人们在自己本地也会创建一个库，用于保存自己的修改与提交，之后再将自己库提交至服务器库进行更新。</p>
+<p><strong>Subversion的特点概括起来主要由以下几条：</strong></p>
+<ul>
+<li>每个版本库有唯一的URL（官方地址），每个用户都从这个地址获取代码和数据；</li>
+<li>获取代码的更新，也只能连接到这个唯一的版本库，同步以取得最新数据；</li>
+<li>提交必须有网络连接（非本地版本库）；</li>
+<li>提交需要授权，如果没有写权限，提交会失败；</li>
+<li>提交并非每次都能够成功。如果有其他人先于你提交，会提示“改动基于过时的版本，先更新再提交”… 诸如此类；</li>
+<li>冲突解决是一个提交速度的竞赛：手快者，先提交，平安无事；手慢者，后提交，可能遇到麻烦的冲突解决；</li>
+</ul>
+<p><strong>Git具有以下特点：</strong></p>
+<ul>
+<li>Git中每个克隆(clone)的版本库都是平等的。你可以从任何一个版本库的克隆来创建属于你自己的版本库，同时你的版本库也可以作为源提供给他人，只要你愿意；</li>
+<li>Git的每一次提取操作，实际上都是一次对代码仓库的完整备份；</li>
+<li>提交完全在本地完成，无须别人给你授权，你的版本库你作主，并且提交总是会成功；</li>
+<li>甚至基于旧版本的改动也可以成功提交，提交会基于旧的版本创建一个新的分支；</li>
+<li>Git的提交不会被打断，直到你的工作完全满意了，PUSH给他人或者他人PULL你的版本库，合并会发生在PULL和PUSH过程中，不能自动解决的冲突会提示您手工完成；</li>
+<li>冲突解决不再像是SVN一样的提交竞赛，而是在需要的时候才进行合并和冲突解决；</li>
+<li>Git 也可以模拟集中式的工作模式，Git版本库统一放在服务器中，Git 的集中式工作模式非常灵活；</li>
+<li>可以为 Git 版本库进行授权：谁能创建版本库，谁能向版本库PUSH，谁能够读取（克隆）版本库;</li>
+<li>团队的成员先将服务器的版本库克隆到本地；并经常的从服务器的版本库拉（PULL）最新的更新；</li>
+<li>团队的成员将自己的改动推（PUSH）到服务器的版本库中，当其他人和版本库同步（PULL）时，会自动获取改变；</li>
+<li>你完全可以在脱离Git服务器所在网络的情况下，如移动办公或出差时，照常使用代码库；</li>
+<li>你只需要在能够接入Git服务器所在网络时，PULL和PUSH即可完成和服务器同步以及提交；</li>
+<li>Git提供 rebase 命令，可以让你的改动看起来是基于最新的代码实现的改动；</li>
+<li>Git 有更多的工作模式可以选择，远非 Subversion可比；</li>
+<li>Git 分支是指针指向某次提交，而 SVN 分支是拷贝的目录，这个特性使 Git 的分支切换非常迅速，且创建成本非常低；</li>
+</ul>
+<h2 id="Git基本概念和常用命令"><a href="#Git基本概念和常用命令" class="headerlink" title="Git基本概念和常用命令"></a>Git基本概念和常用命令</h2><ul>
+<li><strong>工作区：</strong>就是你在电脑里能看到的目录。</li>
+<li><strong>暂存区：</strong>英文叫 stage 或 index。一般存放在 <strong>.git</strong> 目录下的 index 文件（.git/index）中，所以我们把暂存区有时也叫作索引（index）。</li>
+<li><strong>版本库：</strong>工作区有一个隐藏目录 <strong>.git</strong>，这个不算工作区，而是 Git 的版本库，版本库可分为远程仓库和本地仓库。<br><img src="/2022/05/12/220512-Git%E5%92%8CSVN/220512-Git和SVN-1.jpg" alt="220512-Git和SVN-1.jpg"></li>
+</ul>
+<p>Git 常用的是以下 6 个命令：<strong>git clone</strong>、<strong>git push</strong>、<strong>git add</strong> 、<strong>git commit</strong>、<strong>git checkout</strong>、<strong>git pull</strong><br><img src="/2022/05/12/220512-Git%E5%92%8CSVN/220512-Git和SVN-2.jpg" alt="220512-Git和SVN-2.jpg"></p>
+<p> git 创建仓库的命令：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">命令</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>git init</code></td>
+<td style="text-align:left">初始化仓库</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>git clone</code></td>
+<td style="text-align:left">拷贝一份远程仓库，也就是下载一个项目。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>提交与修改的命令：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">命令</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>git add</code></td>
+<td style="text-align:left">添加文件到暂存区</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>git status</code></td>
+<td style="text-align:left">查看仓库当前的状态，显示有变更的文件。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>git diff</code></td>
+<td style="text-align:left">比较文件的不同，即暂存区和工作区的差异。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>git commit</code></td>
+<td style="text-align:left">提交暂存区到本地仓库。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>git reset</code></td>
+<td style="text-align:left">回退版本。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>git rm</code></td>
+<td style="text-align:left">删除工作区文件。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>git mv</code></td>
+<td style="text-align:left">移动或重命名工作区文件。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>提交日志的命令：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">命令</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>git log</code></td>
+<td style="text-align:left">查看历史提交记录</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>git blame</code></td>
+<td style="text-align:left">以列表形式查看指定文件的历史修改记录</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>远程操作的命令：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">命令</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>git remote</code></td>
+<td style="text-align:left">远程仓库操作</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>git fetch</code></td>
+<td style="text-align:left">从远程获取代码库</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>git pull</code></td>
+<td style="text-align:left">下载远程代码并合并</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>git push</code></td>
+<td style="text-align:left">上传远程代码并合并</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Git 分支管理：<a target="_blank" rel="noopener" href="https://www.runoob.com/git/git-branch.html">https://www.runoob.com/git/git-branch.html</a><br>Git 查看提交历史：<a target="_blank" rel="noopener" href="https://www.runoob.com/git/git-commit-history.html">https://www.runoob.com/git/git-commit-history.html</a><br>Git 标签：<a target="_blank" rel="noopener" href="https://www.runoob.com/git/git-tag.html">https://www.runoob.com/git/git-tag.html</a><br>更多命令查看Git完整命令手册地址：<a target="_blank" rel="noopener" href="http://git-scm.com/docs">http://git-scm.com/docs</a></p>
+<h2 id="Tortoise-SVN"><a href="#Tortoise-SVN" class="headerlink" title="Tortoise SVN"></a>Tortoise SVN</h2><p>SVN教程：<a target="_blank" rel="noopener" href="https://www.runoob.com/svn/svn-tutorial.html">https://www.runoob.com/svn/svn-tutorial.html</a></p>
+<p>TortoiseSVN 是 SVN(Subversion) 版本控制系统的一个免费开源客户端，可以超越时间的管理文件和目录。TortoiseSVN 使用教程：<a target="_blank" rel="noopener" href="https://www.runoob.com/svn/tortoisesvn-intro.html">https://www.runoob.com/svn/tortoisesvn-intro.html</a></p>
+<p>企业通常是使用TortoiseSVN提供的图像化界面操作，使用较简单。Windows的Git提供了GitGUI，也可以使用TortoiseGit，配置参数也有图形化界面，之前实习的一家公司就是 TortoiseGit 和 TortoiseSVN 。</p>
+<h2 id="版本管控工具分支管理"><a href="#版本管控工具分支管理" class="headerlink" title="版本管控工具分支管理"></a>版本管控工具分支管理</h2><h3 id="SVN分支管理策略"><a href="#SVN分支管理策略" class="headerlink" title="SVN分支管理策略"></a>SVN分支管理策略</h3><ul>
+<li>trunk(主干|主线|主分支)：是用来做主方向开发的，新功能的开发应放在主线中，当模块开发完成后，需要修改，就用branch。</li>
+<li>branches(分支)：分支开发和主线开发是可以同时进行的，也就是并行开发，分支通常用于修复bug时使用。</li>
+<li>tags (标记)：用于标记某个可用的版本，可以标记已经上线发布的版本，也可以标记正在测试的版本，通常是只读的。</li>
+</ul>
+<p>branch是用来做并行开发的，这里的并行是指和trunk进行比较。比如，3.0开发完成，这个时候要做一个tag，tag_release_3_0，然后基于这个tag做release，比如安装程序等。trunk进入3.1的开发，但是3.0发现了bug，那么就需要基于tag_release_3_0做一个branch，branch_bugfix_3_0，基于这个branch进行bugfix，等到bugfix结束，做一个tag，tag_release_3_0_1，然后，根据需要决定branch_bugfix_3_0是否并入trunk。</p>
+<h3 id="Git分支管理策略"><a href="#Git分支管理策略" class="headerlink" title="Git分支管理策略"></a>Git分支管理策略</h3><p><strong>Git Flow模型</strong>中定义了主分支和辅助分支两类分支。其中主分支用于组织与软件开发、部署相关的活动，辅助分支组织用于解决特定的问题而进行的各种开发活动。Git Flow开发模型从源代码管理角度对通常意义上的软件开发活动进行了约束，为软件开发提供了一个可供参考的管理模型。Git Flow开发模型让代码仓库保持整洁，让小组各个成员之间的开发相互隔离，能够有效避免处于开发状态中的代码相互影响而导致的效率低下和混乱。</p>
+<p>Git Flow模型的特点是只有2个主干分支，Master和Develop分支：Master分支上只有稳定的生产版本，Develop分支用于集成。其中还涉及到HotFix分支。而其他还有三类分支：Feature分支用于开发人员各自开发；Release用于代码合并和集成；HotFix用于产品版本代码的紧急修订。</p>
+<p><strong>master分支</strong>通常只能从其它分支合并，不能在master分支直接修改。master分支上存放的是随时可供在生产环境中部署的代码（Production Ready state）。当开发活动到一定阶段，产生一份新的可供部署的代码时，master分支上的代码会被更新。同时，每一次更新，最好添加对应的版本号标签（TAG），所有在Master分支上的Commit应该打Tag。</p>
+<p><strong>develop分支</strong>是保持当前开发最新成果的分支，一般会在此分支上进行晚间构建（Nightly Build）并执行自动化测试。develop分支产生于master分支, 并长期存在。当一个版本功能开发完毕且通过测试功能稳定时，就会合并到master分支上，并打好带有相应版本号的tag。develop分支是主开发分支，包含所有要发布到下一个Release的代码，主要合并其它分支，比如Feature分支。</p>
+<p><strong>辅助分支</strong>是用于组织解决特定问题的各种软件开发活动的分支。辅助分支主要用于组织软件新功能的并行开发、简化新功能开发代码的跟踪、辅助完成版本发布工作以及对生产代码的缺陷进行紧急修复工作。辅助分支通常只会在有限的时间范围内存在。辅助分支包括用于开发新功能时所使用的feature分支，用于辅助版本发布的release分支，用于修正生产代码中的缺陷的hotfix分支。辅助分支都有固定的使用目的和分支操作限制。通过对分支的命名，定义了使用辅助分支的方法。</p>
+<p><strong>feature分支</strong>可以从develop分支派生。feature分支的命名可以使用除master，develop，release-*，hotfix-*之外的任何名称。feature分支（topic分支）通常在开发一项新的软件功能的时候使用，分支上的代码变更最终合并回develop分支或者干脆被抛弃掉（例如实验性且效果不好的代码变更）。一般而言，feature分支代码可以保存在开发者自己的代码库中而不强制提交到主代码库里。Feature分支开发完成后，必须合并回Develop分支，合并完分支后一般会删feature分支，但也可以保留。</p>
+<p><strong>release分支</strong>可以从develop分支派生。release分支是为发布新的产品版本而设计的。在release分支上的代码允许做测试、bug修改、准备发布版本所需的各项说明信息（版本号、发布时间、编译时间等）。通过在release分支上进行发布相关工作可以让develop分支空闲出来以接受新的feature分支上的代码提交，进入新的软件开发迭代周期。当develop分支上的代码已经包含了所有即将发布的版本中所计划包含的软件功能，并且已通过所有测试时，可以考虑准备创建release分支。而所有在当前即将发布的版本外的业务需求一定要确保不能混到release分支内（避免由此引入一些不可控的系统缺陷）。成功的派生release分支并被赋予版本号后，develop分支就可以为下一个版本服务。版本号的命名可以依据项目定义的版本号命名规则进行。发布Release分支时，合并Release到Master和Develop， 同时在Master分支上打个Tag记住Release版本号，然后就可以删除Release分支。</p>
+<p><strong>hotfix分支</strong>可以从master分支派生。hotfix分支是计划外创建的，可以产生一个新的可供在生产环境部署的软件版本。当生产环境中的软件遇到异常情况或者发现了严重到必须立即修复的软件缺陷时，就需要从master分支上指定的TAG版本派生hotfix分支来组织代码的紧急修复工作。优点是不会打断正在进行的develop分支的开发工作，能够让团队中负责新功能开发的人与负责代码紧急修复的人并行的开展工作。hotfix分支基于Master分支创建，开发完后需要合并回Master和Develop分支，同时在Master上打一个tag。</p>
+<h2 id="使用Git遇到的问题"><a href="#使用Git遇到的问题" class="headerlink" title="使用Git遇到的问题"></a>使用Git遇到的问题</h2><h3 id="Git-tag"><a href="#Git-tag" class="headerlink" title="Git tag"></a>Git tag</h3><p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_21746331/article/details/1207767">GIT 中如何打标签（git tag）</a></p>
+<p><img src="/2022/05/12/220512-Git%E5%92%8CSVN/220512-Git和SVN-3.jpg" alt="220512-Git和SVN-3.jpg"></p>
+<h3 id="Git-show"><a href="#Git-show" class="headerlink" title="Git show"></a>Git show</h3><p>给历史版本打标签时用的commit可以通过git show查看历史版本的hash。</p>
+<p><img src="/2022/05/12/220512-Git%E5%92%8CSVN/220512-Git和SVN-4.jpg" alt="220512-Git和SVN-4.jpg"></p>
+<h3 id="Git-log"><a href="#Git-log" class="headerlink" title="Git log"></a>Git log</h3><p>查看提交日志，当你要修改历史提交前，你可以通过git log看看要修改第几次的提交。</p>
+<p><img src="/2022/05/12/220512-Git%E5%92%8CSVN/220512-Git和SVN-5.jpg" alt="220512-Git和SVN-5.jpg"></p>
+<h3 id="Git-rebase"><a href="#Git-rebase" class="headerlink" title="Git rebase"></a>Git rebase</h3><p>通过git rebase可以修改历史的版本，参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_62277266/article/details/124260568">Git系列之修改历史提交信息</a>，使用rebase指令后会在vi编辑器中选择要修改哪次提交，然后通过vi编辑器修改提交的内容。</p>
+<p>注意：异常退出可能导致文件丢失，不要慌终端有提示如何恢复。</p>
+<p><img src="/2022/05/12/220512-Git%E5%92%8CSVN/220512-Git和SVN-6.jpg" alt="220512-Git和SVN-6.jpg"></p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/11/220511-C%E8%AF%AD%E8%A8%80%E9%A2%84%E5%A4%84%E7%90%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -243,91 +493,98 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h3 id="ANSI-C标准"><a href="#ANSI-C标准" class="headerlink" title="ANSI C标准"></a><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/ANSI%20C%E6%A0%87%E5%87%86/6044290?fr=aladdin">ANSI C标准</a></h3><p>ANSI C是<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%BE%8E%E5%9B%BD%E5%9B%BD%E5%AE%B6%E6%A0%87%E5%87%86%E5%8D%8F%E4%BC%9A/5709537">美国国家标准协会</a>（ANSI）对<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/C%E8%AF%AD%E8%A8%80">C语言</a>发布的标准。使用C的软件开发者被鼓励遵循ANSI C文档的要求，因为它鼓励使用<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E8%B7%A8%E5%B9%B3%E5%8F%B0/8558902">跨平台</a>的代码。</p>
+          <h3 id="ANSI-C标准"><a href="#ANSI-C标准" class="headerlink" title="ANSI C标准"></a><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/ANSI%20C%E6%A0%87%E5%87%86/6044290?fr=aladdin">ANSI C标准</a></h3><p>ANSI C是<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/美国国家标准协会/5709537">美国国家标准协会</a>（ANSI）对<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/C语言">C语言</a>发布的标准。使用C的软件开发者被鼓励遵循ANSI C文档的要求，因为它鼓励使用<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/跨平台/8558902">跨平台</a>的代码。</p>
 <p>发展过程中产生了C89、C90、C99、C11四套标准，最早的C89在1983年创立，C90是1990年创立的ANSI C标准（带有一些小改动），C99在2000年3月创立，C11在2011年12月创立。</p>
-<h3 id="C预处理器"><a href="#C预处理器" class="headerlink" title="C预处理器"></a><a target="_blank" rel="noopener" href="https://www.runoob.com/cprogramming/c-preprocessors.html">C预处理器</a></h3><table>
-<thead>
-<tr>
-<th align="left">指令</th>
-<th align="left">描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">#define</td>
-<td align="left">定义宏</td>
-</tr>
-<tr>
-<td align="left">#include</td>
-<td align="left">包含一个源代码文件</td>
-</tr>
-<tr>
-<td align="left">#undef</td>
-<td align="left">取消已定义的宏</td>
-</tr>
-<tr>
-<td align="left">#ifdef</td>
-<td align="left">如果宏已经定义，则返回真</td>
-</tr>
-<tr>
-<td align="left">#ifndef</td>
-<td align="left">如果宏没有定义，则返回真</td>
-</tr>
-<tr>
-<td align="left">#if</td>
-<td align="left">如果给定条件为真，则编译下面代码</td>
-</tr>
-<tr>
-<td align="left">#else</td>
-<td align="left">#if 的替代方案</td>
-</tr>
-<tr>
-<td align="left">#elif</td>
-<td align="left">如果前面的 #if 给定条件不为真，当前条件为真，则编译下面代码</td>
-</tr>
-<tr>
-<td align="left">#endif</td>
-<td align="left">结束一个 #if……#else 条件编译块</td>
-</tr>
-<tr>
-<td align="left">#error</td>
-<td align="left">当遇到标准错误时，输出错误消息</td>
-</tr>
-<tr>
-<td align="left">#pragma</td>
-<td align="left">使用标准化方法，向编译器发布特殊的命令到编译器中</td>
-</tr>
-</tbody></table>
-<h3 id="预定义宏"><a href="#预定义宏" class="headerlink" title="预定义宏"></a>预定义宏</h3><p>ANSI C 定义了许多宏。在编程中可以使用这些宏，但是不能直接修改这些预定义的宏。</p>
+<h3 id="C预处理器"><a href="#C预处理器" class="headerlink" title="C预处理器"></a><a target="_blank" rel="noopener" href="https://www.runoob.com/cprogramming/c-preprocessors.html">C预处理器</a></h3><div class="table-container">
 <table>
 <thead>
 <tr>
-<th align="left">宏</th>
-<th align="left">描述</th>
+<th style="text-align:left">指令</th>
+<th style="text-align:left">描述</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="left">__DATE__</td>
-<td align="left">当前日期，一个以 “MMM DD YYYY” 格式表示的字符常量。</td>
+<tbody>
+<tr>
+<td style="text-align:left">#define</td>
+<td style="text-align:left">定义宏</td>
 </tr>
 <tr>
-<td align="left">__TIME__</td>
-<td align="left">当前时间，一个以 “HH:MM:SS” 格式表示的字符常量。</td>
+<td style="text-align:left">#include</td>
+<td style="text-align:left">包含一个源代码文件</td>
 </tr>
 <tr>
-<td align="left">__FILE__</td>
-<td align="left">这会包含当前文件名，一个字符串常量。</td>
+<td style="text-align:left">#undef</td>
+<td style="text-align:left">取消已定义的宏</td>
 </tr>
 <tr>
-<td align="left">__LINE__</td>
-<td align="left">这会包含当前行号，一个十进制常量。</td>
+<td style="text-align:left">#ifdef</td>
+<td style="text-align:left">如果宏已经定义，则返回真</td>
 </tr>
 <tr>
-<td align="left">__STDC__</td>
-<td align="left">当编译器以 ANSI 标准编译时，则定义为 1。</td>
+<td style="text-align:left">#ifndef</td>
+<td style="text-align:left">如果宏没有定义，则返回真</td>
 </tr>
-</tbody></table>
-<h3 id="pragma"><a href="#pragma" class="headerlink" title="#pragma"></a><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_39640298/article/details/84503428">#pragma</a></h3><p>#pragma指令的作用是：用于指定计算机或操作系统特定的编译器功能。C 和 C++ 的每个实现均支持某些对其主机或操作系统唯一的功能。 例如，某些程序必须对将数据放入的内存区域进行准确的控制或控制某些函数接收参数的方式。 在保留与 C 和 C++ 语言的总体兼容性的同时，#pragma 指令使每个编译器均能够提供特定于计算机和操作系统的功能。</p>
-<p>根据定义，#pragma指令是计算机或操作系统特定的，并且通常对于每个编译器而言都有所不同。 #pragma指令可用于条件语句以提供新的预处理器功能，或为编译器提供实现所定义的信息。</p>
+<tr>
+<td style="text-align:left">#if</td>
+<td style="text-align:left">如果给定条件为真，则编译下面代码</td>
+</tr>
+<tr>
+<td style="text-align:left">#else</td>
+<td style="text-align:left">#if 的替代方案</td>
+</tr>
+<tr>
+<td style="text-align:left">#elif</td>
+<td style="text-align:left">如果前面的 #if 给定条件不为真，当前条件为真，则编译下面代码</td>
+</tr>
+<tr>
+<td style="text-align:left">#endif</td>
+<td style="text-align:left">结束一个 #if……#else 条件编译块</td>
+</tr>
+<tr>
+<td style="text-align:left">#error</td>
+<td style="text-align:left">当遇到标准错误时，输出错误消息</td>
+</tr>
+<tr>
+<td style="text-align:left">#pragma</td>
+<td style="text-align:left">使用标准化方法，向编译器发布特殊的命令到编译器中</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="预定义宏"><a href="#预定义宏" class="headerlink" title="预定义宏"></a>预定义宏</h3><p>ANSI C 定义了许多宏。在编程中可以使用这些宏，但是不能直接修改这些预定义的宏。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">宏</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">__DATE__</td>
+<td style="text-align:left">当前日期，一个以 “MMM DD YYYY” 格式表示的字符常量。</td>
+</tr>
+<tr>
+<td style="text-align:left">__TIME__</td>
+<td style="text-align:left">当前时间，一个以 “HH:MM:SS” 格式表示的字符常量。</td>
+</tr>
+<tr>
+<td style="text-align:left">__FILE__</td>
+<td style="text-align:left">这会包含当前文件名，一个字符串常量。</td>
+</tr>
+<tr>
+<td style="text-align:left">__LINE__</td>
+<td style="text-align:left">这会包含当前行号，一个十进制常量。</td>
+</tr>
+<tr>
+<td style="text-align:left">__STDC__</td>
+<td style="text-align:left">当编译器以 ANSI 标准编译时，则定义为 1。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="pragma"><a href="#pragma" class="headerlink" title="#pragma"></a><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_39640298/article/details/84503428">#pragma</a></h3><h1 id="pragma指令的作用是：用于指定计算机或操作系统特定的编译器功能。C-和-C-的每个实现均支持某些对其主机或操作系统唯一的功能。-例如，某些程序必须对将数据放入的内存区域进行准确的控制或控制某些函数接收参数的方式。-在保留与-C-和-C-语言的总体兼容性的同时，-pragma-指令使每个编译器均能够提供特定于计算机和操作系统的功能。"><a href="#pragma指令的作用是：用于指定计算机或操作系统特定的编译器功能。C-和-C-的每个实现均支持某些对其主机或操作系统唯一的功能。-例如，某些程序必须对将数据放入的内存区域进行准确的控制或控制某些函数接收参数的方式。-在保留与-C-和-C-语言的总体兼容性的同时，-pragma-指令使每个编译器均能够提供特定于计算机和操作系统的功能。" class="headerlink" title="pragma指令的作用是：用于指定计算机或操作系统特定的编译器功能。C 和 C++ 的每个实现均支持某些对其主机或操作系统唯一的功能。 例如，某些程序必须对将数据放入的内存区域进行准确的控制或控制某些函数接收参数的方式。 在保留与 C 和 C++ 语言的总体兼容性的同时，#pragma 指令使每个编译器均能够提供特定于计算机和操作系统的功能。"></a>pragma指令的作用是：用于指定计算机或操作系统特定的编译器功能。C 和 C++ 的每个实现均支持某些对其主机或操作系统唯一的功能。 例如，某些程序必须对将数据放入的内存区域进行准确的控制或控制某些函数接收参数的方式。 在保留与 C 和 C++ 语言的总体兼容性的同时，#pragma 指令使每个编译器均能够提供特定于计算机和操作系统的功能。</h1><p>根据定义，#pragma指令是计算机或操作系统特定的，并且通常对于每个编译器而言都有所不同。 #pragma指令可用于条件语句以提供新的预处理器功能，或为编译器提供实现所定义的信息。</p>
 <p><code>#pragma pack([ show ] | [ push | pop ] [, identifier ] , n)</code>，用于内存对齐。<br><code>#pragma message(messageString)</code>，用于不中断编译的情况下，发送一个字符串文字量到标准输出。</p>
 <p>编译器可识别的指令还有很多。</p>
 <h3 id="和…"><a href="#和…" class="headerlink" title="##和…"></a><a target="_blank" rel="noopener" href="https://blog.csdn.net/ysds20211402/article/details/122300354">##和…</a></h3><p><code>##</code> 起连接字符串的作用，用于把参数宏中的“形参”与其它没有天然分割的内容粘连在一起。<br>例如：<code>#define def_u32_array(__name, __size)    uint32_t array_##__name[__size];</code><br><code>def_u32_array(sample_buffer, 64)</code>，宏展开后为：<code>uint32_t array_sample_buffer[64];</code></p>
@@ -414,54 +671,54 @@
       
           <h2 id="绪论"><a href="#绪论" class="headerlink" title="绪论"></a>绪论</h2><h3 id="研究内容"><a href="#研究内容" class="headerlink" title="研究内容"></a>研究内容</h3><p>本文介绍了如何设计一个以Altera FPGA为核心的网络摄像机，将图像传感器和MEMS麦克风作为的主要传感器，辅以千兆以太网模块、电源模块等模块，最终完成实现一个低成本易使用的网络摄像机的功能。要求该网络摄像机能够实时传输图像和音频信息，在电脑端可以将图像实时处理显示并将音频实时播放。此外，还能够将数据流存储在设备中，便于用户对视频进行回放等操作。</p>
 <h2 id="总体设计方案描述"><a href="#总体设计方案描述" class="headerlink" title="总体设计方案描述"></a>总体设计方案描述</h2><p>本设计方案是以Altera FPGA为核心，在Quartus 18.0开发平台上，实现FPGA接收图像传感器和麦克风数据，并通过千兆以太网PHY芯片，将图像和声音数据发送至电脑上位机，电脑上位机利用Python3编程语言编写，在PyCharm IDE中执行，实现音视频实时播放和音视频回放的功能。主要由Altera FPGA控制器、图像传感器模块、麦克风模块、以太网模块和电脑上位机组成，系统框图如下图所示。</p>
-<p><img src="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-1.png" alt="220501-毕业设计-1.png"></p>
+<p><img src="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/220501-毕业设计-1.png" alt="220501-毕业设计-1.png"></p>
 <h3 id="硬件选型"><a href="#硬件选型" class="headerlink" title="硬件选型"></a>硬件选型</h3><p>FPGA选用Cyclone IV EP4CE15 Starter Kit开发板。开发板板载W25Q64 SPI Flash芯片，8MB字节的存储容量，开发板给主控提供了50MHz的外部时钟源，芯片逻辑单元数为 15K LE，开发板引出了芯片的JTAG调试端口，引出了GMII千兆以太网接口，采用了RealTek的RTL8211EG芯片，引出了一个CMOS/CCD摄像头接口和40P的排座。开发板条件满足本设计的所有需求。</p>
 <p>图像传感器选择经典的OV2640模组，OV2640适配开发板引出的40P的排座，提供了SCCB接口，可供配置传感器参数，可以配置最大1600*1200分辨率的图像输出，还可以配置JPEG压缩格式输出图像，模组拥有8位并口，可以高速输出图像信息，拥有帧场同步信号管脚，和电源使能管脚，方便FPGA控制和接收图像信息。</p>
 <p>麦克风选择INMP441全向麦克风传感器，INMP441麦克风直接输出数字信号，采用的接口是I2S，非常适合FPGA去读取总线数据。传统驻极体麦克风输出模拟信号，选用INMP441省去了传统驻极体麦克所需的放大器、滤波器和模数转换器等硬件设计。</p>
 <h3 id="FPGA设计方案"><a href="#FPGA设计方案" class="headerlink" title="FPGA设计方案"></a>FPGA设计方案</h3><p>FPGA设计采用模块化设计的方案，通过模块化设计，可以使一个大型设计分成多个模块，这样分工协作可使仿真测试更加容易，并且代码维护和代码升级也会更加方便。顶层模块不做逻辑设计，只通过例化调用子模块接口。因此，顶层模块下就由各功能模块组成，各功能模块下还可以分成多个子功能模块来实现。通过编译器对每个模块的综合仿真约束等设计，最后将所有模块连在一起，构成整个网络摄像机FPGA部分的设计。</p>
 <p>本设计模块层次设计图如下所示，由时钟模块、数据交互模块、图像传感器模块、麦克风模块、千兆网络模块总共5个模块组成，各模块又由各个子模块组成，顶层模块通过例化的方式，将5个模块之间的接口互相连接起来，实现顶层模块的最终设计。该模块层次设计的各个子模块功能相对独立，各模块内部联系紧密，模块之间的连接简单，满足FPGA的模块化设计基本规则。</p>
-<p><img src="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-2.png" alt="220501-毕业设计-2.png"></p>
+<p><img src="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/220501-毕业设计-2.png" alt="220501-毕业设计-2.png"></p>
 <h3 id="上位机设计方案"><a href="#上位机设计方案" class="headerlink" title="上位机设计方案"></a>上位机设计方案</h3><p>上位机采用Python3编程语言设计，主要功能分为接收数据包、实时解码播放、保存回放。FPGA传来的UDP数据包包含了音频和图像，两者通过两个不同的端口传输，这样更便于应用层的分开处理。在UDP数据包中还加入了帧序列号，上位机可通过校验前后两帧的序列号是否对应，来判断是否发生掉包的现象。实时解码播放是通过数据包的传输协议将有用数据部分取出，图像数据为JPEG压缩图像，通过OpenCV对JPEG图像解码，通过图像流的方式显示在屏幕上。音频是通过PCM码流传输，通过约定好的采样频率、量化位数、声道数等信息，调用PyAudio函数库接口进行播放。回放功能是将图片流保存成avi视频格式，音频流保存成wav音频格式，然后在电脑文件系统中可以打开进行回放。通过多进程多线程将这三个功能配合起来，通过流水线操作的方式，让整个上位机程序执行更加的高效、稳定。上位机的程序流程图如下图所示。</p>
-<p><img src="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-3.png" alt="220501-毕业设计-3.png"></p>
+<p><img src="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/220501-毕业设计-3.png" alt="220501-毕业设计-3.png"></p>
 <h2 id="FPGA各模块功能实现"><a href="#FPGA各模块功能实现" class="headerlink" title="FPGA各模块功能实现"></a>FPGA各模块功能实现</h2><h3 id="时钟模块实现"><a href="#时钟模块实现" class="headerlink" title="时钟模块实现"></a>时钟模块实现</h3><h4 id="系统时钟输入和PLL配置"><a href="#系统时钟输入和PLL配置" class="headerlink" title="系统时钟输入和PLL配置"></a>系统时钟输入和PLL配置</h4><p>下图为FPGA开发板硬件原理图中的时钟部分，FPGA系统时钟信号由一颗50MHz有源晶振，从FPGA的T2引脚传入，由该时钟通过PLL锁相环和分频器，得到各模块所需的时钟，为整个系统提供准确的时钟信号。</p>
-<p><img src="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-4.jpg" alt="220501-毕业设计-4.jpg"></p>
+<p><img src="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/220501-毕业设计-4.jpg" alt="220501-毕业设计-4.jpg"></p>
 <p>锁相环（Phase Locked Loop, PLL）是一种反馈型的控制电路，可以通过PLL对输入时钟进行系统级的时钟控制，可以配置管理时钟相位、偏移，具有倍频、分频和可编程占空比等功能。由于本设计使用到的模块较多，使用单一的时钟通过软件分频无法得到精准音频采样的频率，所以满足本设计要求。故使用PLL模块来满足该设计的不同时钟频率和不同时钟相位偏移的要求。通过Quartus提供的PLL IP核，对Altera FPGA片上的可编程PLL进行控制，使其输出各种时钟信号提供给各个模块使用。</p>
 <p>下图为在Quartus 18.0中通过PLL IP核配置输入50Mhz时钟，输出2.205MHz时钟提供给麦克风模块的采样频率使用，配置软件会根据输入输出时钟频率自动计算出PLL的各个参数（时钟倍频参数、时钟分频参数），提供给麦克风模块的采样频率不需要相位偏移和特殊的占空比，故设置相位偏移为0，占空比为50%。</p>
-<p><img src="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-5.jpg" alt="220501-毕业设计-5.jpg"></p>
+<p><img src="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/220501-毕业设计-5.jpg" alt="220501-毕业设计-5.jpg"></p>
 <h4 id="软件分频器实现"><a href="#软件分频器实现" class="headerlink" title="软件分频器实现"></a>软件分频器实现</h4><p>由于片上PLL资源数量有限，部分对时钟精准度要求不高的模块也可以采用软件分频器实现。例如I²C模块中的时钟信号采用250KHz，通过对输入的50MHz系统时钟上升沿或者下降沿计数，计数器值累加到100时，让输出信号产生翻转，即可产生250KHz的I²C驱动信号。这就是软件分频器的实现原理，占用硬件资源少，像这种整数倍分频，也可以提供较好的精度。</p>
 <h3 id="数据交互模块实现"><a href="#数据交互模块实现" class="headerlink" title="数据交互模块实现"></a>数据交互模块实现</h3><p>设计FPGA各模块交互时，需要将图像和音频的数据传送给网络模块封装发送，故使用FIFO来做数据的缓冲。而网络模块的时钟信号是125MHz，与图像传感器模块24MHz和麦克风模块44100Hz有较大的区别，所以不能直接将数据通过同读写同时钟的FIFO传送给网络模块发送。FIFO模块可以配置读写相同时钟和读写不同时钟，在实际测试中，由于读取时钟为125MHz高频率信号，读写不同时钟情况下，FIFO的读写会产生严重的数据错误。因此本设计采用读写同时钟，FIFO模块输入时钟为网络模块的时钟125MHz，再手动编写跨时钟数据交互的时序逻辑，实现不同时钟域数据通过FIFO的转换。</p>
 <h4 id="FIFO模块配置"><a href="#FIFO模块配置" class="headerlink" title="FIFO模块配置"></a>FIFO模块配置</h4><p>FIFO（First In First Out）模块是对数据缓冲时用到存储器，使模块可以被突发性读写。通常也被用于高速信号跨时钟域的数据交互，它可以被顺序写入，然后可以被顺序读出，先进先出的特性是FIFO不同于其他存储器的地方。</p>
 <p>在Quartus 18.0中也可以通过IP核的方式来配置FIFO模块，关系FIFO容量的两个参数是FIFO的宽度和深度，宽度是指同时多少位可以被读写，深度是指可以存储多少该宽度的数据。由于FPGA中以太网是以字（4Bytes）的宽度来发送数据，并且以太网一帧默认最长大小是1500个字节，其中有用的数据为1472个字节，因此这里选择宽度为32bits，深度为512words可以满足缓冲一阵的以太网数据包。这里配置时我们采用读写相同时钟，从而使FIFO高速稳定的运行。需要打开usedw[]的功能，让网络模块读取已经使用的FIFO数量，当已经使用的数量大于等于1472字节时，可以开始发送一帧以太网数据。在输出寄存器一选项中，选择要求时间同步，Yes(best speed)，由于FIFO时钟是125MHz，不选速度优先的话也会导致FIFO读写混乱错误。同时关闭上下溢出检测以提升FIFO模块性能。下图为最后FIFO模块配置的部分参数，配置时一定要使性能最优。</p>
-<p><img src="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-6.jpg" alt="220501-毕业设计-6.jpg"></p>
+<p><img src="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/220501-毕业设计-6.jpg" alt="220501-毕业设计-6.jpg"></p>
 <h4 id="将数据写入FIFO模块实现"><a href="#将数据写入FIFO模块实现" class="headerlink" title="将数据写入FIFO模块实现"></a>将数据写入FIFO模块实现</h4><p>FIFO模块的时钟为125MHz，在图像FIFO存储模块中，图像传感器的时钟是24MHz，并且是8位宽度，需要手动编写跨时钟数据交互的时序逻辑，实现不同时钟域数据通过FIFO的转换。图像FIFO写模块输入有时钟、复位、图像数据、数据有效使能、垂直同步信号，输出有32位FIFO写入、FIFO写使能信号。捕获四个数据有效使能信号上升沿，将4个8位数据合并成1个32位数据，并向FIFO模块发送写使能，由于FIFO模块的时钟为125MHz，要写1个数据到FIFO模块，写使能信号高电平时间只能为8ns。为了使每幅图像不会等到下一张图像数据写入FIFO，直到FIFO满1472字节才发送，即使每幅图像都可以在该图像接收结束被发送完成，在垂直同步（一幅图像数据结束）信号产生后就向FIFO中追加写入1472个字节的0x00数据。</p>
 <p>麦克风模块和网络模块也通过FIFO传递数据，麦克风模块的采样频率为44100Hz，也需要做个时钟转换和数据宽度转换，转换成FIFO模块的125MHz和32位宽才能写入FIFO，实现方法与图像数据写入FIFO模块类似。由于音频数据的采样量化位数是24位，转换成32位数据需要在首位补0x00，为了上位机方便保存成wav格式，采用小段存储方方式写入FIFO模块。</p>
 <h4 id="从FIFO模块读取数据实现"><a href="#从FIFO模块读取数据实现" class="headerlink" title="从FIFO模块读取数据实现"></a>从FIFO模块读取数据实现</h4><p>网络模块在判断FIFO存储数量大于等于1472字节时会开始发送数据，发送数据时会请求读取FIFO模块数据，以太网发送数据的时钟是125MHz的，读取FIFO数据后要及时锁存，在锁存进入稳态后才可以被网络模块读取发送，否则由于FIFO发送速度过快，数据在信号线上容易未进入稳态被读取，造成读取和发送的数据出现错误。因为音频传送的数据量小，且实时性要求高，所以音频FIFO模块读取的优先级要设置比图像FIFO模块读取的优先级高。</p>
 <h3 id="图像传感器模块实现"><a href="#图像传感器模块实现" class="headerlink" title="图像传感器模块实现"></a>图像传感器模块实现</h3><h4 id="I²C驱动模块实现"><a href="#I²C驱动模块实现" class="headerlink" title="I²C驱动模块实现"></a>I²C驱动模块实现</h4><p>使用OV2640传感器，需要用SCCB类I²C总线配置OV2640传感器的寄存器。I²C总线协议由飞利浦公司发明，由一根数据线和一根时钟线构成，属于半双工同步通信，较常用的时钟速率有低速模式100KHz，高速模式400KHz，超高速模式3.4MHz。I²C总线协议支持一主多从，由于I²C总线协议中设备标识符占7位空间，所以I²C总线理论可以挂载128个设备，但实际考虑I²C总线上设备的驱动能力，只可以挂载5个左右从设备。</p>
 <p>I²C总线协议发送起始位后开始通信，起始位的标识是时钟线为高电平时，数据线从高电转变为低电平。通信时发送的第一个字节高7位内容为从设备的设备地址，末一位为读或写请求，低标识写标志位，反之则是读标志位。I²C通信协议中每发送一个字节后一位（第9位），对应的从机接收到就要发送应答响应，即第9位需要将数据线拉低响应，若主机读取到第9位仍为高电平，则标识无对应从机应答。发送设备地址后，若从机有应答，则主从双方继续通信，若主机写请求，就可以发送数据，向从机对应寄存器地址写入数据，从机收到数据后会返回应答信号，若主机读请求，则从机会向主机发送对应地址的数据内容，主机在接收后也需要拉低数据线响应。通信结束后主机发送停止位信号，停止位的标识是时钟线保持高电平，数据线从低电平转变为高电平的状态。</p>
 <p>在FPGA中实现I²C驱动相对别的通信方式（USART、SPI等）难度较高，因为I²C驱动存在有多个工作状态，需要采用复杂的有限状态机来实现I²C驱动。下图是FPGA程序的有限状态机状态转移图，I²C驱动部分程序的代码见附录。</p>
-<p><img src="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-7.jpg" alt="220501-毕业设计-7.jpg"></p>
+<p><img src="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/220501-毕业设计-7.jpg" alt="220501-毕业设计-7.jpg"></p>
 <h4 id="图像传感器配置模块实现"><a href="#图像传感器配置模块实现" class="headerlink" title="图像传感器配置模块实现"></a>图像传感器配置模块实现</h4><p>OV2640图像传感器有较多的寄存器，参考数据手册配置，在图像传感器配置模块中总共配置了201个寄存器，通过case语句，用查表的形式读取相应寄存器地址和寄存器数据，发送给I²C驱动模块，配置OV2640图像传感器。</p>
 <p>先对传感器软复位，后根据本设计的需要配置寄存器，例如：分辨率采用UXGA模式，对输入时钟不分频，倍频系数2，配置JPEG输出，设置图像窗口大小和图像尺寸大小等。配置的程序代码和各寄存器的配置的值见附录。在配置完成后，图像传感器配置模块会发送给图像数据读取模块OV2640初始化完成信号。</p>
 <h4 id="图像数据读取模块实现"><a href="#图像数据读取模块实现" class="headerlink" title="图像数据读取模块实现"></a>图像数据读取模块实现</h4><p>图像传感器数据通讯接口采用的是DCMI接口，在OV2640中DCMI接口是8位数据并口，并且配有行同步垂直同步信号。行同步信号高电平时为图片中一行像素点有效数据，低电平为无效数据，所以每当出现行同步信号上升沿时就是该幅图像传输新的一行标识位。垂直同步信号是一张图片中有效数据的标识，当垂直同步高电平时为有效，每当出现垂直信号的下降沿时，表示该幅图像传输完成，当出现垂直信号的上升沿时，表示新的一幅图像传输开始。</p>
 <p>图像数据读取模块收到配置模块发来的初始化完成信号后开始采集数据，在OV2640传感器实际应用中，图像传感器传来的前几幅图像会有显示问题，所以将开始传来的数据丢弃，根据垂直同步信号计数，第10幅图像开始开始采集图像数据发送给写FIFO模块。数据读取模块实现的代码见附录。</p>
 <h3 id="麦克风模块实现"><a href="#麦克风模块实现" class="headerlink" title="麦克风模块实现"></a>麦克风模块实现</h3><h4 id="I²S总线数据读取模块实现"><a href="#I²S总线数据读取模块实现" class="headerlink" title="I²S总线数据读取模块实现"></a>I²S总线数据读取模块实现</h4><p>使用的MEMS硅麦克风采用的是I²S通信协议，当INMP441的L/R引脚为低电平时，INMP441提供单个左通道音频数据，时序图如下图所示。和I²C比较而言，I²S多了个WS接口，WS接口是串行数据声道选择，为低时左声道麦克风模块在I²S总线上发送数据，右声道是高阻态。WS为高时右声道麦克风模块在I²S总线上发送数据，而左声道是高阻态。</p>
-<p><img src="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-8.jpg" alt="220501-毕业设计-8.jpg"></p>
+<p><img src="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/220501-毕业设计-8.jpg" alt="220501-毕业设计-8.jpg"></p>
 <p>根据时序图可以编写FPGA的I²S驱动，可见经过WS的一周期会得到一组声音信号，WS在SCK下降沿时跳变，在WS跳变后的第二个SCK上升沿可以读取音频数据的最高位，依次24个SCK后得到完整的24位左声道音频数据。设计FPGA程序时，一周期WS会有50次SCK上升沿，因此SCK的频率会比WS高50倍，要保证采样率为44100Hz，就需要通过PLL模块给麦克风模块提供2.205MHz的SCK信号。具体的I²S驱动代码见附录。</p>
 <h3 id="千兆以太网模块实现"><a href="#千兆以太网模块实现" class="headerlink" title="千兆以太网模块实现"></a>千兆以太网模块实现</h3><p>千兆以太网模块是本设计FPGA部分实现起来最复杂和困难的模块，由于千兆以太网PHY芯片采用125MHz高速时钟和8位并口数据传输，容易导致数据传输时未进入稳定态，出现时序混乱的现象。网络模块由三个部分组成，分别是网络发送模块、网络接收模块、CRC-32校验模块，三个模块之间的连接关系RTL视图如下图所示。</p>
-<p><img src="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-9.jpg" alt="220501-毕业设计-9.jpg"></p>
+<p><img src="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/220501-毕业设计-9.jpg" alt="220501-毕业设计-9.jpg"></p>
 <h4 id="CRC-32校验模块实现"><a href="#CRC-32校验模块实现" class="headerlink" title="CRC-32校验模块实现"></a>CRC-32校验模块实现</h4><p>以太网帧组成如下图所示，它是由前导、帧起始定界符、以太网帧头、以太网数据、帧校验序列组成，其中网络中帧校验序列使用最广泛的是采用4字节的循环冗余校验方式，即CRC-32校验。</p>
-<p><img src="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-10.jpg" alt="220501-毕业设计-10.jpg"></p>
+<p><img src="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/220501-毕业设计-10.jpg" alt="220501-毕业设计-10.jpg"></p>
 <p>CRC-32计算方式可以采用串行或并行计算，为了发挥FPGA并行优势，本设计采用并行的方式计算CRC-32校验码，并行CRC-32计算的表可以由工具生成。在FPGA设计中，该模块输入的值有时钟、使能、一字节数据，以太网每发送一字节数据，就要将发送的数据值发送给CRC-32校验模块，会根据上次CRC-32的结果和本次传来的数据值，同步更新CRC-32的值，最后输出为CRC-32校验的结果加在以太网帧的帧尾发送出去，如果目的主机校验CRC-32结果失败，则会在数据链路层丢弃该帧。具体的CRC-32校验模块实现代码见附录。</p>
 <h4 id="千兆以太网数据发送模块实现"><a href="#千兆以太网数据发送模块实现" class="headerlink" title="千兆以太网数据发送模块实现"></a>千兆以太网数据发送模块实现</h4><p>实现以太网数据发送模块，要解决两个问题，需要发送的数据包含哪些信息，需要如何控制千兆以太网PHY芯片。</p>
 <p>在CRC-32校验模块实现一节中介绍了以太网帧的组成结构，在发送目的MAC地址时使用ff-ff-ff-ff-ff-ff广播地址。以太网帧中的以太网数据段格式如下图所示，由于网络摄像机传输要满足实时性，且网络传输在局域网环境下环境不复杂，所以采用UDP协议传输数据，即在IP首部选择协议的地址中写入17表示UDP，生存时间一般为64，标识部分需要每次发送后累加，首部校验和是对IP首部内容累加保留末四位进行校验，在本设计中将源IP地址（FPGA的IP地址）设置为192.168.0.2，目的IP地址（电脑的IP地址）设置为192.168.0.3。以太网数据一般不超过1500字节，IP首部占了24字节，所以IP数据部分最大可为1476字节，其中IP数据的首四字节为用户自定义的帧序列号，用于上位机校验是否有丢包现象产生，所以实际每帧的IP数据中传输有用信息的只有1472个字节。</p>
-<p><img src="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-11.jpg" alt="220501-毕业设计-11.jpg"></p>
+<p><img src="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/220501-毕业设计-11.jpg" alt="220501-毕业设计-11.jpg"></p>
 <p>下图为物理层芯片RTL8211的硬件原理图，可见RTL8211与FPGA的连接主要包含8个发送引脚、8个接收引脚，还有发送和接收的时钟引脚，MDC和MDIO属于配置RTL8211芯片寄存器的接口，在本设计中采用默认寄存器值，所以未用到配置引脚。RTL8211发送和接收时钟均为125MHz，上升沿采样，发送和接收均为8位并口，可以满足1000Mbps全双工通信。</p>
-<p><img src="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-12.jpg" alt="220501-毕业设计-12.jpg"></p>
+<p><img src="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/220501-毕业设计-12.jpg" alt="220501-毕业设计-12.jpg"></p>
 <p>设计千兆以太网数据发送模块也是用有限状态机实现，使用了idle, start, make, send55, sendmac, sendheader, sendpicdata, sendmicdata, sendcrc共9个状态。在idle状态的时候，程序主要是初始化数据，并且检测图像FIFO和音频FIFO是否有超过1472个字节，其中先检测音频FIFO的使用量，若有超过1472个字节跳转到下个状态start。在start状态中会对IP首部进行配置，如果是图像FIFO大于1472字节，会配置端口号为8080，如果是音频FIFO大于1472字节，会配置端口号为8081，配置完成后会跳到下一个状态。make状态中会对IP首部计算校验和，并写入IP首部配置变量ip_header中，跳转至send55状态。在send55状态下，FPGA会和RTL8211通信，发送7字节前导码0x55和1字节帧起始界定符0xD5，发送完成后跳转到下个状态sendmac。在sendmac状态中会发送以太网帧头，包含目的MAC地址，源MAC地址，长度类型这些信息。下个状态sendheader，即发送start状态下存入ip_header变量中的IP首部信息，接下来进入发送数据的状态。发送数据的状态分两种一种是发送图像的状态，另一种是发送音频数据的状态，两个实现的方法一致，只是FIFO读请求所对应的FIFO不同，在发送数据状态中要先发送帧序列号，图像和音频的帧序列号是分开的，发送完帧序列号后循环请求读FIFO368次，将1472字节数据发送给RTL8211芯片，RTL8211会将从FPGA接收到的数据通过网线中的两对差分信号线发送到电脑网口。发送数据状态结束后进入最后一个sendcrc状态，该状态下会读取最后CRC-32的校验值发送给以太网PHY芯片，该状态结束后，表示一帧以太网数据传输结束，状态又跳转至空闲状态检测两个FIFO使用量。具体实现详见附录代码。</p>
 <h2 id="上位机功能实现"><a href="#上位机功能实现" class="headerlink" title="上位机功能实现"></a>上位机功能实现</h2><h3 id="图像功能实现"><a href="#图像功能实现" class="headerlink" title="图像功能实现"></a>图像功能实现</h3><h4 id="接收和解析图像数据包功能实现"><a href="#接收和解析图像数据包功能实现" class="headerlink" title="接收和解析图像数据包功能实现"></a>接收和解析图像数据包功能实现</h4><p>接收UDP的数据包使用了Python中socket库，在程序开始引用该库，通过socket.socket(socket.AF_INET, socket.SOCK_DGRAM)构造函数构造一个套接字，配置使用UDP协议，并且通过server.bind(‘192.168.0.3’, 8080)绑定该套接字对应的IP地址和端口号。接收UDP数据包通过函数server.recvfrom(BUFSIZE)，其中BUFSIZE为缓冲大小，由于一帧以太网数据1472字节，这里将BUFSIZE设置为1472*1000，以实现每次接收缓冲区满足处理的速度。在每次接收UDP数据包后，首先会校验帧序列号，即数据区前四字节，帧序列号是否为上次接收的累加1，若帧序列号不连续则表示存在丢包的现象，通过打印verify error告诉用户帧序列号校验失败。处理图像数据时，传来的图像数据时JPEG编码格式，由于JPEG编码格式帧起始标识符值为0xFFD8、帧结束标识符值为0xFFD9，提取数据包中的有用数据就是通过find(0xff, index)函数找到0xff功能标识符，然后再判断的下一字节是否为0xD8，若判断为真即表示找到JPEG图像数据头，再找尾标识符0xFFD9，通过同样的方法找到数据尾标识符后，将JPEG图像数据包头到包尾数据通过fp.write(data)函数写入jpg格式的文件，就完成了一张图像的保存。</p>
 <h4 id="图像流实时播放功能实现"><a href="#图像流实时播放功能实现" class="headerlink" title="图像流实时播放功能实现"></a>图像流实时播放功能实现</h4><p>要实现图像流实时播放功能，需按照拍摄图像的帧率，连续读取保存在磁盘中的图像，再在屏幕上不断刷新显示。本设计上位机程序采用OpenCV函数库实现图像的读取，解码和显示的功能。首先，在程序的开头通过import cv2引用OpenCV库。通过img = cv2.imread(img_root + str(i)+’.jpg’, cv2.IMREAD_COLOR)读取jpg格式的文件，其中img_root为图像所在文件夹的名字，imread的第一个参数就是图像路径，将读取到的数据保存在mat对象img中。调用cv2.namedWindow(“video”, cv2.WINDOW_AUTOSIZE)创建一个显示图像的窗口，窗口名为video。最后通过cv2.imshow(“video”, img)函数，该函数可以让名为video的显示窗口中显示img图像信息。cv2.waitKey(55)函数是使该窗口显示时间为55ms，这个延时时间由视频的帧数决定。</p>
-<p><img src="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-13.jpg" alt="220501-毕业设计-13.jpg"></p>
-<h4 id="图像流存储功能实现"><a href="#图像流存储功能实现" class="headerlink" title="图像流存储功能实现"></a>图像流存储功能实现</h4><p>OpenCV库中有支持导出avi视频的函数，fourcc = cv2.VideoWriter_fourcc(*’XVID’)函数，其中XVID参数是指将视频以MPEG-4编码类型保存，保存成avi格式的文件。videoWriter = cv2.VideoWriter(‘./avi/‘ + str(j) + ‘.avi’, fourcc, fps, size)函数配置了视频保存的路径，编码格式，帧率和每帧图像的分辨率，size = (1600, 1200)图像为1600 * 1200的分辨率。通过videoWriter.write(img)函数可以将img图像信息传入，让OpenCV处理生成视频。每隔150张图像发布一个10秒钟时长的avi视频，通过函数videoWriter.release()实现avi视频的发布。每次发布成功后程序会打印release告诉用户，可以在avi文件夹下查看保存的回放视频。</p>
+<p><img src="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/220501-毕业设计-13.jpg" alt="220501-毕业设计-13.jpg"></p>
+<h4 id="图像流存储功能实现"><a href="#图像流存储功能实现" class="headerlink" title="图像流存储功能实现"></a>图像流存储功能实现</h4><p>OpenCV库中有支持导出avi视频的函数，fourcc = cv2.VideoWriter_fourcc(<em>‘XVID’)函数，其中XVID参数是指将视频以MPEG-4编码类型保存，保存成avi格式的文件。videoWriter = cv2.VideoWriter(‘./avi/‘ + str(j) + ‘.avi’, fourcc, fps, size)函数配置了视频保存的路径，编码格式，帧率和每帧图像的分辨率，size = (1600, 1200)图像为1600 </em> 1200的分辨率。通过videoWriter.write(img)函数可以将img图像信息传入，让OpenCV处理生成视频。每隔150张图像发布一个10秒钟时长的avi视频，通过函数videoWriter.release()实现avi视频的发布。每次发布成功后程序会打印release告诉用户，可以在avi文件夹下查看保存的回放视频。</p>
 <h3 id="音频功能实现"><a href="#音频功能实现" class="headerlink" title="音频功能实现"></a>音频功能实现</h3><h4 id="接收和解析音频数据包功能实现"><a href="#接收和解析音频数据包功能实现" class="headerlink" title="接收和解析音频数据包功能实现"></a>接收和解析音频数据包功能实现</h4><p>接收音频数据的方式与接收图像数据方式相同，通过Python的socket库。在接收音频数据后做帧序列号校验，并提取有效部分。接收到的音频数据是24位的麦克风adc原始值，由于自己电脑声卡输出只支持16位，播放24位音频会没有声音，故在上位机上做了个24位转换为16位的操作，即提取高16位数据，保存到pcm文件中。使用20ms的数据缓冲时间，分别将20ms的pcm数据保存到电脑中。</p>
 <h4 id="音频流实时播放功能实现"><a href="#音频流实时播放功能实现" class="headerlink" title="音频流实时播放功能实现"></a>音频流实时播放功能实现</h4><p>上位机使用pyaudio库播放PCM音频，在程序的开始通过import pyaudio引用该库，读取已经保存在硬盘中的音频数据，通过p = pyaudio.PyAudio()初始化音频播放器，由于PCM是音频的原始数据，不包含量化位数、通道数、采样率等参数，所以，通过stream = p.open(format=p.get_format_from_width(2), channels=1, rate=44563, output=True)配置要播放音频的参数，并赋值给stream对象。通过stream.write(data)向stream播放器对象中写入音频数据，就可以完成音频的实时播放。</p>
 <h4 id="音频流存储功能实现"><a href="#音频流存储功能实现" class="headerlink" title="音频流存储功能实现"></a>音频流存储功能实现</h4><p>使用wave库，将pcm音频保存成wav格式的音频文件写入磁盘，为了方便回放，每10s中保存一个wav音频。通过wavfile = wave.open(‘./wav/‘ + str(j) + ‘.wav’, ‘wb’)打开一个wav文件，通过设置函数给wavfile对象设置音频的通道数、量化位数和采样率。最后通过wavfile.writeframes(data)就可以往wav文件中追加音频内容，每10s保存成一个文件。</p>
@@ -471,7 +728,7 @@
 <p>以太网测试也是采用比对发送和接收到的数据，由于发送和接收数据无法简单的通过其他的方式高速传输，所以要发送的数据选择有规律的数据。数据选择从0x00开始，下一字节都发送上一个数据加一后的补码，这样可以使每次发送的数据较上一次数据有更多的位会产生变化，通过此方法可以检测出更多的异常数据，若只通过单纯的数据累加测试，无法发现异常数据。经测试，以太网数据在200Mbps带宽下有较好的准确性，丢包现象不常发生，以太网在P2P模式下，全速传输千兆带宽数据时，丢包率为2%左右。</p>
 <h4 id="系统稳定性测试"><a href="#系统稳定性测试" class="headerlink" title="系统稳定性测试"></a>系统稳定性测试</h4><p>对本设计经过长时间的稳定性测试，本设计不会产生图像卡顿，回放保存失败等现象，说明本设计具有良好的系统稳定性。</p>
 <h3 id="作品展示"><a href="#作品展示" class="headerlink" title="作品展示"></a>作品展示</h3><p>下图为FPGA部分的图片，包含FPGA开发板、图像传感器和麦克风传感器。</p>
-<p><img src="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-14.jpg" alt="220501-毕业设计-14.jpg"></p>
+<p><img src="/2022/05/01/220501-%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/220501-毕业设计-14.jpg" alt="220501-毕业设计-14.jpg"></p>
 <h2 id="总结与不足"><a href="#总结与不足" class="headerlink" title="总结与不足"></a>总结与不足</h2><p>毕业设计是对学生四年所学知识的一次考察，也是对我们四年学习成绩的一次考验。本次毕业设计让我学习了FPGA设计和上位机开发，经过此次毕业设计，我懂得了如何将一整个设计划分成多个小功能逐个实现，在联调的过程中也学习了如何分析问题和解决问题。通过本次毕业设计，让我懂得了学习其实是长期积累的过程，越往深的学会发现自己有越多的不会，所以在今后工作是也要学会敬畏知识，学习是个长期积累的过程，就算毕业工作会我也会持续学习，努力提高自己的综合水平。</p>
 <p>本次毕业设计还有几个可以改进的地方：第一，在传输UDP的时候为采用丢包重传，上位机具备发现丢包的能力，可以在丢包发生时将帧序列号发回FPGA，请求FPGA重发数据。第二，上位机软件没有图形化界面，可以使用QT对上位机的图形化界面做开发。第三，FPGA可以尝试设计个MCU，在MCU中跑操作系统和lwip协议栈，使用TCP协议传输语音数据。本设计还有更多功能待完善。</p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
@@ -554,65 +811,65 @@
           <h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>此文章是搬运来的，<a target="_blank" rel="noopener" href="https://blog.csdn.net/techexchangeischeap/article/details/72569999">原地址点击此处</a>，写的真好，能看的非常懂，原作者有个地方可能笔误写错了，做了改正。</p>
 <h2 id="输入IO"><a href="#输入IO" class="headerlink" title="输入IO"></a>输入IO</h2><p>这里所说的输入IO，指的是只作为输入，不具有输出功能。此时对于input引脚的要求就是高阻（高阻与三态是同一个概念）。基本输入电路的类型大致可以分为3类：基本输入IO电路、施密特触发输入电路以及弱上拉输入电路。</p>
 <p>先从最基本的基本输入IO电路说起，其电路如图 1所示。</p>
-<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-1.jpg" alt="220426-GPIO输入输出各种模式-1.jpg"></p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO输入输出各种模式-1.jpg" alt="220426-GPIO输入输出各种模式-1.jpg"></p>
 <p>其中的缓冲器U1是具有控制输入端，且具有高阻抗特性的三态缓冲器。通俗地说就是这个缓冲器对外来说是高阻的，相当于在控制输入端不使能的情况下，物理引脚与内部总线之间是完全隔离的，完全不会影响内部电路。而控制输入端的作用就是可以发出读Pin状态的操作指令。其过程如图 2所示。</p>
-<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-2.jpg" alt="220426-GPIO输入输出各种模式-2.jpg"></p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO输入输出各种模式-2.jpg" alt="220426-GPIO输入输出各种模式-2.jpg"></p>
 <p>这种基本电路的一个缺点是在读取外部信号的跳变沿时会出现抖动，如下图所示。</p>
-<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-3.jpg" alt="220426-GPIO输入输出各种模式-3.jpg"></p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO输入输出各种模式-3.jpg" alt="220426-GPIO输入输出各种模式-3.jpg"></p>
 <p>于是施密特触发输入电路就是解决了上述这种抖动的问题，其经过施密特触发器后的信号如图 4所示。</p>
-<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-4.jpg" alt="220426-GPIO输入输出各种模式-4.jpg"></p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO输入输出各种模式-4.jpg" alt="220426-GPIO输入输出各种模式-4.jpg"></p>
 <p>对于输入电路还存在另外一个问题，就是当输入引脚悬空的时候，输入端检测到的电平是高还是低？当输入信号没有被驱动，即悬空(Floating)时，输入引脚上任何的噪声都会改变输入端检测到的电平，如图 5所示。</p>
-<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-5.jpg" alt="220426-GPIO输入输出各种模式-5.jpg"></p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO输入输出各种模式-5.jpg" alt="220426-GPIO输入输出各种模式-5.jpg"></p>
 <p>为了解决这个问题，可以在输入引脚处加一个弱上拉电阻，如图 6所示。</p>
-<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-6.jpg" alt="220426-GPIO输入输出各种模式-6.jpg"></p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO输入输出各种模式-6.jpg" alt="220426-GPIO输入输出各种模式-6.jpg"></p>
 <p>这样，当输入引脚悬空时，会被RP上拉到高电平，在内部总线上就有确定的状态了。</p>
 <p>但是这种结构是有一定问题的。首先很明显的一点是，当输入引脚悬空时读到的是1，当输入引脚被高电平驱动时读到的也是1，只有当输入引脚被低电平驱动时读到的才是0。也就是对于读1采取的方式是”读取非零”的方式。</p>
 <p>另一个问题是该电路对外呈现的不是高阻，某种意义上说也在向外输出，当外部驱动电路不同时可能出现错误的检测结果。例如外部驱动电路是如图 7所示的结构，该电路结构中通过K打到不同端可以输出高电平或者低电平。</p>
-<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-7.jpg" alt="220426-GPIO输入输出各种模式-7.jpg"></p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO输入输出各种模式-7.jpg" alt="220426-GPIO输入输出各种模式-7.jpg"></p>
 <p>如果将如图 7所示的电路输出低电平，连接到带有弱上拉电阻的输入引脚，其结构如下所示。</p>
-<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-8.jpg" alt="220426-GPIO输入输出各种模式-8.jpg"></p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO输入输出各种模式-8.jpg" alt="220426-GPIO输入输出各种模式-8.jpg"></p>
 <p>由欧姆定律知，测试点处的电平是4.545V，于是CPU测得的输入信号为高，而外部驱动电路希望输出的电平为低。这种错误的原因就在于这种结构的输入电路并不是真正的高阻，或者说这个输入IO其实也在输出，而且影响了外部输入电路。</p>
 <p>这种情况的发生也说明了：信号前后两级传递，为什么需要输出阻抗小，输入阻抗大的原因。在这个例子中，外围驱动电路的输出阻抗很大，达到了100Kohm;而输入端的阻抗又不够大，只有10Kohm，于是就出现了问题。如果输入端的输入阻抗真正做到高阻（无穷大），如下所示，就不会出现问题。</p>
-<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-9.jpg" alt="220426-GPIO输入输出各种模式-9.jpg"></p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO输入输出各种模式-9.jpg" alt="220426-GPIO输入输出各种模式-9.jpg"></p>
 <p>上面提到的这个带弱上拉的输入电路，也就是在后续章节会提到的准双向端口的情况。</p>
 <h2 id="输出IO"><a href="#输出IO" class="headerlink" title="输出IO"></a>输出IO</h2><p>IO输出电路最主要的两种模式分别是推挽输出（Push-Pull Output）和开漏输出（Open Drain Output）。</p>
 <h3 id="推挽输出（Push-Pull-Output）"><a href="#推挽输出（Push-Pull-Output）" class="headerlink" title="推挽输出（Push-Pull Output）"></a>推挽输出（Push-Pull Output）</h3><p>推挽输出的结构是由两个三极管或者MOS管受到互补信号的控制，两个管子始终保持一个处于截止，另一个处于导通的状态。如图 10所示。</p>
-<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-10.jpg" alt="220426-GPIO输入输出各种模式-10.jpg"></p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO输入输出各种模式-10.jpg" alt="220426-GPIO输入输出各种模式-10.jpg"></p>
 <p>推挽输出的最大特点是可以真正能真正的输出高电平和低电平，在两种电平下都具有驱动能力。</p>
-<p><em><strong>补充说明</strong></em>：所谓的驱动能力，就是指输出电流的能力。对于驱动大负载（即负载内阻越小，负载越大）时，例如IO输出为5V，驱动的负载内阻为10ohm，于是根据欧姆定律可以正常情况下负载上的电流为0.5A（推算出功率为2.5W）。显然一般的IO不可能有这么大的驱动能力，也就是没有办法输出这么大的电流。于是造成的结果就是输出电压会被拉下来，达不到标称的5V。</p>
+<p><strong><em>补充说明</em></strong>：所谓的驱动能力，就是指输出电流的能力。对于驱动大负载（即负载内阻越小，负载越大）时，例如IO输出为5V，驱动的负载内阻为10ohm，于是根据欧姆定律可以正常情况下负载上的电流为0.5A（推算出功率为2.5W）。显然一般的IO不可能有这么大的驱动能力，也就是没有办法输出这么大的电流。于是造成的结果就是输出电压会被拉下来，达不到标称的5V。</p>
 <p>当然如果只是数字信号的传递，下一级的输入阻抗理论上最好是高阻，也就是只需要传电压，基本没有电流，也就没有功率，于是就不需要很大的驱动能力。</p>
 <p>对于推挽输出，输出高、低电平时电流的流向如图 11所示。所以相比于后面介绍的开漏输出，输出高电平时的驱动能力强很多。</p>
-<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-11.jpg" alt="220426-GPIO输入输出各种模式-11.jpg"></p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO输入输出各种模式-11.jpg" alt="220426-GPIO输入输出各种模式-11.jpg"></p>
 <p>但推挽输出的一个缺点是，如果当两个推挽输出结构相连在一起，一个输出高电平，即上面的MOS导通，下面的MOS闭合时；同时另一个输出低电平，即上面的MOS闭合，下面的MOS导通时。电流会从第一个引脚的VCC通过上端MOS再经过第二个引脚的下端MOS直接流向GND。整个通路上电阻很小，会发生短路，进而可能造成端口的损害。这也是为什么推挽输出不能实现” 线与”的原因。</p>
 <h3 id="开漏输出（Open-Drain-Output）"><a href="#开漏输出（Open-Drain-Output）" class="headerlink" title="开漏输出（Open Drain Output）"></a>开漏输出（Open Drain Output）</h3><p>常说的与推挽输出相对的就是开漏输出，对于开漏输出和推挽输出的区别最普遍的说法就是开漏输出无法真正输出高电平，即高电平时没有驱动能力，需要借助外部上拉电阻完成对外驱动。下面就从内部结构和原理上说明为什么开漏输出输出高电平时没有驱动能力，以及进一步比较与推挽输出的区别。</p>
 <p>首先需要介绍一些开漏输出和开集输出。这两种输出的原理和特性基本是类似的，区别在于一个是使用MOS管，其中的”漏”指的就是MOS管的漏极；另一个使用三极管，其中的”集”指的就是MOS三极管的集电极。这两者其实都是和推挽输出相对应的输出模式，由于使用MOS管的情况较多，很多时候就用”开漏输出”这个词代替了开漏输出和开集输出。</p>
 <p>介绍就先从开集输出开始，其原理电路结如图 12所示。</p>
-<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-12.jpg" alt="220426-GPIO输入输出各种模式-12.jpg"></p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO输入输出各种模式-12.jpg" alt="220426-GPIO输入输出各种模式-12.jpg"></p>
 <p>图 12左边的电路是开集（OC）输出最基本的电路，当输入为高电平时，NPN三极管导通，Output被拉到GND，输出为低电平；当输入为低电平时，NPN三极管闭合，Output相当于开路（输出高阻）。高电平时输出高阻（高阻、三态以及floating说的都是一个意思），此时对外没有任何的驱动能力。这就是开漏和开集输出最大的特点，如何利用该特点完成各种功能稍后介绍。这个电路虽然完成了开集输出的功能，但是会出现input为高，输出为低；input为低，输出为高的情况。</p>
 <p>图 12右边的电路中多使用了一个三极管完成了”反相”。当输入为高电平时，第一个三极管导通，此时第二个三极管的输入端会被拉到GND，于是第二个三极管闭合，输出高阻；当输入为低电平时，第一个三极管闭合，此时第二个三极管的输入端会被上拉电阻拉到高电平，于是第二个三极管导通，输出被拉到GND。这样，这个电路的输入与输出是同相的了。</p>
 <p>接下来介绍开漏输出的电路，如图 13所示。原理与开集输出基本相同，只是将三极管换成了MOS而已。</p>
-<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-13.jpg" alt="220426-GPIO输入输出各种模式-13.jpg"></p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO输入输出各种模式-13.jpg" alt="220426-GPIO输入输出各种模式-13.jpg"></p>
 <p>接着说说开漏、开集输出的特点以及应用，由于两者相似，后文中若无特殊说明，则用开漏表示开漏和开集输出电路。</p>
 <ol>
 <li><p>开漏输出最主要的特性就是高电平没有驱动能力，需要借助外部上拉电阻才能真正输出高电平，其电路如图 14所示。</p>
-<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-14.jpg" alt="220426-GPIO输入输出各种模式-14.jpg"></p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO输入输出各种模式-14.jpg" alt="220426-GPIO输入输出各种模式-14.jpg"></p>
 </li>
 </ol>
-<p>当MOS管<em><strong>断开</strong></em>时，开漏输出电路输出高电平，且连接着负载时，电流流向是从外部电源，流经上来电阻RPU，流进负载，最后进入GND。</p>
+<p>当MOS管<strong><em>断开</em></strong>时，开漏输出电路输出高电平，且连接着负载时，电流流向是从外部电源，流经上来电阻RPU，流进负载，最后进入GND。</p>
 <ol>
 <li>开漏输出的这一特性一个明显的优势就是可以很方便的调节输出的电平，因为输出电平完全由上拉电阻连接的电源电平决定。所以在需要进行电平转换的地方，非常适合使用开漏输出。</li>
 <li>开漏输出的这一特性另一个好处在于可以实现”线与”功能，所谓的”线与”指的是多个信号线直接连接在一起，只有当所有信号全部为高电平时，合在一起的总线为高电平；只要有任意一个或者多个信号为低电平，则总线为低电平。而推挽输出就不行，如果高电平和低电平连在一起，会出现电流倒灌，损坏器件。</li>
 </ol>
-<h3 id="推挽与开漏输出的区别"><a href="#推挽与开漏输出的区别" class="headerlink" title="推挽与开漏输出的区别"></a>推挽与开漏输出的区别</h3><p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-15.jpg" alt="220426-GPIO输入输出各种模式-15.jpg"></p>
+<h3 id="推挽与开漏输出的区别"><a href="#推挽与开漏输出的区别" class="headerlink" title="推挽与开漏输出的区别"></a>推挽与开漏输出的区别</h3><p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO输入输出各种模式-15.jpg" alt="220426-GPIO输入输出各种模式-15.jpg"></p>
 <h2 id="双向IO"><a href="#双向IO" class="headerlink" title="双向IO"></a>双向IO</h2><p>很多处理器的引脚可以设置为双向端口，双向端口的要求就是既可以输出信号，又可以读回外部信号输入。要同时做到这两点从原理上来说有点困难，首先从处理器的开漏输出IO口的内部结构说起，如图 16所示。</p>
-<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-16.jpg" alt="220426-GPIO输入输出各种模式-16.jpg"></p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO输入输出各种模式-16.jpg" alt="220426-GPIO输入输出各种模式-16.jpg"></p>
 <p>该结构是在图 13的基础上，在三极管之前加入了一个FF，目的是用于控制输出信号的时间。比较常见的一个应用场合是多个IO作为一个总线时，需要总线上的各个引脚同时将数据输出。</p>
 <p>对于开漏输出结构，会将FF的输出Q端连接会输入驱动缓冲器，这样的话执行读操作是读的并不是外部引脚的状态，而是自己输出的状态。</p>
 <h3 id="双向开漏IO"><a href="#双向开漏IO" class="headerlink" title="双向开漏IO"></a>双向开漏IO</h3><p>但是对图 16的结构稍作修改，如图 17所示时，该结构称为双向开漏IO的结构。所做的改动是将输入驱动缓冲器连接到了PIN上。</p>
-<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-17.jpg" alt="220426-GPIO输入输出各种模式-17.jpg"></p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO输入输出各种模式-17.jpg" alt="220426-GPIO输入输出各种模式-17.jpg"></p>
 <p>该结构输出为”1”时，T1断开，此时pin对外呈现高阻，作为输入引脚没有任何问题。但是如果该结构输出”0”时，T1导通，此时pin对外短路到地，即无论外部输入什么信号，U2读回的全部是低。所以对于这样的结构，如果需要作为输入引脚使用时，必须给U1输出”1”后才能读取外部引脚数据。</p>
 <h3 id="准双向开漏IO"><a href="#准双向开漏IO" class="headerlink" title="准双向开漏IO"></a>准双向开漏IO</h3><p>很多文献中还提到了准双向端口，其实准双向端口就是图 17的结构中加了一个上拉电阻，如图 18所示。</p>
-<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-18.jpg" alt="220426-GPIO输入输出各种模式-18.jpg"></p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO输入输出各种模式-18.jpg" alt="220426-GPIO输入输出各种模式-18.jpg"></p>
 <p>这个结构与图 17相比有以下相同与不同之处：</p>
 <ol>
 <li>作为输入引脚使用时，也必须先向U1中写”1”，以达到断开T1的目的。所以是否需要提前写”1”并不是双向IO与准双向IO的区别。两者做输入端口时都需要提前写”1”。</li>
@@ -622,7 +879,7 @@
 <h3 id="推挽输出作为双向IO"><a href="#推挽输出作为双向IO" class="headerlink" title="推挽输出作为双向IO"></a>推挽输出作为双向IO</h3><p>如果双向端口中的输出部分采用的是推挽输出结构，那么作为输入时必须将上下两个管子全部端口才能成为高阻，作为输入。</p>
 <h3 id="51单片机的P0端口"><a href="#51单片机的P0端口" class="headerlink" title="51单片机的P0端口"></a>51单片机的P0端口</h3><p>在双向端口的讨论中，比较复杂的就是51单片机的P0端口了。这里就详细讨论一下51单片机的P0端口结构和工作原理。</p>
 <p>P0端口的内部结构如图 19所示。</p>
-<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-19.jpg" alt="220426-GPIO输入输出各种模式-19.jpg"></p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO输入输出各种模式-19.jpg" alt="220426-GPIO输入输出各种模式-19.jpg"></p>
 <p>内部结构比较复杂，包括以下这些器件：</p>
 <ol>
 <li>U1：与门。一个输入连着控制线，另一个输入连接这地址/数据信号。由于与门的特性，当控制线为1时，与门输出与地址/数据信号的电平保持一致；如果控制线为0，则输出恒为。于是控制信号线相当于与门的使能信号。</li>
@@ -636,18 +893,18 @@
 <p><strong>P0用于地址/数据线时：</strong></p>
 <p>在P0作为地址/数据线时，是地址、数据复用总线，P0需要输出地址，同时需要读回数据信号。</p>
 <p>当P0需要输出地址信息时，U1的控制信号为0，模拟开关U5接到U2反相器的输出。于是当地址信号线传来的信号为1，与控制线”1”相与之后输出到V1的输入信号为”0”，V1截止。地址信号”1”经反相之后，通过模拟开关输出到V2的输入端为”1”，V2导通，于是情况如图 20所示，pin输出”0”。</p>
-<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-20.jpg" alt="220426-GPIO输入输出各种模式-20.jpg"></p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO输入输出各种模式-20.jpg" alt="220426-GPIO输入输出各种模式-20.jpg"></p>
 <p>当地址信号线传来的信号为1，与控制线”1”相与之后输出到V1的输入信号为”1”，V1导通。地址信号”0”经反相之后，通过模拟开关输出到V2的输入端为”0”，V2截止，于是情况如图 21所示，pin输出”1”。</p>
-<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-21.jpg" alt="220426-GPIO输入输出各种模式-21.jpg"></p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO输入输出各种模式-21.jpg" alt="220426-GPIO输入输出各种模式-21.jpg"></p>
 <p>于是在作为地址线输出时，V1、V2两个MOS管均使用了，是推挽输出。</p>
 <p>当P0在输出低8位地址信息后，将变为数据总线，此时CPU的操作是控制端输出0，模拟开关打到锁存器的Q非端，且向锁存器中打入”1”。于是Q非输出为0，V2截止。同时控制线为0使得与门输出为0，V1截止。由于V1和V2都截止，所以此时pin对外完全呈现高阻，作为输入端口，外部数据通过U6进入内部总线，情况如图 22所示。（相当于将推挽输出的两个MOS管全部断开了）此时由于对外呈现高阻，所以是真正的输入引脚。这就解释了为什么说P0是真正的双线端口。</p>
-<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-22.jpg" alt="220426-GPIO输入输出各种模式-22.jpg"></p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO输入输出各种模式-22.jpg" alt="220426-GPIO输入输出各种模式-22.jpg"></p>
 <p><strong>P0用于普通IO时：</strong></p>
 <p>在P0作为普通IO并作为输出时，控制信号为0，使V1始终处于截止状态。模拟开关连接到Q非输出，当作为输出时，锁存器的输入端直接输入0或者1，Q非将反相信号输入到V2的输入端。即当输出”0”时，V2输入端为”1”，V2导通，pin输出”0”；当输出”1”时，V2输入端为”0”，V2截止，pin输出高阻的0。即当P0工作在普通IO模式下，输出为开漏输出，且内部没有上拉电阻。</p>
 <p>在P0作为普通IO并作为输入时，控制信号为0，使V1始终处于截止状态。模拟开关连接到Q非输出，且CPU自动向锁存器输入端写1，则V2输入端为0，V2截止。与之前在作为地址/数据线，作为输入时一样，也是两个MOS管全部断开，pin直接连接到U6，对外呈现高阻。于是也是真正的输入引脚。</p>
 <p>综上P0无论工作在哪种模式下都是真正的双端口IO。</p>
 <h3 id="51单片机的P1～P3端口"><a href="#51单片机的P1～P3端口" class="headerlink" title="51单片机的P1～P3端口"></a>51单片机的P1～P3端口</h3><p>51单片机的其他三个端口的内部结构如图 23所示，与P0相比简单了很多，没有了顶部的MOS管，也没有了地址/数据信号的选项。作为输出时是带有上拉电阻的的开漏输出，作为输入时是有上拉电阻存在的，于是输入端口对外不是高阻。这就解释了为什么P1～P3只能是准双向端口。</p>
-<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F-23.jpg" alt="220426-GPIO输入输出各种模式-23.jpg"></p>
+<p><img src="/2022/04/26/220426-GPIO%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%84%E7%A7%8D%E6%A8%A1%E5%BC%8F/220426-GPIO输入输出各种模式-23.jpg" alt="220426-GPIO输入输出各种模式-23.jpg"></p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
     </div>
@@ -725,24 +982,22 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="数组指针-amp-指针数组"><a href="#数组指针-amp-指针数组" class="headerlink" title="数组指针&amp;指针数组"></a>数组指针&amp;指针数组</h2><p>参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/mq0036/p/3382732.html%EF%BC%8C%E4%B8%A4%E8%80%85%E5%86%85%E5%AD%98%E5%88%86%E5%B8%83%E5%86%99%E7%9A%84%E5%BE%88%E8%AF%A6%E7%BB%86%E3%80%82">https://www.cnblogs.com/mq0036/p/3382732.html，两者内存分布写的很详细。</a></p>
+          <h2 id="数组指针-amp-指针数组"><a href="#数组指针-amp-指针数组" class="headerlink" title="数组指针&amp;指针数组"></a>数组指针&amp;指针数组</h2><p>参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/mq0036/p/3382732.html，两者内存分布写的很详细。">https://www.cnblogs.com/mq0036/p/3382732.html，两者内存分布写的很详细。</a></p>
 <h3 id="数组指针"><a href="#数组指针" class="headerlink" title="数组指针"></a>数组指针</h3><p>定义<code>int (*p)[n];</code></p>
 <p>()优先级比[]高，首先说明p是一个指针，指向一个整型的一维数组，这个一维数组的长度是n，也可以说是p的步长。</p>
 <p>如要将二维数组赋给一指针，应这样赋值：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a[<span class="number">3</span>][<span class="number">4</span>];</span><br><span class="line"><span class="type">int</span> (*p)[<span class="number">4</span>];   <span class="comment">//该语句是定义一个数组指针，指向含4个元素的一维数组。</span></span><br><span class="line">p = a;     <span class="comment">//将该二维数组的首地址赋给p，也就是a[0]或&amp;a[0][0]</span></span><br><span class="line">p++;       <span class="comment">//该语句执行过后，也就是p=p+1;p跨过行a[0][]指向了行a[1][]</span></span><br></pre></td></tr></table></figure>
-
 <p>所以数组指针也称指向一维数组的指针，亦称行指针。</p>
 <h3 id="指针数组"><a href="#指针数组" class="headerlink" title="指针数组"></a>指针数组</h3><p>定义<code>int *p[n];</code></p>
-<p>[]优先级比*高，先与p结合成为一个数组，再由int*说明这是一个整型指针数组，它有n个指针类型的数组元素。这里执行p+1时，则p指向下一个数组元素，这样赋值是错误的：p=a；因为p是个不可知的表示，只存在p[0]、p[1]、p[2]…p[n-1],而且它们分别是指针变量可以用来存放变量地址。但可以这样 <em>p=a; 这里</em>p表示指针数组第一个元素的值，a的首地址的值。<br>如要将二维数组赋给一指针数组：</p>
+<p>[]优先级比*高，先与p结合成为一个数组，再由int<em>说明这是一个整型指针数组，它有n个指针类型的数组元素。这里执行p+1时，则p指向下一个数组元素，这样赋值是错误的：p=a；因为p是个不可知的表示，只存在p[0]、p[1]、p[2]…p[n-1],而且它们分别是指针变量可以用来存放变量地址。但可以这样 </em>p=a; 这里*p表示指针数组第一个元素的值，a的首地址的值。<br>如要将二维数组赋给一指针数组：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> *p[<span class="number">3</span>];</span><br><span class="line"><span class="type">int</span> a[<span class="number">3</span>][<span class="number">4</span>];</span><br><span class="line">p++;  <span class="comment">//该语句表示p数组指向下一个数组元素。注：此数组每一个元素都是一个指针</span></span><br><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">3</span>;i++)</span><br><span class="line">    p[i] = a[i];</span><br></pre></td></tr></table></figure>
-
 <p>这里int *p[3] 表示一个一维数组内存放着三个指针变量，分别是p[0]、p[1]、p[2]，所以要分别赋值。</p>
 <h2 id="常量指针-amp-指针常量"><a href="#常量指针-amp-指针常量" class="headerlink" title="常量指针&amp;指针常量"></a>常量指针&amp;指针常量</h2><h3 id="指针常量"><a href="#指针常量" class="headerlink" title="指针常量"></a>指针常量</h3><p>定义<code>int * const p = &amp;a;</code></p>
-<p>p是个常量，p的类型是int*，所以p的值不能改变，但是*p的值可以改变。</p>
+<p>p是个常量，p的类型是int<em>，所以p的值不能改变，但是\</em>p的值可以改变。</p>
 <h3 id="常量指针"><a href="#常量指针" class="headerlink" title="常量指针"></a>常量指针</h3><p>定义<code>const int * p = NULL;</code></p>
-<p>*p是个常量，p的类型是int*，所以*p的值不能改变，但是p的值可以改变。利用这个特性，在函数传参时使用常量指针可以防止函数对变量值的误修改。</p>
+<p><em>p是个常量，p的类型是int\</em>，所以*p的值不能改变，但是p的值可以改变。利用这个特性，在函数传参时使用常量指针可以防止函数对变量值的误修改。</p>
 <h3 id="常量指针常量"><a href="#常量指针常量" class="headerlink" title="常量指针常量"></a>常量指针常量</h3><p>定义<code>const int * const p = &amp;a;</code></p>
-<p>p是个常量，*p也是个常量，p的类型是int*，所以*p的值不能改变，p的值也不能改变。</p>
+<p>p是个常量，<em>p也是个常量，p的类型是int\</em>，所以*p的值不能改变，p的值也不能改变。</p>
 <h2 id="引用-amp-常量引用"><a href="#引用-amp-常量引用" class="headerlink" title="引用&amp;常量引用"></a>引用&amp;常量引用</h2><h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><p>定义<code>int&amp; r = a;</code></p>
 <p><a target="_blank" rel="noopener" href="https://www.runoob.com/cplusplus/cpp-references.html">C++ 引用</a>，引用变量是一个别名，也就是说，它是某个已存在变量的另一个名字。</p>
 <p>函数可以通过引用传参，<code>void foo(int &amp;a)&#123;a = 1;&#125;</code>修改引用形参可以改变实参。</p>
@@ -842,7 +1097,7 @@
 </li>
 <li><p>计算机工作方式：取址执行，取CS和PC指针指向内存中的指令，在CPU执行</p>
 </li>
-<li><p>操作系统引导：启动引导时内核在内存中的位置和移动后的位置情况图<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-1.jpg" alt="220326-操作系统-1.jpg"></p>
+<li><p>操作系统引导：启动引导时内核在内存中的位置和移动后的位置情况图<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-操作系统-1.jpg" alt="220326-操作系统-1.jpg"></p>
 <p>开机时，CS=0xffff，IP=0x0000，CPU处于实模式。实模式寻址CS&lt;&lt;4+IP，CS存放段地址，IP存放4位段偏移量，共20位。0xffff0地址属于BIOS映射区，在BIOS里检查硬件（RAM，键盘，…）；</p>
 <p>将磁盘0磁道0扇区（引导扇区）读到内存0x7c00，引导扇区代码存放在bootsect.s；</p>
 <p>将引导扇区代码从内存0x7c00处移动到0x90000处；</p>
@@ -852,23 +1107,24 @@
 <p>do_move:中将system模块移动到0地址，<code>jmpi 0, 8</code>，跳转到system模块，system模块开始是head.s；</p>
 <p>通过设置cr0最后一位，PE=1由16位实模式转到32位保护模式，在保护模式下，CS表示选择子，查GDT表得到；</p>
 <p>在head.s中初始化GDT表和IDT表，setup_paging执行ret后，会执行函数main()，进入main()后的栈为0，0，0，L6，三个0表示main函数的参数，L6表示main函数返回时进入死循环；</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">after_page_tables:</span><br><span class="line">    pushl $0 # These are the parameters to main :-)</span><br><span class="line">    pushl $0 # 这些是调用 main 程序的参数（指 init/main.c）。</span><br><span class="line">    pushl $0 # 其中的&#x27;$&#x27;符号表示这是一个立即操作数。</span><br><span class="line">    pushl $L6 # return address for main, if it decides to.</span><br><span class="line">    pushl $_main # &#x27;_main&#x27;是编译程序对 main 的内部表示方法。</span><br><span class="line">    jmp setup_paging # 跳转至第 198 行。</span><br><span class="line">L6:</span><br><span class="line">    jmp L6 # main should never return here, but</span><br><span class="line">    # just in case, we know what happens.</span><br><span class="line">    # main 程序绝对不应该返回到这里。不过为了以防万一，</span><br><span class="line">    # 所以添加了该语句。这样我们就知道发生什么问题了。</span><br><span class="line">setup_paging:</span><br><span class="line">    设置页表...</span><br><span class="line">    ret</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">after_page_tables:</span><br><span class="line">    pushl $0 # These are the parameters to main :-)</span><br><span class="line">    pushl $0 # 这些是调用 main 程序的参数（指 init/main.c）。</span><br><span class="line">    pushl $0 # 其中的&#x27;$&#x27;符号表示这是一个立即操作数。</span><br><span class="line">    pushl $L6 # return address for main, if it decides to.</span><br><span class="line">    pushl $_main # &#x27;_main&#x27;是编译程序对 main 的内部表示方法。</span><br><span class="line">    jmp setup_paging # 跳转至第 198 行。</span><br><span class="line">L6:</span><br><span class="line">    jmp L6 # main should never return here, but</span><br><span class="line">    # just in case, we know what happens.</span><br><span class="line">    # main 程序绝对不应该返回到这里。不过为了以防万一，</span><br><span class="line">    # 所以添加了该语句。这样我们就知道发生什么问题了。</span><br><span class="line">setup_paging:</span><br><span class="line">    设置页表...</span><br><span class="line">    ret</span><br></pre></td></tr></table></figure>
+</li>
 </ol>
 <h3 id="L4-L7"><a href="#L4-L7" class="headerlink" title="L4~L7"></a>L4~L7</h3><ol>
 <li>操作系统接口：接口表现为函数调用，又由系统提供，所以称为系统调用，可移植操作系统接口(Portable Operating System Interface of uniX, POSIX)</li>
-<li>系统调用的实现：应用层要通过接口访问内核，不能直接读内核内存，内核是受保护的。中断是进入内核的唯一方法；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-2.jpg" alt="220326-操作系统-2.jpg"><img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-3.jpg" alt="220326-操作系统-3.jpg"></li>
+<li>系统调用的实现：应用层要通过接口访问内核，不能直接读内核内存，内核是受保护的。中断是进入内核的唯一方法；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-操作系统-2.jpg" alt="220326-操作系统-2.jpg"><img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-操作系统-3.jpg" alt="220326-操作系统-3.jpg"></li>
 <li>课程任务：操作系统要学习CPU管理、内存管理、文件管理；</li>
 </ol>
 <h3 id="L8-L19"><a href="#L8-L19" class="headerlink" title="L8~L19"></a>L8~L19</h3><ol>
 <li><p>CPU管理：多道程序，交替执行（并发）。运行的程序是进程，多进程切换时要保存现场。通过进程控制块(Process Control Block, PCB)来记录进程信息。操作系统要把这些进程记录好，要按照合理的次序分配资源、调度；</p>
 </li>
-<li><p>进程状态图：<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-4.jpg" alt="220326-操作系统-4.jpg"></p>
+<li><p>进程状态图：<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-操作系统-4.jpg" alt="220326-操作系统-4.jpg"></p>
 </li>
 <li><p>通过进程内存映射表来实现内存分离，切换进程时要切换内存映射表；通过上锁，来保证共享内存的正确被读写；</p>
 </li>
 <li><p>用户级线程和核心级线程区别：用户级线程创建、切换无需进内核，一个线程阻塞进程会被切换；</p>
 </li>
-<li><p>线程的优点：线程切换无需切换内存映射表。<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-5.jpg" alt="220326-操作系统-5.jpg"></p>
+<li><p>线程的优点：线程切换无需切换内存映射表。<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-操作系统-5.jpg" alt="220326-操作系统-5.jpg"></p>
 </li>
 <li><p>用户级线程切换通过Yield()，要先切换栈，栈会存在TCB（线程控制块）中，每个线程对应一个TCB；</p>
 </li>
@@ -879,7 +1135,8 @@
 <li><p>CPU调度策略：FIFO、Priority；CPU调度算法：先来先服务（First come, first served），短作业优先（SJF）这个算法周转时间最小，按时间片来轮转调度（RR），优先级调度（前台&gt;后台）；</p>
 </li>
 <li><p>linux0.11中的调度函数既考虑了优先级又考虑了时间片：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">Schedule</span><span class="params">(<span class="type">void</span>)</span> <span class="comment">// 在 kernel/sched.c 中</span></span><br><span class="line">&#123; <span class="keyword">while</span>(<span class="number">1</span>)&#123; c=<span class="number">-1</span>; next=<span class="number">0</span>; i=NR_TASKS; p=&amp;task[NR_TASKS];</span><br><span class="line">    <span class="keyword">while</span>(--i)&#123; <span class="keyword">if</span>((*p-&gt;state == TASK_RUNNING&amp;&amp;(*p)-&gt;counter&gt;c)</span><br><span class="line">        c=(*p)-&gt;counter, next=i; &#125;</span><br><span class="line">    <span class="keyword">if</span>(c) <span class="keyword">break</span>; <span class="comment">// 找到了最大的counter,跳出，执行switch_to()</span></span><br><span class="line">    <span class="keyword">for</span>(p=&amp;LAST_TASK;p&gt;&amp;FIRST_TASK;--p)</span><br><span class="line">        (*p)-&gt;counter=((*p)-&gt;counter&gt;&gt;<span class="number">1</span>)+(*p)-&gt;priority; </span><br><span class="line">    &#125;</span><br><span class="line">switch_to(next);&#125;</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">Schedule</span><span class="params">(<span class="type">void</span>)</span> <span class="comment">// 在 kernel/sched.c 中</span></span><br><span class="line">&#123; <span class="keyword">while</span>(<span class="number">1</span>)&#123; c=<span class="number">-1</span>; next=<span class="number">0</span>; i=NR_TASKS; p=&amp;task[NR_TASKS];</span><br><span class="line">    <span class="keyword">while</span>(--i)&#123; <span class="keyword">if</span>((*p-&gt;state == TASK_RUNNING&amp;&amp;(*p)-&gt;counter&gt;c)</span><br><span class="line">        c=(*p)-&gt;counter, next=i; &#125;</span><br><span class="line">    <span class="keyword">if</span>(c) <span class="keyword">break</span>; <span class="comment">// 找到了最大的counter,跳出，执行switch_to()</span></span><br><span class="line">    <span class="keyword">for</span>(p=&amp;LAST_TASK;p&gt;&amp;FIRST_TASK;--p)</span><br><span class="line">        (*p)-&gt;counter=((*p)-&gt;counter&gt;&gt;<span class="number">1</span>)+(*p)-&gt;priority; </span><br><span class="line">    &#125;</span><br><span class="line">switch_to(next);&#125;</span><br></pre></td></tr></table></figure>
+</li>
 <li><p>进程间同步看信号量（Semaphore），可使多个进程合理有序运行。<strong>读写信号量的代码一定在临界区</strong>，或者原子操作。临界区：一次只允许一个进程进入该进程的那段代码。原子操作：不会被线程调度机制打断的操作;</p>
 </li>
 <li><p>保护临界区的方法：关闭中断<code>cli();</code>，临界区，开中断<code>sti();</code>，剩余区。这种方法只适用于小系统，不适用于多核CPU。还可以采取硬件原子指令法，硬件一条指令修改mutex变量；</p>
@@ -888,43 +1145,36 @@
 </li>
 </ol>
 <h3 id="L20-L25"><a href="#L20-L25" class="headerlink" title="L20~L25"></a>L20~L25</h3><ol>
-<li><p>内存使用：将程序放到内存中，PC指向开始的地址。将程序从硬盘载入内存需要重定位，物理地址=基址+逻辑地址。重定位可以在编译时（静态系统）、载入时执行、<strong>运行时执行</strong>。编译时重定位的程序只能放在内存固定位，载入时重定位的程序一旦载入内存就不能动了；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-6.jpg" alt="220326-操作系统-6.jpg"></p>
-</li>
+<li>内存使用：将程序放到内存中，PC指向开始的地址。将程序从硬盘载入内存需要重定位，物理地址=基址+逻辑地址。重定位可以在编译时（静态系统）、载入时执行、<strong>运行时执行</strong>。编译时重定位的程序只能放在内存固定位，载入时重定位的程序一旦载入内存就不能动了；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-操作系统-6.jpg" alt="220326-操作系统-6.jpg"></li>
 <li><p>程序载入后还需要移动，引入<strong>交换</strong>（swap）概念，可以把暂时不用的内存搬到交换分区，充分利用内存。</p>
 </li>
-<li><p>引入分段，程序由若干部分(段)组成，每个段有各自的特点、用途：主程序（只读）、变量集（可写、不会动态增长）、函数集、动态数组（会动态增长）、栈。使用分段思想可以让用户分治每个段，可以让内存更高效使用。定位具体指令<code>mov [es:bx], ax</code>。地址组成：&lt;段号，段内偏移&gt;。进程段表存放在LDT表，系统段表存放在GDT表，LDT存放在PCB中；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-7.jpg" alt="220326-操作系统-7.jpg"></p>
+<li><p>引入分段，程序由若干部分(段)组成，每个段有各自的特点、用途：主程序（只读）、变量集（可写、不会动态增长）、函数集、动态数组（会动态增长）、栈。使用分段思想可以让用户分治每个段，可以让内存更高效使用。定位具体指令<code>mov [es:bx], ax</code>。地址组成：&lt;段号，段内偏移&gt;。进程段表存放在LDT表，系统段表存放在GDT表，LDT存放在PCB中；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-操作系统-7.jpg" alt="220326-操作系统-7.jpg"></p>
 </li>
 <li><p><strong>内存分区</strong>可分为固定分区和可变分区。可变分区的管理：空闲分区表、已分配分区表。可变分区分配内存算法：首先适配（最快）、最佳适配和申请空间长度最接近（会导致内存碎片）、最差适配；</p>
 </li>
-<li><p>实际物理内存采用<strong>分页</strong>来管理，分区是对虚拟内存（交换分区）的管理方法。分区会造成内存碎片，分页会将物理内存分割（比如每4k分割），程序也会被分页，每段都会被分页，分页会使内存存储离散化。地址翻译有专门的硬件内存管理单元（MMU）执行；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-8.jpg" alt="220326-操作系统-8.jpg"></p>
+<li><p>实际物理内存采用<strong>分页</strong>来管理，分区是对虚拟内存（交换分区）的管理方法。分区会造成内存碎片，分页会将物理内存分割（比如每4k分割），程序也会被分页，每段都会被分页，分页会使内存存储离散化。地址翻译有专门的硬件内存管理单元（MMU）执行；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-操作系统-8.jpg" alt="220326-操作系统-8.jpg"></p>
 </li>
-<li><p>为了提高内存空间利用率，页应该小，但是页小了页表就大了。如果页表只存放用到的页，则需要顺序查找页表，速度慢。采用多级页表可兼顾速度和空间，即页目录表+页表，地址组成&lt;10bits页目录号，10bits页号，12bits偏移&gt;，12bits偏移刚好是4K。</p>
+<li><p>为了提高内存空间利用率，页应该小，但是页小了页表就大了。如果页表只存放用到的页，则需要顺序查找页表，速度慢。采用多级页表可兼顾速度和空间，即页目录表+页表，地址组成<10bits页目录号，10bits页号，12bits偏移>，12bits偏移刚好是4K。</10bits页目录号，10bits页号，12bits偏移></p>
 </li>
-<li><p>多级页表增加了访存的次数，尤其是64位系统。硬件上引入转译后备缓冲区（Translation Look-aside Buffer，TLB，快表），快表能存放最近查过多级页表的逻辑页和物理页，可以根据页号直接查物理页号；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-9.jpg" alt="220326-操作系统-9.jpg"></p>
+<li><p>多级页表增加了访存的次数，尤其是64位系统。硬件上引入转译后备缓冲区（Translation Look-aside Buffer，TLB，快表），快表能存放最近查过多级页表的逻辑页和物理页，可以根据页号直接查物理页号；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-操作系统-9.jpg" alt="220326-操作系统-9.jpg"></p>
 </li>
-<li><p>段页结合：段面向用户，页面向硬件。实际的段页内存管理，程序如何载入内存，fork后内存做了什么可以看<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1d4411v7u7?p=23">L23 段页结合的实际内存管理</a>；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-10.jpg" alt="220326-操作系统-10.jpg"></p>
+<li><p>段页结合：段面向用户，页面向硬件。实际的段页内存管理，程序如何载入内存，fork后内存做了什么可以看<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1d4411v7u7?p=23">L23 段页结合的实际内存管理</a>；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-操作系统-10.jpg" alt="220326-操作系统-10.jpg"></p>
 </li>
 <li><p>用内存换入换出实现“大内存”，虚拟内存4G，物理内存可以只有1G。当程序运行缺页时， page fault中断请求do_no_page调页（读磁盘），这就是换入；</p>
 </li>
-<li><p>内存换出：将内存中不用的页换出到磁盘。如何找不用的页？换出算法：FIFO（先来的先被换出，不太行）、MIN（将未来最远要使用的页淘汰，是最优方案，但无法预测未来）、LRU（Least Recently Used，最近最少使用）；</p>
-</li>
-<li><p>LUR的准确实现：可以用时间戳，每次地址访问都需要修改时间戳，需维护一个全局时钟，实现代价较较大，可以用页码栈，选择栈底淘汰，代价也太大。在实际中内存换出算法采用LUR的近似实现：时钟算法（环形队列）<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-11.jpg" alt="220326-操作系统-11.jpg"><img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-12.jpg" alt="220326-操作系统-12.jpg"></p>
-</li>
-<li><p>给进程分配多少页框？分配多了，请求调页导致的内存高效利用就没有了。分配少了，会频繁请求调页导致系统低效。系统低效解释：系统内进程增多多，每个进程的缺页率增大大，缺页率增大到一定程度，进程总等待调页完成，CPU利用率降低低，进程进一步增多，缺页率更大，称这一现象为颠簸(thrashing)；</p>
-</li>
+<li>内存换出：将内存中不用的页换出到磁盘。如何找不用的页？换出算法：FIFO（先来的先被换出，不太行）、MIN（将未来最远要使用的页淘汰，是最优方案，但无法预测未来）、LRU（Least Recently Used，最近最少使用）；</li>
+<li>LUR的准确实现：可以用时间戳，每次地址访问都需要修改时间戳，需维护一个全局时钟，实现代价较较大，可以用页码栈，选择栈底淘汰，代价也太大。在实际中内存换出算法采用LUR的近似实现：时钟算法（环形队列）<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-操作系统-11.jpg" alt="220326-操作系统-11.jpg"><img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-操作系统-12.jpg" alt="220326-操作系统-12.jpg"></li>
+<li>给进程分配多少页框？分配多了，请求调页导致的内存高效利用就没有了。分配少了，会频繁请求调页导致系统低效。系统低效解释：系统内进程增多多，每个进程的缺页率增大大，缺页率增大到一定程度，进程总等待调页完成，CPU利用率降低低，进程进一步增多，缺页率更大，称这一现象为颠簸(thrashing)；</li>
 </ol>
 <h3 id="L26-L32"><a href="#L26-L32" class="headerlink" title="L26~L32"></a>L26~L32</h3><ol>
-<li><p>IO设备、显示器、键盘，让这些外设工作的基本思想就是往外设硬件寄存器写值，外设处理完再产生中断，CPU处理。在Linux中无论什么设备都用文件接口open、read、write、close，例如<code>int fd = open(&quot;/dev/xxx&quot;);</code>到最后是通过out写对应寄存器；</p>
-</li>
-<li><p>生磁盘的使用：磁盘驱动负责从盘块号（block）计算出柱面（cgl）、磁头（head）、扇区号（sec）。从CHS到扇区号，从扇区到盘块（第一层抽象）：<strong>扇区号 = C×H×S+H×S+S</strong> 。<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-13.jpg" alt="220326-操作系统-13.jpg"></p>
-</li>
-<li><p>多个进程通过<strong>请求队列</strong>使用磁盘（第二层抽象）；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-14.jpg" alt="220326-操作系统-14.jpg"></p>
-</li>
+<li>IO设备、显示器、键盘，让这些外设工作的基本思想就是往外设硬件寄存器写值，外设处理完再产生中断，CPU处理。在Linux中无论什么设备都用文件接口open、read、write、close，例如<code>int fd = open(&quot;/dev/xxx&quot;);</code>到最后是通过out写对应寄存器；</li>
+<li>生磁盘的使用：磁盘驱动负责从盘块号（block）计算出柱面（cgl）、磁头（head）、扇区号（sec）。从CHS到扇区号，从扇区到盘块（第一层抽象）：<strong>扇区号 = C×H×S+H×S+S</strong> 。<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-操作系统-13.jpg" alt="220326-操作系统-13.jpg"></li>
+<li>多个进程通过<strong>请求队列</strong>使用磁盘（第二层抽象）；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-操作系统-14.jpg" alt="220326-操作系统-14.jpg"></li>
 <li><p><strong>访问磁盘时间 = 写入控制器时间 + 寻道时间（8~12ms）+ 旋转时间（7200rmp，半周4ms）+ 传输时间（50MB/s，约0.3ms）</strong>。可见访问磁盘主要时间花在寻道，block相邻的盘块可以快速读出，因此需要考虑寻道算法。寻道调度算法有FCFS（先来先服务）、SSTF（短寻道优先算法，可能有磁道长时间访问不到）、SCAN（SSTF+中途不折回）、C-SCAN（SCAN+直接移动到另一端，电梯算法）；</p>
 </li>
 <li><p>引入文件（第三层抽象），文件是建立字符流在磁盘块集合的映射关系，每个文件都对应一个文件控制块（FCB），连续结构存储FCB包含文件名、起始块、块数的信息，链式结构存储FCB包含文件名、起始块的信息，链式结构存储顺序访问慢、可靠性差，<strong>索引结构</strong>存储文件是连续和链式的有效折中，FCB包含文件名、索引块的信息。在实际系统中采用的是<strong>多级索引结构</strong>，根据不同大小文件分成不同级索引通过<strong>inode</strong>一级级查询访问，因此可以标识很大的文件，很小的文件可以高效访问，中等大小的文件访问速度也不慢；</p>
 </li>
-<li><p>引入文件系统（第四层抽象），文件系统引入目录树，文件目录也是个文件，存放目录下其他文件名和对应文件的FCB指针。inode位图：哪些inode空闲，哪些被占用。盘块位图：哪些盘块是空闲的，硬盘大小不同这个位图的大小也不同。超级块：存放i节点位图和盘块位图的大小，因此可以计算出i节点起始地址；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-15.jpg" alt="220326-操作系统-15.jpg"><img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-16.jpg" alt="220326-操作系统-16.jpg"><img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-17.jpg" alt="220326-操作系统-17.jpg"></p>
+<li><p>引入文件系统（第四层抽象），文件系统引入目录树，文件目录也是个文件，存放目录下其他文件名和对应文件的FCB指针。inode位图：哪些inode空闲，哪些被占用。盘块位图：哪些盘块是空闲的，硬盘大小不同这个位图的大小也不同。超级块：存放i节点位图和盘块位图的大小，因此可以计算出i节点起始地址；<img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-操作系统-15.jpg" alt="220326-操作系统-15.jpg"><img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-操作系统-16.jpg" alt="220326-操作系统-16.jpg"><img src="/2022/03/26/220326-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/220326-操作系统-17.jpg" alt="220326-操作系统-17.jpg"></p>
 </li>
 </ol>
 <h2 id="课程总结"><a href="#课程总结" class="headerlink" title="课程总结"></a>课程总结</h2><p>通过本次操作系统的学习，了解了操作系统全图（CPU、内存、文件设备），学习了多进程视图、文件视图。哈工大的几个实验非常的难，Study OS by coding !!!</p>
@@ -1014,24 +1264,22 @@
 </ul>
 <h3 id="GDB支持哪些语言"><a href="#GDB支持哪些语言" class="headerlink" title="GDB支持哪些语言"></a>GDB支持哪些语言</h3><p>GDB主要来调试C/C++语言写的程序，当然也就可以调试其他语言程序，另外的语言没了解过。</p>
 <h2 id="GDB使用"><a href="#GDB使用" class="headerlink" title="GDB使用"></a>GDB使用</h2><h3 id="在Ubuntu中安装GDB"><a href="#在Ubuntu中安装GDB" class="headerlink" title="在Ubuntu中安装GDB"></a>在Ubuntu中安装GDB</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt install gdb</span><br></pre></td></tr></table></figure>
-
 <h3 id="补一下GCC的知识"><a href="#补一下GCC的知识" class="headerlink" title="补一下GCC的知识"></a>补一下GCC的知识</h3><p><a target="_blank" rel="noopener" href="https://www.runoob.com/w3cnote/gcc-parameter-detail.html">GCC参数详解</a>，gcc 与 g++ 分别是 gnu 的 c &amp; c++ 编译器 gcc/g++ 在执行编译工作的时候，总共需要4步：</p>
 <ul>
 <li><p>预处理,生成 .i 的文件[预处理器cpp]，指令：-E</p>
 </li>
 <li><p>将预处理后的文件转换成汇编语言, 生成文件 .s [编译器egcs]，指令：-S</p>
 </li>
-<li><p>由汇编变为目标代码(机器代码)生成 .o 的文件[汇编器as]，指令：-c</p>
-</li>
-<li><p>连接目标代码, 生成可执行程序 [链接器ld]，指令：-o FILE</p>
-</li>
+<li>由汇编变为目标代码(机器代码)生成 .o 的文件[汇编器as]，指令：-c</li>
+<li>连接目标代码, 生成可执行程序 [链接器ld]，指令：-o FILE</li>
 </ul>
 <p>在配合GDB时，gcc的指令选项有：</p>
 <ul>
 <li>-g（生成调试信息，GNU 调试器可利用该信息）</li>
 <li>-ggdb（此选项将尽可能的生成 gdb 的可以使用的调试信息）</li>
 </ul>
-<h3 id="GDB中的基本调试命令"><a href="#GDB中的基本调试命令" class="headerlink" title="GDB中的基本调试命令"></a>GDB中的基本调试命令</h3><table>
+<h3 id="GDB中的基本调试命令"><a href="#GDB中的基本调试命令" class="headerlink" title="GDB中的基本调试命令"></a>GDB中的基本调试命令</h3><div class="table-container">
+<table>
 <thead>
 <tr>
 <th><strong>命令</strong></th>
@@ -1039,7 +1287,8 @@
 <th><strong>命令说明</strong></th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>set args</td>
 <td></td>
 <td>设置主程序的参数。例如：./test 1 2设置参数的方法是：gdb test(gdb) set args 1 2</td>
@@ -1084,15 +1333,13 @@
 <td>q</td>
 <td>退出gdb环境。</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h3 id="进入GDB调试"><a href="#进入GDB调试" class="headerlink" title="进入GDB调试"></a>进入GDB调试</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gcc test.c -g -o test</span><br><span class="line">gdb test # 进入gdb，指定test为可执行文件</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">也可以只执行gdb，在gdb中用file命令指定可执行文件</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">接下来就可以使用GDB的基本调试命令调试程序了</span></span><br></pre></td></tr></table></figure>
-
 <h3 id="调试正在运行的程序"><a href="#调试正在运行的程序" class="headerlink" title="调试正在运行的程序"></a>调试正在运行的程序</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">通过ps获取程序进程号</span></span><br><span class="line">gdb test -p [进程号]</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">进入gdb后，程序会被暂停</span></span><br><span class="line">(gdb)bt # 使用bt查看程序的调用栈</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Print backtrace of all stack frames, or innermost COUNT frames.</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">退出后，程序继续执行</span></span><br></pre></td></tr></table></figure>
-
 <h3 id="调试多进程程序"><a href="#调试多进程程序" class="headerlink" title="调试多进程程序"></a>调试多进程程序</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(gdb)set follow-fork-mode [parent|child]</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">（缺省是parent）调试父|子进程，父|子进程不受影响</span></span><br><span class="line">(gdb)set datach-on-fork [on|off]</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">（缺省是on）on表示调试当前进程时，其他进程继续运行，off表示调试当前进程时，其他进程被GDB挂起</span></span><br><span class="line">(gdb)info inferiors # 查看调试的进程</span><br><span class="line">(gdb)inferior # 切换当前调试的进程，进程id是查看调试的进程返回的Num值</span><br></pre></td></tr></table></figure>
-
 <h3 id="调试多线程程序"><a href="#调试多线程程序" class="headerlink" title="调试多线程程序"></a>调试多线程程序</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ps aux|grep test # 查看当前运行的进程，查找符合&quot;test&quot;的字符串</span><br><span class="line">ps -aL|grep test # 查看当前运行的轻量级进程</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">轻量级进程(LWP)是建立在内核之上并由内核支持的用户线程，它是内核线程的高度抽象，每一个轻量级进程都与一个特定的内核线程关联。</span></span><br><span class="line">pstree -p [主线程ID] # 查看主线程和新线程的关系</span><br><span class="line">(gdb)info threads # 查看线程</span><br><span class="line">(gdb)thread [线程ID] # 切换线程，线程ID是查看线程返回的Num值</span><br><span class="line">(gdb)set scheduler-locking [on|off] # on：只运行当前线程，off：运行全部的线程</span><br><span class="line">(gdb)thread apply [线程ID|all] [cmd] # 让某个|全部线程执行某GDB命令</span><br></pre></td></tr></table></figure>
-
 <h3 id="服务程序运行日志"><a href="#服务程序运行日志" class="headerlink" title="服务程序运行日志"></a>服务程序运行日志</h3><p>设置断点或单步跟踪可能会严重干扰多进程、多线程之间的竞争状态，导致我们看到一个假象。一旦我们在某个线程设置了断点，该线程在断点处挺住了，只剩下另一个线程在跑。这时候，并发的场景已经完全被破坏了，通过调试器看到的只是一个和谐的场景（理想状态）。<strong>输出Log日志</strong>可以避免断点和单步跟踪所导致的副作用。</p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
@@ -1179,9 +1426,9 @@
 <p>__asm__ 是GCC关键字asm的宏定义，asm用于声明这行代码是一个内嵌汇编表达式，任何内嵌的汇编表达式都以此关键字作为开头。</p>
 <p>一个最简单的内嵌汇编：<code>__asm__(&quot;nop&quot;);</code> 括号里的是汇编指令，表示运行空指令，一个机器周期。Instruction List 是汇编指令序列，它可以是空的。可以有多条汇编指令，需要将所有指令放在多对引号中，两条指令必须用换行或分号分开。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">printk</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *fmt, ...)</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="comment">//    ……</span></span><br><span class="line">    __asm__(<span class="string">&quot;push %%fs\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;push %%ds\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;pop %%fs\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;pushl %0\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;pushl $buf\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;pushl $0\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;call tty_write\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;addl $8,%%esp\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;popl %0\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;pop %%fs&quot;</span></span><br><span class="line">            ::<span class="string">&quot;r&quot;</span> (i):<span class="string">&quot;ax&quot;</span>,<span class="string">&quot;cx&quot;</span>,<span class="string">&quot;dx&quot;</span>);</span><br><span class="line"><span class="comment">//    ……</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>可以看上面<code>printk()</code>的例子，首先<code>push %fs</code>保存这个指向用户段的寄存器，在最后<code>pop %fs</code>将其恢复，<code>printk()</code>的核心是调用<code>tty_write()</code>。</p>
 <p>Output Input 用来指定当前内联汇编语句的输出与输入，格式为形如“constraint”(variable)的列表（逗号分隔)，constraint是限制字符，下面表中列出几个常用限制字符作用，更多用法见：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_15974389/article/details/76416668">GCC内嵌汇编一些限制字符串</a>。</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -1189,7 +1436,8 @@
 <th>作用</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>a/b/c/d/s/d</td>
 <td>将输入变量放入eax/ebx/ecx/edx/esi/edi</td>
 </tr>
@@ -1205,7 +1453,9 @@
 <td>=/+</td>
 <td>操作数在指令中是只写/读写类型的（输出操作数）</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h2 id="volatile"><a href="#volatile" class="headerlink" title="__volatile__"></a>__volatile__</h2><p>__volatile__ 是GCC关键字volatile的宏定义，在内联汇编中，它是可选的。使用它会向GCC声明不允许对该内联汇编优化，否则当使用了优化选项(-O)进行编译时，GCC将会根据自己的判断决定是否将这个内联汇编表达式中的指令优化掉。</p>
 <p>编译器优化常用的方法有：将内存变量缓存到寄存器；调整指令顺序充分利用CPU指令流水线，常见的是重新排序读写指令。对常规内存进行优化的时候，这些优化是透明的，而且效率很好。由编译器优化或者硬件重新排序引起的问题的解决办法是在从硬件（或者其他处理器）的角度看必须以特定顺序执行的操作之间设置内存屏障（memory barrier），linux 提供了一个宏，<code>barrier()</code>，解决编译器的执行顺序问题，但对硬件无效。</p>
 <p>有一种硬件级别的优化：内存访问速度远不及CPU处理速度，为提高机器整体性能，在硬件上引入硬件高速缓存Cache，加速对内存的访问。在现代CPU中指令的执行并不一定严格按照顺序执行，没有相关性的指令可以乱序执行，以充分利用CPU的指令流水线，提高执行速度。</p>
@@ -1215,7 +1465,6 @@
 <p>如果一个内联汇编语句的Clobber/Modify域存在”memory”，那么GCC会保证在此内联汇编之前，如果某个内存的内容被装入了寄存器，那么在这个内联汇编之后，如果需要使用这个内存处的内容，就会直接到这个内存处重新读取，而不是使用被存放在寄存器中的拷贝。因为这个 时候寄存器中的拷贝已经很可能和内存处的内容不一致了。</p>
 <p>这只是使用”memory”时，GCC会保证做到的一点，但这并不是全部。因为使用”memory”是向GCC声明内存发生了变化，而内存发生变化带来的影响并不止这一点。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> __argc, <span class="type">char</span>* __argv[])</span> </span><br><span class="line">&#123; </span><br><span class="line">    <span class="type">int</span>* __p = (<span class="type">int</span>*)__argc; </span><br><span class="line">    (*__p) = <span class="number">9999</span>; </span><br><span class="line">    __asm__(<span class="string">&quot;&quot;</span>:::<span class="string">&quot;memory&quot;</span>); </span><br><span class="line">    <span class="keyword">if</span>((*__p) == <span class="number">9999</span>) </span><br><span class="line">        <span class="keyword">return</span> <span class="number">5</span>; </span><br><span class="line">    <span class="keyword">return</span> (*__p); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>上面例子中，如果没有那条内联汇编语句，那个if语句的判断条件就完全是一句废话。GCC在优化时会意识到这一点，而直接只生成return 5的汇编代码，而不会再生成if语句的相关代码，而不会生成return (*__p)的相关代码。但你加上了这条内联汇编语句，它除了声明内存变化之外，什么都没有做。但GCC此时就不能简单的认为它不需要判断都知道 (*__p)一定与9999相等，它只有老老实实生成这条if语句的汇编代码，一起相关的两个return语句相关代码。</p>
 <p>linux内核中内存屏障也是基于它实现，<code>#define barrier() _asm__volatile_(&quot;&quot; : : : &quot;memory&quot;)</code>，主要是保证程序的执行遵循顺序一致性。</p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
@@ -1297,7 +1546,6 @@
       
           <h2 id="Linux-screen工具"><a href="#Linux-screen工具" class="headerlink" title="Linux screen工具"></a>Linux screen工具</h2><h3 id="功能介绍"><a href="#功能介绍" class="headerlink" title="功能介绍"></a>功能介绍</h3><p>Linux screen命令用于多重视窗管理程序。此处所谓的视窗，是指一个全屏幕的文字模式画面。通常只有在使用telnet登入主机或是使用老式的终端机时，才有可能用到screen程序。</p>
 <h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">screen [-AmRvx -ls -wipe][-d &lt;作业名称&gt;][-h &lt;行数&gt;][-r &lt;作业名称&gt;][-s &lt;shell&gt;][-S &lt;作业名称&gt;]</span><br></pre></td></tr></table></figure>
-
 <h3 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明"></a>参数说明</h3><ul>
 <li>-A 　将所有的视窗都调整为目前终端机的大小。</li>
 <li>-d&lt;作业名称&gt; 　将指定的screen作业离线。</li>
@@ -1309,11 +1557,10 @@
 <li>-S&lt;作业名称&gt; 　指定screen作业的名称。</li>
 <li>-v 　显示版本信息。</li>
 <li>-x 　恢复之前离线的screen作业。</li>
-<li>-ls或–list 　显示目前所有的screen作业。</li>
+<li>-ls或—list 　显示目前所有的screen作业。</li>
 <li>-wipe 　检查目前所有的screen作业，并删除已经无法使用的screen作业。</li>
 </ul>
 <h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">screen -ls  # 显示已创建的screen终端</span><br><span class="line">screen -S &lt;screen name&gt;  # 创建新的screen终端</span><br><span class="line">screen -r &lt;screen name&gt;  # 重连screen终端</span><br><span class="line">screen -d &lt;screen name&gt;  # 断开screen终端</span><br><span class="line">screen -S &lt;screen name&gt; -X quit  # 强制停止命令</span><br></pre></td></tr></table></figure>
-
 <h3 id="screen快捷键"><a href="#screen快捷键" class="headerlink" title="screen快捷键"></a>screen快捷键</h3><ul>
 <li>Ctrl -a c            创建新的视窗</li>
 <li>Ctrl -a d            断开screen终端，任务还在运行</li>
@@ -1324,11 +1571,11 @@
 <li>Ctrl -a [            复制模式，可以移光标上去看上面的打印</li>
 </ul>
 <h3 id="screen配置"><a href="#screen配置" class="headerlink" title="screen配置"></a>screen配置</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/hao0527/hao0527.github.io/blob/main/others/screencfg -O ~/.screenrc  # 一个好用的screen配置文件</span><br></pre></td></tr></table></figure>
-
 <p>上面这个配置指令有些问题，wget下载下来的是html，所以就手动复制下内容到~/.screenrc文件吧。</p>
 <h2 id="Linux-vi-vim工具"><a href="#Linux-vi-vim工具" class="headerlink" title="Linux vi/vim工具"></a>Linux vi/vim工具</h2><h3 id="功能介绍-1"><a href="#功能介绍-1" class="headerlink" title="功能介绍"></a>功能介绍</h3><p>所有的 Unix Like 系统都会内建 vi 文书编辑器，其他的文书编辑器则不一定会存在。vim 具有程序编辑的能力，可以主动的以字体颜色辨别语法的正确性，方便程序设计。</p>
 <h3 id="vi-vim使用"><a href="#vi-vim使用" class="headerlink" title="vi/vim使用"></a>vi/vim使用</h3><p>基本上 vi/vim 共分为三种模式，分别是<strong>命令模式（Command mode）</strong>，<strong>输入模式（Insert mode）</strong>和<strong>底线命令模式（Last line mode）</strong>。</p>
-<h4 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h4><p><img src="/2022/02/24/220224-Linux%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7/220224-Linux%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7-1.jpg" alt="220224-Linux实用工具-1.jpg"></p>
+<h4 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h4><p><img src="/2022/02/24/220224-Linux%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7/220224-Linux实用工具-1.jpg" alt="220224-Linux实用工具-1.jpg"></p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -1336,7 +1583,8 @@
 <th>作用</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>yy</td>
 <td>复制游标所在的那一行。(常用)</td>
 </tr>
@@ -1372,21 +1620,25 @@
 <td>ZZ</td>
 <td>如果修改过，保存当前文件，然后退出！效果等同于保存并退出</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <p>常用的还有替换功能：</p>
 <ul>
 <li><code>:1,$s/word1/word2/g</code> 或 <code>:%s/word1/word2/g</code>，从第一行到最后一行寻找 word1 字符串，并将该字符串取代为 word2 ！(常用)</li>
 <li><code>:1,$s/word1/word2/gc</code> 或 <code>:%s/word1/word2/gc</code>，从第一行到最后一行寻找 word1 字符串，并将该字符串取代为 word2 ，加了c表示取代前显示提示字符给用户确认 (confirm) 是否需要取代。</li>
 </ul>
 <h4 id="输入模式"><a href="#输入模式" class="headerlink" title="输入模式"></a>输入模式</h4><p>输入模式比较简单，可以使用键盘上的Home、End等功能键，按Esc退出输入模式到命令模式</p>
-<h4 id="底线命令模式"><a href="#底线命令模式" class="headerlink" title="底线命令模式"></a>底线命令模式</h4><table>
+<h4 id="底线命令模式"><a href="#底线命令模式" class="headerlink" title="底线命令模式"></a>底线命令模式</h4><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>输入</th>
 <th>作用</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>:w</td>
 <td>将编辑的数据写入硬盘档案中(常用)</td>
 </tr>
@@ -1422,8 +1674,10 @@
 <td>:set nu/nonu</td>
 <td>显示/取消行号</td>
 </tr>
-</tbody></table>
-<h2 id="Linux-tldr工具"><a href="#Linux-tldr工具" class="headerlink" title="Linux tldr工具"></a>Linux tldr工具</h2><h3 id="功能介绍-2"><a href="#功能介绍-2" class="headerlink" title="功能介绍"></a>功能介绍</h3><p>一个比 –help 和 man 好用的查指令手册的工具，<a target="_blank" rel="noopener" href="https://github.com/tldr-pages/tldr">点我跳到tldr(too long don’t read)主页</a>。</p>
+</tbody>
+</table>
+</div>
+<h2 id="Linux-tldr工具"><a href="#Linux-tldr工具" class="headerlink" title="Linux tldr工具"></a>Linux tldr工具</h2><h3 id="功能介绍-2"><a href="#功能介绍-2" class="headerlink" title="功能介绍"></a>功能介绍</h3><p>一个比 —help 和 man 好用的查指令手册的工具，<a target="_blank" rel="noopener" href="https://github.com/tldr-pages/tldr">点我跳到tldr(too long don’t read)主页</a>。</p>
 <h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>我使用<code>sudo apt install tldr</code>安装，然后<code>mkdir -p ~/.tldr/tldr</code>，再更新字典<code>sudo git clone https://gitclone.com/github.com/tldr-pages/tldr.git ~/.tldr/tldr</code>，国内使用这个镜像快。</p>
 <p>推荐：官网上说可以使用npm或pip3安装。</p>
 <h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>使用方式极其简单，<code>tldr tldr</code>你就可以查到tldr的使用手册。</p>
@@ -1432,7 +1686,6 @@
 <p>安装后可用<code>samba -V</code>查看samba版本号，以确认安装完成。</p>
 <h3 id="使用-1"><a href="#使用-1" class="headerlink" title="使用"></a>使用</h3><p>配置文件目录在/etc/samba/smb.conf，配置以下内容可共享home目录下用户文件夹。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Un-comment the following (and tweak the other settings below to suit)</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">to <span class="built_in">enable</span> the default home directory shares. This will share each</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">user<span class="string">&#x27;s home directory as \\server\username</span></span></span><br><span class="line">[homes]</span><br><span class="line">   comment = Home Directories</span><br><span class="line">   browseable = no</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">By default, the home directories are exported read-only. Change the</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">next parameter to &#x27;</span>no<span class="string">&#x27; if you want to be able to write to them.</span></span></span><br><span class="line">   read only = no</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">File creation mask is set to 0700 for security reasons. If you want to</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">create files with group=rw permissions, set next parameter to 0775.</span></span></span><br><span class="line">   create mask = 0775</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">Directory creation mask is set to 0700 for security reasons. If you want to</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">create dirs. with group=rw permissions, set next parameter to 0775.</span></span></span><br><span class="line">   directory mask = 0775</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">By default, \\server\username shares can be connected to by anyone</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">with access to the samba server.</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">Un-comment the following parameter to make sure that only &quot;username&quot;</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">can connect to \\server\username</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">This might need tweaking when using external authentication schemes</span></span></span><br><span class="line">   valid users = %S</span><br></pre></td></tr></table></figure>
-
 <h3 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h3><p>以上配置后需要重启samba服务生效，可以注销用户后重新登录。</p>
 <p>通过<code>sudo smbpasswd -a userName</code>添加一个samba用户，不然直接windows远程访问会拒绝访问。</p>
 <p>userName需要是系统已有的用户名，否则会<code>Failed to add entry for user userName</code>。</p>
@@ -1516,7 +1769,7 @@
 <p>用处：进行高性能计算。只有多进程方案设计合理，才能加速计算。</p>
 <h2 id="Python中应用多进程"><a href="#Python中应用多进程" class="headerlink" title="Python中应用多进程"></a>Python中应用多进程</h2><ul>
 <li>毕设的上位机要接收显示图像，我在udp数据接收解码后，写入IO流，通过管道发给另一个进程，另一个进程做图像的处理与显示，这样就不会因为处理时间过长而阻塞下一次接收解码了。</li>
-<li><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3.7/library/multiprocessing.html">multiprocessing — 基于进程的并行</a>：multiprocessing是Python自带的多进程库，这是Python官方的文档对multiprocessing库的介绍。</li>
+<li><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3.7/library/multiprocessing.html">multiprocessing —- 基于进程的并行</a>：multiprocessing是Python自带的多进程库，这是Python官方的文档对multiprocessing库的介绍。</li>
 <li>Python的线程是操作系统线程，因此要有Python全局解释器锁。一个python解释器进程内有一条<strong>主线程</strong>，以及多条用户程序的<strong>执行线程</strong>。即使在多核CPU平台上，由于GIL的存在，所以禁止多线程的并行执行。Python 3.6 才让multiprocessing逐渐发展成一个能用的Python内置多进程库，可以进行进程间的通信，以及有限的内存共享。</li>
 </ul>
 <h3 id="两种多进程创建方式"><a href="#两种多进程创建方式" class="headerlink" title="两种多进程创建方式"></a>两种多进程创建方式</h3><p>Python多进程可以选择两种创建进程的方式，spawn与fork，实际使用中可以根据子进程具体做什么来选取用fork还是spawn。</p>
@@ -1525,16 +1778,14 @@
 <li>spawn：从头构建一个子进程，父进程的数据等拷贝到子进程空间内，拥有自己的Python解释器，所以需要重新加载一遍父进程的包，因此启动较慢，由于数据都是自己的，安全性较高</li>
 </ol>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">multiprocessing.set_start_method(<span class="string">&#x27;spawn&#x27;</span>)  <span class="comment"># default on WinOS or MacOS</span></span><br><span class="line">multiprocessing.set_start_method(<span class="string">&#x27;fork&#x27;</span>)   <span class="comment"># default on Linux (UnixOS)</span></span><br></pre></td></tr></table></figure>
-
 <h3 id="四种进程间通信方式"><a href="#四种进程间通信方式" class="headerlink" title="四种进程间通信方式"></a>四种进程间通信方式</h3><p>Python中进程间通信可以采用进程池Pool、管道Pipe、队列Queue，在新版本Python中多了共享内存Manager的方式。</p>
 <ol>
 <li><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3.7/library/multiprocessing.html#module-multiprocessing.pool">进程池Pool</a>：不怎么使用？通常使用另外两个方式通信</li>
 <li><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3.7/library/multiprocessing.html#pipes-and-queues">管道和队列</a>：Queue用于多个进程间实现通信，Pipe是两个进程的通信。Queue通过put和get方法插入读取队列，Pipe通过send和recv方法发送和接收信息，用法可以参考这篇文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/guguobao/p/9398653.html">python进程间通信</a>，如果追求运行更快，那么最好使用管道Pipe而队列Queue，详细查看<a target="_blank" rel="noopener" href="https://www.raspberrypi.org/forums/viewtopic.php?t=141576">Python pipes and queues performance</a></li>
 <li><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/multiprocessing.html#sharing-state-between-processes">共享内存Manager</a>：Pipe Queue 把需要通信的信息从内存里深拷贝了一份给其他线程使用（需要分发的线程越多，其占用的内存越多）。而共享内存会由解释器负责维护一块共享内存（而不用深拷贝），这块内存每个进程都能读取到，读写的时候遵守管理（因此不要以为用了共享内存就一定变快）</li>
 </ol>
-<h3 id="编程中要注意"><a href="#编程中要注意" class="headerlink" title="编程中要注意"></a>编程中要注意</h3><p>为了避免自己调用自己时重复执行主进程，**多进程的主进程一定要写在程序入口if __name__ == ‘__main__’:，否则可能会报错。</p>
+<h3 id="编程中要注意"><a href="#编程中要注意" class="headerlink" title="编程中要注意"></a>编程中要注意</h3><p>为了避免自己调用自己时重复执行主进程，**多进程的主进程一定要写在程序入口if __name<strong> == ‘__main</strong>‘:，否则可能会报错。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">function1</span>(<span class="params"><span class="built_in">id</span></span>):  <span class="comment"># 这里是子进程</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;id <span class="subst">&#123;<span class="built_in">id</span>&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">run__process</span>():  <span class="comment"># 这里是主进程</span></span><br><span class="line">    <span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process</span><br><span class="line">    process = [mp.Process(target=function1, args=(<span class="number">1</span>,)),</span><br><span class="line">               mp.Process(target=function1, args=(<span class="number">2</span>,)), ]</span><br><span class="line">    [p.start() <span class="keyword">for</span> p <span class="keyword">in</span> process]  <span class="comment"># 开启了两个进程</span></span><br><span class="line">    [p.join() <span class="keyword">for</span> p <span class="keyword">in</span> process]   <span class="comment"># 等待两个进程依次结束</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># run__process()  # 主线程不建议写在 if外部。由于这里的例子很简单，你强行这么做可能不会报错</span></span><br><span class="line"><span class="keyword">if</span> __name__ ==<span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    run__process()  <span class="comment"># 正确做法：主线程只能写在 if内部</span></span><br></pre></td></tr></table></figure>
-
 <p>设计高性能的多进程时，遵守以下规则：</p>
 <ul>
 <li>尽可能少传一点数据</li>
@@ -1547,93 +1798,6 @@
 <li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/340657122">在Python中优雅地用多进程</a></li>
 </ul>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/19/220119-%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E5%AF%92%E5%81%87/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/19/220119-%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E5%AF%92%E5%81%87/" class="post-title-link" itemprop="url">大学最后一个假期</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-01-19 20:00:00" itemprop="dateCreated datePublished" datetime="2022-01-19T20:00:00+08:00">2022-01-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-02-14 22:08:15" itemprop="dateModified" datetime="2022-02-14T22:08:15+08:00">2022-02-14</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%BF%99%E7%AE%97%E4%BB%80%E4%B9%88/" itemprop="url" rel="index"><span itemprop="name">这算什么</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="大学回忆录"><a href="#大学回忆录" class="headerlink" title="大学回忆录"></a>大学回忆录</h1><h2 id="大一上学期"><a href="#大一上学期" class="headerlink" title="大一上学期"></a>大一上学期</h2><p>回忆从开学前几日的寝室生活开始，<strong>室友都非常的好相处</strong>，大家在一起能玩的很嗨。再到大一我参加了两个学生会的部门（学生会办公室&amp;党员之家实践部）和一个社团（单车俱乐部），自己在部门里认识了些不同班级不同专业的朋友，也<strong>交到了一位知心</strong>，大一上学期我天天晚上会和他去健身房，或是去钱塘江边散步，或是在寝室喝酒，元旦跨年我去了他家里，人生中第一次和别人跨年。参与了学生会的活动演出和演讲还有优秀干部的竞选；</p>
-<h2 id="大一寒假"><a href="#大一寒假" class="headerlink" title="大一寒假"></a>大一寒假</h2><p>寒假里我一个人坐飞机去了山东蓬莱，找我高考结束后在华为上班认识的同事，蓬莱待了7天，青岛待了2天。独自旅行，去一个陌生的地方，享受孤独，思考人生，一个人狂欢。旅行结束回家后，我学习了郭天祥的<strong>十天学会51单片机</strong>，但并没有完全学会；</p>
-<h2 id="大一下学期"><a href="#大一下学期" class="headerlink" title="大一下学期"></a>大一下学期</h2><p>大一下学期有我喜欢的课程模电，我通过教同学们解题来学习这门课程，因此也<strong>交到了陪伴我至今的女朋友</strong>。除了模电课我还选了一门电子课程设计也非常喜欢，老师授课讲了51单片机的知识，课程做了51数字钟（我在5月19日晚上写完，拍了个51开发版显示520倒计时的视频），最后的作业是51小车。这学期学生会部门成员积极性变差了，我最后没有选择留任执委，选择了留在电子创新实验室（一待就是三年）；</p>
-<h2 id="大一暑假"><a href="#大一暑假" class="headerlink" title="大一暑假"></a>大一暑假</h2><p>暑假我留在实验室<strong>准备19年的全国大学生电子设计竞赛</strong>，暑假做了历年的题目（声音存储录放、风力摆、旋转倒立摆），那时候的我不知道熬夜会伤身体，每天白天调试，晚上在寝室看文档到凌晨2点。暑假里由于比较专注比赛，忘记关心女朋友，两人有过多次争执，女朋友不回消息，我直接去她家里了，就这样被她家人认识，至今我还常去她家蹭饭。这个暑假差一点点就分手了；</p>
-<h2 id="大二上学期"><a href="#大二上学期" class="headerlink" title="大二上学期"></a>大二上学期</h2><p>大二上学期，一开学和徐高东学长参加了<strong>工程训练大赛</strong>，那次比赛后感觉之前所有学过的东西都能联会贯通了。比赛的时候出现了意外，没有取得好成绩，东哥说了句：比赛不就是这样。随后我参加了<strong>飞思卡尔智能车竞赛</strong>，在校内训练的时候感觉都良好，本来计划我和洪晨益写程序，由于硬件画的板子实在惨不忍睹，就自己动手把硬件做完了，我那写代码的队友也很强，一人能维护好代码，那年寒假前我们俩调车调到学校关门。这学期，我和我的女朋友分手了，但几个星期又复合了，我们相互都很缺时间在一起交流；</p>
-<h2 id="大二寒假"><a href="#大二寒假" class="headerlink" title="大二寒假"></a>大二寒假</h2><p>那年是全世界肺炎流行的一年，寒假在家3个月，当然我也没闲着，趁家里无聊，打开电脑学了些东西，有<strong>python，tensorflow，sklearn，百度飞桨，git</strong>等，有潘利斌陪我一起学。疫情原因只能在家调飞卡，在家里把<strong>Altium Designer</strong>了一遍，画板子是没有问题了。3月在家网课，网课非常适合我，我可以不仅可以回放自己学校老师上课讲的，还能去B站慕课上找名校老师上课的视频；</p>
-<h2 id="大二下学期"><a href="#大二下学期" class="headerlink" title="大二下学期"></a>大二下学期</h2><p>中国疫情控制的很厉害，4月中就能返校了。这学期在学校主要是准备电赛，准备飞卡，飞卡参加的是<strong>AI组别</strong>，通过机器学习，训练后部署到单片机，实现自主规划路线；</p>
-<h2 id="大二暑假"><a href="#大二暑假" class="headerlink" title="大二暑假"></a>大二暑假</h2><p>暑假<strong>培训大一电赛新生</strong>，不过今年比赛延期了，暑假没有比赛。飞卡如期举行，离国赛就差0.02秒，怎么就这么可惜呀。电赛准备了很多模块，把模块间通信学的明明白白的，还有很多PCB上的设计规范也学了一遍，那年我们实验室都在看<strong>长江大学唐老师</strong>的教学视频。</p>
-<h2 id="大三上学期"><a href="#大三上学期" class="headerlink" title="大三上学期"></a>大三上学期</h2><p>大三上学期开始在黄道麒<strong>公司实习</strong>，老板非常厉害，抓住了疫情这个风口，做红外热像仪体温枪这些生意。公司离学校很近，我每天上完课就去公司，那段时间进步非常快，学的东西也非常多非常杂。用了好多品牌的国产mcu，用QT写了上位机，学习了二元光学。十月份<strong>浙江省电子大赛</strong>，作品实物验收满分取得了省二等奖，队友配合的非常棒！这学期上了算法与数据结构和数字逻辑设计、51汇编，非常感兴趣，买了块FPGA开发板练手；</p>
-<h2 id="大三寒假"><a href="#大三寒假" class="headerlink" title="大三寒假"></a>大三寒假</h2><p>寒假里我还在公司上班，老板让我住宾馆可以报销。寒假里我学习了<strong>linux应用开发</strong>，opencv，makefile，cmake，用树莓派做了个红外热像仪的demo。这个寒假我在公司借了很多书看，有linux的，opencv的，无线传感器网络的，感测技术的。在公司里和老板经常聊到很晚，我们谈未来的方向，谈生活时政等等，无所不谈，<strong>是一家有温度的公司</strong>；</p>
-<h2 id="大三下学期"><a href="#大三下学期" class="headerlink" title="大三下学期"></a>大三下学期</h2><p>这学期了解了一些<strong>网络安全，开关电源设计，搭建了blog</strong>，仍然在公司实习。搞的东西太杂了容易忘记自己学过什么，写写博客记录下的话翻到还能有印象。公司里主要是把之前用树莓派跑的demo移到了m4的mcu，另一个项目是用高云fpga做了ov2640的串并转换到mcu处理，练习了fpga。5月份之前飞卡的软件队友提出来要再参加一次，让我做一下硬件，这次我非常熟练，PCB最多就设计了两版就完成了硬件设计；</p>
-<h2 id="大三暑假"><a href="#大三暑假" class="headerlink" title="大三暑假"></a>大三暑假</h2><p>暑假去了一家做半导体芯片的公司实习，是属于系统集成部，公司平均年龄比较大，部门里同事都不怎么说话，公司氛围不太好，领导经常会骂别人很凶，我一看不对劲就溜溜球了。暑假在做wifi图传的项目，尝试用m4自己看数据手册写<strong>WiFi驱动</strong>，不过后来这事没成，换了<strong>esp32用idf</strong>开发。很早开始我就对网络感兴趣，可能未来也会多往这个方向发展；</p>
-<h2 id="大四上学期"><a href="#大四上学期" class="headerlink" title="大四上学期"></a>大四上学期</h2><p>大四第一学期在世界五百强<strong>博世</strong>上班，公司的氛围特别好，领导都很有管理的能力，同事之间办公都非常的舒心，博世是个不加班的外企，但是工作效率挺高的，流程虽多，但处理速度很快。我在博世工作了4个月，学习了高压交流的PCB设计，直流无刷电机，永磁同步电机，把电力这一块学了一遍，也了解了电机的控制算法，最简单的六步换向，还有FOC。可以说这次实习经历相当难忘，每个牛的公司，都有一群好的团队管理者。这学期，还报名考研了，算是把大学的知识复习了一下，没考好，以后也不会再有考研的想法了；</p>
-<h1 id="还有最后一个假期"><a href="#还有最后一个假期" class="headerlink" title="还有最后一个假期"></a>还有最后一个假期</h1><p>最后一个假期也没选择安逸，找了家做安防的公司实习，在这里我学到了<strong>linux驱动开发</strong>的知识，我的主管年龄挺大的技术很好，整个框架是他从头写出来的，我看git log一步步看他怎么写出来，太强了！面试的时候就被他的技术所吸引，这么强的人为人还非常谦虚，值得我去学习！在这里我重学了一年前了解过的<strong>makefile编写，shell脚本编程，C代码规范</strong>等等。看了主管写的几万行脚本代码，我再感叹到太强了！过年在家里自己系统的学了一遍计算机网络，本来还想学计算机组成原理和操作系统的，学操作系统的时候卡住了，看早期的linux源码也非常的费劲，只能推到我2月实习完回学校再学了；</p>
-<h1 id="致青春：如果没有源自内心的冲动，怎么可能登峰造极呢？"><a href="#致青春：如果没有源自内心的冲动，怎么可能登峰造极呢？" class="headerlink" title="致青春：如果没有源自内心的冲动，怎么可能登峰造极呢？"></a>致青春：<strong>如果没有源自内心的冲动，怎么可能登峰造极呢？</strong></h1><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
     </div>
 
@@ -1717,7 +1881,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-count">80</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1810,6 +1974,8 @@
 
 
 
+
+  
 
   
 

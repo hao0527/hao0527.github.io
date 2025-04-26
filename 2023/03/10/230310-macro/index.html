@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="字符串转换符使用#运算符可以将宏参数替换为一个字符串，并用双引号括起来，例如： 123456#define PRINT_STR(x) printf(&quot;The string is: %s\n&quot;, #x)int main() &amp;#123;    PRINT_STR(Hello World);    return 0;&amp;#125;  在这个示例程序中，定义了一个宏PRINT_STR，">
+  <meta name="description" content="字符串转换符使用#运算符可以将宏参数替换为一个字符串，并用双引号括起来，例如： 123456#define PRINT_STR(x) printf(&quot;The string is: %s\n&quot;, #x)int main() &amp;#123;    PRINT_STR(Hello World);    return 0;&amp;#125; 在这个示例程序中，定义了一个宏PRINT_STR，它">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C语言 宏的高级用法">
 <meta property="og:url" content="http://example.com/2023/03/10/230310-macro/index.html">
 <meta property="og:site_name" content="永恆博客网">
-<meta property="og:description" content="字符串转换符使用#运算符可以将宏参数替换为一个字符串，并用双引号括起来，例如： 123456#define PRINT_STR(x) printf(&quot;The string is: %s\n&quot;, #x)int main() &amp;#123;    PRINT_STR(Hello World);    return 0;&amp;#125;  在这个示例程序中，定义了一个宏PRINT_STR，">
+<meta property="og:description" content="字符串转换符使用#运算符可以将宏参数替换为一个字符串，并用双引号括起来，例如： 123456#define PRINT_STR(x) printf(&quot;The string is: %s\n&quot;, #x)int main() &amp;#123;    PRINT_STR(Hello World);    return 0;&amp;#125; 在这个示例程序中，定义了一个宏PRINT_STR，它">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-03-10T08:00:00.000Z">
 <meta property="article:modified_time" content="2023-03-12T23:35:35.821Z">
@@ -247,20 +247,16 @@
       
         <h3 id="字符串转换符"><a href="#字符串转换符" class="headerlink" title="字符串转换符"></a>字符串转换符</h3><p>使用<code>#</code>运算符可以将宏参数替换为一个字符串，并用双引号括起来，例如：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> PRINT_STR(x) printf(<span class="string">&quot;The string is: %s\n&quot;</span>, #x)</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    PRINT_STR(Hello World);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>在这个示例程序中，定义了一个宏PRINT_STR，它的参数x通过#运算符被转换为一个字符串，并被传递给printf函数进行输出。运行这个程序会输出：<code>The string is: Hello World</code></p>
 <h3 id="字符串拼接"><a href="#字符串拼接" class="headerlink" title="字符串拼接"></a>字符串拼接</h3><p>在C语言中，宏定义可以使用##运算符进行字符串拼接，称为连接运算符（Token Pasting Operator）。<code>##</code>运算符可以将两个标记（Token）连接成一个标记，从而实现字符串拼接的功能。例如：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> CONCAT(x, y) x##y</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">int</span> xy = <span class="number">10</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, CONCAT(x, y));</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>在这个示例程序中，定义了一个宏CONCAT，它使用<code>##</code>运算符将两个参数x和y连接成一个标记。在main函数中定义了一个变量xy，并将连接后的标记xy作为参数传递给printf函数进行输出。输出结果是：<code>10</code></p>
 <h3 id="变长参数宏"><a href="#变长参数宏" class="headerlink" title="变长参数宏"></a>变长参数宏</h3><p>C语言中的变长参数宏（Variadic Macro）可以接受可变数量的参数。变长参数宏是通过使用特殊的预处理符号<code>__VA_ARGS__</code>来实现的，它表示可变参数的列表。下面是一个简单的示例，展示了如何使用变长参数宏：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PRINTF(...) printf(__VA_ARGS__)</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">int</span> x = <span class="number">10</span>;</span><br><span class="line">    <span class="type">char</span>* str = <span class="string">&quot;hello&quot;</span>;</span><br><span class="line">    PRINTF(<span class="string">&quot;x = %d, str = %s\n&quot;</span>, x, str);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>在这个示例程序中，定义了一个宏PRINTF，它使用printf函数打印可变数量的参数。使用<code>__VA_ARGS__</code>表示可变参数的列表。在main函数中，PRINTF宏被调用，传递了三个参数，包括一个整数和一个字符串。输出结果是：<code>x = 10, str = hello</code></p>
 <h3 id="宏：取最大值"><a href="#宏：取最大值" class="headerlink" title="宏：取最大值"></a>宏：取最大值</h3><p>一种方式：<code>#define MAX(a, b) ((a) &gt; (b) ? (a) : (b))</code><br>这种方式需要注意参数如果有自增运算，需要在传参的时候加括号，否则自增运算会重复两次。<br>正确调用方法如：<code>z = MAX((x++), (y++));</code></p>
 <p>使用下面一种方式可以避免此类问题</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> MAX(a, b) (&#123; \</span></span><br><span class="line"><span class="meta">    typeof(a) _a = (a); \</span></span><br><span class="line"><span class="meta">    typeof(b) _b = (b); \</span></span><br><span class="line"><span class="meta">    (void)(&amp;_a == &amp;_b); \</span></span><br><span class="line"><span class="meta">    _a &gt; _b ? _a : _b; \</span></span><br><span class="line"><span class="meta">&#125;)</span></span><br></pre></td></tr></table></figure>
-
 <p><code>typeof</code>是GNU C编译器内置的一种类型描述符，用于表示表达式的类型。在编译时，编译器会根据<code>typeof(x)</code>对象的类型生成一个类型的值，并将其插入到代码中。</p>
 <p>比较难理解的是<code>(void)(&amp;_a == &amp;_b);</code>，看起来很多余，仔细分析一下，你会发现这条语句很有意思。它的作用有两个： </p>
 <ol>
@@ -269,12 +265,10 @@
 </ol>
 <h3 id="宏：offsetof"><a href="#宏：offsetof" class="headerlink" title="宏：offsetof"></a>宏：offsetof</h3><p><code>offsetof</code>是一个宏，用于获取结构体中成员的偏移量。实现是使用指针运算来计算结构体成员的偏移量。具体实现：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> offsetof(type, member) ((size_t) &amp;((type *)0)-&gt;member)</span></span><br></pre></td></tr></table></figure>
-
 <p>其中，type表示结构体类型，member表示结构体成员。在宏展开时，(type *)0将一个空指针强制转换为结构体指针类型，然后通过指针运算获取成员的地址。由于空指针的地址为0，因此可以确保这个地址不会指向任何实际的内存位置，避免了访问非法内存的风险。最后，将成员的地址转换为size_t类型的偏移量，并返回。</p>
 <p>需要注意的是，offsetof宏只能用于标准布局的结构体，即结构体中的成员按照其定义顺序依次存储，没有嵌套、位域、虚函数等。对于非标准布局的结构体，offsetof可能无法正确计算成员的偏移量。</p>
 <h3 id="宏：container-of"><a href="#宏：container-of" class="headerlink" title="宏：container_of"></a>宏：container_of</h3><p><code>container_of</code>是一个宏，用于从结构体的成员指针计算出结构体的地址。其实现通常基于<code>offsetof</code>宏和指针运算。实现如下：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> container_of(ptr, type, member) \</span></span><br><span class="line"><span class="meta">    ((type *)((char *)(ptr) - offsetof(type, member)))</span></span><br></pre></td></tr></table></figure>
-
 <p>其中，ptr表示结构体成员的指针，type表示结构体类型，member表示结构体成员名。offsetof(type, member)用于计算结构体成员在结构体中的偏移量，(char *)(ptr)将成员指针转换为char类型指针，以便进行指针运算。通过成员指针的地址减去成员在结构体中的偏移量，可以得到结构体的地址。最后，将地址转换为type类型的指针，并返回。</p>
 <p>container_of宏常用于实现Linux内核中的数据结构，如链表、哈希表等。它可以方便地从链表节点或哈希桶中获取对应的数据结构。</p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
@@ -371,7 +365,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-count">80</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -464,6 +458,8 @@
 
 
 
+
+  
 
   
 

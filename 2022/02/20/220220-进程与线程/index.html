@@ -248,7 +248,7 @@
 <p>用处：进行高性能计算。只有多进程方案设计合理，才能加速计算。</p>
 <h2 id="Python中应用多进程"><a href="#Python中应用多进程" class="headerlink" title="Python中应用多进程"></a>Python中应用多进程</h2><ul>
 <li>毕设的上位机要接收显示图像，我在udp数据接收解码后，写入IO流，通过管道发给另一个进程，另一个进程做图像的处理与显示，这样就不会因为处理时间过长而阻塞下一次接收解码了。</li>
-<li><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3.7/library/multiprocessing.html">multiprocessing — 基于进程的并行</a>：multiprocessing是Python自带的多进程库，这是Python官方的文档对multiprocessing库的介绍。</li>
+<li><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3.7/library/multiprocessing.html">multiprocessing —- 基于进程的并行</a>：multiprocessing是Python自带的多进程库，这是Python官方的文档对multiprocessing库的介绍。</li>
 <li>Python的线程是操作系统线程，因此要有Python全局解释器锁。一个python解释器进程内有一条<strong>主线程</strong>，以及多条用户程序的<strong>执行线程</strong>。即使在多核CPU平台上，由于GIL的存在，所以禁止多线程的并行执行。Python 3.6 才让multiprocessing逐渐发展成一个能用的Python内置多进程库，可以进行进程间的通信，以及有限的内存共享。</li>
 </ul>
 <h3 id="两种多进程创建方式"><a href="#两种多进程创建方式" class="headerlink" title="两种多进程创建方式"></a>两种多进程创建方式</h3><p>Python多进程可以选择两种创建进程的方式，spawn与fork，实际使用中可以根据子进程具体做什么来选取用fork还是spawn。</p>
@@ -257,16 +257,14 @@
 <li>spawn：从头构建一个子进程，父进程的数据等拷贝到子进程空间内，拥有自己的Python解释器，所以需要重新加载一遍父进程的包，因此启动较慢，由于数据都是自己的，安全性较高</li>
 </ol>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">multiprocessing.set_start_method(<span class="string">&#x27;spawn&#x27;</span>)  <span class="comment"># default on WinOS or MacOS</span></span><br><span class="line">multiprocessing.set_start_method(<span class="string">&#x27;fork&#x27;</span>)   <span class="comment"># default on Linux (UnixOS)</span></span><br></pre></td></tr></table></figure>
-
 <h3 id="四种进程间通信方式"><a href="#四种进程间通信方式" class="headerlink" title="四种进程间通信方式"></a>四种进程间通信方式</h3><p>Python中进程间通信可以采用进程池Pool、管道Pipe、队列Queue，在新版本Python中多了共享内存Manager的方式。</p>
 <ol>
 <li><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3.7/library/multiprocessing.html#module-multiprocessing.pool">进程池Pool</a>：不怎么使用？通常使用另外两个方式通信</li>
 <li><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3.7/library/multiprocessing.html#pipes-and-queues">管道和队列</a>：Queue用于多个进程间实现通信，Pipe是两个进程的通信。Queue通过put和get方法插入读取队列，Pipe通过send和recv方法发送和接收信息，用法可以参考这篇文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/guguobao/p/9398653.html">python进程间通信</a>，如果追求运行更快，那么最好使用管道Pipe而队列Queue，详细查看<a target="_blank" rel="noopener" href="https://www.raspberrypi.org/forums/viewtopic.php?t=141576">Python pipes and queues performance</a></li>
 <li><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/multiprocessing.html#sharing-state-between-processes">共享内存Manager</a>：Pipe Queue 把需要通信的信息从内存里深拷贝了一份给其他线程使用（需要分发的线程越多，其占用的内存越多）。而共享内存会由解释器负责维护一块共享内存（而不用深拷贝），这块内存每个进程都能读取到，读写的时候遵守管理（因此不要以为用了共享内存就一定变快）</li>
 </ol>
-<h3 id="编程中要注意"><a href="#编程中要注意" class="headerlink" title="编程中要注意"></a>编程中要注意</h3><p>为了避免自己调用自己时重复执行主进程，**多进程的主进程一定要写在程序入口if __name__ == ‘__main__’:，否则可能会报错。</p>
+<h3 id="编程中要注意"><a href="#编程中要注意" class="headerlink" title="编程中要注意"></a>编程中要注意</h3><p>为了避免自己调用自己时重复执行主进程，**多进程的主进程一定要写在程序入口if __name<strong> == ‘__main</strong>‘:，否则可能会报错。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">function1</span>(<span class="params"><span class="built_in">id</span></span>):  <span class="comment"># 这里是子进程</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;id <span class="subst">&#123;<span class="built_in">id</span>&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">run__process</span>():  <span class="comment"># 这里是主进程</span></span><br><span class="line">    <span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process</span><br><span class="line">    process = [mp.Process(target=function1, args=(<span class="number">1</span>,)),</span><br><span class="line">               mp.Process(target=function1, args=(<span class="number">2</span>,)), ]</span><br><span class="line">    [p.start() <span class="keyword">for</span> p <span class="keyword">in</span> process]  <span class="comment"># 开启了两个进程</span></span><br><span class="line">    [p.join() <span class="keyword">for</span> p <span class="keyword">in</span> process]   <span class="comment"># 等待两个进程依次结束</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># run__process()  # 主线程不建议写在 if外部。由于这里的例子很简单，你强行这么做可能不会报错</span></span><br><span class="line"><span class="keyword">if</span> __name__ ==<span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    run__process()  <span class="comment"># 正确做法：主线程只能写在 if内部</span></span><br></pre></td></tr></table></figure>
-
 <p>设计高性能的多进程时，遵守以下规则：</p>
 <ul>
 <li>尽可能少传一点数据</li>
@@ -372,7 +370,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-count">80</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -465,6 +463,8 @@
 
 
 
+
+  
 
   
 

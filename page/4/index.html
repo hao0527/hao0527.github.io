@@ -185,6 +185,267 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/09/27/220927-CAN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/09/27/220927-CAN/" class="post-title-link" itemprop="url">CAN (控制器域网, Controller Area Network)</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-27 08:00:00" itemprop="dateCreated datePublished" datetime="2022-09-27T08:00:00+08:00">2022-09-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-07-09 00:21:23" itemprop="dateModified" datetime="2024-07-09T00:21:23+08:00">2024-07-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>这几天在做云途单片机的CAN接口移植，学习了CAN通信，还看了一些通信时用到的环形队列、通信协议栈。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><p>本文搬运自 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/538834760">CAN通信讲解</a> ，自己复习使用</p>
+</li>
+<li><p>s32k144、云途ME0单片机参考手册</p>
+</li>
+</ol>
+<h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>CAN是<strong>控制器局域网络</strong>(Controller Area Network, CAN)的简称，是一种能够实现分布式实时控制的串行通信网络。</p>
+<p>CAN的发展历史节点：</p>
+<ul>
+<li><strong>1983</strong>年，BOSCH开始着手开发CAN总线；</li>
+<li><strong>1986</strong>年，在SAE会议上，CAN总线正式发布；</li>
+<li><strong>1987</strong>年，Intel和Philips推出第一款CAN控制器芯片；</li>
+<li><strong>1991</strong>年，奔驰 500E 是世界上第一款基于CAN总线系统的量产车型；</li>
+<li><strong>1991</strong>年，Bosch发布CAN 2.0标准，分 <strong>CAN 2.0A</strong> （11位标识符）和 <strong>CAN 2.0B</strong> （29位标识符）；</li>
+<li><strong>1993</strong>年，ISO发布CAN总线标准（<strong>ISO 11898</strong>），随后该标准主要有三部分：</li>
+<li>ISO 11898-1：数据链路层协议</li>
+<li>ISO 11898-2：高速CAN总线物理层协议，通信速度为 125kbps-1Mbps。</li>
+<li>ISO 11898-3：（整合了ISO11519）低速CAN总线物理层协议，通信速度为 125kbps 以下。</li>
+<li><strong>2011</strong>年，开始CAN FD协议的开发。</li>
+<li><strong>2015</strong>年ISO11898-1进行了修订，将CAN FD加入其中。</li>
+</ul>
+<h2 id="CAN总线协议介绍"><a href="#CAN总线协议介绍" class="headerlink" title="CAN总线协议介绍"></a>CAN总线协议介绍</h2><p>CAN总线协议有CAN1.0、CAN2.0（CAN2.0A、CAN2.0B），其中CAN2.0对比1.0，主要是增加了CAN的扩展帧定义。现在我们所说的CAN通常都是指CAN2.0标准的总线。</p>
+<p>CAN-FD协议在原有的CAN协议基础上，增加了可变波特率、扩大数据场、提升校验算法安全性等改进。</p>
+<p>本文主要讲述CAN的数据通信，CAN-FD的区别会在其他文章单独讲解。</p>
+<h2 id="CAN的物理通信形式"><a href="#CAN的物理通信形式" class="headerlink" title="CAN的物理通信形式"></a>CAN的物理通信形式</h2><p>通过两条通信线（双绞线）产生的电压差传输数据，一个CAN网络里的所有节点都挂在这两条通信线上，使用差分信号半双工通信。</p>
+<p><img src="/2022/09/27/220927-CAN/v2-23d364e14ef20208bac9b47fed047ada_r.jpg" alt="img"></p>
+<p>CAN 使用称为 CANH / CANL 的通信线路执行传输和接收。没有电位差的信号称为隐性(Recessive)信号，其逻辑值为1。具有电位差的信号称为显性（Dominant）信号，其逻辑值0。如果通信总线上发生显性和隐性(Recessive)冲突，则显性（Dominant）优先。总线空闲时保持隐性。</p>
+<p>CAN总线的物理层逻辑电平，分为高速ISO11898标准（125kbps ~ 1Mbps）和低速ISO11519标准（10kbps ~ 125kbps）；</p>
+<p>低速的物理层电平如图：</p>
+<p><img src="/2022/09/27/220927-CAN/v2-3667818bfa85894c20ee09fb428f363d_r.jpg" alt="img"></p>
+<p>而我们现在通常使用的CAN2.0，都是使用高速CAN标准，其物理层电平如图：</p>
+<p><img src="/2022/09/27/220927-CAN/v2-aabdb0a85b5bc7446840ed2b8c4d788e_r.jpg" alt="img"></p>
+<p>对于高速CAN，总结一下，也就是：</p>
+<ul>
+<li>CAN_H-CAN_L &lt; 0.5V 时候为隐性的，逻辑信号表现为”逻辑1”- 高电平。</li>
+<li>CAN_H-CAN_L &gt; 0.9V 时候为显性的，逻辑信号表现为”逻辑0”- 低电平。</li>
+</ul>
+<p>关于CAN通信的电平传输，一个<strong>重要概念</strong>就是：</p>
+<p>CAN总线在电平传输上，具有仲裁判断逻辑，优先级为：显性（低电平）&gt;隐形（高电平）！</p>
+<p>在理解CAN总线传输的整个过程中，主要就是清楚这一规则在传输时的灵活运用，并定义的各种帧形式。</p>
+<h2 id="CAN的数据格式"><a href="#CAN的数据格式" class="headerlink" title="CAN的数据格式"></a>CAN的数据格式</h2><p>CAN的数据定义了有5种帧类型：</p>
+<p><img src="/2022/09/27/220927-CAN/v2-1f0d94451bb01c75375b4c912012e39d_r.jpg" alt="img"></p>
+<p>其中，遥控帧也常被称为远程帧。CAN的应用开发者只能使用“数据帧”和“遥控帧”，其他的3种帧类型是由CAN的底层固件自动帮我们在特定场景下进行收发，开发者无需担心也无法直接参与控制。</p>
+<p>所以，本文把“数据帧”和“遥控帧”与其他的3种帧类型分别进行介绍。</p>
+<h3 id="数据帧与遥控帧"><a href="#数据帧与遥控帧" class="headerlink" title="数据帧与遥控帧"></a>数据帧与遥控帧</h3><p>关于数据帧，也就是我们最常用的帧类型，用于数据的收发；也是CAN通信里最主要的内容。</p>
+<p>而遥控帧，只是CAN网络里的某一节点发送一个遥控帧请求其他的节点反馈数据给自己，关于<strong><em>遥控帧其实在实际使用中，显得很鸡肋</em></strong>，原因有：</p>
+<p>1、CAN通信作为一种半双工通信形式，在实际使用中的应用层通信协议往往会定义好数据的应答机制与时间间隔，节点与节点之间只要按照协议规定进行数据的收发即可。</p>
+<p>2、遥控帧与数据帧对比，其实就是一条数据长度为0的数据帧而已，只是在帧格式里的仲裁段RTR位为隐性。那么，似乎有数据帧就足够了。</p>
+<p>3、遥控帧的概念定义只是一个预定义，所谓的请求其他节点给自己发送数据并不是强制的，与数据帧一样完全根据应用层协议来规定其具体的使用。</p>
+<p>综上所述，CAN里定义的遥控帧实际作用不大，而且可以用数据帧配合应用协议的定义，进行替代。所以在后来的CAN-FD中已经取消了遥控帧的定义了。</p>
+<p>本文主要以数据帧进行介绍，并简单介绍遥控帧。</p>
+<h3 id="数据帧与遥控帧的数据格式"><a href="#数据帧与遥控帧的数据格式" class="headerlink" title="数据帧与遥控帧的数据格式"></a>数据帧与遥控帧的数据格式</h3><p>不管是Classic CAN Frame还是CANFD Frame，其帧结构都由以下7个段组成：</p>
+<p>— SOF帧起始;</p>
+<p>— arbitration field仲裁段；</p>
+<p>— control field控制段;</p>
+<p>— data field数据段;</p>
+<p>— CRC field;</p>
+<p>— ACK field;</p>
+<p>— EOF.</p>
+<p><img src="/2022/09/27/220927-CAN/v2-94586126c0989e25599b758d8ecc5295_r.jpg" alt="img"></p>
+<p>这7个段，每个段里又都有自己的格式细分，有两种格式：标准格式和扩展格式。</p>
+<p><img src="/2022/09/27/220927-CAN/v2-f58bfd8f6bb42cf469dfb4c2243750ca_r.jpg" alt="img"></p>
+<p><strong>CAN的应用开发者只使用其中的仲裁段、控制段和数据段。其他部分都由CAN底层固件自动封装！</strong></p>
+<p>由上图可以看到，对于仲裁段和控制段在标准帧与扩展帧里有不同的定义，其他段一致。</p>
+<h3 id="帧起始与帧结束"><a href="#帧起始与帧结束" class="headerlink" title="帧起始与帧结束"></a>帧起始与帧结束</h3><p>SOF帧起始：由一个显性位（低电平）组成，发送节点发送帧起始，其他节点同步于帧起始；</p>
+<p>EOF帧结束：由7个隐形位（高电平）组成。</p>
+<p><img src="/2022/09/27/220927-CAN/v2-5d0c0aa1ef7750f0620e92407a09f4b8_r.jpg" alt="img"></p>
+<h3 id="仲裁段"><a href="#仲裁段" class="headerlink" title="仲裁段"></a>仲裁段</h3><h4 id="仲裁机制"><a href="#仲裁机制" class="headerlink" title="仲裁机制"></a>仲裁机制</h4><p>只要总线空闲，总线上任何节点都可以发送报文，如果有两个或两个以上的节点开始传送报文，那么就会存在总线访问冲突的可能。但是CAN使用了标识符的逐位仲裁方法可以解决这个问题。帧ID越小，优先级越高。</p>
+<p>CAN总线控制器在发送数据的同时监控总线电平，如果电平不同，则停止发送并做其他处理。如果该位位于仲裁段，则退出总线竞争；如果位于其他段，则产生错误事件。</p>
+<p><img src="/2022/09/27/220927-CAN/v2-b31c6be2bf95f5553e9b236fd5f8a562_r.jpg" alt="img"></p>
+<h4 id="仲裁段内容"><a href="#仲裁段内容" class="headerlink" title="仲裁段内容"></a>仲裁段内容</h4><p>RTR位：用于指示这包数据是遥控帧还是数据帧，数据帧的RTR位为显性电平，远程帧为隐性电平。</p>
+<p>所以帧格式和帧ID相同的情况下，数据帧优先于远程帧。</p>
+<p>IDE位：用于指示这包数据是标准帧还是扩展帧，标准帧的IDE位为显性电平，扩展帧的IDE位为隐形电平。</p>
+<p>对于前11位ID相同的标准帧（RTR为显性的遥控帧）和扩展帧，标准帧优先级比扩展帧高。</p>
+<p><img src="/2022/09/27/220927-CAN/v2-c1baaa702dd521f883248bf5d69357ce_r.jpg" alt="img"></p>
+<p>可以看到，在标准格式里，仲裁段没有IDE位，其实这个位在标准格式里是放在控制段的第一位的，这样就正好可以和扩展格式的IDE位对应上进行仲裁了。</p>
+<h3 id="控制段"><a href="#控制段" class="headerlink" title="控制段"></a>控制段</h3><p>仲裁段之后紧跟控制段，控制段共6位，标准帧的控制段由IDE、保留位r0和数据长度代码DLC组成；扩展帧控制段则由保留位r1、r0和DLC组成，如图：</p>
+<p><img src="/2022/09/27/220927-CAN/v2-d7b37d72e67ba4fdc89dc6374a640754_r.jpg" alt="img"></p>
+<p>在这里可以看到，在标准格式里，IDE位放到了控制段的第一位来了，对应前文仲裁段的内容，就可以使标准格式与扩展格式进行仲裁了。</p>
+<p>保留位（ r0 、 r1 ）：保留位必须全部以显性电平发送。</p>
+<p>数据长度码（ DLC ）：数据的字节数必须为 0 ～ 8 字节。数据帧的DLC表示的就是当前包数据段所带的字节数，遥控帧的DLC表示的是请求返回的数据长度。</p>
+<h3 id="数据段"><a href="#数据段" class="headerlink" title="数据段"></a>数据段</h3><p>一个数据帧传输的数据量为0~8个字节。遥控帧的数据段长度固定为0。</p>
+<p><img src="/2022/09/27/220927-CAN/v2-ea717bbfd46d990dffefa9d6d78e7b88_r.jpg" alt="img"></p>
+<h3 id="CRC段"><a href="#CRC段" class="headerlink" title="CRC段"></a>CRC段</h3><p>CAN-bus使用CRC校验进行数据检错，CRC校验值存放于CRC段。 CRC校验段由15位CRC值和1位CRC界定符构成如图：</p>
+<p><img src="/2022/09/27/220927-CAN/v2-d153142849cef02d8701015681d3ef9b_r.jpg" alt="img"></p>
+<h3 id="ACK段"><a href="#ACK段" class="headerlink" title="ACK段"></a>ACK段</h3><p>当一个接收节点接收的帧起始到CRC段之间的内容没发生错误时，它将在ACK段发送一个显性电平如图：</p>
+<p><img src="/2022/09/27/220927-CAN/v2-123b6f8079ca6645f96c0a4b0379933d_r.jpg" alt="img"></p>
+<h2 id="位填充"><a href="#位填充" class="headerlink" title="位填充"></a>位填充</h2><p>CAN数据在收发上除了会遵循以上数据格式定义之外，还有一个“位填充”的底层规则（类似通信协议里的“转义符”），这个操作是在CAN的底层固件中自动判断执行的，其目的是为了增强数据正确性，以便识别错误信号。</p>
+<p>为防止突发错误而设定，CAN协议中规定，当相同极性的电平持续五位时，则添加一个极性相反的位。填充位的添加和删除是由发送节点和接收节点完成的，CAN-BUS只负责传输，不会操纵信号。</p>
+<p><img src="/2022/09/27/220927-CAN/v2-1886bf7c09fedcdb6d34a025e4f63d9d_r.jpg" alt="img"></p>
+<ul>
+<li>对于发送节点而言：</li>
+</ul>
+<p>在发送数据帧和遥控帧时，对于SOF~CRC(除去CRC界定符) 之间的位流，相同极性的电平如果持续5位，那么在下一个位插入一个与之前5位反型的电平；</p>
+<ul>
+<li>对于接收节点而言：</li>
+</ul>
+<p>在接收数据帧和遥控帧时，对于SOF~CRC(除去CRC界定符)之间的位流，相同极性的电平如果持续5位，那么需要删除下一位再接收。如果这个第 6 个位的电平与前 5 位相同，将被视为错误并发送<strong>位填充错误帧</strong>。</p>
+<h2 id="错误帧、过载帧与帧间隔"><a href="#错误帧、过载帧与帧间隔" class="headerlink" title="错误帧、过载帧与帧间隔"></a>错误帧、过载帧与帧间隔</h2><p>对于这三种帧，都是在使用数据帧或遥控帧的过程当中进行错误、时序管理的辅助信号，并不会单独出现在CAN网络中；如前文所述是由CAN的底层固件自动判断并执行他们收发的，但是CAN的开发人员有必要对它们进行了解，以对CAN网络有一个整体的认识。</p>
+<h3 id="错误帧"><a href="#错误帧" class="headerlink" title="错误帧"></a>错误帧</h3><p>尽管CAN-bus是可靠性很高的总线，但依然可能出现错误；CAN-bus的错误类型共有5种：</p>
+<p><img src="/2022/09/27/220927-CAN/v2-873a92aa91e65481dc812b1bc85a3841_r.jpg" alt="img"></p>
+<p>当出现5种错误类型之一时，发送或接收节点将发送错误帧。但是错误帧又有两种格式：主动错误格式和被动错误格式。</p>
+<p>主动错误和被动错误，指的并不是发送方与接收方。而是指某一CAN节点的“错误状态”，无论发送方还是接收方，都会处于自己的错误状态，并根据自身的状态来决定自己要发送主动错误格式还是被动错误格式：</p>
+<p><img src="/2022/09/27/220927-CAN/v2-32a00c5310f9ddb0f89f391b60fbd1ae_r.jpg" alt="img"></p>
+<p>由上图可知，6个连续的显性或隐性电平位，正好违反了之前所提及的“位填充”规则，CAN总线设计上就是利用了自己的这一规则对错误数据进行刻意的覆盖破坏，使总线上其他节点都知道错误的发生。</p>
+<h4 id="错误状态"><a href="#错误状态" class="headerlink" title="错误状态"></a>错误状态</h4><p>在CAN节点内，有两个计数器：发送错误计数器（TEC）和接收错误计数器（REC），当该节点检测到错误后，内部REC/TEC计数器会相应的增加，基于REC/TEC的值判定节点状态，CAN的错误状态如图：</p>
+<p><img src="/2022/09/27/220927-CAN/v2-fddf34e76afc765a8030e7ec7feac111_r.jpg" alt="img"></p>
+<p>节点错误状态的转换就是一个 “量变”到“质变” 的过程：</p>
+<ul>
+<li><strong>主动错误状态：【REC&lt;127 且TEC&lt;127】</strong></li>
+</ul>
+<p>初步可判定该节点相对稳定可靠，该错误计数很可能是由于某个节点异常导致的，那么其他节点很可能也会触发该错误，那么允许该节点破坏CAN总线的异常报文并告知其他节点；<br>节点检测到一个错误就会发送带有主动错误标志的错误帧，因为主动错误标志是连续六个显性位，所以这个时候主动错误标志将会“覆盖”掉总线上其它节点的发送，而之前在CAN总线上传输的报文就被这“六个连续显性位”破坏掉了。<br>如果发出主动错误帧的节点是发送节点，这个情况下就相当于：刚刚发送的那一帧报文我发错了，现在我破坏掉它（发送主动错误帧），你们不管收到什么都不算数；</p>
+<p>如果发出主动错误帧的节点是接收节点，这个情况就相当于：刚刚我收报文的时候发现了错误，不管你们有没有发现这个错误，我现在主动站出来告诉大家这个错误，并把这一帧报文破坏掉（发送主动错误帧），刚才你们收到的东西不管对错都不算数了。</p>
+<ul>
+<li><strong>被动错误状态：【REC&gt;128 或TEC&gt;128】</strong></li>
+</ul>
+<p>节点发送错误帧的次数较多，初步可判定该节点相对不可靠，该错误计数很可能是由于自身节点问题导致，即该错误很可能仅有该节点才有，对于其他节点而言是可以正常交互的，总线不信任该节点提供的错误标识，将不允许破坏总线数据，那么允许该节点发送错误帧“6个连续隐性位”至CAN总线，仅告知其他节点异常；<br>如果发出被动错误帧的节点为报文的发送节点，那么在发送被动错误帧之后，刚刚正在发送的报文被破坏，并且该节点不能在错误帧之后随着连续发送刚刚发送失败的那个报文。随之而来的是帧间隔，并且连带着8位隐性位的 “延迟传送” 段；这样总线电平就呈现出连续11位隐性位，总线上的其它节点就能判定总线处于空闲状态，就能参与总线竞争。</p>
+<p>此时如果该节点能够竞争成功，那么它就能接着发送，如果竞争不能成功，那么就接着等待下一次竞争。这种机制的目的正是为了让其它正常节点（处于主动错误）优先使用总线。</p>
+<ul>
+<li><strong>总线关闭状态：【TEC&gt;255】</strong></li>
+</ul>
+<p>一个处于被动错误状态的节点，仍然多次发送被动错误帧，使该节点转为总线关闭态；<br>该节点不能向总线上发送报文，也不能从总线上接收报文，整个节点脱离总线。等到检测到128次11个连续的隐性位时，TEC和REC置0，重新回到主动错误状态。<br>由于存在实现方式的不同，CAN总线关闭状态存在只允许用户请求恢复和检测到128个11位连续的隐性位时自恢复两种不同的恢复形式。</p>
+<p>如果总线上只有一个节点，该节点发送数据帧后得不到应答，TEC最大只能计数到128，即这种情况下节点只会进入被动错误状态而不会进入总线关闭状态。</p>
+<h4 id="错误帧的发送"><a href="#错误帧的发送" class="headerlink" title="错误帧的发送"></a>错误帧的发送</h4><p>按照CAN协议的规定：<br>发生位错误、填充错误、格式错误、ACK错误时，则在错误产生的那一位的下一位开始发送错误帧。<br>发生CRC错误时，紧随ACK界定符后的位发送错误帧。</p>
+<p>错误帧发送完成后，总线空闲时自动重发出错的数据帧。</p>
+<p><strong>【位错误】举例（情况1）：</strong></p>
+<ul>
+<li>设总线上所有节点处于主动错误状态；</li>
+<li>当一个发送节点监控到总线上的位数值与发送的位数值不一致时，检测为位错误，并发送主动错误标志（6个连续的显性位）；</li>
+<li>接收节点接收到发送节点发送的6个连续的显性位时，会检测为位填充错误，也会发送主动错误标志；</li>
+<li>发送节点发送完主动错误标志后，开始监控总线是否为隐性位，当总线为隐性位时，开始发送错误界定符（8个连续的隐性位）；</li>
+<li>当接收节点发送完主动错误标志后，开始向总线发送错误界定符； 等待错误帧发送完成，总线空闲后，发送节点重新发送出错的报文.</li>
+</ul>
+<blockquote>
+<p>由于发送节点发送6个连续的显性位会破坏位填充规则，触发接收节点发送主动错误标志，发送节点和接收节点的结合是形成错误标志叠加部分的原因。</p>
+</blockquote>
+<p><img src="/2022/09/27/220927-CAN/v2-2266e218b6061b77c37b34e3eb58c723_r.jpg" alt="img"></p>
+<p><strong>【位错误】举例（情况2）：</strong></p>
+<ul>
+<li>假设发送节点处于被动错误状态，接收节点处于主动错误状态；</li>
+<li>当发送节点监控到总线上的位数值与发送的位数值不一致时，检测为位错误，并发送被动错误标志（6个连续的隐性位）；</li>
+<li>接收节点接收到发送节点发送的6个连续的隐性位时，会检测为位填充错误，并会发送主动错误标志；</li>
+<li>发送节点发送完被动错误标志后，开始监控总线是否为隐性位，当总线为隐性位时，开始发送错误界定符（8个连续的隐性位）；</li>
+<li>接收节点发送完主动错误标志后，开始监控总线是否为隐性位，当总线为隐性位时，开始发送错误界定符（8个连续的隐性位）；</li>
+</ul>
+<p><img src="/2022/09/27/220927-CAN/v2-bc7b7162a61a7861ebf895c765122302_r.jpg" alt="img"></p>
+<h3 id="过载帧与帧间隔"><a href="#过载帧与帧间隔" class="headerlink" title="过载帧与帧间隔"></a>过载帧与帧间隔</h3><p>过载帧与主动错误帧非常相似，甚至可以把过载帧直接理解成也是一种错误帧，只是它的错误触发条件不同罢了。</p>
+<p>当某个接收节点没有做好接收下一帧数据的准备时，将发送过载帧以通知发送节点；过载帧由过载标志和过载帧界定符组成，如图所示：</p>
+<p><img src="/2022/09/27/220927-CAN/v2-ae4660f6be52518c6ca8f24b9a5b39ce_r.jpg" alt="img"></p>
+<p>由于存在多个节点同时过载且过载帧发送有时间差问题，可能出现过载标志叠加后超过6个位的现象，如图所示：</p>
+<p><img src="/2022/09/27/220927-CAN/v2-443d97a46a841c5bb2900f0304414ac1_r.jpg" alt="img"></p>
+<p>过载帧是用于接收单元通知发送单元它尚未完成接收准备的帧。在两种情况下，节点会发送过载帧：</p>
+<ul>
+<li>接收单元条件的制约，要求发送节点延缓下一个数据帧或远程帧的传输；</li>
+<li>帧间隔（Intermission）的 <strong><em>3 bit</em></strong> 内检测到显性位</li>
+</ul>
+<p>帧间隔是用于分隔数据帧、遥控帧这些有效数据的帧。数据帧和遥控帧可通过插入帧间隔将本帧与前面的任何帧（数据帧、 遥控帧、错误帧、过载帧）分开。</p>
+<p><img src="/2022/09/27/220927-CAN/v2-09da8cc2f7158aeb3e7ab5a05aed0bff_r.jpg" alt="img"></p>
+<p>注意，过载帧和错误帧由于要按照发送条件立即执行，前不能插入帧间隔</p>
+<h2 id="CAN的采样点与波特率"><a href="#CAN的采样点与波特率" class="headerlink" title="CAN的采样点与波特率"></a>CAN的采样点与波特率</h2><p>根据前文描述，由于CAN总线在通信时，每个节点都会不断的监控总线上的实际电平用于仲裁、判断错误等功能，因此CAN定义了采样点这一概念指明节点对总线的监控时间点。</p>
+<p>因为CAN要对总线上特定数据里的每一个位都要进行一次单独的监控，所以这个监控的时间点，指的是在一个“位”的时间范围之内的一个“相对时间”，比如：一个位时间的中间时刻，就把它称为50%采样点（率）。这个解释只是让读者直接理解它的大体概念，实际情况并不是这么简单。</p>
+<p>实际的CAN采样点的位时间划分如下：</p>
+<p><img src="/2022/09/27/220927-CAN/v2-40e0a834157ea339143219a350f88373_r.jpg" alt="img"></p>
+<p><img src="/2022/09/27/220927-CAN/v2-88bed791a65bcd50ec1eee089c1f067f_r.jpg" alt="img"></p>
+<p>由上图可知，CAN每发送一个位，需要涉及的内容有：</p>
+<p><strong>时间单元（Tq）：</strong>指的是CAN模块时钟提供的单位时间，与其他的芯片外设一样，任何外设模块都需要提供合适的时钟才能正常工作，在很多芯片里CAN时钟还会配合一个分频器，也就是：CAN时钟= CAN时钟源（如图中的晶振时钟） / CAN_Prescaler。<strong>时间单元</strong>指的就是分频后的实际<strong>CAN时钟</strong>的单位时间。</p>
+<p><strong>位时间：</strong>就是我们理解的<strong>CAN波特率</strong>里一位的时间，由上图可知，CAN每发送一个位都由几个“段”组成，而每个段又需要占用几个“时间单元（Tq）”，所以我们在使用CAN的时候，就需要通过指定这些段的Tq个数来得到CAN的波特率。</p>
+<p><strong>同步段（SS：Synchronization Segment）：</strong>用于同步CAN总线上的各个节点。输入信号的跳变沿就发生在同步段，该段持续时间固定为 1 Tq。同步段用于同步总线上的各个节点，一个位的跳变边沿在此时间段内。</p>
+<p><strong>传播段（PTS：Propagation Time Segment）：</strong>用于补偿各节点之间的物理传输延迟时间。传输延迟时间为信号在总线上传播时间的两倍，包括总线驱动器延迟时间。传播段的长度一般有一个取值范围，不同的控制器不完全一致，典型值为 1 – 8 TQ。在CAN-FD中取消了传播段。</p>
+<p><strong>相位缓冲段1（PBS1：Phase Buffer Segment 1）：</strong>用于补偿节点间的晶振误差，允许通过<strong>重同步（SJW）</strong>对该段<strong>加长</strong>。在该时间段结束时进行总线电平<strong>采样点</strong>的采样。</p>
+<p><strong>相位缓冲段2（PBS2：Phase Buffer Segment 2）：</strong>用于补偿节点间的晶振误差，允许通过<strong>重同步（SJW）</strong>对该段<strong>缩短。</strong></p>
+<p>不同的控制器，PBS1/PBS2 的取值范围不完全一致，一般 PS1 为 1 – 8 TQ，PS2 为 2 – 8 TQ。</p>
+<p>在有的控制器里，把传播段与相位缓冲段1合并称为“<strong>时间段1</strong>”,而相位缓冲段2称为“<strong>时间段2</strong>”，如图：</p>
+<p><img src="/2022/09/27/220927-CAN/v2-0ddb4086a6638f5d70a106bc583e55f6_r.jpg" alt="img"></p>
+<p><strong>重同步（SJW）：</strong>在<strong>时间段1</strong>而不是在<strong>同步段(SS)</strong>检测到有效跳变，那么<strong>相位缓冲段1(PBS1)</strong> 的时间就被延长最多SJW那么长，从而采样点被延迟了。相反如果在<strong>时间段2</strong>而不是在<strong>同步段(SS)</strong>检测到有效跳变，那么<strong>相位缓冲段2(PBS2)</strong> 的时间就被缩短最多SJW那么长，从而采样点被提前了。如图：</p>
+<p><img src="/2022/09/27/220927-CAN/v2-e731e178deca7a637b6e36e6976f9d5f_r.jpg" alt="img"></p>
+<p>综上所述：</p>
+<p>CAN时钟 = CAN时钟源 / 分频值CAN_Prescaler；</p>
+<p>CAN波特率 = CAN时钟 / (SS(1Tq) + PTS + PBS1 + PBS2)的Tq总个数；</p>
+<p>CAN采样点（率） = (SS(1Tq) + TSEG1) / (SS(1Tq) + TSEG1 + TSEG2) * 100%</p>
+<p>= (SS(1Tq) + PTS + PBS1) / (SS(1Tq) + PTS + PBS1 + PBS2) * 100%；</p>
+<p><strong>注意：</strong>在实际的CAN使用中，一个CAN网络的各节点最好把采样点设置成一样，如果采样点的设置偏差较大，虽然可能不会造成完全不能通信的情况，但是由于不同节点的判断时间点不同，会造成CAN通信上出现较大概率的错误数据。</p>
+<p>如果发现通信误码率较高，不妨可以排查一下各个节点的CAN采样点设置。</p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/09/09/220909-flash/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -245,7 +506,7 @@
       
           <h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>这几天在做云途单片机的flash接口移植，同时陀螺仪的代码也需要将校准参数保存到flash每次开机读取，于是就看了s32k单片机的flash操作和模拟eeprom，同时看了云途的手册和sdk，也看了stm32闪存编程参考手册和hal库。</p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
-<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Lx411Z7Qa?p=66&spm_id_from=pageDriver&vd_source=67da16e91bf092509864c6a51f44c92e">【正点原子】 手把手教你学STM32入门教学视频单片机 嵌入式 之 F103-基于新战舰V3/精英/MINI板</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Lx411Z7Qa?p=66&amp;spm_id_from=pageDriver&amp;vd_source=67da16e91bf092509864c6a51f44c92e">【正点原子】 手把手教你学STM32入门教学视频单片机 嵌入式 之 F103-基于新战舰V3/精英/MINI板</a></li>
 <li>《STM32F10xxx闪存编程参考手册》，《STM32 FLASH  模拟 EEPROM 使用和优化》</li>
 <li>云途、s32k的参考手册，云途和stm32的sdk</li>
 <li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_38179373/article/details/111660812">nor flash原理详细讲解</a></li>
@@ -436,27 +697,72 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="GPS模块"><a href="#GPS模块" class="headerlink" title="GPS模块"></a>GPS模块</h2><p>商品链接：<a target="_blank" rel="noopener" href="https://detail.tmall.com/item.htm?spm=a1z0d.6639537/tb.1997196601.377.28fa7484mpFNB4&id=619952916530&skuId=4626828970522">Beitian北天高精度GPS模块NEO-M8M陶瓷天线GPS北斗GLONASS三模GNSS授时BN-357</a></p>
+          <h2 id="GPS模块"><a href="#GPS模块" class="headerlink" title="GPS模块"></a>GPS模块</h2><p>商品链接：<a target="_blank" rel="noopener" href="https://detail.tmall.com/item.htm?spm=a1z0d.6639537/tb.1997196601.377.28fa7484mpFNB4&amp;id=619952916530&amp;skuId=4626828970522">Beitian北天高精度GPS模块NEO-M8M陶瓷天线GPS北斗GLONASS三模GNSS授时BN-357</a></p>
 <p>输出协议：NMEA-0183协议</p>
 <h2 id="NMEA-0183协议"><a href="#NMEA-0183协议" class="headerlink" title="NMEA-0183协议"></a>NMEA-0183协议</h2><p><code>&lt;CR&gt;</code> 回车，(ASCII 13, \r)<br><code>&lt;LF&gt;</code> 换行，(ASCII 10, \n)<br><code>hh</code> 报文$到*之间数据的异或校验</p>
 <h3 id="RMC"><a href="#RMC" class="headerlink" title="RMC"></a>RMC</h3><p>Recommended Minimum Specific GPS/TRANSIT Data（<strong>RMC</strong>）推荐定位信息</p>
-<p>报文：<code>$GPRMC,&lt;1&gt;,&lt;2&gt;,&lt;3&gt;,&lt;4&gt;,&lt;5&gt;,&lt;6&gt;,&lt;7&gt;,&lt;8&gt;,&lt;9&gt;,&lt;10&gt;,&lt;11&gt;,&lt;12&gt;*hh&lt;CR&gt;&lt;LF&gt;</code><br>&lt;1&gt; UTC 时间，hhmmss.sss（时分秒）格式<br>&lt;2&gt; 定位状态，A=有效定位，V=无效定位<br>&lt;3&gt; 纬度ddmm.mmmm（度分）格式（前面的0也将被传输）<br>&lt;4&gt; 纬度半球N（北半球）或S（南半球）<br>&lt;5&gt; 经度dddmm.mmmm（度分）格式（前面的0也将被传输）<br>&lt;6&gt; 经度半球E（东经）或W（西经）<br>&lt;7&gt; 地面速率（000.0~999.9 节，前面的0 也将被传输）<br>&lt;8&gt; 地面航向（000.0~359.9 度，以真北为参考基准，前面的0 也将被传输）<br>&lt;9&gt; UTC 日期，ddmmyy（日月年）格式<br>&lt;10&gt; 磁偏角（000.0~180.0 度，前面的0 也将被传输）<br>&lt;11&gt; 磁偏角方向，E（东）或W（西）<br>&lt;12&gt; 模式指示（仅NMEA0183 3.00 版本输出，A=自主定位，D=差分，E=估算，N=数据无效）</p>
+<p>报文：<code>$GPRMC,&lt;1&gt;,&lt;2&gt;,&lt;3&gt;,&lt;4&gt;,&lt;5&gt;,&lt;6&gt;,&lt;7&gt;,&lt;8&gt;,&lt;9&gt;,&lt;10&gt;,&lt;11&gt;,&lt;12&gt;*hh&lt;CR&gt;&lt;LF&gt;</code></p>
+<p><1> UTC 时间，hhmmss.sss（时分秒）格式</1></p>
+<p><2> 定位状态，A=有效定位，V=无效定位</2></p>
+<p><3> 纬度ddmm.mmmm（度分）格式（前面的0也将被传输）</3></p>
+<p><4> 纬度半球N（北半球）或S（南半球）</4></p>
+<p><5> 经度dddmm.mmmm（度分）格式（前面的0也将被传输）</5></p>
+<p><6> 经度半球E（东经）或W（西经）</6></p>
+<p><7> 地面速率（000.0~999.9 节，前面的0 也将被传输）</7></p>
+<p><8> 地面航向（000.0~359.9 度，以真北为参考基准，前面的0 也将被传输）</8></p>
+<p><9> UTC 日期，ddmmyy（日月年）格式</9></p>
+<p><10> 磁偏角（000.0~180.0 度，前面的0 也将被传输）</10></p>
+<p><11> 磁偏角方向，E（东）或W（西）</11></p>
+<p><12> 模式指示（仅NMEA0183 3.00 版本输出，A=自主定位，D=差分，E=估算，N=数据无效）</12></p>
 <h3 id="GGA"><a href="#GGA" class="headerlink" title="GGA"></a>GGA</h3><p>Global Positioning System Fix Data（<strong>GGA</strong>）GPS 定位信息</p>
-<p>报文：<code>$GPGGA,&lt;1&gt;,&lt;2&gt;,&lt;3&gt;,&lt;4&gt;,&lt;5&gt;,&lt;6&gt;,&lt;7&gt;,&lt;8&gt;,&lt;9&gt;,M,&lt;10&gt;,M,&lt;11&gt;,&lt;12&gt;*hh&lt;CR&gt;&lt;LF&gt;</code><br>&lt;1&gt; UTC 时间，hhmmss.sss（时分秒）格式<br>&lt;2&gt; 纬度ddmm.mmmm（度分）格式（前面的0 也将被传输）<br>&lt;3&gt; 纬度半球N（北半球）或S（南半球）<br>&lt;4&gt; 经度dddmm.mmmm（度分）格式（前面的0 也将被传输）<br>&lt;5&gt; 经度半球E（东经）或W（西经）<br>&lt;6&gt; GPS 状态：0=未定位，1=非差分定位，2=差分定位，6=正在估算<br>&lt;7&gt; 正在使用解算位置的卫星数量（00~12）（前面的0 也将被传输）<br>&lt;8&gt; HDOP 水平精度因子（0.5~99.9）<br>&lt;9&gt; 海拔高度（-9999.9~99999.9）<br>&lt;10&gt; 地球椭球面相对大地水准面的高度<br>&lt;11&gt; 差分时间（从最近一次接收到差分信号开始的秒数，如果不是差分定位将为空<br>&lt;12&gt; 差分站ID 号0000~1023（前面的0 也将被传输，如果不是差分定位将为空）</p>
+<p>报文：<code>$GPGGA,&lt;1&gt;,&lt;2&gt;,&lt;3&gt;,&lt;4&gt;,&lt;5&gt;,&lt;6&gt;,&lt;7&gt;,&lt;8&gt;,&lt;9&gt;,M,&lt;10&gt;,M,&lt;11&gt;,&lt;12&gt;*hh&lt;CR&gt;&lt;LF&gt;</code></p>
+<p><1> UTC 时间，hhmmss.sss（时分秒）格式</1></p>
+<p><2> 纬度ddmm.mmmm（度分）格式（前面的0 也将被传输）</2></p>
+<p><3> 纬度半球N（北半球）或S（南半球）</3></p>
+<p><4> 经度dddmm.mmmm（度分）格式（前面的0 也将被传输）</4></p>
+<p><5> 经度半球E（东经）或W（西经）</5></p>
+<p><6> GPS 状态：0=未定位，1=非差分定位，2=差分定位，6=正在估算</6></p>
+<p><7> 正在使用解算位置的卫星数量（00~12）（前面的0 也将被传输）</7></p>
+<p><8> HDOP 水平精度因子（0.5~99.9）</8></p>
+<p><9> 海拔高度（-9999.9~99999.9）</9></p>
+<p><10> 地球椭球面相对大地水准面的高度</10></p>
+<p><11> 差分时间（从最近一次接收到差分信号开始的秒数，如果不是差分定位将为空</11></p>
+<p><12> 差分站ID 号0000~1023（前面的0 也将被传输，如果不是差分定位将为空）</12></p>
 <h3 id="GSA"><a href="#GSA" class="headerlink" title="GSA"></a>GSA</h3><p>GPS DOP and Active Satellites（<strong>GSA</strong>）当前卫星信息</p>
-<p>报文：<code>$GPGSA,&lt;1&gt;,&lt;2&gt;,&lt;3&gt;,&lt;3&gt;,&lt;3&gt;,&lt;3&gt;,&lt;3&gt;,&lt;3&gt;,&lt;3&gt;,&lt;3&gt;,&lt;3&gt;,&lt;3&gt;,&lt;3&gt;,&lt;3&gt;,&lt;4&gt;,&lt;5&gt;,&lt;6&gt;*hh&lt;CR&gt;&lt;LF&gt;</code><br>&lt;1&gt; 模式，M=手动，A=自动<br>&lt;2&gt; 定位类型，1=没有定位，2=2D 定位，3=3D 定位<br>&lt;3&gt; PRN 码（伪随机噪声码），正在用于解算位置的卫星号（01~32，前面的0 也将被传输）<br>&lt;4&gt; PDOP 位置精度因子（0.5~99.9）<br>&lt;5&gt; HDOP 水平精度因子（0.5~99.9）<br>&lt;6&gt; VDOP 垂直精度因子（0.5~99.9）</p>
+<p>报文：<code>$GPGSA,&lt;1&gt;,&lt;2&gt;,&lt;3&gt;,&lt;3&gt;,&lt;3&gt;,&lt;3&gt;,&lt;3&gt;,&lt;3&gt;,&lt;3&gt;,&lt;3&gt;,&lt;3&gt;,&lt;3&gt;,&lt;3&gt;,&lt;3&gt;,&lt;4&gt;,&lt;5&gt;,&lt;6&gt;*hh&lt;CR&gt;&lt;LF&gt;</code></p>
+<p><1> 模式，M=手动，A=自动</1></p>
+<p><2> 定位类型，1=没有定位，2=2D 定位，3=3D 定位</2></p>
+<p><3> PRN 码（伪随机噪声码），正在用于解算位置的卫星号（01~32，前面的0 也将被传输）</3></p>
+<p><4> PDOP 位置精度因子（0.5~99.9）</4></p>
+<p><5> HDOP 水平精度因子（0.5~99.9）</5></p>
+<p><6> VDOP 垂直精度因子（0.5~99.9）</6></p>
 <h3 id="GSV"><a href="#GSV" class="headerlink" title="GSV"></a>GSV</h3><p>报文：<code>$GPGSV,&lt;1&gt;,&lt;2&gt;,&lt;3&gt;,&lt;4&gt;,&lt;5&gt;,&lt;6&gt;,&lt;7&gt;,…&lt;4&gt;,&lt;5&gt;,&lt;6&gt;,&lt;7&gt;*hh&lt;CR&gt;&lt;LF&gt;</code></p>
-<p>&lt;1&gt; GSV 语句的总数<br>&lt;2&gt; 本句GSV 的编号<br>&lt;3&gt; 可见卫星的总数（00~12，前面的0 也将被传输）<br>&lt;4&gt; PRN 码（伪随机噪声码）（01~32，前面的0 也将被传输）<br>&lt;5&gt; 卫星仰角（00~90 度，前面的0 也将被传输）<br>&lt;6&gt; 卫星方位角（000~359 度，前面的0 也将被传输）<br>&lt;7&gt; 信噪比（00~99dB，没有跟踪到卫星时为空，前面的0 也将被传输）<br>注：&lt;4&gt;,&lt;5&gt;,&lt;6&gt;,&lt;7&gt;信息将按照每颗卫星进行循环显示，每条GSV 语句最多可以显示4 颗卫星的信息。其他卫星信息将在下一序列的NMEA0183 语句中输出。</p>
+<p><1> GSV 语句的总数</1></p>
+<p><2> 本句GSV 的编号</2></p>
+<p><3> 可见卫星的总数（00~12，前面的0 也将被传输）</3></p>
+<p><4> PRN 码（伪随机噪声码）（01~32，前面的0 也将被传输）</4></p>
+<p><5> 卫星仰角（00~90 度，前面的0 也将被传输）</5></p>
+<p><6> 卫星方位角（000~359 度，前面的0 也将被传输）</6></p>
+<p><7> 信噪比（00~99dB，没有跟踪到卫星时为空，前面的0 也将被传输）<br>注：<4>,<5>,<6>,<7>信息将按照每颗卫星进行循环显示，每条GSV 语句最多可以显示4 颗卫星的信息。其他卫星信息将在下一序列的NMEA0183 语句中输出。</7></6></5></4></7></p>
 <h3 id="VTG"><a href="#VTG" class="headerlink" title="VTG"></a>VTG</h3><p>Track Made Good and Ground Speed（<strong>VTG</strong>）地面速度信息</p>
-<p>报文：<code>$GPVTG,&lt;1&gt;,T,&lt;2&gt;,M,&lt;3&gt;,N,&lt;4&gt;,K,&lt;5&gt;*hh&lt;CR&gt;&lt;LF&gt;</code><br>&lt;1&gt; 以真北为参考基准的地面航向（000~359 度，前面的0 也将被传输）<br>&lt;2&gt; 以磁北为参考基准的地面航向（000~359 度，前面的0 也将被传输）<br>&lt;3&gt; 地面速率（000.0~999.9 节，前面的0 也将被传输）<br>&lt;4&gt; 地面速率（0000.0~1851.8 公里/小时，前面的0 也将被传输）<br>&lt;5&gt; 模式指示（仅NMEA0183 3.00 版本输出，A=自主定位，D=差分，E=估算，N=数据无效）</p>
+<p>报文：<code>$GPVTG,&lt;1&gt;,T,&lt;2&gt;,M,&lt;3&gt;,N,&lt;4&gt;,K,&lt;5&gt;*hh&lt;CR&gt;&lt;LF&gt;</code></p>
+<p><1> 以真北为参考基准的地面航向（000~359 度，前面的0 也将被传输）</1></p>
+<p><2> 以磁北为参考基准的地面航向（000~359 度，前面的0 也将被传输）</2></p>
+<p><3> 地面速率（000.0~999.9 节，前面的0 也将被传输）</3></p>
+<p><4> 地面速率（0000.0~1851.8 公里/小时，前面的0 也将被传输）</4></p>
+<p><5> 模式指示（仅NMEA0183 3.00 版本输出，A=自主定位，D=差分，E=估算，N=数据无效）</5></p>
 <h3 id="GLL"><a href="#GLL" class="headerlink" title="GLL"></a>GLL</h3><p>Geographic Position（<strong>GLL</strong>）定位地理信息</p>
-<p>报文：<code>$GPGLL,&lt;1&gt;,&lt;2&gt;,&lt;3&gt;,&lt;4&gt;,&lt;5&gt;,&lt;6&gt;,&lt;7&gt;*hh&lt;CR&gt;&lt;LF&gt;</code><br>&lt;1&gt; 纬度ddmm.mmmm（度分）格式（前面的0 也将被传输）<br>&lt;2&gt; 纬度半球N（北半球）或S（南半球）<br>&lt;3&gt; 经度dddmm.mmmm（度分）格式（前面的0 也将被传输）<br>&lt;4&gt; 经度半球E（东经）或W（西经）<br>&lt;5&gt; UTC 时间，hhmmss（时分秒）格式<br>&lt;6&gt; 定位状态，A=有效定位，V=无效定位<br>&lt;7&gt; 模式指示（仅NMEA0183 3.00 版本输出，A=自主定位，D=差分，E=估算，N=数据无效）</p>
+<p>报文：<code>$GPGLL,&lt;1&gt;,&lt;2&gt;,&lt;3&gt;,&lt;4&gt;,&lt;5&gt;,&lt;6&gt;,&lt;7&gt;*hh&lt;CR&gt;&lt;LF&gt;</code></p>
+<p><1> 纬度ddmm.mmmm（度分）格式（前面的0 也将被传输）</1></p>
+<p><2> 纬度半球N（北半球）或S（南半球）</2></p>
+<p><3> 经度dddmm.mmmm（度分）格式（前面的0 也将被传输）</3></p>
+<p><4> 经度半球E（东经）或W（西经）</4></p>
+<p><5> UTC 时间，hhmmss（时分秒）格式</5></p>
+<p><6> 定位状态，A=有效定位，V=无效定位</6></p>
+<p><7> 模式指示（仅NMEA0183 3.00 版本输出，A=自主定位，D=差分，E=估算，N=数据无效）</7></p>
 <h2 id="str转int-float函数"><a href="#str转int-float函数" class="headerlink" title="str转int/float函数"></a>str转int/float函数</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">hexStr2Int</span><span class="params">(<span class="type">char</span> *pStr)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> num = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(*pStr &gt;= <span class="string">&#x27;0&#x27;</span> &amp;&amp; *pStr &lt;= <span class="string">&#x27;9&#x27;</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			num *= <span class="number">16</span>;</span><br><span class="line">			num += *pStr - <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">			pStr++;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span>(*pStr &gt;= <span class="string">&#x27;a&#x27;</span> &amp;&amp; *pStr &lt;= <span class="string">&#x27;f&#x27;</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			num *= <span class="number">16</span>;</span><br><span class="line">			num += *pStr - <span class="string">&#x27;a&#x27;</span> + <span class="number">10</span>;</span><br><span class="line">			pStr++;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span>(*pStr &gt;= <span class="string">&#x27;A&#x27;</span> &amp;&amp; *pStr &lt;= <span class="string">&#x27;F&#x27;</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			num *= <span class="number">16</span>;</span><br><span class="line">			num += *pStr - <span class="string">&#x27;A&#x27;</span> + <span class="number">10</span>;</span><br><span class="line">			pStr++;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> num;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">decStr2Int</span><span class="params">(<span class="type">char</span> *pStr)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> num = <span class="number">0</span>;</span><br><span class="line">	<span class="type">char</span> isMinus = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">if</span>(*pStr == <span class="string">&#x27;-&#x27;</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		isMinus = <span class="number">1</span>;</span><br><span class="line">		pStr++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">while</span>(*pStr &gt;= <span class="string">&#x27;0&#x27;</span> &amp;&amp; *pStr &lt;= <span class="string">&#x27;9&#x27;</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		num *= <span class="number">10</span>;</span><br><span class="line">		num += *pStr - <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">		pStr++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(isMinus)</span><br><span class="line">		num = -num;</span><br><span class="line">	<span class="keyword">return</span> num;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">float</span> <span class="title function_">str2Float</span><span class="params">(<span class="type">char</span> *pStr)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> intNum = <span class="number">0</span>;</span><br><span class="line">	<span class="type">float</span> num = <span class="number">0</span>;</span><br><span class="line">	<span class="type">char</span> isMinus = <span class="number">0</span>;</span><br><span class="line">	intNum = decStr2Int(pStr);</span><br><span class="line">	<span class="keyword">if</span>(*pStr == <span class="string">&#x27;-&#x27;</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		isMinus = <span class="number">1</span>;</span><br><span class="line">		pStr++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">while</span>(*pStr &gt;= <span class="string">&#x27;0&#x27;</span> &amp;&amp; *pStr &lt;= <span class="string">&#x27;9&#x27;</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		pStr++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(*pStr == <span class="string">&#x27;.&#x27;</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		pStr++;</span><br><span class="line">		<span class="keyword">if</span>(*pStr &gt;= <span class="string">&#x27;0&#x27;</span> &amp;&amp; *pStr &lt;= <span class="string">&#x27;9&#x27;</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			num = decStr2Int(pStr);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">while</span>(*pStr &gt;= <span class="string">&#x27;0&#x27;</span> &amp;&amp; *pStr &lt;= <span class="string">&#x27;9&#x27;</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			num /= <span class="number">10.f</span>;</span><br><span class="line">			pStr++;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(isMinus)</span><br><span class="line">		num = intNum - num;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		num = intNum + num;</span><br><span class="line">	<span class="keyword">return</span> num;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h2 id="查找char和异或校验函数"><a href="#查找char和异或校验函数" class="headerlink" title="查找char和异或校验函数"></a>查找char和异或校验函数</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">inline</span> <span class="type">uint16_t</span> <span class="title function_">findChar</span><span class="params">(<span class="type">uint8_t</span> findValue, <span class="type">uint8_t</span> *pStr, <span class="type">uint16_t</span> size)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">uint16_t</span> i = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; size; i++, pStr++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(*pStr == findValue)</span><br><span class="line">			<span class="keyword">return</span> i;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0xffff</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">inline</span> <span class="type">uint8_t</span> <span class="title function_">calcXorCheck</span><span class="params">(<span class="type">uint8_t</span> *pStart, <span class="type">uint8_t</span> *pEnd)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">uint8_t</span> ret = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(pStart &lt; pEnd)</span><br><span class="line">	&#123;</span><br><span class="line">		ret ^= *pStart;</span><br><span class="line">		pStart++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h2 id="utcTime增加一秒函数"><a href="#utcTime增加一秒函数" class="headerlink" title="utcTime增加一秒函数"></a>utcTime增加一秒函数</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">uint32_t</span> <span class="title function_">gps_addSecondUtcTime</span><span class="params">(<span class="type">uint32_t</span> now)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">uint8_t</span> hh, mm, ss;</span><br><span class="line">	ss = now%<span class="number">100</span>;</span><br><span class="line">	<span class="keyword">if</span>(ss &lt; <span class="number">59</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		now++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		ss = <span class="number">0</span>;</span><br><span class="line">		mm = (now/<span class="number">100</span>)%<span class="number">100</span>;</span><br><span class="line">		hh = (now/<span class="number">10000</span>)%<span class="number">100</span>;</span><br><span class="line">		<span class="keyword">if</span>(mm &lt; <span class="number">59</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			mm++;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">		&#123;</span><br><span class="line">			mm = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">if</span>(hh &lt; <span class="number">23</span>)</span><br><span class="line">			&#123;</span><br><span class="line">				hh++;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">			&#123;</span><br><span class="line">				hh = <span class="number">0</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		now = hh*<span class="number">10000</span> + mm*<span class="number">100</span> + ss;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> now;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h2 id="解析函数"><a href="#解析函数" class="headerlink" title="解析函数"></a>解析函数</h2><p>Github：<a target="_blank" rel="noopener" href="https://github.com/hao0527/gps_data_parse">https://github.com/hao0527/gps_data_parse</a></p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
@@ -541,9 +847,9 @@
 <li><a target="_blank" rel="noopener" href="http://t.zoukankan.com/zhuguanhao-p-2887210.html">使用CreateFile()打开COM10及以上串口的问题</a></li>
 </ul>
 <h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;Windows.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span>* <span class="title function_">serial_openSerial</span><span class="params">(<span class="type">void</span>* lpFileName, <span class="type">unsigned</span> <span class="type">int</span> baudRate, <span class="type">unsigned</span> <span class="type">int</span> dwInQueue, <span class="type">unsigned</span> <span class="type">int</span> dwOutQueue)</span> &#123;</span><br><span class="line">    HANDLE hComm = <span class="literal">NULL</span>;</span><br><span class="line">    DCB dcb;</span><br><span class="line">    COMMTIMEOUTS commTimeOuts;</span><br><span class="line">    hComm = CreateFile(lpFileName,       <span class="comment">//串口名称</span></span><br><span class="line">                        GENERIC_READ | GENERIC_WRITE, <span class="comment">//允许读和写</span></span><br><span class="line">                        <span class="number">0</span>,             <span class="comment">//独占方式</span></span><br><span class="line">                        <span class="literal">NULL</span>,          <span class="comment">// 无安全属性，不可被子程序继承</span></span><br><span class="line">                        OPEN_EXISTING, <span class="comment">//创建文件的性质，打开而不是创建</span></span><br><span class="line">                        <span class="number">0</span>,             <span class="comment">// Non Overlapped I/O</span></span><br><span class="line">                        <span class="literal">NULL</span>);         <span class="comment">// Null for Comm Devices</span></span><br><span class="line">    SetupComm(hComm, dwInQueue, dwOutQueue);</span><br><span class="line">    GetCommState(hComm, &amp;dcb);</span><br><span class="line">    dcb.BaudRate = baudRate;</span><br><span class="line">    SetCommState(hComm, &amp;dcb);</span><br><span class="line">    commTimeOuts.ReadIntervalTimeout = <span class="number">0</span>;</span><br><span class="line">    commTimeOuts.ReadTotalTimeoutMultiplier = <span class="number">0</span>;</span><br><span class="line">    commTimeOuts.ReadTotalTimeoutConstant = <span class="number">0</span>;</span><br><span class="line">    commTimeOuts.WriteTotalTimeoutMultiplier = <span class="number">0</span>;</span><br><span class="line">    commTimeOuts.WriteTotalTimeoutConstant = <span class="number">0</span>;</span><br><span class="line">    SetCommTimeouts(hComm, &amp;commTimeOuts);	<span class="comment">// 配置Timeout参数(ms)，0表示不Timeout</span></span><br><span class="line">    <span class="keyword">return</span> hComm;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">serial_readLen</span><span class="params">(<span class="type">void</span>* hComm, <span class="type">unsigned</span> <span class="type">char</span>* pBuff, <span class="type">unsigned</span> <span class="type">int</span> len, <span class="type">unsigned</span> <span class="type">int</span>* pLenRead)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> ReadFile(hComm, pBuff, len, pLenRead, <span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">serial_closeSerial</span><span class="params">(<span class="type">void</span>* hComm)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> CloseHandle(hComm);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">serial_purgeSerial</span><span class="params">(<span class="type">void</span>* hComm)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> PurgeComm(hComm, PURGE_RXCLEAR | PURGE_TXCLEAR);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><p>Windows.h的api是<strong>正确返回非0</strong></p>
-<h2 id="不同系统编译各数据类型所占内存空间大小"><a href="#不同系统编译各数据类型所占内存空间大小" class="headerlink" title="不同系统编译各数据类型所占内存空间大小"></a>不同系统编译各数据类型所占内存空间大小</h2><h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><table>
+<h2 id="不同系统编译各数据类型所占内存空间大小"><a href="#不同系统编译各数据类型所占内存空间大小" class="headerlink" title="不同系统编译各数据类型所占内存空间大小"></a>不同系统编译各数据类型所占内存空间大小</h2><h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>类型</th>
@@ -553,7 +859,8 @@
 <th>linux64</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>char</td>
 <td>1</td>
 <td>1</td>
@@ -609,7 +916,9 @@
 <td>4</td>
 <td>8</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ol>
 <li>指针所占空间看系统是16位、32位还是64位。</li>
 <li>win64把long编成4字节，linux64把long编成8字节。</li>
@@ -783,9 +1092,7 @@
       
           <h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>不喜欢用现成的账本app记账，喜欢在手机记事本里记账，没次统计花费总额都需要按计算器，比较麻烦也不确定会不会按错，所以用Python写个脚本算算总共花费多少，额外也可以统计些自己想知道的数据。</p>
 <h2 id="账本格式"><a href="#账本格式" class="headerlink" title="账本格式"></a>账本格式</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">7.8 两餐-29 电费-57 开箱-30 充气宝-160</span><br><span class="line">7.9 一餐-10 充话费-54</span><br><span class="line">7.10 两餐-33 鼠标脚垫-11 早餐包-24</span><br><span class="line">7.11 两餐-22 出行-7 理发-13</span><br></pre></td></tr></table></figure>
-
 <h2 id="脚本代码"><a href="#脚本代码" class="headerlink" title="脚本代码"></a>脚本代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">costStruct = [  &#123;&#x27;date&#x27;: &#x27;7.1&#x27;, &#x27;item&#x27;: [&#x27;两餐&#x27;], &#x27;consume&#x27;: [33]&#125;,</span></span><br><span class="line"><span class="string">                &#123;&#x27;date&#x27;: &#x27;7.2&#x27;, &#x27;item&#x27;: [&#x27;两餐&#x27;, &#x27;遮阳布&#x27;, &#x27;出行&#x27;], &#x27;consume&#x27;: [25, 6, 13]&#125;,</span></span><br><span class="line"><span class="string">                ...</span></span><br><span class="line"><span class="string">             ]</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line">costStruct = []</span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(file=<span class="string">&#x27;cost.txt&#x27;</span>, mode=<span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> fp:</span><br><span class="line">    costStrList = fp.readlines()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除空白行</span></span><br><span class="line">delNum = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(costStrList)):</span><br><span class="line">    j = i - delNum</span><br><span class="line">    costStrList[j] = costStrList[j].strip(<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(costStrList[j].replace(<span class="string">&#x27; &#x27;</span>, <span class="string">&#x27;&#x27;</span>)) == <span class="number">0</span>:</span><br><span class="line">        delNum = delNum + <span class="number">1</span></span><br><span class="line">        <span class="keyword">del</span>(costStrList[j])</span><br><span class="line"><span class="comment"># print(costStrList)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(costStrList)):</span><br><span class="line">    costDic = &#123;<span class="string">&#x27;date&#x27;</span>: <span class="string">&#x27;&#x27;</span>, <span class="string">&#x27;item&#x27;</span>: [], <span class="string">&#x27;consume&#x27;</span>: []&#125;</span><br><span class="line">    strList = costStrList[i].split(<span class="string">&#x27; &#x27;</span>)</span><br><span class="line">    costDic[<span class="string">&#x27;date&#x27;</span>] = strList[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="built_in">len</span>(strList)):</span><br><span class="line">        cost = strList[j].split(<span class="string">&#x27;-&#x27;</span>)</span><br><span class="line">        costDic[<span class="string">&#x27;item&#x27;</span>].append(cost[<span class="number">0</span>])</span><br><span class="line">        costDic[<span class="string">&#x27;consume&#x27;</span>].append(<span class="built_in">int</span>(cost[<span class="number">1</span>]))</span><br><span class="line">    costStruct.append(costDic)</span><br><span class="line"><span class="comment"># print(costStruct)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算总共花费</span></span><br><span class="line">dayCost = []</span><br><span class="line">dateStr = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(costStruct)):</span><br><span class="line">    dayCost.append(<span class="built_in">sum</span>(costStruct[i][<span class="string">&#x27;consume&#x27;</span>]))</span><br><span class="line">    dateStr.append(costStruct[i][<span class="string">&#x27;date&#x27;</span>])</span><br><span class="line">    <span class="built_in">print</span>(costStruct[i][<span class="string">&#x27;date&#x27;</span>] + <span class="string">&#x27; cost ￥&#x27;</span> + <span class="built_in">str</span>(dayCost[i]))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;total cost ￥&#x27;</span> + <span class="built_in">str</span>(<span class="built_in">sum</span>(dayCost)))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘图</span></span><br><span class="line">plt.figure(figsize=(<span class="number">3</span>+<span class="number">0.25</span>*<span class="built_in">len</span>(dayCost), <span class="number">8</span>), dpi=<span class="number">100</span>)    <span class="comment"># 自适应长度</span></span><br><span class="line">plt.bar(dateStr, dayCost)</span><br><span class="line">plt.xticks(rotation=<span class="number">45</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;total cost &#x27;</span> + <span class="built_in">str</span>(<span class="built_in">sum</span>(dayCost)) + <span class="string">&#x27; yuan&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;date&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;consume&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-
 <h2 id="Github"><a href="#Github" class="headerlink" title="Github"></a>Github</h2><p>代码存放在<a target="_blank" rel="noopener" href="https://github.com/hao0527/costSummary">https://github.com/hao0527/costSummary</a>，以后有新的统计分析需求，会直接在我的Github更新。</p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
@@ -865,14 +1172,14 @@
 
       
           <h2 id="RC振荡器"><a href="#RC振荡器" class="headerlink" title="RC振荡器"></a>RC振荡器</h2><p>在振荡电路中的频率选择部分可以只用电阻和电容构成，这种只用电阻和电容构成的振荡器称为RC振荡器。RC振荡器需要起振电路，常用的正弦波荡电路有文氏桥振荡电路，要起振所以电路是正反馈，RC构成选频网络，两个二极管和R3构成稳幅电路。</p>
-<p><img src="/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-1.jpg" alt="2207010-RC与晶体振荡器-1.jpg"></p>
+<p><img src="/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC与晶体振荡器-1.jpg" alt="2207010-RC与晶体振荡器-1.jpg"></p>
 <p>RC振荡器容易封装到芯片中，MCU内部的时钟一般就是RC振荡器。成本低、功耗小、电路板上无需外部晶振，这些都是RC振荡器的优点。</p>
 <p>缺点：MCU的内部振荡电路对外界干扰很敏感，非常容易受到外界环境温度的影响。同时精度也低，下图是用F767内部和外部振荡器生成1Hz方波的区别。</p>
-<p><img src="/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-2.jpg" alt="2207010-RC与晶体振荡器-2.jpg"></p>
+<p><img src="/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC与晶体振荡器-2.jpg" alt="2207010-RC与晶体振荡器-2.jpg"></p>
 <h2 id="晶体振荡器"><a href="#晶体振荡器" class="headerlink" title="晶体振荡器"></a>晶体振荡器</h2><p>只要在晶体板级上施加交变电压，就会是晶片产生机械变形振动，此现象即所谓逆压电效应。当外加电压频率等于晶体谐振器的固有频率时，就会发生压电谐振，从而导致机械变形的振幅突然增大。一般而言，晶振的振荡频率比较稳定。但是价格稍微高点，还有用晶体振荡器一般还要接两个15-33pF起振电容。</p>
 <p>有源晶振（Oscillator，晶振）只需要供电自身就能起振，无源晶振（Crystal，晶体）最高精度为5ppm，而有源晶振的精度则可以达到0.1ppm。有源晶振的信号电平是固定，所以需要选择好合适输出电平，灵活性较差。无源晶振单片机可以配置振荡输出电压。</p>
-<p><img src="/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-3.jpg" alt="有源晶振"><br><img src="/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-4.jpg" alt="无源晶振"></p>
-<h2 id="STM32CubeMX中的时钟配置"><a href="#STM32CubeMX中的时钟配置" class="headerlink" title="STM32CubeMX中的时钟配置"></a>STM32CubeMX中的时钟配置</h2><p><img src="/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8-5.jpg" alt="STM32中的时钟配置"></p>
+<p><img src="/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC与晶体振荡器-3.jpg" alt="有源晶振"><br><img src="/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC与晶体振荡器-4.jpg" alt="无源晶振"></p>
+<h2 id="STM32CubeMX中的时钟配置"><a href="#STM32CubeMX中的时钟配置" class="headerlink" title="STM32CubeMX中的时钟配置"></a>STM32CubeMX中的时钟配置</h2><p><img src="/2022/07/10/220710-RC%E4%B8%8E%E6%99%B6%E4%BD%93%E6%8C%AF%E8%8D%A1%E5%99%A8/2207010-RC与晶体振荡器-5.jpg" alt="STM32中的时钟配置"></p>
 <p>BYPASS Clock Source：使用有源晶振的话，则只需要给它加上电源，即可输出时钟到MCU的时钟输入端，绕过MCU的OSC模块，时钟直接供MCU使用。</p>
 <p>Crystal/Ceramic Resonator：使用晶体的话，除了外部需要加上谐振电容（有些会加上MΩ的反馈电阻）之外，还需要<strong>MCU内部的OSC振荡电路辅助</strong>才能正常产生所需时钟。</p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
@@ -960,15 +1267,15 @@
 </ol>
 <h2 id="软件操作"><a href="#软件操作" class="headerlink" title="软件操作"></a>软件操作</h2><ol>
 <li>Tools -&gt; Settings -&gt; Text Editor中选择编辑器，我选择的是notepad++，需要将编辑器路径加到系统环境变量。</li>
-<li>创建PLL IP核：<img src="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-2.jpg" alt="220708-XilinxFPGA点灯-2.jpg"></li>
+<li>创建PLL IP核：<img src="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA点灯-2.jpg" alt="220708-XilinxFPGA点灯-2.jpg"></li>
 <li>功能仿真，RTL分析，综合，约束输入，设计实现都在左侧的Flow Navigator中。</li>
 </ol>
 <h2 id="流水灯"><a href="#流水灯" class="headerlink" title="流水灯"></a>流水灯</h2><ol>
-<li>New Project，芯片选择xc7a35tfgg484-2。<img src="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-1.jpg" alt="220708-XilinxFPGA点灯-1.jpg"></li>
+<li>New Project，芯片选择xc7a35tfgg484-2。<img src="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA点灯-1.jpg" alt="220708-XilinxFPGA点灯-1.jpg"></li>
 <li>Add Sources -&gt; Create File，创建led_top.v文件。</li>
-<li>Vivado中打开文件会调用Notepad++编辑器，编写流水灯代码：<img src="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-5.jpg" alt="220708-XilinxFPGA点灯-5.jpg"></li>
+<li>Vivado中打开文件会调用Notepad++编辑器，编写流水灯代码：<img src="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA点灯-5.jpg" alt="220708-XilinxFPGA点灯-5.jpg"></li>
 <li>再功能仿真（可选），再综合、约束输入。</li>
-<li>最后生成bit流下载到开发板：<img src="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA%E7%82%B9%E7%81%AF-4.jpg" alt="220708-XilinxFPGA点灯-4.jpg"></li>
+<li>最后生成bit流下载到开发板：<img src="/2022/07/08/220708-XilinxFPGA%E7%82%B9%E7%81%AF/220708-XilinxFPGA点灯-4.jpg" alt="220708-XilinxFPGA点灯-4.jpg"></li>
 <li>Xilinx的集成开发环境要比Altera的好用不少，就是编译速度较慢。</li>
 </ol>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
@@ -1056,257 +1363,23 @@
 <p>arch – 体系架构，如ARM，MIPS，表示该编译器用于编译哪个目标平台的程序<br>vendor – 工具链提供商，通常是把vendor写成体系架构的值，比如cortex_a8<br>os – 运行编译产生的程序的目标操作系统，一般用linux表示有操作系统，none表示裸系统，uboot编译无os<br>eabi – 嵌入式应用二进制接口（Embedded Application Binary Interface），abi是计算机上的</p>
 <h2 id="编译工具使用（持续更新）"><a href="#编译工具使用（持续更新）" class="headerlink" title="编译工具使用（持续更新）"></a>编译工具使用（持续更新）</h2><p>交叉编译工具使用方法与本地编译工具链基本一样，只是命名不同。</p>
 <h3 id="gcc"><a href="#gcc" class="headerlink" title="gcc"></a>gcc</h3><p>Linux系统下的GCC编译器实际上是GNU编译工具链中的一款软件，可以用它来调用其他不同的工具进行诸如预处理、编译、汇编和链接这样的工作。gcc编译器从拿到一个c源文件到生成一个可执行程序，中间一共经历了四个步骤：</p>
-<p><img src="/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-1.jpg" alt="220522-交叉编译工具链-1.jpg"></p>
+<p><img src="/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-交叉编译工具链-1.jpg" alt="220522-交叉编译工具链-1.jpg"></p>
 <h3 id="ld"><a href="#ld" class="headerlink" title="ld"></a>ld</h3><p>ld是GNU操作系统上的连接器，把二进制文件连接成可执行文件。<strong>ELF文件</strong>可用于程序的链接，重定位目标文件。用于链接的ELF文件格式：</p>
-<p><img src="/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-2.jpg" alt="220522-交叉编译工具链-2.jpg"></p>
+<p><img src="/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-交叉编译工具链-2.jpg" alt="220522-交叉编译工具链-2.jpg"></p>
 <p>从编译和链接角度看ELF文件<strong>ELF头</strong>，每个ELF文件都必须存在一个ELF_Header，这里存放了很多重要的信息用来<strong>描述整个文件的组织</strong>，如：版本信息、入口信息、偏移信息等，程序执行也必须依靠其提供的信息。</p>
 <p><strong>段头表</strong>，存放的是所有<strong>不同段将在内存中的位置</strong>。代码段.text section，存放已编译程序的机器代码，一般是只读的。只读数据段.rodata section，此段的数据不可修改，存放常量。数据段.data section，存放已初始化的全局变量。.bss section，未初始化全局变量，仅是占位符，不占据任何实际磁盘空间，目标文件格式区分初始化和非初始化是为了空间效率。</p>
 <p>符号表.symtab section，它存放在程序中定义和引用的函数和全局变量的信息。.text节的重定位信息.rel.txt section，用于重新修改代码段的指令中的地址信息。.data节的重定位信息.rel.data section，用于对被模块使用或定义的全局变量进行重定位的信息。调试用的符号表.debug section。.strtab section，包含symtab和debug节中符号及节名。.line section，存储调试的行号信息，描述源代码和机器码之间的对应关系。</p>
 <p>ELF(Executable and Linkable Format)的完整描述，可以参考这个文档 - <a target="_blank" rel="noopener" href="http://www.uclibc.org/docs/elf-64-gen.pdf">这里</a></p>
-<h3 id="size"><a href="#size" class="headerlink" title="size"></a>size</h3><p><img src="/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-3.jpg" alt="220522-交叉编译工具链-3.jpg"></p>
+<h3 id="size"><a href="#size" class="headerlink" title="size"></a>size</h3><p><img src="/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-交叉编译工具链-3.jpg" alt="220522-交叉编译工具链-3.jpg"></p>
 <p>用于显示二进制文件各节的大小。</p>
 <p>text段最终是存放在FLASH存储器中的，text段不仅包含函数，还有常量。</p>
 <p>data段是用于初始化数据（全局/外部），既有初始化值的数据。</p>
 <p>bss段包含着所有未初始化（或初始化值为0）的数据（全局/外部）。</p>
 <p>dec（decimal的缩写，即十进制数）是text，data和bss的算术和。</p>
-<h3 id="objcopy"><a href="#objcopy" class="headerlink" title="objcopy"></a>objcopy</h3><p><img src="/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE-4.jpg" alt="220522-交叉编译工具链-4.jpg"></p>
+<h3 id="objcopy"><a href="#objcopy" class="headerlink" title="objcopy"></a>objcopy</h3><p><img src="/2022/05/22/220522-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE/220522-交叉编译工具链-4.jpg" alt="220522-交叉编译工具链-4.jpg"></p>
 <p>把一种目标文件中的内容复制到另一种类型的目标文件中。</p>
 <p><code>objcopy -O ihex xxxxxx.elf xxxxxx.hex</code> 将编译生成的elf文件转换为hex格式的文件。</p>
 <p><code>objcopy -O srec xxxxxx.elf xxxxxx.srec</code> 将编译生成的elf文件转换为srec格式的文件。</p>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/12/220512-Git%E5%92%8CSVN/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/12/220512-Git%E5%92%8CSVN/" class="post-title-link" itemprop="url">Git和SVN</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-05-12 21:00:00" itemprop="dateCreated datePublished" datetime="2022-05-12T21:00:00+08:00">2022-05-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-09 00:21:23" itemprop="dateModified" datetime="2024-07-09T00:21:23+08:00">2024-07-09</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="Git和SVN"><a href="#Git和SVN" class="headerlink" title="Git和SVN"></a>Git和SVN</h2><p>公司里常用的两种版本控制工具：Git和SVN，两者最大的区别就是Git是分布式，SVN是集中式。<strong>集中式</strong>的版本控制系统都有一个单一的集中管理的服务器，保存所有文件的修订版本，而协同工作的人们都通过客户端连到这台服务器，取出最新的文件或者提交更新。 <strong>分布式</strong>的版本控制系统都有一个单一的集中管理的服务器，保存所有文件的修订版本，而协同工作的人们在自己本地也会创建一个库，用于保存自己的修改与提交，之后再将自己库提交至服务器库进行更新。</p>
-<p><strong>Subversion的特点概括起来主要由以下几条：</strong></p>
-<ul>
-<li>每个版本库有唯一的URL（官方地址），每个用户都从这个地址获取代码和数据；</li>
-<li>获取代码的更新，也只能连接到这个唯一的版本库，同步以取得最新数据；</li>
-<li>提交必须有网络连接（非本地版本库）；</li>
-<li>提交需要授权，如果没有写权限，提交会失败；</li>
-<li>提交并非每次都能够成功。如果有其他人先于你提交，会提示“改动基于过时的版本，先更新再提交”… 诸如此类；</li>
-<li>冲突解决是一个提交速度的竞赛：手快者，先提交，平安无事；手慢者，后提交，可能遇到麻烦的冲突解决；</li>
-</ul>
-<p><strong>Git具有以下特点：</strong></p>
-<ul>
-<li>Git中每个克隆(clone)的版本库都是平等的。你可以从任何一个版本库的克隆来创建属于你自己的版本库，同时你的版本库也可以作为源提供给他人，只要你愿意；</li>
-<li>Git的每一次提取操作，实际上都是一次对代码仓库的完整备份；</li>
-<li>提交完全在本地完成，无须别人给你授权，你的版本库你作主，并且提交总是会成功；</li>
-<li>甚至基于旧版本的改动也可以成功提交，提交会基于旧的版本创建一个新的分支；</li>
-<li>Git的提交不会被打断，直到你的工作完全满意了，PUSH给他人或者他人PULL你的版本库，合并会发生在PULL和PUSH过程中，不能自动解决的冲突会提示您手工完成；</li>
-<li>冲突解决不再像是SVN一样的提交竞赛，而是在需要的时候才进行合并和冲突解决；</li>
-<li>Git 也可以模拟集中式的工作模式，Git版本库统一放在服务器中，Git 的集中式工作模式非常灵活；</li>
-<li>可以为 Git 版本库进行授权：谁能创建版本库，谁能向版本库PUSH，谁能够读取（克隆）版本库;</li>
-<li>团队的成员先将服务器的版本库克隆到本地；并经常的从服务器的版本库拉（PULL）最新的更新；</li>
-<li>团队的成员将自己的改动推（PUSH）到服务器的版本库中，当其他人和版本库同步（PULL）时，会自动获取改变；</li>
-<li>你完全可以在脱离Git服务器所在网络的情况下，如移动办公或出差时，照常使用代码库；</li>
-<li>你只需要在能够接入Git服务器所在网络时，PULL和PUSH即可完成和服务器同步以及提交；</li>
-<li>Git提供 rebase 命令，可以让你的改动看起来是基于最新的代码实现的改动；</li>
-<li>Git 有更多的工作模式可以选择，远非 Subversion可比；</li>
-<li>Git 分支是指针指向某次提交，而 SVN 分支是拷贝的目录，这个特性使 Git 的分支切换非常迅速，且创建成本非常低；</li>
-</ul>
-<h2 id="Git基本概念和常用命令"><a href="#Git基本概念和常用命令" class="headerlink" title="Git基本概念和常用命令"></a>Git基本概念和常用命令</h2><ul>
-<li><strong>工作区：</strong>就是你在电脑里能看到的目录。</li>
-<li><strong>暂存区：</strong>英文叫 stage 或 index。一般存放在 <strong>.git</strong> 目录下的 index 文件（.git/index）中，所以我们把暂存区有时也叫作索引（index）。</li>
-<li><strong>版本库：</strong>工作区有一个隐藏目录 <strong>.git</strong>，这个不算工作区，而是 Git 的版本库，版本库可分为远程仓库和本地仓库。<br><img src="/2022/05/12/220512-Git%E5%92%8CSVN/220512-Git%E5%92%8CSVN-1.jpg" alt="220512-Git和SVN-1.jpg"></li>
-</ul>
-<p>Git 常用的是以下 6 个命令：<strong>git clone</strong>、<strong>git push</strong>、<strong>git add</strong> 、<strong>git commit</strong>、<strong>git checkout</strong>、<strong>git pull</strong><br><img src="/2022/05/12/220512-Git%E5%92%8CSVN/220512-Git%E5%92%8CSVN-2.jpg" alt="220512-Git和SVN-2.jpg"></p>
-<p> git 创建仓库的命令：</p>
-<table>
-<thead>
-<tr>
-<th align="left">命令</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><code>git init</code></td>
-<td align="left">初始化仓库</td>
-</tr>
-<tr>
-<td align="left"><code>git clone</code></td>
-<td align="left">拷贝一份远程仓库，也就是下载一个项目。</td>
-</tr>
-</tbody></table>
-<p>提交与修改的命令：</p>
-<table>
-<thead>
-<tr>
-<th align="left">命令</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><code>git add</code></td>
-<td align="left">添加文件到暂存区</td>
-</tr>
-<tr>
-<td align="left"><code>git status</code></td>
-<td align="left">查看仓库当前的状态，显示有变更的文件。</td>
-</tr>
-<tr>
-<td align="left"><code>git diff</code></td>
-<td align="left">比较文件的不同，即暂存区和工作区的差异。</td>
-</tr>
-<tr>
-<td align="left"><code>git commit</code></td>
-<td align="left">提交暂存区到本地仓库。</td>
-</tr>
-<tr>
-<td align="left"><code>git reset</code></td>
-<td align="left">回退版本。</td>
-</tr>
-<tr>
-<td align="left"><code>git rm</code></td>
-<td align="left">删除工作区文件。</td>
-</tr>
-<tr>
-<td align="left"><code>git mv</code></td>
-<td align="left">移动或重命名工作区文件。</td>
-</tr>
-</tbody></table>
-<p>提交日志的命令：</p>
-<table>
-<thead>
-<tr>
-<th align="left">命令</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><code>git log</code></td>
-<td align="left">查看历史提交记录</td>
-</tr>
-<tr>
-<td align="left"><code>git blame </code></td>
-<td align="left">以列表形式查看指定文件的历史修改记录</td>
-</tr>
-</tbody></table>
-<p>远程操作的命令：</p>
-<table>
-<thead>
-<tr>
-<th align="left">命令</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><code>git remote</code></td>
-<td align="left">远程仓库操作</td>
-</tr>
-<tr>
-<td align="left"><code>git fetch</code></td>
-<td align="left">从远程获取代码库</td>
-</tr>
-<tr>
-<td align="left"><code>git pull</code></td>
-<td align="left">下载远程代码并合并</td>
-</tr>
-<tr>
-<td align="left"><code>git push</code></td>
-<td align="left">上传远程代码并合并</td>
-</tr>
-</tbody></table>
-<p>Git 分支管理：<a target="_blank" rel="noopener" href="https://www.runoob.com/git/git-branch.html">https://www.runoob.com/git/git-branch.html</a><br>Git 查看提交历史：<a target="_blank" rel="noopener" href="https://www.runoob.com/git/git-commit-history.html">https://www.runoob.com/git/git-commit-history.html</a><br>Git 标签：<a target="_blank" rel="noopener" href="https://www.runoob.com/git/git-tag.html">https://www.runoob.com/git/git-tag.html</a><br>更多命令查看Git完整命令手册地址：<a target="_blank" rel="noopener" href="http://git-scm.com/docs">http://git-scm.com/docs</a></p>
-<h2 id="Tortoise-SVN"><a href="#Tortoise-SVN" class="headerlink" title="Tortoise SVN"></a>Tortoise SVN</h2><p>SVN教程：<a target="_blank" rel="noopener" href="https://www.runoob.com/svn/svn-tutorial.html">https://www.runoob.com/svn/svn-tutorial.html</a></p>
-<p>TortoiseSVN 是 SVN(Subversion) 版本控制系统的一个免费开源客户端，可以超越时间的管理文件和目录。TortoiseSVN 使用教程：<a target="_blank" rel="noopener" href="https://www.runoob.com/svn/tortoisesvn-intro.html">https://www.runoob.com/svn/tortoisesvn-intro.html</a></p>
-<p>企业通常是使用TortoiseSVN提供的图像化界面操作，使用较简单。Windows的Git提供了GitGUI，也可以使用TortoiseGit，配置参数也有图形化界面，之前实习的一家公司就是 TortoiseGit 和 TortoiseSVN 。</p>
-<h2 id="版本管控工具分支管理"><a href="#版本管控工具分支管理" class="headerlink" title="版本管控工具分支管理"></a>版本管控工具分支管理</h2><h3 id="SVN分支管理策略"><a href="#SVN分支管理策略" class="headerlink" title="SVN分支管理策略"></a>SVN分支管理策略</h3><ul>
-<li>trunk(主干|主线|主分支)：是用来做主方向开发的，新功能的开发应放在主线中，当模块开发完成后，需要修改，就用branch。</li>
-<li>branches(分支)：分支开发和主线开发是可以同时进行的，也就是并行开发，分支通常用于修复bug时使用。</li>
-<li>tags (标记)：用于标记某个可用的版本，可以标记已经上线发布的版本，也可以标记正在测试的版本，通常是只读的。</li>
-</ul>
-<p>branch是用来做并行开发的，这里的并行是指和trunk进行比较。比如，3.0开发完成，这个时候要做一个tag，tag_release_3_0，然后基于这个tag做release，比如安装程序等。trunk进入3.1的开发，但是3.0发现了bug，那么就需要基于tag_release_3_0做一个branch，branch_bugfix_3_0，基于这个branch进行bugfix，等到bugfix结束，做一个tag，tag_release_3_0_1，然后，根据需要决定branch_bugfix_3_0是否并入trunk。</p>
-<h3 id="Git分支管理策略"><a href="#Git分支管理策略" class="headerlink" title="Git分支管理策略"></a>Git分支管理策略</h3><p><strong>Git Flow模型</strong>中定义了主分支和辅助分支两类分支。其中主分支用于组织与软件开发、部署相关的活动，辅助分支组织用于解决特定的问题而进行的各种开发活动。Git Flow开发模型从源代码管理角度对通常意义上的软件开发活动进行了约束，为软件开发提供了一个可供参考的管理模型。Git Flow开发模型让代码仓库保持整洁，让小组各个成员之间的开发相互隔离，能够有效避免处于开发状态中的代码相互影响而导致的效率低下和混乱。</p>
-<p>Git Flow模型的特点是只有2个主干分支，Master和Develop分支：Master分支上只有稳定的生产版本，Develop分支用于集成。其中还涉及到HotFix分支。而其他还有三类分支：Feature分支用于开发人员各自开发；Release用于代码合并和集成；HotFix用于产品版本代码的紧急修订。</p>
-<p><strong>master分支</strong>通常只能从其它分支合并，不能在master分支直接修改。master分支上存放的是随时可供在生产环境中部署的代码（Production Ready state）。当开发活动到一定阶段，产生一份新的可供部署的代码时，master分支上的代码会被更新。同时，每一次更新，最好添加对应的版本号标签（TAG），所有在Master分支上的Commit应该打Tag。</p>
-<p><strong>develop分支</strong>是保持当前开发最新成果的分支，一般会在此分支上进行晚间构建（Nightly Build）并执行自动化测试。develop分支产生于master分支, 并长期存在。当一个版本功能开发完毕且通过测试功能稳定时，就会合并到master分支上，并打好带有相应版本号的tag。develop分支是主开发分支，包含所有要发布到下一个Release的代码，主要合并其它分支，比如Feature分支。</p>
-<p><strong>辅助分支</strong>是用于组织解决特定问题的各种软件开发活动的分支。辅助分支主要用于组织软件新功能的并行开发、简化新功能开发代码的跟踪、辅助完成版本发布工作以及对生产代码的缺陷进行紧急修复工作。辅助分支通常只会在有限的时间范围内存在。辅助分支包括用于开发新功能时所使用的feature分支，用于辅助版本发布的release分支，用于修正生产代码中的缺陷的hotfix分支。辅助分支都有固定的使用目的和分支操作限制。通过对分支的命名，定义了使用辅助分支的方法。</p>
-<p><strong>feature分支</strong>可以从develop分支派生。feature分支的命名可以使用除master，develop，release-*，hotfix-*之外的任何名称。feature分支（topic分支）通常在开发一项新的软件功能的时候使用，分支上的代码变更最终合并回develop分支或者干脆被抛弃掉（例如实验性且效果不好的代码变更）。一般而言，feature分支代码可以保存在开发者自己的代码库中而不强制提交到主代码库里。Feature分支开发完成后，必须合并回Develop分支，合并完分支后一般会删feature分支，但也可以保留。</p>
-<p><strong>release分支</strong>可以从develop分支派生。release分支是为发布新的产品版本而设计的。在release分支上的代码允许做测试、bug修改、准备发布版本所需的各项说明信息（版本号、发布时间、编译时间等）。通过在release分支上进行发布相关工作可以让develop分支空闲出来以接受新的feature分支上的代码提交，进入新的软件开发迭代周期。当develop分支上的代码已经包含了所有即将发布的版本中所计划包含的软件功能，并且已通过所有测试时，可以考虑准备创建release分支。而所有在当前即将发布的版本外的业务需求一定要确保不能混到release分支内（避免由此引入一些不可控的系统缺陷）。成功的派生release分支并被赋予版本号后，develop分支就可以为下一个版本服务。版本号的命名可以依据项目定义的版本号命名规则进行。发布Release分支时，合并Release到Master和Develop， 同时在Master分支上打个Tag记住Release版本号，然后就可以删除Release分支。</p>
-<p><strong>hotfix分支</strong>可以从master分支派生。hotfix分支是计划外创建的，可以产生一个新的可供在生产环境部署的软件版本。当生产环境中的软件遇到异常情况或者发现了严重到必须立即修复的软件缺陷时，就需要从master分支上指定的TAG版本派生hotfix分支来组织代码的紧急修复工作。优点是不会打断正在进行的develop分支的开发工作，能够让团队中负责新功能开发的人与负责代码紧急修复的人并行的开展工作。hotfix分支基于Master分支创建，开发完后需要合并回Master和Develop分支，同时在Master上打一个tag。</p>
-<h2 id="使用Git遇到的问题"><a href="#使用Git遇到的问题" class="headerlink" title="使用Git遇到的问题"></a>使用Git遇到的问题</h2><h3 id="Git-tag"><a href="#Git-tag" class="headerlink" title="Git tag"></a>Git tag</h3><p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_21746331/article/details/1207767">GIT 中如何打标签（git tag）</a></p>
-<p><img src="/2022/05/12/220512-Git%E5%92%8CSVN/220512-Git%E5%92%8CSVN-3.jpg" alt="220512-Git和SVN-3.jpg"></p>
-<h3 id="Git-show"><a href="#Git-show" class="headerlink" title="Git show"></a>Git show</h3><p>给历史版本打标签时用的commit可以通过git show查看历史版本的hash。</p>
-<p><img src="/2022/05/12/220512-Git%E5%92%8CSVN/220512-Git%E5%92%8CSVN-4.jpg" alt="220512-Git和SVN-4.jpg"></p>
-<h3 id="Git-log"><a href="#Git-log" class="headerlink" title="Git log"></a>Git log</h3><p>查看提交日志，当你要修改历史提交前，你可以通过git log看看要修改第几次的提交。</p>
-<p><img src="/2022/05/12/220512-Git%E5%92%8CSVN/220512-Git%E5%92%8CSVN-5.jpg" alt="220512-Git和SVN-5.jpg"></p>
-<h3 id="Git-rebase"><a href="#Git-rebase" class="headerlink" title="Git rebase"></a>Git rebase</h3><p>通过git rebase可以修改历史的版本，参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_62277266/article/details/124260568">Git系列之修改历史提交信息</a>，使用rebase指令后会在vi编辑器中选择要修改哪次提交，然后通过vi编辑器修改提交的内容。</p>
-<p>注意：异常退出可能导致文件丢失，不要慌终端有提示如何恢复。</p>
-<p><img src="/2022/05/12/220512-Git%E5%92%8CSVN/220512-Git%E5%92%8CSVN-6.jpg" alt="220512-Git和SVN-6.jpg"></p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
     </div>
@@ -1391,7 +1464,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-count">80</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1484,6 +1557,8 @@
 
 
 
+
+  
 
   
 

@@ -185,6 +185,98 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/21/210821-%E9%87%8D%E5%AE%9A%E5%90%91printf/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/08/21/210821-%E9%87%8D%E5%AE%9A%E5%90%91printf/" class="post-title-link" itemprop="url">在Keil中重定向printf</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-08-21 15:00:00 / 修改时间：19:32:10" itemprop="dateCreated datePublished" datetime="2021-08-21T15:00:00+08:00">2021-08-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="遇到问题"><a href="#遇到问题" class="headerlink" title="遇到问题"></a>遇到问题</h3><p>今天用STM32CubeMX生成了代码，使用printf函数后单片机程序运行异常，查出是STM32CubeMX生成的代码没有printf的重定向，百度查了两个方法后两个都行不通，最后参考正点原子例程解决。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><p>错误参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/xukao5671927/article/details/78485537">一知半解学CubeMX——UART：Printf实现</a></p>
+</li>
+<li><p>正确参考：正点原子例程SYSTEM文件夹下的usart.c</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//加入以下代码,支持printf函数,而不需要选择use MicroLIB</span></span><br><span class="line"><span class="meta">#<span class="keyword">if</span> 1</span></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> import(__use_no_semihosting)</span></span><br><span class="line"><span class="comment">//标准库需要的支持函数</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> __<span class="title">FILE</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="type">int</span> handle;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">FILE __stdout;</span><br><span class="line"><span class="comment">//定义_sys_exit()以避免使用半主机模式</span></span><br><span class="line"><span class="type">void</span> _sys_exit(<span class="type">int</span> x)</span><br><span class="line">&#123;</span><br><span class="line">	x = x;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//重定义fputc函数</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">fputc</span><span class="params">(<span class="type">int</span> ch, FILE *f)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">while</span>((USART1-&gt;SR&amp;<span class="number">0X40</span>)==<span class="number">0</span>);<span class="comment">//循环发送,直到发送完毕</span></span><br><span class="line">	USART1-&gt;DR = (u8) ch;</span><br><span class="line">	<span class="keyword">return</span> ch;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ol>
+<li>要注意重定向的函数名是<code>int __io_putchar(int ch)</code>还是<code>int fputc(int ch, FILE *f)</code></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifdef</span> __GNUC__</span></span><br><span class="line">  <span class="comment">/* With GCC/RAISONANCE, small printf (option LD Linker-&gt;Libraries-&gt;Small printf set to &#x27;Yes&#x27;) calls __io_putchar() */</span></span><br><span class="line">  <span class="meta">#<span class="keyword">define</span> PUTCHAR_PROTOTYPE int __io_putchar(int ch)</span></span><br><span class="line"><span class="meta">#<span class="keyword">else</span></span></span><br><span class="line">  <span class="meta">#<span class="keyword">define</span> PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> <span class="comment">/* __GNUC__ */</span></span></span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>CubeMX生成的代码没有勾选Use MicroLib，可能需要勾选，可以看<a target="_blank" rel="noopener" href="https://www.cnblogs.com/zyqgold/p/6114637.html">Keil中的USE MicroLib说明</a>，MicroLib不支持操作系统函数。</p>
+</li>
+<li><p>Unix系统里，每行结尾只有“&lt;换行&gt;”，即”\n”；</p>
+<p>Windows系统里面，每行结尾是“&lt;回车&gt;&lt;换行&gt;”，即“\r\n”；</p>
+<p>Mac系统里，每行结尾是“&lt;回车&gt;”，即”\r”；</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/liewen_/article/details/89673402">\r,\n,\r\n的区别：回车与换行</a></p>
+</li>
+</ol>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/09/210809-%E4%BF%A1%E5%8F%B7%E5%AE%8C%E6%95%B4%E6%80%A7%E4%B8%8E%E7%94%B5%E6%BA%90%E5%AE%8C%E6%95%B4%E6%80%A7%E5%88%86%E6%9E%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -243,7 +335,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h3 id="书籍介绍"><a href="#书籍介绍" class="headerlink" title="书籍介绍"></a>书籍介绍</h3><p>作者: [美] Eric Bogatin<br>出版社: 电子工业出版社<br>原作名: Signal and Power Integrity：Simplified， Third Edition<br>译者: <a target="_blank" rel="noopener" href="https://book.douban.com/search/%E6%9D%8E%E7%8E%89%E5%B1%B1">李玉山</a> / <a target="_blank" rel="noopener" href="https://book.douban.com/search/%E5%88%98%E6%B4%8B">刘洋</a> / <a target="_blank" rel="noopener" href="https://book.douban.com/search/%E5%88%9D%E7%A7%80%E7%90%B4">初秀琴</a> / <a target="_blank" rel="noopener" href="https://book.douban.com/search/%E8%B7%AF%E5%BB%BA%E6%B0%91">路建民</a></p>
+          <h3 id="书籍介绍"><a href="#书籍介绍" class="headerlink" title="书籍介绍"></a>书籍介绍</h3><p>作者: [美] Eric Bogatin<br>出版社: 电子工业出版社<br>原作名: Signal and Power Integrity：Simplified， Third Edition<br>译者: <a target="_blank" rel="noopener" href="https://book.douban.com/search/李玉山">李玉山</a> / <a target="_blank" rel="noopener" href="https://book.douban.com/search/刘洋">刘洋</a> / <a target="_blank" rel="noopener" href="https://book.douban.com/search/初秀琴">初秀琴</a> / <a target="_blank" rel="noopener" href="https://book.douban.com/search/路建民">路建民</a></p>
 <h3 id="第一版前言"><a href="#第一版前言" class="headerlink" title="第一版前言"></a>第一版前言</h3><p>“一切都应该尽可能简单，而不只是简单一点。”        ——阿尔伯特·爱因斯坦</p>
 <h3 id="信号完整性问题的10个基本原则"><a href="#信号完整性问题的10个基本原则" class="headerlink" title="信号完整性问题的10个基本原则"></a>信号完整性问题的10个基本原则</h3><ol>
 <li><p>提高高速产品设计的关键是：充分利用分析工具实现准确的性能预估，使用测量手段验证设计过程，降低风险并提高所采用设计工具的可信度。</p>
@@ -351,9 +443,9 @@
 
       
           <h3 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h3><ul>
-<li>开发板：<a target="_blank" rel="noopener" href="https://item.taobao.com/item.htm?spm=a1z10.1-c.w4004-1816603213.25.3acf849bUh4GaW&id=592735846549">勤谋电子 Intel Altera Cyclone IV FPGA 开发板 EP4CE15 开发板</a></li>
+<li>开发板：<a target="_blank" rel="noopener" href="https://item.taobao.com/item.htm?spm=a1z10.1-c.w4004-1816603213.25.3acf849bUh4GaW&amp;id=592735846549">勤谋电子 Intel Altera Cyclone IV FPGA 开发板 EP4CE15 开发板</a></li>
 <li>IDE：Quartus (Quartus Prime 18.0) Standard Edition</li>
-<li>下载器：<a target="_blank" rel="noopener" href="https://detail.tmall.com/item.htm?spm=a230r.1.14.16.4d1e5dd8starCH&id=616077647019&ns=1&abbucket=9&skuId=4393547028324">USB Blaster下载器 ALTERA CPLD/FPGA下载线</a></li>
+<li>下载器：<a target="_blank" rel="noopener" href="https://detail.tmall.com/item.htm?spm=a230r.1.14.16.4d1e5dd8starCH&amp;id=616077647019&amp;ns=1&amp;abbucket=9&amp;skuId=4393547028324">USB Blaster下载器 ALTERA CPLD/FPGA下载线</a></li>
 </ul>
 <h3 id="实现功能"><a href="#实现功能" class="headerlink" title="实现功能"></a>实现功能</h3><ul>
 <li>实时频率测量</li>
@@ -536,7 +628,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><img src="/2021/07/10/210710-%E7%AC%AC%E4%B8%80%E5%9D%97%E5%9B%9B%E5%B1%82%E6%9D%BF/210710-%E7%AC%AC%E4%B8%80%E5%9D%97%E5%9B%9B%E5%B1%82%E6%9D%BF-1.jpg" alt="210710-第一块四层板-1.jpg"></p>
+          <p><img src="/2021/07/10/210710-%E7%AC%AC%E4%B8%80%E5%9D%97%E5%9B%9B%E5%B1%82%E6%9D%BF/210710-第一块四层板-1.jpg" alt="210710-第一块四层板-1.jpg"></p>
 <ul>
 <li><p>第一次画四层板，嘉立创打板的时候出了点问题，嘉立创PCB解析和AD21.3.1版本的不兼容，导致内层存在空气间距</p>
 </li>
@@ -646,16 +738,13 @@
 </ol>
 <h3 id="GND和机壳的连接"><a href="#GND和机壳的连接" class="headerlink" title="GND和机壳的连接"></a>GND和机壳的连接</h3><p>​    PCB板卡置于金属机壳中，机壳一般接大地，PCB的GND与机壳之间经常使用一个电容（1nF/1KV）并联一个电阻（1M）连接。</p>
 <ol>
-<li><p>电容是干啥用的<br>从EMS（电磁抗扰度）角度说，这个电容是在假设PE良好连接大地的前提下，降低可能存在的，以大地电平为参考的高频干扰型号对电路的影响，是为了抑制电路和干扰源之间瞬态共模压差的。其实GND直连PE是最好的，但是，直连可能不可操作或者不安全，例如，220V交流电过整流桥之后产生的GND是不可以连接PE的，所以就弄个低频过不去，高频能过去的路径。从EMI（电磁干扰）角度说，如果有与PE相连的金属外壳，有这个高频路径，也能够避免高频信号辐射出来。</p>
-</li>
-<li><p>一般在1nF左右比较合适<br>如果答主在变频器、伺服驱动器这样8~16kHz开关频率的工业设备上用这么大的电容值，那么，用户摸外壳会有触电的风险的。一般选到这么大，都是电路其他地方设计不合格，为了对付EMC测试，只好把这个电容加大的。<strong>最好是安规电容，GND和PE间选用Y电容</strong>。</p>
-</li>
+<li>电容是干啥用的<br>从EMS（电磁抗扰度）角度说，这个电容是在假设PE良好连接大地的前提下，降低可能存在的，以大地电平为参考的高频干扰型号对电路的影响，是为了抑制电路和干扰源之间瞬态共模压差的。其实GND直连PE是最好的，但是，直连可能不可操作或者不安全，例如，220V交流电过整流桥之后产生的GND是不可以连接PE的，所以就弄个低频过不去，高频能过去的路径。从EMI（电磁干扰）角度说，如果有与PE相连的金属外壳，有这个高频路径，也能够避免高频信号辐射出来。</li>
+<li>一般在1nF左右比较合适<br>如果答主在变频器、伺服驱动器这样8~16kHz开关频率的工业设备上用这么大的电容值，那么，用户摸外壳会有触电的风险的。一般选到这么大，都是电路其他地方设计不合格，为了对付EMC测试，只好把这个电容加大的。<strong>最好是安规电容，GND和PE间选用Y电容</strong>。</li>
 <li><p>1M电阻是干啥用的<br>这是对付ESD（静电放电）测试用的。因为这种用电容连接PE和GND的系统（浮地系统），在做ESD测试的时候，打入被测电路的电荷无处释放，会逐渐累积，抬升或降低GND相对与PE的电平，累积到一定程度，超过了PE和电路之间的绝缘最薄弱处所能耐受的电压范围，GND和PE之间就会放电，几个纳秒间，在PCB上的产生数十到数百安培的电流，这足以让任何电路因EMP（电磁脉冲）宕机，或者是让PE与电路之间绝缘最薄弱处所在信号连接的器件损坏。但是刚才说了，有时候又不能直接连接PE和GND，那么就用一个1-2M的电阻去慢慢释放这个电荷，以消除二者间的压差。当然1-2M这个数值是根据ESD测试标准选择的，因为IEC61000里面规定最高的重复次数只有10次/秒，如果你搞个1000次/秒的非标ESD放电，那么1~2M的电阻我觉得是不能释放掉累积的电荷的。1M电阻的高阻接地方式，往往是为了在<strong>提供EMC保护</strong>的同时或者说不影响防护效果的同时<strong>限制故障电流</strong>，印象中1M是根据人体模型得到的结果。比如内部挂了，GND连到高压上的故障，有这个1M，通过的电流不会伤害人体。</p>
 </li>
 <li><p>PE不可靠！因为很多国内的客户根本不会给你接上有效的PE，也就是说，你根本无法依靠PE来提升EMS或降低EMI的指标。其实这也不能全怪客户，是因为他们的车间、厂房、办公室根本就没按照电工标准来修，压根就是没有接地线的！所以，我明白PE不可靠以后，就使用一些技巧让电路能够硬抗过EMS测试。</p>
 </li>
-<li><p>PE（机壳）和GND直连是不行的。多见的系统是浮地，机壳连PE，PCBA不连PE，这样机壳就是个很好的法拉第笼，有效屏蔽外界。</p>
-</li>
+<li>PE（机壳）和GND直连是不行的。多见的系统是浮地，机壳连PE，PCBA不连PE，这样机壳就是个很好的法拉第笼，有效屏蔽外界。</li>
 </ol>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
@@ -735,7 +824,7 @@
 
       
           <h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><ul>
-<li>FPGA采用的是<a target="_blank" rel="noopener" href="http://www.gowinsemi.com.cn/prod_view.aspx?TypeId=10&FId=t3:10:3&Id=168">高云小蜜蜂家族</a>的GW1N-LV4QN88C6/I5</li>
+<li>FPGA采用的是<a target="_blank" rel="noopener" href="http://www.gowinsemi.com.cn/prod_view.aspx?TypeId=10&amp;FId=t3:10:3&amp;Id=168">高云小蜜蜂家族</a>的GW1N-LV4QN88C6/I5</li>
 <li>摄像头使用OV2640，可以配置数据为JPEG压缩后输出</li>
 <li>采用DC-DC降压到3.6V再LDO降至3.3V与2.8V，OV内核和FPGA内核采用DC-DC降到1.2V使用</li>
 </ul>
@@ -923,7 +1012,7 @@
 <h3 id="python3多线程"><a href="#python3多线程" class="headerlink" title="python3多线程"></a>python3多线程</h3><p>参考：<a target="_blank" rel="noopener" href="https://www.runoob.com/python3/python3-multithreading.html">Python3 多线程</a></p>
 <h2 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h2><h3 id="什么是异步"><a href="#什么是异步" class="headerlink" title="什么是异步"></a>什么是异步</h3><p><strong>同步</strong>是指完成事务的逻辑，先执行第一个事务，如果阻塞了，会一直等待，直到这个事务完成，再执行第二个事务，顺序执行。</p>
 <p><strong>异步</strong>是和同步相对的，异步是指在处理调用这个事务的之后，不会等待这个事务的处理结果，直接处理第二个事务去了，通过状态、通知、回调来通知调用者处理结果。</p>
-<h3 id="python3异步"><a href="#python3异步" class="headerlink" title="python3异步"></a>python3异步</h3><p>参考：<a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/asyncio.html?highlight=asyncio#module-asyncio">asyncio — 异步 I/O</a></p>
+<h3 id="python3异步"><a href="#python3异步" class="headerlink" title="python3异步"></a>python3异步</h3><p>参考：<a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/asyncio.html?highlight=asyncio#module-asyncio">asyncio —- 异步 I/O</a></p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
     </div>
@@ -1045,7 +1134,7 @@
 </li>
 <li><p>C++用new关键字请求内存，用delete释放内存，参考：<a target="_blank" rel="noopener" href="https://www.runoob.com/cplusplus/cpp-dynamic-memory.html">C++ 动态内存</a></p>
 </li>
-<li><p>C没有引用，C++引用变量是一个别名，参考：<a target="_blank" rel="noopener" href="https://www.runoob.com/cplusplus/cpp-references.htmlv">C++引用</a>；使用<a target="_blank" rel="noopener" href="https://www.runoob.com/cplusplus/passing-parameters-by-references.html">引用传参</a>；使用<a target="_blank" rel="noopener" href="https://www.runoob.com/cplusplus/returning-values-by-reference.html">引用作为函数返回值</a>；<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1et411b73Z?p=93&spm_id_from=pageDriver">引用的本质</a>是指针常量；</p>
+<li><p>C没有引用，C++引用变量是一个别名，参考：<a target="_blank" rel="noopener" href="https://www.runoob.com/cplusplus/cpp-references.htmlv">C++引用</a>；使用<a target="_blank" rel="noopener" href="https://www.runoob.com/cplusplus/passing-parameters-by-references.html">引用传参</a>；使用<a target="_blank" rel="noopener" href="https://www.runoob.com/cplusplus/returning-values-by-reference.html">引用作为函数返回值</a>；<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1et411b73Z?p=93&amp;spm_id_from=pageDriver">引用的本质</a>是指针常量；</p>
 </li>
 <li><p>浅拷贝只复制指向某个对象的指针，而不复制对象本身，新旧对象还是共享同一块内存。但深拷贝会另外创造一个一模一样的对象，新对象跟原对象不共享内存，修改新对象不会改到原对象。<strong>如果属性有在堆区开辟的，一定要自己提供拷贝构造函数，防止浅拷贝析构时重复释放堆带来的问题</strong>。</p>
 </li>
@@ -1055,167 +1144,6 @@
 </li>
 <li><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ostream&amp; <span class="keyword">operator</span>&lt;&lt;(ostream&amp; cout, Class &amp;c)</span><br><span class="line">&#123;	<span class="comment">// c++重载&lt;&lt;运算符</span></span><br><span class="line">    cout &lt;&lt; c.m_A;	<span class="comment">// 打印成员变量</span></span><br><span class="line">    <span class="keyword">return</span> cout;	<span class="comment">// 链式编程</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ol>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/23/210523-%E7%94%B5%E5%AE%B9%E9%80%89%E5%9E%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/05/23/210523-%E7%94%B5%E5%AE%B9%E9%80%89%E5%9E%8B/" class="post-title-link" itemprop="url">电容的选型</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-05-23 15:00:00" itemprop="dateCreated datePublished" datetime="2021-05-23T15:00:00+08:00">2021-05-23</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-24 09:12:39" itemprop="dateModified" datetime="2021-05-24T09:12:39+08:00">2021-05-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%99%BA%E8%83%BD%E8%BD%A6/" itemprop="url" rel="index"><span itemprop="name">智能车</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
-<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/yingxuexuan/article/details/6117023">LDO 输出电容</a></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/AirCity123/article/details/104186046">LDO输出端电容对其稳定性的影响</a></p>
-</li>
-</ul>
-<h3 id="各种电容特性"><a href="#各种电容特性" class="headerlink" title="各种电容特性"></a>各种电容特性</h3><p><strong>多层陶瓷电容</strong></p>
-<p>多层陶瓷电容(MLCC)不仅尺寸小，而且将低ESR、低ESL和宽工作温度范围特性融于一体，可以说是旁路电容的首选。不过，这类电容也并非完美无缺。根据电介质材料不同，电容值会随着温度、直流偏置和交流信号电压动态变化。另外，电介质材料的压电特性可将振动或机械冲击转换为交流噪声电压。大多数情况下，此类噪声往往以微伏计，但在极端情况下，机械力可以产生毫伏级噪声。</p>
-<p>电压控制振荡器(VCO)、锁相环(PLL)、RF功率放大器(PA)和其它模拟电路都对供电轨上的噪声非常敏感。在VCO和PLL中，此类噪声表现为相位噪声；在RF PA中，表现为幅度调制；而在超声、CT扫描以及处理低电平模拟信号的其它应用中，则表现为显示伪像。尽管陶瓷电容存在上述缺陷，但由于尺寸小且成本低，因此几乎在每种电子器件中都会用到。不过，当调节器用在对噪声敏感的应用中时，设计人员必须仔细评估这些副作用。</p>
-<p><strong>固态钽电解电容</strong></p>
-<p>与陶瓷电容相比，固态钽电容对温度、偏置和振动效应的敏感度相对较低。新兴一种固态钽电容采用导电聚合物电解质，而非常见的二氧化锰电解质，其浪涌电流能力有所提高，而且无需电流限制电阻。此项技术的另一好处是ESR更低。固态钽电容的电容值可以相对于温度和偏置电压保持稳定，因此选择标准仅包括容差、工作温度范围内的降压情况以及最大ESR。</p>
-<p>导电聚合物钽电容具有低ESR特性，成本高于陶瓷电容而且体积也略大，但对于不能忍受压电效应噪声的应用而言可能是唯一选择。不过，钽电容的漏电流要远远大于等值陶瓷电容，因此不适合一些低电流应用。</p>
-<p>固态聚合物电解质技术的缺点是此类钽电容对无铅焊接过程中的高温更为敏感，因此制造商通常会规定电容在焊接时不得超过三个焊接周期。组装过程中若忽视此项要求，则可能导致长期稳定性问题。</p>
-<p><strong>铝电解电容</strong></p>
-<p>传统的铝电解电容往往体积较大、ESR和ESL较高、漏电流相对较高且使用寿命有限（以数千小时计）。而OS-CON电容则采用有机半导体电解质和铝箔阴极，以实现较低的ESR。这类电容虽然与固态聚合物钽电容相关，但实际上要比钽电容早10年或更久。由于不存在液态电解质逐渐变干的问题，OS-CON型电容的使用寿命要比传统的铝电解电容长。大多数电容的工作温度上限为105°C，但现在OS-CON型电容可以在最高125°C的温度范围内工作。</p>
-<p>虽然OS-CON型电容的性能要优于传统的铝电解电容，但是与陶瓷电容或固态聚合物钽电容相比，往往体积更大且ESR更高。与固态聚合物钽电容一样，这类电容不受压电效应影响，因此适合低噪声应用。</p>
-<p><strong>固态电容</strong></p>
-<p>固态电容器的全名为固态铝质电解电容器，是目前电容器产品中最高阶的产品，固态电容的介电材料则为功能性导电高分子，能大幅提升产品的稳定度与安全性，它与液态铝质电解电容最大差别，在于所使用的介电材料，过去铝质电解电容所使用的介电材料是电解液，而固态电容则是导电性高分子材料，也因此导致成本相对较高。固态电容特点固态电容具备环保、低阻抗、高低温稳定、耐高纹波及高信赖度等优越特性，是目前电解电容产品中最高阶的产品。由于固态电容特性远优于液态铝电容，固态电容耐温达摄氏260度，且导电性、频率特性及寿命均佳，适用于低电压、高电流的应用。</p>
-<h3 id="LDO负载电容"><a href="#LDO负载电容" class="headerlink" title="LDO负载电容"></a>LDO负载电容</h3><p>影响LDO稳定工作的外在因素是负载电容容值CL和ESR，以及LDO的输出电流，他们的关系是：</p>
-<ol>
-<li><p>容值小的CL，ESR往往较大，容值大的CL，ESR往往较小。无论哪种电容，都要保证ESR在合理的范围内，规格书往往会提供这个范围。</p>
-</li>
-<li><p>当LDO输出电流是额定电流的20%~50%时，容易发生不稳定状况。</p>
-</li>
-<li><p>低温时，CL的ESR会升高，并且容值也会发生变化。选型时要注意！</p>
-</li>
-<li><p>在ESR很低，LDO输出电流很小（≤1mA）时，容易发生不稳定状况。</p>
-</li>
-<li><p>同一温度下，LDO输出电流越小，保证LDO稳定性的ESR值越高。</p>
-</li>
-<li><p>同一输出电流下，温度越高，保证LDO稳定性的ESR越大。</p>
-</li>
-<li><p>在低输出电流时，LDO输出波形变成三角波，说明ESR过低；在中等输出电流时，如果LDO波形是正弦波，说明ESR过高。</p>
-</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th><strong>电容技术</strong></th>
-<th><strong>等效串联电阻</strong></th>
-<th><strong>等效串联电感</strong></th>
-<th><strong>电压稳定性</strong></th>
-<th><strong>温度稳定性</strong></th>
-<th><strong>振动敏感度</strong></th>
-<th><strong>电容值/单位体积</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>铝电解电容</strong></td>
-<td>最高</td>
-<td>最高</td>
-<td>好</td>
-<td>最低</td>
-<td>低</td>
-<td>低</td>
-</tr>
-<tr>
-<td><strong>固态钽电容</strong></td>
-<td>中等</td>
-<td>中等</td>
-<td>最佳</td>
-<td>好</td>
-<td>低</td>
-<td>高</td>
-</tr>
-<tr>
-<td><strong>聚合物固态铝电容</strong></td>
-<td>低</td>
-<td>低</td>
-<td>最佳</td>
-<td>好</td>
-<td>低</td>
-<td>高</td>
-</tr>
-<tr>
-<td><strong>多层陶瓷电容</strong></td>
-<td>最低</td>
-<td>最低</td>
-<td>差</td>
-<td>好</td>
-<td>高</td>
-<td>中等</td>
-</tr>
-</tbody></table>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
     </div>
@@ -1300,7 +1228,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-count">80</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1393,6 +1321,8 @@
 
 
 
+
+  
 
   
 

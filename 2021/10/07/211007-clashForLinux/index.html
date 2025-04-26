@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="安装运行clash 在clash发布网站下载对应的版本，我下载的是clash-linux-amd64-v1.7.1.gz  将压缩包里的文件解压至**&#x2F;opt&#x2F;clash**，改名为clash，下载订阅链接文件到同个目录 1sudo wget -O config.yaml [订阅链接] Country.mmdb为全球IP库，可以实现各个国家的IP信息解析和地理定位，没有这个文件clash是无法运行">
+  <meta name="description" content="安装运行clash 在clash发布网站下载对应的版本，我下载的是clash-linux-amd64-v1.7.1.gz  将压缩包里的文件解压至&#x2F;opt&#x2F;clash，改名为clash，下载订阅链接文件到同个目录 1sudo wget -O config.yaml [订阅链接]  Country.mmdb为全球IP库，可以实现各个国家的IP信息解析和地理定位，没有这个文件clash是无法运行的 1">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Ubuntu使用Clash">
 <meta property="og:url" content="http://example.com/2021/10/07/211007-clashForLinux/index.html">
 <meta property="og:site_name" content="永恆博客网">
-<meta property="og:description" content="安装运行clash 在clash发布网站下载对应的版本，我下载的是clash-linux-amd64-v1.7.1.gz  将压缩包里的文件解压至**&#x2F;opt&#x2F;clash**，改名为clash，下载订阅链接文件到同个目录 1sudo wget -O config.yaml [订阅链接] Country.mmdb为全球IP库，可以实现各个国家的IP信息解析和地理定位，没有这个文件clash是无法运行">
+<meta property="og:description" content="安装运行clash 在clash发布网站下载对应的版本，我下载的是clash-linux-amd64-v1.7.1.gz  将压缩包里的文件解压至&#x2F;opt&#x2F;clash，改名为clash，下载订阅链接文件到同个目录 1sudo wget -O config.yaml [订阅链接]  Country.mmdb为全球IP库，可以实现各个国家的IP信息解析和地理定位，没有这个文件clash是无法运行的 1">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-10-07T00:00:00.000Z">
 <meta property="article:modified_time" content="2021-10-07T01:46:52.332Z">
@@ -242,14 +242,18 @@
         <h2 id="安装运行clash"><a href="#安装运行clash" class="headerlink" title="安装运行clash"></a>安装运行clash</h2><ol>
 <li><p>在<a target="_blank" rel="noopener" href="https://github.com/Dreamacro/clash/releases">clash发布网站</a>下载对应的版本，我下载的是<strong>clash-linux-amd64-v1.7.1.gz</strong></p>
 </li>
-<li><p>将压缩包里的文件解压至**/opt/clash**，改名为clash，下载订阅链接文件到同个目录</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo wget -O config.yaml [订阅链接]</span><br></pre></td></tr></table></figure></li>
+<li><p>将压缩包里的文件解压至<strong>/opt/clash</strong>，改名为clash，下载订阅链接文件到同个目录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo wget -O config.yaml [订阅链接]</span><br></pre></td></tr></table></figure>
+</li>
 <li><p>Country.mmdb为全球IP库，可以实现各个国家的IP信息解析和地理定位，没有这个文件clash是无法运行的</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo wget -O Country.mmdb https://www.sub-speeder.com/client-download/Country.mmdb</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo wget -O Country.mmdb https://www.sub-speeder.com/client-download/Country.mmdb</span><br></pre></td></tr></table></figure>
+</li>
 <li><p>把clash权限改为可执行应用</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x clash</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x clash</span><br></pre></td></tr></table></figure>
+</li>
 <li><p>执行clash，</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./clash -d .</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./clash -d .</span><br></pre></td></tr></table></figure>
+</li>
 </ol>
 <h2 id="修改系统代理"><a href="#修改系统代理" class="headerlink" title="修改系统代理"></a>修改系统代理</h2><ol>
 <li>我使用的是ubuntu18.4，在设置里面修改。打开系统设置，点击网络代理右边的 ⚙ 按钮，选择手动，填写 HTTP 和 HTTPS 代理为 127.0.0.1:7890，填写 Socks 主机为 127.0.0.1:7891，即可启用系统代理</li>
@@ -259,7 +263,8 @@
 </ol>
 <h2 id="设置为开机启动"><a href="#设置为开机启动" class="headerlink" title="设置为开机启动"></a>设置为开机启动</h2><ol>
 <li><p>创建service文件</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">touch /etc/systemd/system/clash.service</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">touch /etc/systemd/system/clash.service</span><br></pre></td></tr></table></figure>
+</li>
 <li><p>编辑service文件，填入以下内容(注意修改clash文件夹路径)</p>
 <blockquote>
 <p>[Unit]<br>Description=clash daemon</p>
@@ -373,7 +378,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-count">80</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -466,6 +471,8 @@
 
 
 
+
+  
 
   
 

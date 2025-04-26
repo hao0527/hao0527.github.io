@@ -259,7 +259,6 @@
 <p>数据格式为<strong>透传/自定义</strong>，设备通信时，需要物联网平台调用您提交的消息解析脚本，将上行物模型消息解析为物联网平台定义的标准格式（Alink JSON），将下行物模型消息据解析为设备的自定义数据格式。</p>
 <p>在Python脚本中，设备自定义数据格式转Alink JSON格式数据的函数（上行通信）为<code>raw_data_to_protocol</code>，Alink JSON格式数据转为设备自定义数据格式的函数（下行通信）为<code>protocol_to_raw_data</code>，要注意的是<code>raw_data_to_protocol</code>函数需要将rawData输入转为标准的Alink JSON，参考标准Alink JSON数据格式说明。下面是我这次用到的脚本解析代码：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">ALINK_PROP_REPORT_METHOD = <span class="string">&#x27;thing.event.property.post&#x27;</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">raw_data_to_protocol</span>(<span class="params">rawData</span>):</span><br><span class="line">    uint8Array = []</span><br><span class="line">    <span class="keyword">for</span> byteValue <span class="keyword">in</span> rawData:</span><br><span class="line">        uint8Array.append(byteValue &amp; <span class="number">0xff</span>)</span><br><span class="line">    </span><br><span class="line">    jsonMap = &#123;&#125;</span><br><span class="line">    params = &#123;&#125;</span><br><span class="line">    params[<span class="string">&#x27;status&#x27;</span>] = uint8Array[<span class="number">0</span>]</span><br><span class="line">    params[<span class="string">&#x27;error&#x27;</span>] = uint8Array[<span class="number">1</span>]</span><br><span class="line">    params[<span class="string">&#x27;validIDNum&#x27;</span>] = uint8Array[<span class="number">2</span>]</span><br><span class="line">    params[<span class="string">&#x27;errorSlave&#x27;</span>] = uint8Array[<span class="number">3</span>]</span><br><span class="line">    params[<span class="string">&#x27;idallocTimes&#x27;</span>] = uint8Array[<span class="number">4</span>]</span><br><span class="line">    params[<span class="string">&#x27;costTime&#x27;</span>] = (uint8Array[<span class="number">6</span>]|(uint8Array[<span class="number">7</span>]&lt;&lt;<span class="number">8</span>))		<span class="comment"># 非单字节变量注意大小端</span></span><br><span class="line">    params[<span class="string">&#x27;successCnt&#x27;</span>] = (uint8Array[<span class="number">8</span>]|(uint8Array[<span class="number">9</span>]&lt;&lt;<span class="number">8</span>)|(uint8Array[<span class="number">10</span>]&lt;&lt;<span class="number">16</span>)|(uint8Array[<span class="number">11</span>]&lt;&lt;<span class="number">24</span>))</span><br><span class="line">    params[<span class="string">&#x27;errorCnt&#x27;</span>] = (uint8Array[<span class="number">12</span>]|(uint8Array[<span class="number">13</span>]&lt;&lt;<span class="number">8</span>)|(uint8Array[<span class="number">14</span>]&lt;&lt;<span class="number">16</span>)|(uint8Array[<span class="number">15</span>]&lt;&lt;<span class="number">24</span>))</span><br><span class="line">    jsonMap[<span class="string">&#x27;params&#x27;</span>] = params		<span class="comment"># 物模型中的属性添加到params中，再加到jsonMap</span></span><br><span class="line">    jsonMap[<span class="string">&#x27;method&#x27;</span>] = ALINK_PROP_REPORT_METHOD	<span class="comment"># 标准的Alink JSON必须要加method</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> jsonMap</span><br></pre></td></tr></table></figure>
-
 <h3 id="物模型显示效果"><a href="#物模型显示效果" class="headerlink" title="物模型显示效果"></a>物模型显示效果</h3><p>这次应用是有软件模块过年放假期间需要测试，我用4G Cat.1模块传到阿里云物联网平台记录数据，最终物模型显示效果如下图：</p>
 <p><img src="/2023/01/21/230121-iot/230121-iot-2.jpg" alt="img"></p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
@@ -356,7 +355,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-count">80</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -449,6 +448,8 @@
 
 
 
+
+  
 
   
 

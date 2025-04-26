@@ -265,10 +265,8 @@
 </li>
 <li><p>接口：SCCB（类I2C）、DCMI（8bit并口）</p>
 </li>
-<li><p>传感器、传感器窗口、图像尺寸、图像窗口之间的关系如下图：<img src="/2021/05/03/210503-ov2640/210503-ov2640-3.jpg" alt="210503-ov2640-3.jpg"></p>
-</li>
-<li><p>程序开发按照正点原子给的库很容易进行，但部分功能库里没有需要查阅软件开发手册和数据手册，对寄存器进行读写。</p>
-</li>
+<li>传感器、传感器窗口、图像尺寸、图像窗口之间的关系如下图：<img src="/2021/05/03/210503-ov2640/210503-ov2640-3.jpg" alt="210503-ov2640-3.jpg"></li>
+<li>程序开发按照正点原子给的库很容易进行，但部分功能库里没有需要查阅软件开发手册和数据手册，对寄存器进行读写。</li>
 </ul>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
 <li><p>DOVDD是IO的电平，给了3.3V，因为和它通讯的单片机使用的电压也是3.3V，如果这里用2.8V可以也是可以，会产生电流倒灌，增加了产品不稳定的因素</p>
@@ -279,8 +277,7 @@
 </li>
 <li><p>如果单片机没有DCMI接口，软件模拟速度跟不上，需要使用带FIFO的摄像头（ov7550），才可以由软件模拟读取并口数据，模拟的还没有尝试过，可以参考原子哥M3例程，F103使用0V7550</p>
 </li>
-<li><p>由于大多数低成本国产单片机不带DCMI接口，可以由高云FPGA驱动ov2640，通过SPI发送给单片机，这是本人五一节后要做的事情</p>
-</li>
+<li>由于大多数低成本国产单片机不带DCMI接口，可以由高云FPGA驱动ov2640，通过SPI发送给单片机，这是本人五一节后要做的事情</li>
 </ul>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
     </div>
@@ -376,7 +373,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-count">80</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -469,6 +466,8 @@
 
 
 
+
+  
 
   
 

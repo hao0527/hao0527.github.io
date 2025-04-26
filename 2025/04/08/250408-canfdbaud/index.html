@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/heng32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/heng16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="CAN FD 介绍（转载）CAN FD 基础知识随着车辆ECU的数量不断增多，总线上传输的报文数量也越来越多，而在传统CAN网络中，每帧报文只能携带8个字节的数据，CAN总线最大只能支持1Mb&#x2F;s的传输速率，为了增加CAN总线的利用率，在CAN的基础上推出了CAN FD（Flexible Data-rate）标准。 CAN FD 相较于传统CAN，支持更高的传输数率，并且支持变速功能，即在仲裁段使">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CAN FD 波特率配置">
+<meta property="og:url" content="http://example.com/2025/04/08/250408-canfdbaud/index.html">
+<meta property="og:site_name" content="永恆博客网">
+<meta property="og:description" content="CAN FD 介绍（转载）CAN FD 基础知识随着车辆ECU的数量不断增多，总线上传输的报文数量也越来越多，而在传统CAN网络中，每帧报文只能携带8个字节的数据，CAN总线最大只能支持1Mb&#x2F;s的传输速率，为了增加CAN总线的利用率，在CAN的基础上推出了CAN FD（Flexible Data-rate）标准。 CAN FD 相较于传统CAN，支持更高的传输数率，并且支持变速功能，即在仲裁段使">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2025/04/08/250408-canfdbaud/250408-canfdbaud-1.png">
+<meta property="og:image" content="http://example.com/2025/04/08/250408-canfdbaud/250408-canfdbaud-2.png">
+<meta property="og:image" content="http://example.com/2025/04/08/250408-canfdbaud/250408-canfdbaud-3.png">
+<meta property="og:image" content="http://example.com/2025/04/08/250408-canfdbaud/250408-canfdbaud-4.png">
+<meta property="article:published_time" content="2025-04-08T15:59:00.000Z">
+<meta property="article:modified_time" content="2025-04-26T17:39:41.693Z">
+<meta property="article:author" content="Hao">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2025/04/08/250408-canfdbaud/250408-canfdbaud-1.png">
+
+<link rel="canonical" href="http://example.com/2025/04/08/250408-canfdbaud/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>CAN FD 波特率配置 | 永恆博客网</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">永恆博客网</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/04/08/250408-canfdbaud/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CAN FD 波特率配置
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-04-08 23:59:00" itemprop="dateCreated datePublished" datetime="2025-04-08T23:59:00+08:00">2025-04-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-04-27 01:39:41" itemprop="dateModified" datetime="2025-04-27T01:39:41+08:00">2025-04-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="CAN-FD-介绍（转载）"><a href="#CAN-FD-介绍（转载）" class="headerlink" title="CAN FD 介绍（转载）"></a>CAN FD 介绍（<a target="_blank" rel="noopener" href="https://www.canfd.net/canfd.html">转载</a>）</h2><h3 id="CAN-FD-基础知识"><a href="#CAN-FD-基础知识" class="headerlink" title="CAN FD 基础知识"></a>CAN FD 基础知识</h3><p>随着车辆ECU的数量不断增多，总线上传输的报文数量也越来越多，而在传统CAN网络中，每帧报文只能携带8个字节的数据，CAN总线最大只能支持1Mb/s的传输速率，为了增加CAN总线的利用率，在CAN的基础上推出了CAN FD（Flexible Data-rate）标准。</p>
+<p>CAN FD 相较于传统CAN，支持更高的传输数率，并且支持变速功能，即在仲裁段使用较低的传输数率进行总线仲裁，赢得仲裁后，再以高速率传输数据段中的数据，最高支持8Mb/s的传输速率，CAN FD的数据场长度也得到了扩充，一次最大可传输64个字节。</p>
+<p>在硬件方面的改动相对较小，若是ECU自身的CAN控制器与CAN收发器支持CAN FD功能，硬件方面则不需要作任何修改。</p>
+<p>在通信协议方面发生了一定的变动，CAN FD消息帧包括CAN FD标准帧和CAN FD扩展帧，取消了远程帧功能。</p>
+<h4 id="CAN-FD消息帧"><a href="#CAN-FD消息帧" class="headerlink" title="CAN FD消息帧"></a>CAN FD消息帧</h4><p>CANFD 标准帧格式：<br><img src="/2025/04/08/250408-canfdbaud/250408-canfdbaud-1.png" alt><br>CANFD 扩展帧格式<br><img src="/2025/04/08/250408-canfdbaud/250408-canfdbaud-2.png" alt></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文主要介绍实际开发中与 CAN FD 波特率参数相关的配置要点。在使用标准 CAN 时，由于通信速率较低，只需确保采样点配置合理，通常不会遇到明显问题。然而在切换至 CAN FD 后，尽管在使用单独的 CAN 卡进行通信测试时一切正常，但在整车网络测试或 HIL 台架（包含多个 CAN 节点）环境下却频繁出现错误帧。在错误帧较多的情况下，可能导致总线通信完全中断，无法发送任何报文。</p>
+<h2 id="CAN-波特率基础知识"><a href="#CAN-波特率基础知识" class="headerlink" title="CAN 波特率基础知识"></a>CAN 波特率基础知识</h2><h3 id="CAN-位时间的-4-个段"><a href="#CAN-位时间的-4-个段" class="headerlink" title="CAN 位时间的 4 个段"></a>CAN 位时间的 4 个段</h3><p>根据 CAN 协议规范，每一个 CAN 位时间（bit time）都被划分为 4 个连续且不重叠的时间段，每个段由若干个时间量化单位（Tq，Time Quantum）构成：<br><img src="/2025/04/08/250408-canfdbaud/250408-canfdbaud-3.png" alt></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>段名</th>
+<th>中文名</th>
+<th>作用说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sync_Seg</td>
+<td>同步段</td>
+<td>用于对节点进行位同步（bit synchronization），它 总是固定为 1 个 Tq。理想情况下，这个段内应该检测到信号的边沿（如下降沿），以实现对所有节点的时钟对齐。</td>
+</tr>
+<tr>
+<td>Prop_Seg</td>
+<td>传播延迟段</td>
+<td>补偿 CAN 网络中从发送节点到接收节点的传播延迟，包括线路延迟、收发器延迟等。</td>
+</tr>
+<tr>
+<td>Phase_Seg1</td>
+<td>相位缓冲段 1</td>
+<td>用于补偿节点之间的相位差（时钟偏移），也用于重同步。可以通过位定时逻辑来调整其长度以提前或延迟采样点。</td>
+</tr>
+<tr>
+<td>Phase_Seg2</td>
+<td>相位缓冲段 2</td>
+<td>与 Phase_Seg1 类似，也用于相位调整和同步偏差补偿，主要是 调整采样点之后的时间，不能比 Phase_Seg1 短（或必须满足一定规则，取决于实现）。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="CAN-波特率"><a href="#CAN-波特率" class="headerlink" title="CAN 波特率"></a>CAN 波特率</h3><p>CAN 的<strong>波特率</strong>表示每秒传输的位数，单位是 <strong>bps（bit per second）</strong>。它取决于两个参数：</p>
+<ul>
+<li><strong>f_CAN(分频后)，CAN 时钟频率(分频后)</strong> ：CAN 控制器的输入时钟，一般是晶振频率或分频后的频率。</li>
+<li><strong>Tq(total)，总 Tq 数</strong> ：即一个 bit 时间包含的时间量子（Tq）个数。</li>
+</ul>
+<p>公式如下： </p>
+<script type="math/tex; mode=display">
+ \text{Bit Rate} = \frac{f_{\text{CAN(分频后)}}}{\text{Tq(total)}}</script><p>其中：</p>
+<script type="math/tex; mode=display">
+ \text{Tq(total)} = \text{Sync_Seg} + \text{Prop_Seg} + \text{Phase_Seg1} + \text{Phase_Seg2}</script><h3 id="CAN-采样点"><a href="#CAN-采样点" class="headerlink" title="CAN 采样点"></a>CAN 采样点</h3><p>采样点是在每个位中对总线电平进行采样的时间点，采样点的位置在 Phase_Seg1 结束、Phase_Seg2开始。</p>
+<p>采样点位置计算公式： </p>
+<script type="math/tex; mode=display">
+ \text{Sample Point (\%)} = \frac{\text{Sync_Seg} + \text{Prop_Seg} + \text{Phase_Seg1}}{\text{Tq(total)}} \times 100\%</script><h3 id="常见波特率和推荐采样点"><a href="#常见波特率和推荐采样点" class="headerlink" title="常见波特率和推荐采样点"></a>常见波特率和推荐采样点</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>波特率</th>
+<th>推荐采样点位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>125 kbps</td>
+<td>87.5%</td>
+</tr>
+<tr>
+<td>250 kbps</td>
+<td>87.5%</td>
+</tr>
+<tr>
+<td>500 kbps</td>
+<td>80–87.5%</td>
+</tr>
+<tr>
+<td>1 Mbps</td>
+<td>75–80%</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Tips：<strong>波特率越高，采样点越靠前（比例越小）</strong> ，以保证采样更靠近信号稳定期。Tq 越多，波特率越低，采样越精细，抗干扰能力越强。</p>
+<h2 id="CAN-进阶概念"><a href="#CAN-进阶概念" class="headerlink" title="CAN 进阶概念"></a>CAN 进阶概念</h2><h3 id="RJW-概念"><a href="#RJW-概念" class="headerlink" title="RJW 概念"></a>RJW 概念</h3><p>当 CAN 节点检测到位边沿（一般是从隐形位变为显性位）时，会判断其本地时钟与实际信号的相位是否一致，如果不一致，就需要重同步，通过调整 Phase_Seg1 的长度来赶上正确节奏。RJW（<strong>Resynchronization Jump Width</strong> ，重同步跳转宽度）是Phase_Seg1 能被缩短或延长的最大数量（单位：Tq）。</p>
+<h3 id="TDC-概念"><a href="#TDC-概念" class="headerlink" title="TDC 概念"></a>TDC 概念</h3><p>TDC（<strong>Transmitter Delay Compensation</strong>，发送延迟补偿），为解决 CAN FD 在数据阶段（尤其是高速数据阶段，比如2Mbps、5Mbps甚至更高速）时，由于节点内部硬件产生的发送延迟问题。TDC 就是用来动态补偿这种硬件引入的延迟，调整采样点，保证采样准确。</p>
+<p>TDC 有两种模式：</p>
+<ul>
+<li>Automatic（自动测量延迟，推荐）</li>
+<li>Manual（手动设置延迟时间，比如配置一个固定 TDCO）</li>
+</ul>
+<h3 id="SSP-概念"><a href="#SSP-概念" class="headerlink" title="SSP 概念"></a>SSP 概念</h3><p>在 CAN FD 数据阶段，波特率提升后，除了普通采样点，还会根据延迟补偿之后，设定一个新的采样点，叫SSP（<strong>Secondary Sample Point</strong>，第二采样点）。SSP 是经过 TDC 和 TDCO 补偿之后，最终确定的采样位置。<br><img src="/2025/04/08/250408-canfdbaud/250408-canfdbaud-4.png" alt></p>
+<h2 id="CAN-波特率配置参数"><a href="#CAN-波特率配置参数" class="headerlink" title="CAN 波特率配置参数"></a>CAN 波特率配置参数</h2><h3 id="确定-Tq"><a href="#确定-Tq" class="headerlink" title="确定 Tq"></a>确定 Tq</h3><script type="math/tex; mode=display">
+ \text{Tq} = \frac{1}{f_{\text{CAN(分频后)}}}</script><h3 id="根据波特率确定-Tq-total"><a href="#根据波特率确定-Tq-total" class="headerlink" title="根据波特率确定 Tq(total)"></a>根据波特率确定 Tq(total)</h3><script type="math/tex; mode=display">
+ \text{Tq(total)} = \frac{f_{\text{CAN(分频后)}}}{\text{Bit Rate}}</script><h3 id="根据采样点确定-Phase-Seg2"><a href="#根据采样点确定-Phase-Seg2" class="headerlink" title="根据采样点确定 Phase_Seg2"></a>根据采样点确定 Phase_Seg2</h3><script type="math/tex; mode=display">
+ \text{Phase_Seg2} = \text{Tq(total)} \times (1 - \text{Sample Point (\%)})</script><h3 id="根据传输延时确定-Prop-Seg"><a href="#根据传输延时确定-Prop-Seg" class="headerlink" title="根据传输延时确定 Prop_Seg"></a>根据传输延时确定 Prop_Seg</h3><p>假设总线长 10 米，每米线路传输延时大概 5ns，收发器延迟约 200ns<br>总传播延迟 ≈ 10m × 5ns + 200ns = 250ns<br>最后向上取整，计算PropSeg的长度。</p>
+<script type="math/tex; mode=display">
+ \text{Prop_Seg} = \frac{T_{\text{收发器延时}} + T_{\text{线路传输延时}}}{\text{Tq}}</script><h3 id="计算-Phase-Seg1"><a href="#计算-Phase-Seg1" class="headerlink" title="计算 Phase_Seg1"></a>计算 Phase_Seg1</h3><p>通常同步段长度为 1，CAN 模块无法配置同步段长度。</p>
+<script type="math/tex; mode=display">
+ \text{Sync_Seg} = \text{1}</script><script type="math/tex; mode=display">
+ \text{Phase_Seg1} =  \text{Tq(total)} - \text{Sync_Seg} + \text{Prop_Seg} + \text{Phase_Seg2}</script><h3 id="确定-RJW"><a href="#确定-RJW" class="headerlink" title="确定 RJW"></a>确定 RJW</h3><p>RJW 设置太小会导致不能及时调整，太大会导致过度同步。</p>
+<script type="math/tex; mode=display">
+ \text{RJW} \leq \min(\text{Phase_Seg1}, \text{Phase_Seg2})</script><h3 id="TDCO-配置"><a href="#TDCO-配置" class="headerlink" title="TDCO 配置"></a>TDCO 配置</h3><p>TDCO（Delay Compensation Offset）：如果 TDC 是手动模式，需要自己填一个固定补偿偏移（可通过逻辑分析仪测量 CAN TX 到 RX 回读的延时）。</p>
+<ul>
+<li><p>手动 TDC：</p>
+<script type="math/tex; mode=display">
+\text{TDCO} =  \text{Sync_Seg} + \text{Prop_Seg} + \text{Phase_Seg2} + \frac{T_{\text{收发器延时}}}{\text{Tq}}</script></li>
+<li><p>自动 TDC：</p>
+<script type="math/tex; mode=display">
+\text{TDCO} =  \text{Sync_Seg} + \text{Prop_Seg} + \text{Phase_Seg2}</script></li>
+</ul>
+<p>注意：以上计算 TDCO 的单位是Tq个数，部分单片机 TDCO 配置的单位是未分频前的时钟个数，所以结果还需乘上分频系数。</p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/08/20/240820-canfd/" rel="prev" title="云途单片机CAN FD调试记录">
+      <i class="fa fa-chevron-left"></i> 云途单片机CAN FD调试记录
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/04/16/250416-mcalspi/" rel="next" title="MCAL SPI 配置及调用">
+      MCAL SPI 配置及调用 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CAN-FD-%E4%BB%8B%E7%BB%8D%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">CAN FD 介绍（转载）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CAN-FD-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="nav-number">1.1.</span> <span class="nav-text">CAN FD 基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CAN-FD%E6%B6%88%E6%81%AF%E5%B8%A7"><span class="nav-number">1.1.1.</span> <span class="nav-text">CAN FD消息帧</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">2.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CAN-%E6%B3%A2%E7%89%B9%E7%8E%87%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="nav-number">3.</span> <span class="nav-text">CAN 波特率基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CAN-%E4%BD%8D%E6%97%B6%E9%97%B4%E7%9A%84-4-%E4%B8%AA%E6%AE%B5"><span class="nav-number">3.1.</span> <span class="nav-text">CAN 位时间的 4 个段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAN-%E6%B3%A2%E7%89%B9%E7%8E%87"><span class="nav-number">3.2.</span> <span class="nav-text">CAN 波特率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAN-%E9%87%87%E6%A0%B7%E7%82%B9"><span class="nav-number">3.3.</span> <span class="nav-text">CAN 采样点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E6%B3%A2%E7%89%B9%E7%8E%87%E5%92%8C%E6%8E%A8%E8%8D%90%E9%87%87%E6%A0%B7%E7%82%B9"><span class="nav-number">3.4.</span> <span class="nav-text">常见波特率和推荐采样点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CAN-%E8%BF%9B%E9%98%B6%E6%A6%82%E5%BF%B5"><span class="nav-number">4.</span> <span class="nav-text">CAN 进阶概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RJW-%E6%A6%82%E5%BF%B5"><span class="nav-number">4.1.</span> <span class="nav-text">RJW 概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TDC-%E6%A6%82%E5%BF%B5"><span class="nav-number">4.2.</span> <span class="nav-text">TDC 概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSP-%E6%A6%82%E5%BF%B5"><span class="nav-number">4.3.</span> <span class="nav-text">SSP 概念</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CAN-%E6%B3%A2%E7%89%B9%E7%8E%87%E9%85%8D%E7%BD%AE%E5%8F%82%E6%95%B0"><span class="nav-number">5.</span> <span class="nav-text">CAN 波特率配置参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AE%E5%AE%9A-Tq"><span class="nav-number">5.1.</span> <span class="nav-text">确定 Tq</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B9%E6%8D%AE%E6%B3%A2%E7%89%B9%E7%8E%87%E7%A1%AE%E5%AE%9A-Tq-total"><span class="nav-number">5.2.</span> <span class="nav-text">根据波特率确定 Tq(total)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B9%E6%8D%AE%E9%87%87%E6%A0%B7%E7%82%B9%E7%A1%AE%E5%AE%9A-Phase-Seg2"><span class="nav-number">5.3.</span> <span class="nav-text">根据采样点确定 Phase_Seg2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B9%E6%8D%AE%E4%BC%A0%E8%BE%93%E5%BB%B6%E6%97%B6%E7%A1%AE%E5%AE%9A-Prop-Seg"><span class="nav-number">5.4.</span> <span class="nav-text">根据传输延时确定 Prop_Seg</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97-Phase-Seg1"><span class="nav-number">5.5.</span> <span class="nav-text">计算 Phase_Seg1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AE%E5%AE%9A-RJW"><span class="nav-number">5.6.</span> <span class="nav-text">确定 RJW</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TDCO-%E9%85%8D%E7%BD%AE"><span class="nav-number">5.7.</span> <span class="nav-text">TDCO 配置</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Hao</p>
+  <div class="site-description" itemprop="description">保持热爱，奔赴山海。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hao</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

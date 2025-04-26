@@ -302,9 +302,7 @@
 </ol>
 <p>看门狗驱动程序和硬狗操作之间的调用方式如下图：</p>
 <p><img src="/2023/10/31/231031-wdg/wdg-2.png" alt="img"></p>
-<h3 id="WdgIf"><a href="#WdgIf" class="headerlink" title="WdgIf"></a>WdgIf</h3><p>和NvM下的MemIf功能相同，可以通过DeviceIndex区分要调用哪个Wdg Driver，可以用宏或函数实现，接口如下：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Std_ReturnType <span class="title function_">WdgIf_SetMode</span><span class="params">(uint8 DeviceIndex, WdgIf_ModeType WdgMode)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">WdgIf_SetTriggerCondition</span><span class="params">(uint8 DeviceIndex, uint16 Timeout)</span>;</span><br></pre></td></tr></table></figure>
-
+<h3 id="WdgIf"><a href="#WdgIf" class="headerlink" title="WdgIf"></a>WdgIf</h3><p>和NvM下的MemIf功能相同，可以通过DeviceIndex区分要调用哪个Wdg Driver，可以用宏或函数实现，接口如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Std_ReturnType <span class="title function_">WdgIf_SetMode</span><span class="params">(uint8 DeviceIndex, WdgIf_ModeType WdgMode)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">WdgIf_SetTriggerCondition</span><span class="params">(uint8 DeviceIndex, uint16 Timeout)</span>;</span><br></pre></td></tr></table></figure></p>
 <h3 id="WdgM"><a href="#WdgM" class="headerlink" title="WdgM"></a>WdgM</h3><p>Watchdog Manager可以理解为一种应用层软狗机制，该软件机制监控的对象被称为<strong>监控实体</strong>（SupervisedEntity, SE），通过在每个监控实体中打上对应的<strong>检查点</strong>（Checkpoint, CP）监控程序是否正常。</p>
 <p>WdgM中可以创建一个或多个SE，每个SE都有对应的SEID。<br>每个SE可以创建一个或多个CP，每个CP都有对应的CheckpointID。<br>每个SE可以选择一个<strong>监控方式</strong>，这个取决于具体的需求，监控方式可以分为如下三种：</p>
 <ol>
@@ -314,7 +312,6 @@
 </ol>
 <p>每一个监控实体可以基于上述三种监控方式计算得出监控结果，被称为<strong>Local Status</strong>。<br>当每一个监控实体的状态得到确定，那么整个MCU的监控结果便可以最终确定，这个最终确定的状态被称为<strong>Global Status</strong>。</p>
 <h4 id="WdgM-API"><a href="#WdgM-API" class="headerlink" title="WdgM API"></a>WdgM API</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">WdgM_Init</span><span class="params">(<span class="type">const</span> WdgM_ConfigType *ConfigPtr)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">WdgM_DeInit</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">if</span> (WDGM_VERSION_INFO_API == STD_ON)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> WdgM_GetVersionInfo(_vi) STD_GET_VERSION_INFO(_vi,WDGM)</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">Std_ReturnType <span class="title function_">WdgM_SetMode</span><span class="params">(WdgM_ModeType Mode)</span>;</span><br><span class="line"></span><br><span class="line">Std_ReturnType <span class="title function_">WdgM_GetMode</span><span class="params">(WdgM_ModeType *Mode)</span>;</span><br><span class="line"></span><br><span class="line">Std_ReturnType <span class="title function_">WdgM_CheckpointReached</span><span class="params">(WdgM_SupervisedEntityIdType SEID, WdgM_CheckpointIdType CheckpointID)</span>;</span><br><span class="line"></span><br><span class="line">Std_ReturnType <span class="title function_">WdgM_GetLocalStatus</span><span class="params">(WdgM_SupervisedEntityIdType SEID, WdgM_LocalStatusType *Status)</span>;</span><br><span class="line"></span><br><span class="line">Std_ReturnType <span class="title function_">WdgM_GetGlobalStatus</span><span class="params">(WdgM_GlobalStatusType *Status)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">WdgM_PerformReset</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line">Std_ReturnType <span class="title function_">WdgM_GetFirstExpiredSEID</span><span class="params">(WdgM_SupervisedEntityIdType *SEID)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">WdgM_MainFunction</span><span class="params">(<span class="type">void</span>)</span>;</span><br></pre></td></tr></table></figure>
-
 <h4 id="状态转移图"><a href="#状态转移图" class="headerlink" title="状态转移图"></a>状态转移图</h4><p>Figure 2: Local Supervision Status:</p>
 <p><img src="/2023/10/31/231031-wdg/wdgM-1.png" alt="img"></p>
 <p>在从其他状态切换至WDGM_LOCAL_STATUS_EXPIRED状态时，Watchdog Manager提供一定的时间保留机制能够允许做一些特别的操作，如设置看门狗模式或者写入NvM数据，复位原因等。</p>
@@ -414,7 +411,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-count">80</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -507,6 +504,8 @@
 
 
 
+
+  
 
   
 

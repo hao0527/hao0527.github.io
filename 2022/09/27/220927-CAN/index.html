@@ -318,7 +318,7 @@
 <p>其中，遥控帧也常被称为远程帧。CAN的应用开发者只能使用“数据帧”和“遥控帧”，其他的3种帧类型是由CAN的底层固件自动帮我们在特定场景下进行收发，开发者无需担心也无法直接参与控制。</p>
 <p>所以，本文把“数据帧”和“遥控帧”与其他的3种帧类型分别进行介绍。</p>
 <h3 id="数据帧与遥控帧"><a href="#数据帧与遥控帧" class="headerlink" title="数据帧与遥控帧"></a>数据帧与遥控帧</h3><p>关于数据帧，也就是我们最常用的帧类型，用于数据的收发；也是CAN通信里最主要的内容。</p>
-<p>而遥控帧，只是CAN网络里的某一节点发送一个遥控帧请求其他的节点反馈数据给自己，关于<em><strong>遥控帧其实在实际使用中，显得很鸡肋</strong></em>，原因有：</p>
+<p>而遥控帧，只是CAN网络里的某一节点发送一个遥控帧请求其他的节点反馈数据给自己，关于<strong><em>遥控帧其实在实际使用中，显得很鸡肋</em></strong>，原因有：</p>
 <p>1、CAN通信作为一种半双工通信形式，在实际使用中的应用层通信协议往往会定义好数据的应答机制与时间间隔，节点与节点之间只要按照协议规定进行数据的收发即可。</p>
 <p>2、遥控帧与数据帧对比，其实就是一条数据长度为0的数据帧而已，只是在帧格式里的仲裁段RTR位为隐性。那么，似乎有数据帧就足够了。</p>
 <p>3、遥控帧的概念定义只是一个预定义，所谓的请求其他节点给自己发送数据并不是强制的，与数据帧一样完全根据应用层协议来规定其具体的使用。</p>
@@ -427,7 +427,7 @@
 <p>过载帧是用于接收单元通知发送单元它尚未完成接收准备的帧。在两种情况下，节点会发送过载帧：</p>
 <ul>
 <li>接收单元条件的制约，要求发送节点延缓下一个数据帧或远程帧的传输；</li>
-<li>帧间隔（Intermission）的 <em><strong>3 bit</strong></em> 内检测到显性位</li>
+<li>帧间隔（Intermission）的 <strong><em>3 bit</em></strong> 内检测到显性位</li>
 </ul>
 <p>帧间隔是用于分隔数据帧、遥控帧这些有效数据的帧。数据帧和遥控帧可通过插入帧间隔将本帧与前面的任何帧（数据帧、 遥控帧、错误帧、过载帧）分开。</p>
 <p><img src="/2022/09/27/220927-CAN/v2-09da8cc2f7158aeb3e7ab5a05aed0bff_r.jpg" alt="img"></p>
@@ -447,7 +447,7 @@
 <p>不同的控制器，PBS1/PBS2 的取值范围不完全一致，一般 PS1 为 1 – 8 TQ，PS2 为 2 – 8 TQ。</p>
 <p>在有的控制器里，把传播段与相位缓冲段1合并称为“<strong>时间段1</strong>”,而相位缓冲段2称为“<strong>时间段2</strong>”，如图：</p>
 <p><img src="/2022/09/27/220927-CAN/v2-0ddb4086a6638f5d70a106bc583e55f6_r.jpg" alt="img"></p>
-<p><strong>重同步（SJW）：</strong>在<strong>时间段1</strong>而不是在<strong>同步段(SS)<strong>检测到有效跳变，那么</strong>相位缓冲段1(PBS1)</strong> 的时间就被延长最多SJW那么长，从而采样点被延迟了。相反如果在<strong>时间段2</strong>而不是在<strong>同步段(SS)<strong>检测到有效跳变，那么</strong>相位缓冲段2(PBS2)</strong> 的时间就被缩短最多SJW那么长，从而采样点被提前了。如图：</p>
+<p><strong>重同步（SJW）：</strong>在<strong>时间段1</strong>而不是在<strong>同步段(SS)</strong>检测到有效跳变，那么<strong>相位缓冲段1(PBS1)</strong> 的时间就被延长最多SJW那么长，从而采样点被延迟了。相反如果在<strong>时间段2</strong>而不是在<strong>同步段(SS)</strong>检测到有效跳变，那么<strong>相位缓冲段2(PBS2)</strong> 的时间就被缩短最多SJW那么长，从而采样点被提前了。如图：</p>
 <p><img src="/2022/09/27/220927-CAN/v2-e731e178deca7a637b6e36e6976f9d5f_r.jpg" alt="img"></p>
 <p>综上所述：</p>
 <p>CAN时钟 = CAN时钟源 / 分频值CAN_Prescaler；</p>
@@ -550,7 +550,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-count">80</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -643,6 +643,8 @@
 
 
 
+
+  
 
   
 

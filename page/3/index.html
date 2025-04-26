@@ -185,6 +185,91 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/01/230201-gitee/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/02/01/230201-gitee/" class="post-title-link" itemprop="url">Github静态博客访问速度慢，部署图片资源到其他服务器</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-02-01 16:00:00" itemprop="dateCreated datePublished" datetime="2023-02-01T16:00:00+08:00">2023-02-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-07-09 00:18:35" itemprop="dateModified" datetime="2024-07-09T00:18:35+08:00">2024-07-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Hexo/" itemprop="url" rel="index"><span itemprop="name">Hexo</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h3><p>用Github部署静态站访问国内速度慢，主要表现有2个，一是首次请求页面打开慢，二是打开后图片加载慢。问题一原因是域名解析需要访问多个海外的DNS服务器，且Github静态站服务器也在海外，首次请求国内或本地没有缓存。问题二也是访问Github静态站服务器速度受限，图片和文本并发访问，文本比图片数据量小先加载完成显示。</p>
+<p>本想将博客全部移到Gitee上，尝试部署又遇到三个问题，一是不能使用自己的域名解析，二是部署Gitee静态站服务它竟说我有文章不合规，三是每次上传Gitee后不会自动更新静态页面，每次要重新发布审核。</p>
+<p>本人使用的解决办法是将图片上传到gitee，github静态博客上的图片都使用gitee的链接，<a target="_blank" rel="noopener" href="https://gitee.com/xxx/xxx/tree/img/">Gitee/blog仓库img分支</a>上传了本博客用到的图片。</p>
+<h3 id="部署方式"><a href="#部署方式" class="headerlink" title="部署方式"></a>部署方式</h3><p>参考：<a target="_blank" rel="noopener" href="https://gitee.com/help/articles/4136#article-header0">Gitee Pages</a></p>
+<p>在Gitee中创建仓库，开然后将博客用到的图片上传到Gitee中，开通仓库的Pages服务更新分支。审核成功后就可以通过Gitee提供的域名，加上图片在仓库中的路径访问了。例如我的静态页面网址是：<code>https://xxx.gitee.io/</code>，要访问仓库<code>210430-at32</code>文件夹中的<code>210430-at32-1.jpg</code>，访问网址为：<code>https://xxx.gitee.io/210430-at32/210430-at32-1.jpg</code>。</p>
+<h3 id="使用域名转发"><a href="#使用域名转发" class="headerlink" title="使用域名转发"></a>使用域名转发</h3><p>加入以后我的图床地址变了，但我又不想重新修改每个文章里的图片网址怎么办？</p>
+<p>使用域名转发可以解决此问题，我使用的是易名注册的域名和易名免费的域名解析服务，开启URL隐性转发，转发值为你的静态页面网址，这样就可以通过自己的域名访问了，以后想换个图床的话只需要转发地址更改下就可以了。使用易名域名解析转发到我的静态页面会审核不通过，这是因为静态页面没有内容，只需要加个index.html骗骗审核就行了，审核结束就可以删除。</p>
+<p>遇到一个问题，使用域名转发通过http访问可以，通过https访问不行，暂且文章里的图片网址用http访问吧。</p>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/01/21/230121-iot/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -254,7 +339,6 @@
 <p>数据格式为<strong>透传/自定义</strong>，设备通信时，需要物联网平台调用您提交的消息解析脚本，将上行物模型消息解析为物联网平台定义的标准格式（Alink JSON），将下行物模型消息据解析为设备的自定义数据格式。</p>
 <p>在Python脚本中，设备自定义数据格式转Alink JSON格式数据的函数（上行通信）为<code>raw_data_to_protocol</code>，Alink JSON格式数据转为设备自定义数据格式的函数（下行通信）为<code>protocol_to_raw_data</code>，要注意的是<code>raw_data_to_protocol</code>函数需要将rawData输入转为标准的Alink JSON，参考标准Alink JSON数据格式说明。下面是我这次用到的脚本解析代码：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">ALINK_PROP_REPORT_METHOD = <span class="string">&#x27;thing.event.property.post&#x27;</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">raw_data_to_protocol</span>(<span class="params">rawData</span>):</span><br><span class="line">    uint8Array = []</span><br><span class="line">    <span class="keyword">for</span> byteValue <span class="keyword">in</span> rawData:</span><br><span class="line">        uint8Array.append(byteValue &amp; <span class="number">0xff</span>)</span><br><span class="line">    </span><br><span class="line">    jsonMap = &#123;&#125;</span><br><span class="line">    params = &#123;&#125;</span><br><span class="line">    params[<span class="string">&#x27;status&#x27;</span>] = uint8Array[<span class="number">0</span>]</span><br><span class="line">    params[<span class="string">&#x27;error&#x27;</span>] = uint8Array[<span class="number">1</span>]</span><br><span class="line">    params[<span class="string">&#x27;validIDNum&#x27;</span>] = uint8Array[<span class="number">2</span>]</span><br><span class="line">    params[<span class="string">&#x27;errorSlave&#x27;</span>] = uint8Array[<span class="number">3</span>]</span><br><span class="line">    params[<span class="string">&#x27;idallocTimes&#x27;</span>] = uint8Array[<span class="number">4</span>]</span><br><span class="line">    params[<span class="string">&#x27;costTime&#x27;</span>] = (uint8Array[<span class="number">6</span>]|(uint8Array[<span class="number">7</span>]&lt;&lt;<span class="number">8</span>))		<span class="comment"># 非单字节变量注意大小端</span></span><br><span class="line">    params[<span class="string">&#x27;successCnt&#x27;</span>] = (uint8Array[<span class="number">8</span>]|(uint8Array[<span class="number">9</span>]&lt;&lt;<span class="number">8</span>)|(uint8Array[<span class="number">10</span>]&lt;&lt;<span class="number">16</span>)|(uint8Array[<span class="number">11</span>]&lt;&lt;<span class="number">24</span>))</span><br><span class="line">    params[<span class="string">&#x27;errorCnt&#x27;</span>] = (uint8Array[<span class="number">12</span>]|(uint8Array[<span class="number">13</span>]&lt;&lt;<span class="number">8</span>)|(uint8Array[<span class="number">14</span>]&lt;&lt;<span class="number">16</span>)|(uint8Array[<span class="number">15</span>]&lt;&lt;<span class="number">24</span>))</span><br><span class="line">    jsonMap[<span class="string">&#x27;params&#x27;</span>] = params		<span class="comment"># 物模型中的属性添加到params中，再加到jsonMap</span></span><br><span class="line">    jsonMap[<span class="string">&#x27;method&#x27;</span>] = ALINK_PROP_REPORT_METHOD	<span class="comment"># 标准的Alink JSON必须要加method</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> jsonMap</span><br></pre></td></tr></table></figure>
-
 <h3 id="物模型显示效果"><a href="#物模型显示效果" class="headerlink" title="物模型显示效果"></a>物模型显示效果</h3><p>这次应用是有软件模块过年放假期间需要测试，我用4G Cat.1模块传到阿里云物联网平台记录数据，最终物模型显示效果如下图：</p>
 <p><img src="/2023/01/21/230121-iot/230121-iot-2.jpg" alt="img"></p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
@@ -336,20 +420,17 @@
       
           <h3 id="printf函数"><a href="#printf函数" class="headerlink" title="printf函数"></a>printf函数</h3><p>函数原型：<code>int printf(const char *format, ...)</code><br>调用格式为：<code>printf(&quot;&lt;格式化字符串&gt;&quot;, &lt;参量表&gt;);</code><br>功能：发送格式化输出到标准输出 stdout</p>
 <h3 id="变长参数实现思路"><a href="#变长参数实现思路" class="headerlink" title="变长参数实现思路"></a>变长参数实现思路</h3><p>C语言支持变长参数函数(Variable Argument Functions)，即参数的个数可以是不定个，在函数定义的时候用<code>...</code>表示。采用这种形式定义的变长参数函数，<strong>至少需要一个普通的形参</strong>，且<code>...</code>需要放在最后一个参数，比如printf函数中的<code>*format</code>后面的<code>...</code>是函数原型的一部分。</p>
-<p>变长参数的实现得益于C语言默认的<em><strong>cdecl</strong></em>调用惯例，其参数是<strong>从右向左</strong>压入栈的，第一个参数位于栈顶。这样printf函数实现的时候，就无需关心调用他的函数会传递几个参数过来，而只要关心自己用到几个，将全部参数压入栈，函数处理时从栈中取即可。</p>
+<p>变长参数的实现得益于C语言默认的<strong><em>cdecl</em></strong>调用惯例，其参数是<strong>从右向左</strong>压入栈的，第一个参数位于栈顶。这样printf函数实现的时候，就无需关心调用他的函数会传递几个参数过来，而只要关心自己用到几个，将全部参数压入栈，函数处理时从栈中取即可。</p>
 <h3 id="自己实现一个变长参数的函数"><a href="#自己实现一个变长参数的函数" class="headerlink" title="自己实现一个变长参数的函数"></a>自己实现一个变长参数的函数</h3><p>Ｃ已经有现成可用的一些东西来帮我们实现变长参数，它主要通过<code>stdarg.h</code>头文件定义的一个变量类型（va_list）和三个宏（va_start、va_arg、va_end）来实现。</p>
 <p>实现一个可变长参数的sum函数，第一个参数<code>num</code>传递变长参数中有参数的数量，紧接着后面会传递<code>num</code>个整型变量，具体实现如下：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">sum</span><span class="params">(<span class="type">int</span> num, ...)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> i, val = <span class="number">0</span>;</span><br><span class="line">    va_list ap;	<span class="comment">//定义一个具有va_list型的变量，这个变量是指向参数的指针</span></span><br><span class="line">    va_start(ap, num);	<span class="comment">//始化变量刚定义的va_list变量,使其指向第一个可变参数的地址,地址自动增加</span></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; num; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        val += va_arg(ap, <span class="type">int</span>);	<span class="comment">//va_arg返回va_list中的参数，并增加指针偏移</span></span><br><span class="line">    &#125;</span><br><span class="line">    va_end(ap);	<span class="comment">//结束可变参数列表</span></span><br><span class="line">    <span class="keyword">return</span> val;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;16+38+53=%d\n&quot;</span>, sum(<span class="number">3</span>, <span class="number">16</span>, <span class="number">38</span>, <span class="number">53</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h3 id="变长参数实现原理"><a href="#变长参数实现原理" class="headerlink" title="变长参数实现原理"></a>变长参数实现原理</h3><p>上面的sum函数也可以不使用va_list等宏，通过其他方法实现。<br>当我们调用：<code>int n = sum(3, 16, 38, 53);</code><br>参数在栈上会形成如下布局：<br><img src="/2023/01/20/230120-printf/230120-printf-1.jpg" alt="img"></p>
 <p>在函数内部，函数可以使用变量<code>num</code>来访问数字3，但无法使用任何名称访问其他的几个不定参数。但此时由于栈上其他的几个参数实际恰好依序排列在参数<code>num</code>的高地址方向，因此可以很简单地通过<code>num</code>的地址计算出其他参数的地址，sum函数的另一种实现如下：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">sum</span><span class="params">(<span class="type">int</span> num, ...)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span>* p = &amp;num + <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(num--)</span><br><span class="line">        ret += *p++;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;   </span><br></pre></td></tr></table></figure>
-
 <p>printf的不定参数比sum要复杂得多，因为printf的参数不仅数量不定，而且<strong>类型</strong>也不定。所以printf需要在格式字符串中注明参数的类型，例如用<code>%d</code>表明是一个整数。printf里的格式字符串如果将类型描述错误，因为不同参数的大小不同，不仅可能导致这个参数的输出错误，还有可能导致其后的一系列参数错误。[摘自《程序员的自我修养——链接、封装、库》P338]</p>
 <p><code>printf(&quot;%lf\t%d\t%c\n&quot;, 1, 666, &#39;a&#39;);</code> 在这行函数里，printf的第一个输出参数是一个int(4 字节)，而我们告诉printf它是一个double(8字节)，因此printf的输出会错误，由于printf在读取double的时候实际造成了越界，因此后面几个参数的输出也会失败。该程序的实际输出为：<code>0.000000 97</code>（根据实际编译器和环境可能不同）</p>
 <h3 id="va-list等宏如何实现"><a href="#va-list等宏如何实现" class="headerlink" title="va_list等宏如何实现"></a>va_list等宏如何实现</h3><p><strong>va_list</strong> 实际是一个指针，用来指向各个不定参数。由于类型不明，因此这个 va_list 以 void* 或 char*  为最佳选择。<br><strong>va_start</strong> 将 va_list 定义的指针指向函数的最后一个参数后面的位置，这个位置就是第一个不定参数。<br><strong>va_arg</strong> 获取当前不定参数的值，并根据当前不定参数的大小将指针移向下一个参数。<br><strong>va_end</strong> 将指针清 0。<br>按照以上思路，va_list等宏的一个<strong>最简单的实现</strong>就可以得到了，如下所示：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> va_list char*</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> va_start(ap, arg) (ap=(va_list)&amp;arg+sizeof(arg))</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> va_arg(ap, t) (*(t*)((ap+=sizeof(t))-sizeof(t)))</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> va_end(ap) (ap=(va_list)0)</span></span><br></pre></td></tr></table></figure>
-
 <p>注意：实际代码中还套了很多宏，不同编译器，不同架构都有可能使用不同的代码实现，但具体实现思想一致，有些x64条件编译时va_list会是一个结构体，里面会记录可变参数开始地址、结束地址、参数数量等信息。</p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
@@ -429,7 +510,7 @@
 
       
           <h3 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h3><p>在学习FPGA时使用了DDR3，最近学ARM处理器也用到了DDR3的外设，在FPGA是使用 MIG(Memory Interface Generators)IP核驱动DDR3，ARM处理器是通过配置MMDC(Multi Mode DDR Controller)模块驱动DDR3，这编博客将会介绍使用DDR需配置的几个关键参数。</p>
-<p>SRAM操作流程、时序图可以浏览我之前的文章，<a href="/2021/12/19/211219-fpga%E4%B9%8Bsdram/">FPGA之SDRAM学习</a>。</p>
+<p>SRAM操作流程、时序图可以浏览我之前的文章，<a href="/2021/12/19/211219-fpga之sdram/">FPGA之SDRAM学习</a>。</p>
 <h3 id="关键参数"><a href="#关键参数" class="headerlink" title="关键参数"></a>关键参数</h3><h4 id="传输速率"><a href="#传输速率" class="headerlink" title="传输速率"></a>传输速率</h4><p>传输速率的单位是MT/s(Mega Transfer Per Second)，即每秒传输的百万次数，常见DDR3有800MT/s、1066MT/s、1333MT/s、1600MT/s等，这是首先需要考虑的，该参数决定了DDR的最高数据传输速率。</p>
 <h4 id="tRCD-参数"><a href="#tRCD-参数" class="headerlink" title="tRCD 参数"></a>tRCD 参数</h4><p>tRCD 全称是 RAS-to-CAS Delay，也就是<strong>行寻址到列寻址之间的延迟</strong>。 DDR 的寻址流程是先指定 BANK 地址，然后在指定行地址，最后指定列地址确定最终要寻址的单元。 BANK 地址和行地址是同时发出的，这个命令叫做<strong>行激活</strong>(Row Active)。行激活以后就发送列地址和具体的操作命令(读还是写)，这两个是同时发出的，因此一般也用<strong>读/写命令</strong>表示<strong>列寻址</strong>。在行有效(行激活)到读/写命令发出的这段时间间隔叫做 tRCD。</p>
 <h4 id="CL-参数"><a href="#CL-参数" class="headerlink" title="CL 参数"></a>CL 参数</h4><p>当列地址发出以后就会触发数据传输，但是从数据从存储单元到内存芯片 IO 接口上还需要一段时间，这段时间就是非常著名的 CL(CAS Latency)，也就是<strong>列地址选通潜伏期</strong>。</p>
@@ -601,7 +682,6 @@
 </ol>
 <h3 id="点灯汇编代码"><a href="#点灯汇编代码" class="headerlink" title="点灯汇编代码"></a>点灯汇编代码</h3><p>代码中的地址参考《i.MX 6ULL Applications Processor Reference Manual》</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">.global _start	@ global symbol</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line">	ldr r1, =0xffffffff</span><br><span class="line">	mov r2, #6</span><br><span class="line">	ldr r0, =0x020c4080	@ CCM_CCGR6</span><br><span class="line">	ldr r2, =0x020c4068	@ CCM_CCGR0</span><br><span class="line"></span><br><span class="line">CCGR_loop_init:</span><br><span class="line">	str r1, [r0]</span><br><span class="line">	sub r0, #4</span><br><span class="line">	cmp r2, r0</span><br><span class="line">	ble CCGR_loop_init</span><br><span class="line">	</span><br><span class="line">	ldr r0, =0x020e0068	@ IOMUXC_SW_MUX_CTL_PAD_GPIO1_IO03</span><br><span class="line">	ldr r1, =0x5</span><br><span class="line">	str r1, [r0]</span><br><span class="line">	</span><br><span class="line">	ldr r0, =0x020e02f4	@ IOMUXC_SW_PAD_CTL_PAD_GPIO1_IO03</span><br><span class="line">	ldr r1, =0x10b0</span><br><span class="line">	str r1, [r0]</span><br><span class="line"></span><br><span class="line">	ldr r0, =0x0209c004	@ GPIO1_GDIR</span><br><span class="line">	ldr r1, =0x8</span><br><span class="line">	str r1, [r0]</span><br><span class="line">	</span><br><span class="line">loop:</span><br><span class="line">	ldr r0, =0x0209c000	@ GPIO1_DR</span><br><span class="line">	ldr r1, =0x0</span><br><span class="line">	str r1, [r0]</span><br><span class="line"></span><br><span class="line">	ldr r0, =0x1f78a400	@ 528M</span><br><span class="line">	ldr r1, =0xfbc5200	@ 264M</span><br><span class="line">delay1:</span><br><span class="line">	sub r0, #100</span><br><span class="line">	cmp r0, r1</span><br><span class="line">	bge delay1</span><br><span class="line"></span><br><span class="line">	ldr r0, =0x0209c000	@ GPIO1_DR</span><br><span class="line">	ldr r1, =0x8</span><br><span class="line">	str r1, [r0]</span><br><span class="line"></span><br><span class="line">	ldr r0, =0x1f78a400	@ 528M</span><br><span class="line">	ldr r1, =0xfbc5200	@ 264M</span><br><span class="line">delay2:</span><br><span class="line">	sub r0, #100</span><br><span class="line">	cmp r0, r1</span><br><span class="line">	bge delay2</span><br><span class="line"></span><br><span class="line">	b loop</span><br></pre></td></tr></table></figure>
-
 <h2 id="程序编译"><a href="#程序编译" class="headerlink" title="程序编译"></a>程序编译</h2><h3 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h3><p><code>arm-linux-gnueabihf-gcc -g -c led.s -o led.o</code></p>
 <p>上述命令就是将 led.s 编译为 led.o，其中“-g”选项是产生调试信息，GDB 能够使用这些调试信息进行代码调试。“-c”选项是编译源文件，但是不链接。“-o”选项是指定编译产生的文件名字。</p>
 <h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><p><code>arm-linux-gnueabihf-ld -Ttext 0X87800000 led.o -o led.elf</code></p>
@@ -611,10 +691,8 @@
 <h3 id="反汇编"><a href="#反汇编" class="headerlink" title="反汇编"></a>反汇编</h3><p><code>arm-linux-gnueabihf-objdump -D led.elf &gt; led.dis</code></p>
 <p>有时候需要查看其汇编代码来调试代码，因此就需要进行反汇编，一般可以将 elf 文件反汇编，上述代码中的“-D”选项表示反汇编所有的段。</p>
 <h2 id="Makefile脚本"><a href="#Makefile脚本" class="headerlink" title="Makefile脚本"></a>Makefile脚本</h2><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">led.bin:led.s</span></span><br><span class="line">	arm-linux-gnueabihf-gcc -g -c led.s -o led.o</span><br><span class="line">	arm-linux-gnueabihf-ld -Ttext 0X87800000 led.o -o led.elf</span><br><span class="line">	arm-linux-gnueabihf-objcopy -O binary -S -g led.elf led.bin</span><br><span class="line">	arm-linux-gnueabihf-objdump -D led.elf &gt; led.dis</span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm -rf *.o led.bin led.elf led.dis</span><br></pre></td></tr></table></figure>
-
 <p><strong>注意</strong>：每一个命令行必须以 注意：每一个命令行必须以[Tab]字符开始，不能是空格开始，[Tab] 字符告诉 make 此行是一个命令行，make 按照命令完成相应的动作。这也是书写按照命令完成相应的动作，这也是书写 Makefile 中容易产生，而且比较隐蔽的错误。报错信息：<code>Makefile:2: *** 遗漏分隔符 (null)。 停止。</code></p>
 <h2 id="反汇编-1"><a href="#反汇编-1" class="headerlink" title="反汇编"></a>反汇编</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">Disassembly of section .text:</span><br><span class="line"></span><br><span class="line">87800000 &lt;_start&gt;:</span><br><span class="line">87800000:	e3e01000 	mvn	r1, #0</span><br><span class="line">87800004:	e3a02006 	mov	r2, #6</span><br><span class="line">87800008:	e59f0078 	ldr	r0, [pc, #120]	; 87800088 &lt;delay2+0x10&gt;</span><br><span class="line">8780000c:	e59f2078 	ldr	r2, [pc, #120]	; 8780008c &lt;delay2+0x14&gt;</span><br><span class="line"></span><br><span class="line">87800010 &lt;CCGR_loop_init&gt;:</span><br><span class="line">87800010:	e5801000 	str	r1, [r0]</span><br><span class="line">87800014:	e2400004 	sub	r0, r0, #4</span><br><span class="line">87800018:	e1520000 	cmp	r2, r0</span><br><span class="line">8780001c:	dafffffb 	ble	87800010 &lt;CCGR_loop_init&gt;</span><br><span class="line">87800020:	e59f0068 	ldr	r0, [pc, #104]	; 87800090 &lt;delay2+0x18&gt;</span><br><span class="line">87800024:	e3a01005 	mov	r1, #5</span><br><span class="line">87800028:	e5801000 	str	r1, [r0]</span><br><span class="line">8780002c:	e59f0060 	ldr	r0, [pc, #96]	; 87800094 &lt;delay2+0x1c&gt;</span><br><span class="line">87800030:	e59f1060 	ldr	r1, [pc, #96]	; 87800098 &lt;delay2+0x20&gt;</span><br><span class="line">87800034:	e5801000 	str	r1, [r0]</span><br><span class="line">87800038:	e59f005c 	ldr	r0, [pc, #92]	; 8780009c &lt;delay2+0x24&gt;</span><br><span class="line">8780003c:	e3a01008 	mov	r1, #8</span><br><span class="line">87800040:	e5801000 	str	r1, [r0]</span><br><span class="line"></span><br><span class="line">87800044 &lt;loop&gt;:</span><br><span class="line">87800044:	e59f0054 	ldr	r0, [pc, #84]	; 878000a0 &lt;delay2+0x28&gt;</span><br><span class="line">87800048:	e3a01000 	mov	r1, #0</span><br><span class="line">8780004c:	e5801000 	str	r1, [r0]</span><br><span class="line">87800050:	e59f004c 	ldr	r0, [pc, #76]	; 878000a4 &lt;delay2+0x2c&gt;</span><br><span class="line">87800054:	e59f104c 	ldr	r1, [pc, #76]	; 878000a8 &lt;delay2+0x30&gt;</span><br><span class="line"></span><br><span class="line">87800058 &lt;delay1&gt;:</span><br><span class="line">87800058:	e2400064 	sub	r0, r0, #100	; 0x64</span><br><span class="line">8780005c:	e1500001 	cmp	r0, r1</span><br><span class="line">87800060:	aafffffc 	bge	87800058 &lt;delay1&gt;</span><br><span class="line">87800064:	e59f0034 	ldr	r0, [pc, #52]	; 878000a0 &lt;delay2+0x28&gt;</span><br><span class="line">87800068:	e3a01008 	mov	r1, #8</span><br><span class="line">8780006c:	e5801000 	str	r1, [r0]</span><br><span class="line">87800070:	e59f002c 	ldr	r0, [pc, #44]	; 878000a4 &lt;delay2+0x2c&gt;</span><br><span class="line">87800074:	e59f102c 	ldr	r1, [pc, #44]	; 878000a8 &lt;delay2+0x30&gt;</span><br><span class="line"></span><br><span class="line">87800078 &lt;delay2&gt;:</span><br><span class="line">87800078:	e2400064 	sub	r0, r0, #100	; 0x64</span><br><span class="line">8780007c:	e1500001 	cmp	r0, r1</span><br><span class="line">87800080:	aafffffc 	bge	87800078 &lt;delay2&gt;</span><br><span class="line">87800084:	eaffffee 	b	87800044 &lt;loop&gt;</span><br><span class="line">87800088:	020c4080 	andeq	r4, ip, #128	; 0x80</span><br><span class="line">8780008c:	020c4068 	andeq	r4, ip, #104	; 0x68</span><br><span class="line">87800090:	020e0068 	andeq	r0, lr, #104	; 0x68</span><br><span class="line">87800094:	020e02f4 	andeq	r0, lr, #244, 4	; 0x4000000f</span><br><span class="line">87800098:	000010b0 	strheq	r1, [r0], -r0</span><br><span class="line">8780009c:	0209c004 	andeq	ip, r9, #4</span><br><span class="line">878000a0:	0209c000 	andeq	ip, r9, #0</span><br><span class="line">878000a4:	1f78a400 	svcne	0x0078a400</span><br><span class="line">878000a8:	0fbc5200 	svceq	0x00bc5200</span><br></pre></td></tr></table></figure>
-
 <p>和我写的汇编代码都是一一对应的，只是把直接数放在了代码段的最后，ldr通过pc+offset来取。</p>
 <p>从反汇编来看还把ldr一些短的直接数改成了mov指令。</p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
@@ -704,7 +782,6 @@
 </ol>
 <h2 id="启动程序和启动过程"><a href="#启动程序和启动过程" class="headerlink" title="启动程序和启动过程"></a>启动程序和启动过程</h2><h3 id="常用指令"><a href="#常用指令" class="headerlink" title="常用指令"></a>常用指令</h3><p><img src="/2022/11/03/221103-mcustartup/2020032320502673.png" alt="2020032320502673.png"></p>
 <h3 id="startup-stm32f40-41xxx-s-代码分析"><a href="#startup-stm32f40-41xxx-s-代码分析" class="headerlink" title="startup_stm32f40_41xxx.s 代码分析"></a>startup_stm32f40_41xxx.s 代码分析</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Stack_Size      EQU     0x00000400</span><br><span class="line">                AREA    STACK, NOINIT, READWRITE, ALIGN=3</span><br><span class="line">Stack_Mem       SPACE   Stack_Size</span><br><span class="line">__initial_sp</span><br><span class="line"></span><br><span class="line">Heap_Size       EQU     0x00000200</span><br><span class="line">                AREA    HEAP, NOINIT, READWRITE, ALIGN=3</span><br><span class="line">__heap_base</span><br><span class="line">Heap_Mem        SPACE   Heap_Size</span><br><span class="line">__heap_limit</span><br></pre></td></tr></table></figure>
-
 <p>第1行：EQU 是表示宏定义的伪指令，类似于 C 语言中的#define。伪指令的意思是指这个“指令”并不会生成二进制程序代码，也不会引起变量空间分配。0x00000400 表示栈大小，字节为单位。0x00000400 =1024字节=1KB。</p>
 <p>第2行：开辟一段数据空间可读可写，段名 STACK，按照8字节对齐。ARER 伪指令表示下面将开始定义一个代码段或者数据段。此处是定义数据段。ARER 后面的关键字表示这个段的属性。</p>
 <ul>
@@ -716,13 +793,10 @@
 <p>第3行：SPACE 这行指令告诉汇编器给STACK段分配 0x00000400 字节的连续内存空间。</p>
 <p>第4行：__initial_sp 紧接着SPACE语句放置，表示了栈顶地址。__initial_sp 只是一个标号，标号主要用于表示一片内存空间的某个位置，等价于 C 语言中的“地址”概念。地址仅仅表示存储空间的一个位置，从 C 语言的角度来看，变量的地址，数组的地址或是函数的入口地址在本质上并无区别。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">                PRESERVE8   ; 指定当前文件保持堆栈8字节对齐</span><br><span class="line">                THUMB       ; 表示后面的指令是THUMB指令集</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">; Vector Table Mapped to Address 0 at Reset</span><br><span class="line">                AREA    RESET, DATA, READONLY</span><br><span class="line">                EXPORT  __Vectors       ; EXPORT申明标号为可被外部引用</span><br><span class="line">                EXPORT  __Vectors_End</span><br><span class="line">                EXPORT  __Vectors_Size</span><br><span class="line">                </span><br><span class="line">__Vectors       DCD     __initial_sp               ; Top of Stack</span><br><span class="line">                DCD     Reset_Handler              ; Reset Handler</span><br><span class="line">                DCD     NMI_Handler                ; NMI Handler</span><br><span class="line">                DCD     HardFault_Handler          ; Hard Fault Handler</span><br><span class="line">                DCD     MemManage_Handler          ; MPU Fault Handler</span><br><span class="line">                DCD     BusFault_Handler           ; Bus Fault Handler</span><br><span class="line">                DCD     UsageFault_Handler         ; Usage Fault Handler</span><br><span class="line">...... 省略</span><br><span class="line">                DCD     OTG_HS_IRQHandler                 ; USB OTG HS                   </span><br><span class="line">                DCD     DCMI_IRQHandler                   ; DCMI                         </span><br><span class="line">                DCD     CRYP_IRQHandler                   ; CRYP crypto                   </span><br><span class="line">                DCD     HASH_RNG_IRQHandler               ; Hash and Rng</span><br><span class="line">                DCD     FPU_IRQHandler                    ; FPU             </span><br><span class="line">__Vectors_End</span><br><span class="line">__Vectors_Size  EQU  __Vectors_End - __Vectors</span><br></pre></td></tr></table></figure>
-
 <p>上面这块代码初始化了中断向量表，第一个是SP指针初始化地址，后面是中断向量表，包含异常处理和外设中断，DCD会定义个4Bytes空间存储中断要跳转的地址。这块RESET数据段放在Flash开始，程序从Flash首地址开始运行，先初始化SP和PC(PC就是Reset_Handler)，再跳转去Reset_Handler执行。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">                AREA    |.text|, CODE, READONLY</span><br><span class="line">; Reset handler</span><br><span class="line">Reset_Handler    PROC</span><br><span class="line">                 EXPORT  Reset_Handler             [WEAK] ; 弱定义</span><br><span class="line">        IMPORT  SystemInit</span><br><span class="line">        IMPORT  __main</span><br><span class="line">                 LDR     R0, =SystemInit</span><br><span class="line">                 BLX     R0                 ; 跳转至SystemInit()函数初始化时钟</span><br><span class="line">                 LDR     R0, =__main        ; 跳转至__main()初始化堆栈, __main()由MDK自动生成</span><br><span class="line">                 BX      R0</span><br><span class="line">                 ENDP</span><br><span class="line"></span><br><span class="line">; Dummy Exception Handlers (infinite loops which can be modified)</span><br><span class="line"></span><br><span class="line">NMI_Handler     PROC</span><br><span class="line">                EXPORT  NMI_Handler                [WEAK]</span><br><span class="line">                B       .</span><br><span class="line">                ENDP</span><br><span class="line">...... 省略</span><br></pre></td></tr></table></figure>
-
 <p>上面这块定义了中断服务函数，都是弱定义，用户可以在别的文件中重定义。除了Reset_Handler有实现，其他都为死循环。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">;*******************************************************************************</span><br><span class="line">; User Stack and Heap initialization</span><br><span class="line">;*******************************************************************************</span><br><span class="line">                 IF      :DEF:__MICROLIB</span><br><span class="line">                 EXPORT  __initial_sp</span><br><span class="line">                 EXPORT  __heap_base</span><br><span class="line">                 EXPORT  __heap_limit</span><br><span class="line">                </span><br><span class="line">                 ELSE</span><br><span class="line">                 IMPORT  __use_two_region_memory</span><br><span class="line">                 EXPORT  __user_initial_stackheap</span><br><span class="line">                 </span><br><span class="line">__user_initial_stackheap</span><br><span class="line">                 LDR     R0, =  Heap_Mem</span><br><span class="line">                 LDR     R1, =(Stack_Mem + Stack_Size)</span><br><span class="line">                 LDR     R2, = (Heap_Mem +  Heap_Size)</span><br><span class="line">                 LDR     R3, = Stack_Mem</span><br><span class="line">                 BX      LR</span><br><span class="line">                 ALIGN</span><br><span class="line">                 ENDIF</span><br></pre></td></tr></table></figure>
-
 <p>启动代码的最后一部分，简单的汇编语言实现 IF ELSE语句。如果定义了__MICROLIB，那么程序是不会执行ELSE分支的代码。MDK中MicroLIB的作用，参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42682108/article/details/113357057">KeilMDK配置项中Use MicroLIB</a></p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
@@ -906,34 +980,30 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="参数解析"><a href="#参数解析" class="headerlink" title="参数解析"></a>参数解析</h2><p><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/argparse.html#module-argparse">argparse</a> — 命令行选项、参数和子命令解析器</p>
+          <h2 id="参数解析"><a href="#参数解析" class="headerlink" title="参数解析"></a>参数解析</h2><p><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/argparse.html#module-argparse">argparse</a> —- 命令行选项、参数和子命令解析器</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个解析器</span></span><br><span class="line">parser = argparse.ArgumentParser(description=<span class="string">&#x27;use for Encrypting/Decrypting.&#x27;</span>)</span><br><span class="line"><span class="comment"># 添加参数</span></span><br><span class="line">parser.add_argument(<span class="string">&#x27;-d&#x27;</span>, action=<span class="string">&quot;store_true&quot;</span>, <span class="built_in">help</span>=<span class="string">&#x27;Decryption command&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;-e&#x27;</span>, action=<span class="string">&quot;store_true&quot;</span>, <span class="built_in">help</span>=<span class="string">&#x27;Encryption command&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;-r&#x27;</span>, action=<span class="string">&quot;store_true&quot;</span>, <span class="built_in">help</span>=<span class="string">&#x27;Rename command&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;-p&#x27;</span>, action=<span class="string">&quot;store&quot;</span>, required=<span class="literal">True</span>, <span class="built_in">help</span>=<span class="string">&#x27;file path or folder path&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    args = <span class="built_in">vars</span>(parser.parse_args())</span><br><span class="line">    <span class="built_in">print</span>(args)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
 <p>指令 -p 为必须，通过 -p 传入文件或文件夹路径参数，指令 -d -e -r 告知脚本要执行什么任务。</p>
 <p><strong><a target="_blank" rel="noopener" href="https://www.runoob.com/python/python-func-vars.html">Python vars() 函数</a></strong> 返回对象object的属性和属性值的字典对象。</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\decipherer&gt; python main.py <span class="literal">-p</span> .\test1.c</span><br><span class="line">&#123;<span class="string">&#x27;d&#x27;</span>: False, <span class="string">&#x27;e&#x27;</span>: False, <span class="string">&#x27;r&#x27;</span>: False, <span class="string">&#x27;p&#x27;</span>: <span class="string">&#x27;.\\test1.c&#x27;</span>&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="解析路径"><a href="#解析路径" class="headerlink" title="解析路径"></a>解析路径</h2><p><a target="_blank" rel="noopener" href="https://www.runoob.com/python/python-os-path.html">Python os.path() 模块</a> — 主要用于获取文件的属性</p>
+<h2 id="解析路径"><a href="#解析路径" class="headerlink" title="解析路径"></a>解析路径</h2><p><a target="_blank" rel="noopener" href="https://www.runoob.com/python/python-os-path.html">Python os.path() 模块</a> —- 主要用于获取文件的属性</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">main_file_path = os.path.dirname(os.path.realpath(__file__))</span><br><span class="line">file_name = os.path.basename(file_path)</span><br><span class="line">file_content = fp.read()</span><br><span class="line">file_name_md5 = hashlib.md5(file_name.encode(encoding=<span class="string">&#x27;UTF-8&#x27;</span>)).hexdigest()</span><br><span class="line">file_relative_path = os.path.realpath(file_path).replace(main_file_path, <span class="string">&#x27;&#x27;</span>)  <span class="comment"># 相对地址</span></span><br><span class="line">file_relative_dir = os.path.dirname(file_path).replace(main_file_path, <span class="string">&#x27;&#x27;</span>)  <span class="comment"># 相对地址不带文件名</span></span><br></pre></td></tr></table></figure>
-
-<p><a target="_blank" rel="noopener" href="https://www.runoob.com/python3/python3-os-walk.html">Python3 os.walk() 方法</a> — 用于遍历文件夹</p>
+<p><a target="_blank" rel="noopener" href="https://www.runoob.com/python3/python3-os-walk.html">Python3 os.walk() 方法</a> —- 用于遍历文件夹</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">rename_dir</span>(<span class="params">dir_path</span>):</span><br><span class="line">    <span class="keyword">for</span> root, dirs, files <span class="keyword">in</span> os.walk(dir_path, topdown=<span class="literal">False</span>):</span><br><span class="line">        <span class="keyword">for</span> name <span class="keyword">in</span> files:</span><br><span class="line">            rename_file(os.path.join(root, name))</span><br></pre></td></tr></table></figure>
-
-<p><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/shutil.html?highlight=shutil%20rmtree#shutil.rmtree">shutil.rmtree()</a> — 删除一个完整的目录树</p>
+<p><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/shutil.html?highlight=shutil%20rmtree#shutil.rmtree">shutil.rmtree()</a> —- 删除一个完整的目录树</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> os.path.exists(<span class="string">&#x27;./output_rename&#x27;</span>):</span><br><span class="line">    shutil.rmtree(<span class="string">&#x27;./output_rename&#x27;</span>)  <span class="comment"># 删除之前的目录</span></span><br></pre></td></tr></table></figure>
-
-<p><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/os.html?highlight=os%20makedirs#os.makedirs">makedirs()</a> — 递归目录创建函数</p>
+<p><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/os.html?highlight=os%20makedirs#os.makedirs">makedirs()</a> —- 递归目录创建函数</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> os.path.exists(<span class="string">&#x27;./output_rename&#x27;</span> + file_relative_dir) == <span class="number">0</span>:</span><br><span class="line">    os.makedirs(<span class="string">&#x27;./output_rename&#x27;</span> + file_relative_dir)  <span class="comment"># 如果目录不存在 创建新目录</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="MD5加解密"><a href="#MD5加解密" class="headerlink" title="MD5加解密"></a>MD5加解密</h2><p><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/hashlib.html?highlight=hashlib#hash-algorithms">hashlib</a> — 安全哈希与消息摘要</p>
-<h2 id="字符串编解码"><a href="#字符串编解码" class="headerlink" title="字符串编解码"></a>字符串编解码</h2><table>
+<h2 id="MD5加解密"><a href="#MD5加解密" class="headerlink" title="MD5加解密"></a>MD5加解密</h2><p><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/hashlib.html?highlight=hashlib#hash-algorithms">hashlib</a> —- 安全哈希与消息摘要</p>
+<h2 id="字符串编解码"><a href="#字符串编解码" class="headerlink" title="字符串编解码"></a>字符串编解码</h2><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>方法</th>
 <th>描述</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><a target="_blank" rel="noopener" href="https://www.runoob.com/python/att-string-decode.html">string.decode(encoding=’UTF-8’, errors=’strict’)</a></td>
 <td>以 encoding 指定的编码格式解码 string，如果出错默认报一个 ValueError 的 异 常 ， 除非 errors 指 定 的 是 ‘ignore’ 或 者’replace’</td>
 </tr>
@@ -941,7 +1011,9 @@
 <td><a target="_blank" rel="noopener" href="https://www.runoob.com/python/att-string-encode.html">string.encode(encoding=’UTF-8’, errors=’strict’)</a></td>
 <td>以 encoding 指定的编码格式编码 string，如果出错默认报一个ValueError 的异常，除非 errors 指定的是’ignore’或者’replace’</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <p>保存文件名是用encode指定编码格式，再读取时用decode指定格式解码，否则遇到中文字读取会出问题。</p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
@@ -1025,275 +1097,13 @@
 <li><code>SysTick_Handler()</code>有时进有时不进，检查方法查看SysTick结构体，发现CTRL中使能位0，原因：后面的代码使用了delay函数关闭SysTick的使能位。</li>
 </ol>
 <h3 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h3><h4 id="初始化静态线程"><a href="#初始化静态线程" class="headerlink" title="初始化静态线程"></a>初始化静态线程</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">rt_err_t</span> <span class="title function_">rt_thread_init</span><span class="params">(<span class="keyword">struct</span> rt_thread* thread,</span></span><br><span class="line"><span class="params">                        <span class="type">const</span> <span class="type">char</span>* name,</span></span><br><span class="line"><span class="params">                        <span class="type">void</span> (*entry)(<span class="type">void</span>* parameter), <span class="type">void</span>* parameter,</span></span><br><span class="line"><span class="params">                        <span class="type">void</span>* stack_start, <span class="type">rt_uint32_t</span> stack_size,</span></span><br><span class="line"><span class="params">                        <span class="type">rt_uint8_t</span> priority, <span class="type">rt_uint32_t</span> tick)</span>;</span><br></pre></td></tr></table></figure>
-
-<h4 id="启动线程"><a href="#启动线程" class="headerlink" title="启动线程"></a>启动线程</h4><p><code> rt_err_t rt_thread_startup(rt_thread_t thread);</code></p>
+<h4 id="启动线程"><a href="#启动线程" class="headerlink" title="启动线程"></a>启动线程</h4><p><code>rt_err_t rt_thread_startup(rt_thread_t thread);</code></p>
 <h4 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h4><ol>
 <li><p>遇到rt_thread_init()函数卡死，百度竟然啥都查不到（rt-thread用的人这么少的吗），后尝试将栈大小增加至256后成功初始化线程。虽然任务里没什么局部变量，但是一个简单的按键任务竟然占了500多字节内存，可能是因为栈中还保存了寄存器、TCB等信息，那我这单片机16K字节内存可能不够。</p>
 </li>
 <li><p>需要在main函数while(1)中加入rt_thread_mdelay(10); 否则main线程优先级更高，其他线程无法运行。</p>
 </li>
 </ol>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/09/27/220927-CAN/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-      <meta itemprop="description" content="保持热爱，奔赴山海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="永恆博客网">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/09/27/220927-CAN/" class="post-title-link" itemprop="url">CAN (控制器域网, Controller Area Network)</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-09-27 08:00:00" itemprop="dateCreated datePublished" datetime="2022-09-27T08:00:00+08:00">2022-09-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-09 00:21:23" itemprop="dateModified" datetime="2024-07-09T00:21:23+08:00">2024-07-09</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>这几天在做云途单片机的CAN接口移植，学习了CAN通信，还看了一些通信时用到的环形队列、通信协议栈。</p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
-<li><p>本文搬运自 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/538834760">CAN通信讲解</a> ，自己复习使用</p>
-</li>
-<li><p>s32k144、云途ME0单片机参考手册</p>
-</li>
-</ol>
-<h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>CAN是<strong>控制器局域网络</strong>(Controller Area Network, CAN)的简称，是一种能够实现分布式实时控制的串行通信网络。</p>
-<p>CAN的发展历史节点：</p>
-<ul>
-<li><strong>1983</strong>年，BOSCH开始着手开发CAN总线；</li>
-<li><strong>1986</strong>年，在SAE会议上，CAN总线正式发布；</li>
-<li><strong>1987</strong>年，Intel和Philips推出第一款CAN控制器芯片；</li>
-<li><strong>1991</strong>年，奔驰 500E 是世界上第一款基于CAN总线系统的量产车型；</li>
-<li><strong>1991</strong>年，Bosch发布CAN 2.0标准，分 <strong>CAN 2.0A</strong> （11位标识符）和 <strong>CAN 2.0B</strong> （29位标识符）；</li>
-<li><strong>1993</strong>年，ISO发布CAN总线标准（<strong>ISO 11898</strong>），随后该标准主要有三部分：</li>
-<li>ISO 11898-1：数据链路层协议</li>
-<li>ISO 11898-2：高速CAN总线物理层协议，通信速度为 125kbps-1Mbps。</li>
-<li>ISO 11898-3：（整合了ISO11519）低速CAN总线物理层协议，通信速度为 125kbps 以下。</li>
-<li><strong>2011</strong>年，开始CAN FD协议的开发。</li>
-<li><strong>2015</strong>年ISO11898-1进行了修订，将CAN FD加入其中。</li>
-</ul>
-<h2 id="CAN总线协议介绍"><a href="#CAN总线协议介绍" class="headerlink" title="CAN总线协议介绍"></a>CAN总线协议介绍</h2><p>CAN总线协议有CAN1.0、CAN2.0（CAN2.0A、CAN2.0B），其中CAN2.0对比1.0，主要是增加了CAN的扩展帧定义。现在我们所说的CAN通常都是指CAN2.0标准的总线。</p>
-<p>CAN-FD协议在原有的CAN协议基础上，增加了可变波特率、扩大数据场、提升校验算法安全性等改进。</p>
-<p>本文主要讲述CAN的数据通信，CAN-FD的区别会在其他文章单独讲解。</p>
-<h2 id="CAN的物理通信形式"><a href="#CAN的物理通信形式" class="headerlink" title="CAN的物理通信形式"></a>CAN的物理通信形式</h2><p>通过两条通信线（双绞线）产生的电压差传输数据，一个CAN网络里的所有节点都挂在这两条通信线上，使用差分信号半双工通信。</p>
-<p><img src="/2022/09/27/220927-CAN/v2-23d364e14ef20208bac9b47fed047ada_r.jpg" alt="img"></p>
-<p>CAN 使用称为 CANH / CANL 的通信线路执行传输和接收。没有电位差的信号称为隐性(Recessive)信号，其逻辑值为1。具有电位差的信号称为显性（Dominant）信号，其逻辑值0。如果通信总线上发生显性和隐性(Recessive)冲突，则显性（Dominant）优先。总线空闲时保持隐性。</p>
-<p>CAN总线的物理层逻辑电平，分为高速ISO11898标准（125kbps ~ 1Mbps）和低速ISO11519标准（10kbps ~ 125kbps）；</p>
-<p>低速的物理层电平如图：</p>
-<p><img src="/2022/09/27/220927-CAN/v2-3667818bfa85894c20ee09fb428f363d_r.jpg" alt="img"></p>
-<p>而我们现在通常使用的CAN2.0，都是使用高速CAN标准，其物理层电平如图：</p>
-<p><img src="/2022/09/27/220927-CAN/v2-aabdb0a85b5bc7446840ed2b8c4d788e_r.jpg" alt="img"></p>
-<p>对于高速CAN，总结一下，也就是：</p>
-<ul>
-<li>CAN_H-CAN_L &lt; 0.5V 时候为隐性的，逻辑信号表现为”逻辑1”- 高电平。</li>
-<li>CAN_H-CAN_L &gt; 0.9V 时候为显性的，逻辑信号表现为”逻辑0”- 低电平。</li>
-</ul>
-<p>关于CAN通信的电平传输，一个<strong>重要概念</strong>就是：</p>
-<p>CAN总线在电平传输上，具有仲裁判断逻辑，优先级为：显性（低电平）&gt;隐形（高电平）！</p>
-<p>在理解CAN总线传输的整个过程中，主要就是清楚这一规则在传输时的灵活运用，并定义的各种帧形式。</p>
-<h2 id="CAN的数据格式"><a href="#CAN的数据格式" class="headerlink" title="CAN的数据格式"></a>CAN的数据格式</h2><p>CAN的数据定义了有5种帧类型：</p>
-<p><img src="/2022/09/27/220927-CAN/v2-1f0d94451bb01c75375b4c912012e39d_r.jpg" alt="img"></p>
-<p>其中，遥控帧也常被称为远程帧。CAN的应用开发者只能使用“数据帧”和“遥控帧”，其他的3种帧类型是由CAN的底层固件自动帮我们在特定场景下进行收发，开发者无需担心也无法直接参与控制。</p>
-<p>所以，本文把“数据帧”和“遥控帧”与其他的3种帧类型分别进行介绍。</p>
-<h3 id="数据帧与遥控帧"><a href="#数据帧与遥控帧" class="headerlink" title="数据帧与遥控帧"></a>数据帧与遥控帧</h3><p>关于数据帧，也就是我们最常用的帧类型，用于数据的收发；也是CAN通信里最主要的内容。</p>
-<p>而遥控帧，只是CAN网络里的某一节点发送一个遥控帧请求其他的节点反馈数据给自己，关于<em><strong>遥控帧其实在实际使用中，显得很鸡肋</strong></em>，原因有：</p>
-<p>1、CAN通信作为一种半双工通信形式，在实际使用中的应用层通信协议往往会定义好数据的应答机制与时间间隔，节点与节点之间只要按照协议规定进行数据的收发即可。</p>
-<p>2、遥控帧与数据帧对比，其实就是一条数据长度为0的数据帧而已，只是在帧格式里的仲裁段RTR位为隐性。那么，似乎有数据帧就足够了。</p>
-<p>3、遥控帧的概念定义只是一个预定义，所谓的请求其他节点给自己发送数据并不是强制的，与数据帧一样完全根据应用层协议来规定其具体的使用。</p>
-<p>综上所述，CAN里定义的遥控帧实际作用不大，而且可以用数据帧配合应用协议的定义，进行替代。所以在后来的CAN-FD中已经取消了遥控帧的定义了。</p>
-<p>本文主要以数据帧进行介绍，并简单介绍遥控帧。</p>
-<h3 id="数据帧与遥控帧的数据格式"><a href="#数据帧与遥控帧的数据格式" class="headerlink" title="数据帧与遥控帧的数据格式"></a>数据帧与遥控帧的数据格式</h3><p>不管是Classic CAN Frame还是CANFD Frame，其帧结构都由以下7个段组成：</p>
-<p>— SOF帧起始;</p>
-<p>— arbitration field仲裁段；</p>
-<p>— control field控制段;</p>
-<p>— data field数据段;</p>
-<p>— CRC field;</p>
-<p>— ACK field;</p>
-<p>— EOF.</p>
-<p><img src="/2022/09/27/220927-CAN/v2-94586126c0989e25599b758d8ecc5295_r.jpg" alt="img"></p>
-<p>这7个段，每个段里又都有自己的格式细分，有两种格式：标准格式和扩展格式。</p>
-<p><img src="/2022/09/27/220927-CAN/v2-f58bfd8f6bb42cf469dfb4c2243750ca_r.jpg" alt="img"></p>
-<p><strong>CAN的应用开发者只使用其中的仲裁段、控制段和数据段。其他部分都由CAN底层固件自动封装！</strong></p>
-<p>由上图可以看到，对于仲裁段和控制段在标准帧与扩展帧里有不同的定义，其他段一致。</p>
-<h3 id="帧起始与帧结束"><a href="#帧起始与帧结束" class="headerlink" title="帧起始与帧结束"></a>帧起始与帧结束</h3><p>SOF帧起始：由一个显性位（低电平）组成，发送节点发送帧起始，其他节点同步于帧起始；</p>
-<p>EOF帧结束：由7个隐形位（高电平）组成。</p>
-<p><img src="/2022/09/27/220927-CAN/v2-5d0c0aa1ef7750f0620e92407a09f4b8_r.jpg" alt="img"></p>
-<h3 id="仲裁段"><a href="#仲裁段" class="headerlink" title="仲裁段"></a>仲裁段</h3><h4 id="仲裁机制"><a href="#仲裁机制" class="headerlink" title="仲裁机制"></a>仲裁机制</h4><p>只要总线空闲，总线上任何节点都可以发送报文，如果有两个或两个以上的节点开始传送报文，那么就会存在总线访问冲突的可能。但是CAN使用了标识符的逐位仲裁方法可以解决这个问题。帧ID越小，优先级越高。</p>
-<p>CAN总线控制器在发送数据的同时监控总线电平，如果电平不同，则停止发送并做其他处理。如果该位位于仲裁段，则退出总线竞争；如果位于其他段，则产生错误事件。</p>
-<p><img src="/2022/09/27/220927-CAN/v2-b31c6be2bf95f5553e9b236fd5f8a562_r.jpg" alt="img"></p>
-<h4 id="仲裁段内容"><a href="#仲裁段内容" class="headerlink" title="仲裁段内容"></a>仲裁段内容</h4><p>RTR位：用于指示这包数据是遥控帧还是数据帧，数据帧的RTR位为显性电平，远程帧为隐性电平。</p>
-<p>所以帧格式和帧ID相同的情况下，数据帧优先于远程帧。</p>
-<p>IDE位：用于指示这包数据是标准帧还是扩展帧，标准帧的IDE位为显性电平，扩展帧的IDE位为隐形电平。</p>
-<p>对于前11位ID相同的标准帧（RTR为显性的遥控帧）和扩展帧，标准帧优先级比扩展帧高。</p>
-<p><img src="/2022/09/27/220927-CAN/v2-c1baaa702dd521f883248bf5d69357ce_r.jpg" alt="img"></p>
-<p>可以看到，在标准格式里，仲裁段没有IDE位，其实这个位在标准格式里是放在控制段的第一位的，这样就正好可以和扩展格式的IDE位对应上进行仲裁了。</p>
-<h3 id="控制段"><a href="#控制段" class="headerlink" title="控制段"></a>控制段</h3><p>仲裁段之后紧跟控制段，控制段共6位，标准帧的控制段由IDE、保留位r0和数据长度代码DLC组成；扩展帧控制段则由保留位r1、r0和DLC组成，如图：</p>
-<p><img src="/2022/09/27/220927-CAN/v2-d7b37d72e67ba4fdc89dc6374a640754_r.jpg" alt="img"></p>
-<p>在这里可以看到，在标准格式里，IDE位放到了控制段的第一位来了，对应前文仲裁段的内容，就可以使标准格式与扩展格式进行仲裁了。</p>
-<p>保留位（ r0 、 r1 ）：保留位必须全部以显性电平发送。</p>
-<p>数据长度码（ DLC ）：数据的字节数必须为 0 ～ 8 字节。数据帧的DLC表示的就是当前包数据段所带的字节数，遥控帧的DLC表示的是请求返回的数据长度。</p>
-<h3 id="数据段"><a href="#数据段" class="headerlink" title="数据段"></a>数据段</h3><p>一个数据帧传输的数据量为0~8个字节。遥控帧的数据段长度固定为0。</p>
-<p><img src="/2022/09/27/220927-CAN/v2-ea717bbfd46d990dffefa9d6d78e7b88_r.jpg" alt="img"></p>
-<h3 id="CRC段"><a href="#CRC段" class="headerlink" title="CRC段"></a>CRC段</h3><p>CAN-bus使用CRC校验进行数据检错，CRC校验值存放于CRC段。 CRC校验段由15位CRC值和1位CRC界定符构成如图：</p>
-<p><img src="/2022/09/27/220927-CAN/v2-d153142849cef02d8701015681d3ef9b_r.jpg" alt="img"></p>
-<h3 id="ACK段"><a href="#ACK段" class="headerlink" title="ACK段"></a>ACK段</h3><p>当一个接收节点接收的帧起始到CRC段之间的内容没发生错误时，它将在ACK段发送一个显性电平如图：</p>
-<p><img src="/2022/09/27/220927-CAN/v2-123b6f8079ca6645f96c0a4b0379933d_r.jpg" alt="img"></p>
-<h2 id="位填充"><a href="#位填充" class="headerlink" title="位填充"></a>位填充</h2><p>CAN数据在收发上除了会遵循以上数据格式定义之外，还有一个“位填充”的底层规则（类似通信协议里的“转义符”），这个操作是在CAN的底层固件中自动判断执行的，其目的是为了增强数据正确性，以便识别错误信号。</p>
-<p>为防止突发错误而设定，CAN协议中规定，当相同极性的电平持续五位时，则添加一个极性相反的位。填充位的添加和删除是由发送节点和接收节点完成的，CAN-BUS只负责传输，不会操纵信号。</p>
-<p><img src="/2022/09/27/220927-CAN/v2-1886bf7c09fedcdb6d34a025e4f63d9d_r.jpg" alt="img"></p>
-<ul>
-<li>对于发送节点而言：</li>
-</ul>
-<p>在发送数据帧和遥控帧时，对于SOF~CRC(除去CRC界定符) 之间的位流，相同极性的电平如果持续5位，那么在下一个位插入一个与之前5位反型的电平；</p>
-<ul>
-<li>对于接收节点而言：</li>
-</ul>
-<p>在接收数据帧和遥控帧时，对于SOF~CRC(除去CRC界定符)之间的位流，相同极性的电平如果持续5位，那么需要删除下一位再接收。如果这个第 6 个位的电平与前 5 位相同，将被视为错误并发送<strong>位填充错误帧</strong>。</p>
-<h2 id="错误帧、过载帧与帧间隔"><a href="#错误帧、过载帧与帧间隔" class="headerlink" title="错误帧、过载帧与帧间隔"></a>错误帧、过载帧与帧间隔</h2><p>对于这三种帧，都是在使用数据帧或遥控帧的过程当中进行错误、时序管理的辅助信号，并不会单独出现在CAN网络中；如前文所述是由CAN的底层固件自动判断并执行他们收发的，但是CAN的开发人员有必要对它们进行了解，以对CAN网络有一个整体的认识。</p>
-<h3 id="错误帧"><a href="#错误帧" class="headerlink" title="错误帧"></a>错误帧</h3><p>尽管CAN-bus是可靠性很高的总线，但依然可能出现错误；CAN-bus的错误类型共有5种：</p>
-<p><img src="/2022/09/27/220927-CAN/v2-873a92aa91e65481dc812b1bc85a3841_r.jpg" alt="img"></p>
-<p>当出现5种错误类型之一时，发送或接收节点将发送错误帧。但是错误帧又有两种格式：主动错误格式和被动错误格式。</p>
-<p>主动错误和被动错误，指的并不是发送方与接收方。而是指某一CAN节点的“错误状态”，无论发送方还是接收方，都会处于自己的错误状态，并根据自身的状态来决定自己要发送主动错误格式还是被动错误格式：</p>
-<p><img src="/2022/09/27/220927-CAN/v2-32a00c5310f9ddb0f89f391b60fbd1ae_r.jpg" alt="img"></p>
-<p>由上图可知，6个连续的显性或隐性电平位，正好违反了之前所提及的“位填充”规则，CAN总线设计上就是利用了自己的这一规则对错误数据进行刻意的覆盖破坏，使总线上其他节点都知道错误的发生。</p>
-<h4 id="错误状态"><a href="#错误状态" class="headerlink" title="错误状态"></a>错误状态</h4><p>在CAN节点内，有两个计数器：发送错误计数器（TEC）和接收错误计数器（REC），当该节点检测到错误后，内部REC/TEC计数器会相应的增加，基于REC/TEC的值判定节点状态，CAN的错误状态如图：</p>
-<p><img src="/2022/09/27/220927-CAN/v2-fddf34e76afc765a8030e7ec7feac111_r.jpg" alt="img"></p>
-<p>节点错误状态的转换就是一个 “量变”到“质变” 的过程：</p>
-<ul>
-<li><strong>主动错误状态：【REC&lt;127 且TEC&lt;127】</strong></li>
-</ul>
-<p>初步可判定该节点相对稳定可靠，该错误计数很可能是由于某个节点异常导致的，那么其他节点很可能也会触发该错误，那么允许该节点破坏CAN总线的异常报文并告知其他节点；<br>节点检测到一个错误就会发送带有主动错误标志的错误帧，因为主动错误标志是连续六个显性位，所以这个时候主动错误标志将会“覆盖”掉总线上其它节点的发送，而之前在CAN总线上传输的报文就被这“六个连续显性位”破坏掉了。<br>如果发出主动错误帧的节点是发送节点，这个情况下就相当于：刚刚发送的那一帧报文我发错了，现在我破坏掉它（发送主动错误帧），你们不管收到什么都不算数；</p>
-<p>如果发出主动错误帧的节点是接收节点，这个情况就相当于：刚刚我收报文的时候发现了错误，不管你们有没有发现这个错误，我现在主动站出来告诉大家这个错误，并把这一帧报文破坏掉（发送主动错误帧），刚才你们收到的东西不管对错都不算数了。</p>
-<ul>
-<li><strong>被动错误状态：【REC&gt;128 或TEC&gt;128】</strong></li>
-</ul>
-<p>节点发送错误帧的次数较多，初步可判定该节点相对不可靠，该错误计数很可能是由于自身节点问题导致，即该错误很可能仅有该节点才有，对于其他节点而言是可以正常交互的，总线不信任该节点提供的错误标识，将不允许破坏总线数据，那么允许该节点发送错误帧“6个连续隐性位”至CAN总线，仅告知其他节点异常；<br>如果发出被动错误帧的节点为报文的发送节点，那么在发送被动错误帧之后，刚刚正在发送的报文被破坏，并且该节点不能在错误帧之后随着连续发送刚刚发送失败的那个报文。随之而来的是帧间隔，并且连带着8位隐性位的 “延迟传送” 段；这样总线电平就呈现出连续11位隐性位，总线上的其它节点就能判定总线处于空闲状态，就能参与总线竞争。</p>
-<p>此时如果该节点能够竞争成功，那么它就能接着发送，如果竞争不能成功，那么就接着等待下一次竞争。这种机制的目的正是为了让其它正常节点（处于主动错误）优先使用总线。</p>
-<ul>
-<li><strong>总线关闭状态：【TEC&gt;255】</strong></li>
-</ul>
-<p>一个处于被动错误状态的节点，仍然多次发送被动错误帧，使该节点转为总线关闭态；<br>该节点不能向总线上发送报文，也不能从总线上接收报文，整个节点脱离总线。等到检测到128次11个连续的隐性位时，TEC和REC置0，重新回到主动错误状态。<br>由于存在实现方式的不同，CAN总线关闭状态存在只允许用户请求恢复和检测到128个11位连续的隐性位时自恢复两种不同的恢复形式。</p>
-<p>如果总线上只有一个节点，该节点发送数据帧后得不到应答，TEC最大只能计数到128，即这种情况下节点只会进入被动错误状态而不会进入总线关闭状态。</p>
-<h4 id="错误帧的发送"><a href="#错误帧的发送" class="headerlink" title="错误帧的发送"></a>错误帧的发送</h4><p>按照CAN协议的规定：<br>发生位错误、填充错误、格式错误、ACK错误时，则在错误产生的那一位的下一位开始发送错误帧。<br>发生CRC错误时，紧随ACK界定符后的位发送错误帧。</p>
-<p>错误帧发送完成后，总线空闲时自动重发出错的数据帧。</p>
-<p><strong>【位错误】举例（情况1）：</strong></p>
-<ul>
-<li>设总线上所有节点处于主动错误状态；</li>
-<li>当一个发送节点监控到总线上的位数值与发送的位数值不一致时，检测为位错误，并发送主动错误标志（6个连续的显性位）；</li>
-<li>接收节点接收到发送节点发送的6个连续的显性位时，会检测为位填充错误，也会发送主动错误标志；</li>
-<li>发送节点发送完主动错误标志后，开始监控总线是否为隐性位，当总线为隐性位时，开始发送错误界定符（8个连续的隐性位）；</li>
-<li>当接收节点发送完主动错误标志后，开始向总线发送错误界定符； 等待错误帧发送完成，总线空闲后，发送节点重新发送出错的报文.</li>
-</ul>
-<blockquote>
-<p>由于发送节点发送6个连续的显性位会破坏位填充规则，触发接收节点发送主动错误标志，发送节点和接收节点的结合是形成错误标志叠加部分的原因。</p>
-</blockquote>
-<p><img src="/2022/09/27/220927-CAN/v2-2266e218b6061b77c37b34e3eb58c723_r.jpg" alt="img"></p>
-<p><strong>【位错误】举例（情况2）：</strong></p>
-<ul>
-<li>假设发送节点处于被动错误状态，接收节点处于主动错误状态；</li>
-<li>当发送节点监控到总线上的位数值与发送的位数值不一致时，检测为位错误，并发送被动错误标志（6个连续的隐性位）；</li>
-<li>接收节点接收到发送节点发送的6个连续的隐性位时，会检测为位填充错误，并会发送主动错误标志；</li>
-<li>发送节点发送完被动错误标志后，开始监控总线是否为隐性位，当总线为隐性位时，开始发送错误界定符（8个连续的隐性位）；</li>
-<li>接收节点发送完主动错误标志后，开始监控总线是否为隐性位，当总线为隐性位时，开始发送错误界定符（8个连续的隐性位）；</li>
-</ul>
-<p><img src="/2022/09/27/220927-CAN/v2-bc7b7162a61a7861ebf895c765122302_r.jpg" alt="img"></p>
-<h3 id="过载帧与帧间隔"><a href="#过载帧与帧间隔" class="headerlink" title="过载帧与帧间隔"></a>过载帧与帧间隔</h3><p>过载帧与主动错误帧非常相似，甚至可以把过载帧直接理解成也是一种错误帧，只是它的错误触发条件不同罢了。</p>
-<p>当某个接收节点没有做好接收下一帧数据的准备时，将发送过载帧以通知发送节点；过载帧由过载标志和过载帧界定符组成，如图所示：</p>
-<p><img src="/2022/09/27/220927-CAN/v2-ae4660f6be52518c6ca8f24b9a5b39ce_r.jpg" alt="img"></p>
-<p>由于存在多个节点同时过载且过载帧发送有时间差问题，可能出现过载标志叠加后超过6个位的现象，如图所示：</p>
-<p><img src="/2022/09/27/220927-CAN/v2-443d97a46a841c5bb2900f0304414ac1_r.jpg" alt="img"></p>
-<p>过载帧是用于接收单元通知发送单元它尚未完成接收准备的帧。在两种情况下，节点会发送过载帧：</p>
-<ul>
-<li>接收单元条件的制约，要求发送节点延缓下一个数据帧或远程帧的传输；</li>
-<li>帧间隔（Intermission）的 <em><strong>3 bit</strong></em> 内检测到显性位</li>
-</ul>
-<p>帧间隔是用于分隔数据帧、遥控帧这些有效数据的帧。数据帧和遥控帧可通过插入帧间隔将本帧与前面的任何帧（数据帧、 遥控帧、错误帧、过载帧）分开。</p>
-<p><img src="/2022/09/27/220927-CAN/v2-09da8cc2f7158aeb3e7ab5a05aed0bff_r.jpg" alt="img"></p>
-<p>注意，过载帧和错误帧由于要按照发送条件立即执行，前不能插入帧间隔</p>
-<h2 id="CAN的采样点与波特率"><a href="#CAN的采样点与波特率" class="headerlink" title="CAN的采样点与波特率"></a>CAN的采样点与波特率</h2><p>根据前文描述，由于CAN总线在通信时，每个节点都会不断的监控总线上的实际电平用于仲裁、判断错误等功能，因此CAN定义了采样点这一概念指明节点对总线的监控时间点。</p>
-<p>因为CAN要对总线上特定数据里的每一个位都要进行一次单独的监控，所以这个监控的时间点，指的是在一个“位”的时间范围之内的一个“相对时间”，比如：一个位时间的中间时刻，就把它称为50%采样点（率）。这个解释只是让读者直接理解它的大体概念，实际情况并不是这么简单。</p>
-<p>实际的CAN采样点的位时间划分如下：</p>
-<p><img src="/2022/09/27/220927-CAN/v2-40e0a834157ea339143219a350f88373_r.jpg" alt="img"></p>
-<p><img src="/2022/09/27/220927-CAN/v2-88bed791a65bcd50ec1eee089c1f067f_r.jpg" alt="img"></p>
-<p>由上图可知，CAN每发送一个位，需要涉及的内容有：</p>
-<p><strong>时间单元（Tq）：</strong>指的是CAN模块时钟提供的单位时间，与其他的芯片外设一样，任何外设模块都需要提供合适的时钟才能正常工作，在很多芯片里CAN时钟还会配合一个分频器，也就是：CAN时钟= CAN时钟源（如图中的晶振时钟） / CAN_Prescaler。<strong>时间单元</strong>指的就是分频后的实际<strong>CAN时钟</strong>的单位时间。</p>
-<p><strong>位时间：</strong>就是我们理解的<strong>CAN波特率</strong>里一位的时间，由上图可知，CAN每发送一个位都由几个“段”组成，而每个段又需要占用几个“时间单元（Tq）”，所以我们在使用CAN的时候，就需要通过指定这些段的Tq个数来得到CAN的波特率。</p>
-<p><strong>同步段（SS：Synchronization Segment）：</strong>用于同步CAN总线上的各个节点。输入信号的跳变沿就发生在同步段，该段持续时间固定为 1 Tq。同步段用于同步总线上的各个节点，一个位的跳变边沿在此时间段内。</p>
-<p><strong>传播段（PTS：Propagation Time Segment）：</strong>用于补偿各节点之间的物理传输延迟时间。传输延迟时间为信号在总线上传播时间的两倍，包括总线驱动器延迟时间。传播段的长度一般有一个取值范围，不同的控制器不完全一致，典型值为 1 – 8 TQ。在CAN-FD中取消了传播段。</p>
-<p><strong>相位缓冲段1（PBS1：Phase Buffer Segment 1）：</strong>用于补偿节点间的晶振误差，允许通过<strong>重同步（SJW）</strong>对该段<strong>加长</strong>。在该时间段结束时进行总线电平<strong>采样点</strong>的采样。</p>
-<p><strong>相位缓冲段2（PBS2：Phase Buffer Segment 2）：</strong>用于补偿节点间的晶振误差，允许通过<strong>重同步（SJW）</strong>对该段<strong>缩短。</strong></p>
-<p>不同的控制器，PBS1/PBS2 的取值范围不完全一致，一般 PS1 为 1 – 8 TQ，PS2 为 2 – 8 TQ。</p>
-<p>在有的控制器里，把传播段与相位缓冲段1合并称为“<strong>时间段1</strong>”,而相位缓冲段2称为“<strong>时间段2</strong>”，如图：</p>
-<p><img src="/2022/09/27/220927-CAN/v2-0ddb4086a6638f5d70a106bc583e55f6_r.jpg" alt="img"></p>
-<p><strong>重同步（SJW）：</strong>在<strong>时间段1</strong>而不是在<strong>同步段(SS)<strong>检测到有效跳变，那么</strong>相位缓冲段1(PBS1)</strong> 的时间就被延长最多SJW那么长，从而采样点被延迟了。相反如果在<strong>时间段2</strong>而不是在<strong>同步段(SS)<strong>检测到有效跳变，那么</strong>相位缓冲段2(PBS2)</strong> 的时间就被缩短最多SJW那么长，从而采样点被提前了。如图：</p>
-<p><img src="/2022/09/27/220927-CAN/v2-e731e178deca7a637b6e36e6976f9d5f_r.jpg" alt="img"></p>
-<p>综上所述：</p>
-<p>CAN时钟 = CAN时钟源 / 分频值CAN_Prescaler；</p>
-<p>CAN波特率 = CAN时钟 / (SS(1Tq) + PTS + PBS1 + PBS2)的Tq总个数；</p>
-<p>CAN采样点（率） = (SS(1Tq) + TSEG1) / (SS(1Tq) + TSEG1 + TSEG2) * 100%</p>
-<p>= (SS(1Tq) + PTS + PBS1) / (SS(1Tq) + PTS + PBS1 + PBS2) * 100%；</p>
-<p><strong>注意：</strong>在实际的CAN使用中，一个CAN网络的各节点最好把采样点设置成一样，如果采样点的设置偏差较大，虽然可能不会造成完全不能通信的情况，但是由于不同节点的判断时间点不同，会造成CAN通信上出现较大概率的错误数据。</p>
-<p>如果发现通信误码率较高，不妨可以排查一下各个节点的CAN采样点设置。</p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
     </div>
@@ -1378,7 +1188,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-count">80</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1471,6 +1281,8 @@
 
 
 
+
+  
 
   
 

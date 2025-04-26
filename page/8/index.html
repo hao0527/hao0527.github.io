@@ -185,6 +185,171 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/23/210523-%E7%94%B5%E5%AE%B9%E9%80%89%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+      <meta itemprop="description" content="保持热爱，奔赴山海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="永恆博客网">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/23/210523-%E7%94%B5%E5%AE%B9%E9%80%89%E5%9E%8B/" class="post-title-link" itemprop="url">电容的选型</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-05-23 15:00:00" itemprop="dateCreated datePublished" datetime="2021-05-23T15:00:00+08:00">2021-05-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-05-24 09:12:39" itemprop="dateModified" datetime="2021-05-24T09:12:39+08:00">2021-05-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%99%BA%E8%83%BD%E8%BD%A6/" itemprop="url" rel="index"><span itemprop="name">智能车</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/yingxuexuan/article/details/6117023">LDO 输出电容</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/AirCity123/article/details/104186046">LDO输出端电容对其稳定性的影响</a></p>
+</li>
+</ul>
+<h3 id="各种电容特性"><a href="#各种电容特性" class="headerlink" title="各种电容特性"></a>各种电容特性</h3><p><strong>多层陶瓷电容</strong></p>
+<p>多层陶瓷电容(MLCC)不仅尺寸小，而且将低ESR、低ESL和宽工作温度范围特性融于一体，可以说是旁路电容的首选。不过，这类电容也并非完美无缺。根据电介质材料不同，电容值会随着温度、直流偏置和交流信号电压动态变化。另外，电介质材料的压电特性可将振动或机械冲击转换为交流噪声电压。大多数情况下，此类噪声往往以微伏计，但在极端情况下，机械力可以产生毫伏级噪声。</p>
+<p>电压控制振荡器(VCO)、锁相环(PLL)、RF功率放大器(PA)和其它模拟电路都对供电轨上的噪声非常敏感。在VCO和PLL中，此类噪声表现为相位噪声；在RF PA中，表现为幅度调制；而在超声、CT扫描以及处理低电平模拟信号的其它应用中，则表现为显示伪像。尽管陶瓷电容存在上述缺陷，但由于尺寸小且成本低，因此几乎在每种电子器件中都会用到。不过，当调节器用在对噪声敏感的应用中时，设计人员必须仔细评估这些副作用。</p>
+<p><strong>固态钽电解电容</strong></p>
+<p>与陶瓷电容相比，固态钽电容对温度、偏置和振动效应的敏感度相对较低。新兴一种固态钽电容采用导电聚合物电解质，而非常见的二氧化锰电解质，其浪涌电流能力有所提高，而且无需电流限制电阻。此项技术的另一好处是ESR更低。固态钽电容的电容值可以相对于温度和偏置电压保持稳定，因此选择标准仅包括容差、工作温度范围内的降压情况以及最大ESR。</p>
+<p>导电聚合物钽电容具有低ESR特性，成本高于陶瓷电容而且体积也略大，但对于不能忍受压电效应噪声的应用而言可能是唯一选择。不过，钽电容的漏电流要远远大于等值陶瓷电容，因此不适合一些低电流应用。</p>
+<p>固态聚合物电解质技术的缺点是此类钽电容对无铅焊接过程中的高温更为敏感，因此制造商通常会规定电容在焊接时不得超过三个焊接周期。组装过程中若忽视此项要求，则可能导致长期稳定性问题。</p>
+<p><strong>铝电解电容</strong></p>
+<p>传统的铝电解电容往往体积较大、ESR和ESL较高、漏电流相对较高且使用寿命有限（以数千小时计）。而OS-CON电容则采用有机半导体电解质和铝箔阴极，以实现较低的ESR。这类电容虽然与固态聚合物钽电容相关，但实际上要比钽电容早10年或更久。由于不存在液态电解质逐渐变干的问题，OS-CON型电容的使用寿命要比传统的铝电解电容长。大多数电容的工作温度上限为105°C，但现在OS-CON型电容可以在最高125°C的温度范围内工作。</p>
+<p>虽然OS-CON型电容的性能要优于传统的铝电解电容，但是与陶瓷电容或固态聚合物钽电容相比，往往体积更大且ESR更高。与固态聚合物钽电容一样，这类电容不受压电效应影响，因此适合低噪声应用。</p>
+<p><strong>固态电容</strong></p>
+<p>固态电容器的全名为固态铝质电解电容器，是目前电容器产品中最高阶的产品，固态电容的介电材料则为功能性导电高分子，能大幅提升产品的稳定度与安全性，它与液态铝质电解电容最大差别，在于所使用的介电材料，过去铝质电解电容所使用的介电材料是电解液，而固态电容则是导电性高分子材料，也因此导致成本相对较高。固态电容特点固态电容具备环保、低阻抗、高低温稳定、耐高纹波及高信赖度等优越特性，是目前电解电容产品中最高阶的产品。由于固态电容特性远优于液态铝电容，固态电容耐温达摄氏260度，且导电性、频率特性及寿命均佳，适用于低电压、高电流的应用。</p>
+<h3 id="LDO负载电容"><a href="#LDO负载电容" class="headerlink" title="LDO负载电容"></a>LDO负载电容</h3><p>影响LDO稳定工作的外在因素是负载电容容值CL和ESR，以及LDO的输出电流，他们的关系是：</p>
+<ol>
+<li><p>容值小的CL，ESR往往较大，容值大的CL，ESR往往较小。无论哪种电容，都要保证ESR在合理的范围内，规格书往往会提供这个范围。</p>
+</li>
+<li><p>当LDO输出电流是额定电流的20%~50%时，容易发生不稳定状况。</p>
+</li>
+<li><p>低温时，CL的ESR会升高，并且容值也会发生变化。选型时要注意！</p>
+</li>
+<li><p>在ESR很低，LDO输出电流很小（≤1mA）时，容易发生不稳定状况。</p>
+</li>
+<li><p>同一温度下，LDO输出电流越小，保证LDO稳定性的ESR值越高。</p>
+</li>
+<li><p>同一输出电流下，温度越高，保证LDO稳定性的ESR越大。</p>
+</li>
+<li><p>在低输出电流时，LDO输出波形变成三角波，说明ESR过低；在中等输出电流时，如果LDO波形是正弦波，说明ESR过高。</p>
+</li>
+</ol>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>电容技术</strong></th>
+<th><strong>等效串联电阻</strong></th>
+<th><strong>等效串联电感</strong></th>
+<th><strong>电压稳定性</strong></th>
+<th><strong>温度稳定性</strong></th>
+<th><strong>振动敏感度</strong></th>
+<th><strong>电容值/单位体积</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>铝电解电容</strong></td>
+<td>最高</td>
+<td>最高</td>
+<td>好</td>
+<td>最低</td>
+<td>低</td>
+<td>低</td>
+</tr>
+<tr>
+<td><strong>固态钽电容</strong></td>
+<td>中等</td>
+<td>中等</td>
+<td>最佳</td>
+<td>好</td>
+<td>低</td>
+<td>高</td>
+</tr>
+<tr>
+<td><strong>聚合物固态铝电容</strong></td>
+<td>低</td>
+<td>低</td>
+<td>最佳</td>
+<td>好</td>
+<td>低</td>
+<td>高</td>
+</tr>
+<tr>
+<td><strong>多层陶瓷电容</strong></td>
+<td>最低</td>
+<td>最低</td>
+<td>差</td>
+<td>好</td>
+<td>高</td>
+<td>中等</td>
+</tr>
+</tbody>
+</table>
+</div>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -253,18 +418,18 @@
 </li>
 </ul>
 <h3 id="电机驱动"><a href="#电机驱动" class="headerlink" title="电机驱动"></a>电机驱动</h3><p>IR2184老方案，B车电机比较猛，可能有11.7A，试一下加RDC释放电路来提高刹车性能</p>
-<p><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-%E9%A3%9E%E5%8D%A1-1.jpg" alt="210517-飞卡-1.jpg"></p>
-<p><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-%E9%A3%9E%E5%8D%A1-2.jpg" alt="210517-飞卡-2.jpg"></p>
+<p><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-飞卡-1.jpg" alt="210517-飞卡-1.jpg"></p>
+<p><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-飞卡-2.jpg" alt="210517-飞卡-2.jpg"></p>
 <ul>
-<li><input checked disabled type="checkbox"> 电机驱动加上ina240测电机电流(21.6.11前)</li>
+<li>[x] 电机驱动加上ina240测电机电流(21.6.11前)</li>
 </ul>
-<p><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-%E9%A3%9E%E5%8D%A1-7.jpg" alt="210517-飞卡-7.jpg"></p>
-<p><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-%E9%A3%9E%E5%8D%A1-8.jpg" alt="210517-飞卡-8.jpg"></p>
+<p><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-飞卡-7.jpg" alt="210517-飞卡-7.jpg"></p>
+<p><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-飞卡-8.jpg" alt="210517-飞卡-8.jpg"></p>
 <p>（21.6.11）程序员通过电机反转来刹车，未加驱动死区时间，导致锂电池保护板保护。</p>
 <h3 id="电磁运放"><a href="#电磁运放" class="headerlink" title="电磁运放"></a>电磁运放</h3><p>采用逐飞方案，opa4377，单端放大，检波，二极管使用了压降小的肖特基二极管</p>
-<p><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-%E9%A3%9E%E5%8D%A1-3.jpg" alt="210517-飞卡-3.jpg"></p>
-<p><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-%E9%A3%9E%E5%8D%A1-4.jpg" alt="210517-飞卡-4.jpg"></p>
-<h3 id="tc377主控"><a href="#tc377主控" class="headerlink" title="tc377主控"></a>tc377主控</h3><p>考虑到DC-DC负载响应速率不如LDO，继续使用LM1084-ADJ给舵机供6.3v电<br><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-%E9%A3%9E%E5%8D%A1-5.jpg" alt="210517-飞卡-5.jpg"><br><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-%E9%A3%9E%E5%8D%A1-6.jpg" alt="210517-飞卡-6.jpg"></p>
+<p><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-飞卡-3.jpg" alt="210517-飞卡-3.jpg"></p>
+<p><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-飞卡-4.jpg" alt="210517-飞卡-4.jpg"></p>
+<h3 id="tc377主控"><a href="#tc377主控" class="headerlink" title="tc377主控"></a>tc377主控</h3><p>考虑到DC-DC负载响应速率不如LDO，继续使用LM1084-ADJ给舵机供6.3v电<br><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-飞卡-5.jpg" alt="210517-飞卡-5.jpg"><br><img src="/2021/05/17/210517-%E9%A3%9E%E5%8D%A1/210517-飞卡-6.jpg" alt="210517-飞卡-6.jpg"></p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
     </div>
@@ -359,9 +524,7 @@
 </li>
 </ul>
 <h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Stack</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">Stack</span>():_pData(<span class="keyword">new</span> T[<span class="number">1</span>]), _capacity(<span class="number">1</span>), _size(<span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;creat stack successful&quot;</span> &lt;&lt; endl;</span><br><span class="line">	&#125;</span><br><span class="line">	~<span class="built_in">Stack</span>()</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">delete</span> [] _pData;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;delete stack successful&quot;</span> &lt;&lt; endl;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">Push</span><span class="params">(<span class="type">const</span> T&amp; t)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="built_in">CheckCapacity</span>();</span><br><span class="line">		_pData[_size++] = t;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;push &quot;</span> &lt;&lt; t &lt;&lt; <span class="string">&quot; successful&quot;</span> &lt;&lt; endl;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function">T&amp; <span class="title">Pop</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		T&amp; t = _pData[_size<span class="number">-1</span>];</span><br><span class="line">		_size--;</span><br><span class="line">		<span class="comment">// cout &lt;&lt; &quot;pop return &quot; &lt;&lt; t &lt;&lt; endl;</span></span><br><span class="line">		<span class="keyword">return</span> t;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="type">size_t</span> <span class="title">Size</span><span class="params">()</span><span class="type">const</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> _size;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="type">size_t</span> <span class="title">Capacity</span><span class="params">()</span><span class="type">const</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> _capacity;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">CheckCapacity</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="type">size_t</span> size = <span class="built_in">Size</span>();</span><br><span class="line">		<span class="type">size_t</span> capacity = <span class="built_in">Capacity</span>();</span><br><span class="line">		<span class="type">size_t</span> newcapacity = <span class="number">2</span> * capacity;</span><br><span class="line">		<span class="keyword">if</span> (size &gt;= capacity)</span><br><span class="line">		&#123;</span><br><span class="line">			_capacity = newcapacity;</span><br><span class="line">			T* tmp = <span class="keyword">new</span> T[newcapacity];</span><br><span class="line">			<span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">0</span>; i&lt;size; i++)</span><br><span class="line">			&#123;</span><br><span class="line">				tmp[i] = _pData[i];</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">delete</span>[] _pData;</span><br><span class="line">			_pData = tmp;</span><br><span class="line">			cout &lt;&lt; <span class="string">&quot;capacity add to &quot;</span> &lt;&lt; newcapacity &lt;&lt; endl;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	T* _pData;</span><br><span class="line">	<span class="type">size_t</span> _capacity;</span><br><span class="line">	<span class="type">size_t</span> _size;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	Stack&lt;<span class="type">char</span>&gt; s;</span><br><span class="line">	<span class="type">char</span> strInput[<span class="number">100</span>]=<span class="string">&quot;test\0&quot;</span>;</span><br><span class="line">	<span class="type">int</span> i = <span class="number">0</span>;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;input:&quot;</span>;</span><br><span class="line">	<span class="keyword">if</span>(!cin.<span class="built_in">getline</span>(strInput,<span class="number">100</span>))</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;error, input too long&quot;</span> &lt;&lt; endl;</span><br><span class="line">	<span class="keyword">while</span>(strInput[i] != <span class="string">&#x27;\0&#x27;</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		s.<span class="built_in">Push</span>(strInput[i]);</span><br><span class="line">		i++;</span><br><span class="line">	&#125;</span><br><span class="line">	i = <span class="number">0</span>;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;output:&quot;</span>;</span><br><span class="line">	<span class="keyword">while</span>(strInput[i] != <span class="string">&#x27;\0&#x27;</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		cout &lt;&lt; s.<span class="built_in">Pop</span>();</span><br><span class="line">		i++;</span><br><span class="line">	&#125;</span><br><span class="line">	cout &lt;&lt; endl;</span><br><span class="line">	<span class="built_in">system</span>(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h3 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">creat stack successful</span><br><span class="line">input:i love tzy</span><br><span class="line">push i successful</span><br><span class="line">capacity add to 2</span><br><span class="line">push   successful</span><br><span class="line">capacity add to 4</span><br><span class="line">push l successful</span><br><span class="line">push o successful</span><br><span class="line">capacity add to 8</span><br><span class="line">push v successful</span><br><span class="line">push e successful</span><br><span class="line">push   successful</span><br><span class="line">push t successful</span><br><span class="line">capacity add to 16</span><br><span class="line">push z successful</span><br><span class="line">push y successful</span><br><span class="line">output:yzt evol i</span><br></pre></td></tr></table></figure>
-
 <h3 id="坑"><a href="#坑" class="headerlink" title="坑"></a>坑</h3><ol>
 <li>Sublime里运行程序不能输入数据，只能输出数据（卡在cin）</li>
 <li>参考：<strong>动态顺序栈的简单实现</strong> 中，数组扩容未改变_capacity</li>
@@ -464,10 +627,8 @@
 </li>
 </ol>
 <h3 id="使用esp-idf-explorer插件"><a href="#使用esp-idf-explorer插件" class="headerlink" title="使用esp-idf explorer插件"></a>使用esp-idf explorer插件</h3><ul>
-<li><p>这个工具非常好用，有GUI配SDK，在vscode用插件指令可以编译下载等</p>
-</li>
-<li><p>参考：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV17p4y167uN?p=1">ESP-IDF VS Code 插件快速操作指南</a></p>
-</li>
+<li>这个工具非常好用，有GUI配SDK，在vscode用插件指令可以编译下载等</li>
+<li>参考：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV17p4y167uN?p=1">ESP-IDF VS Code 插件快速操作指南</a></li>
 <li><p>vscode cmd <code>&gt;ESP-IDF:Show Examples Projects</code>基于例程新建工程</p>
 </li>
 <li><p>编译，下载，调试，设置sdk等功能点点左下角图标就可以</p>
@@ -575,7 +736,7 @@
 </li>
 <li><p>可见光：OV2640 200W 24pin  考虑fpga作为DVP-spi接口 fpga时钟</p>
 </li>
-<li><p> 白光LED： DC3.4V 100-500mA</p>
+<li><p>白光LED： DC3.4V 100-500mA</p>
 </li>
 <li><p>无线模块：24L01 2.4-2.52GHZ 250Kbps 500mW 27DB发射功率</p>
 </li>
@@ -589,23 +750,23 @@
 </li>
 </ol>
 <h3 id="调试阶段进度"><a href="#调试阶段进度" class="headerlink" title="调试阶段进度"></a>调试阶段进度</h3><h4 id="硬件"><a href="#硬件" class="headerlink" title="硬件"></a>硬件</h4><ul>
-<li><input checked disabled type="checkbox"> 绘制原理图</li>
-<li><input checked disabled type="checkbox"> 绘制PCB（调试板）</li>
-<li><input checked disabled type="checkbox"> 制板焊接（调试板）</li>
-<li><input checked disabled type="checkbox"> 绘制产品的PCB</li>
+<li>[x] 绘制原理图</li>
+<li>[x] 绘制PCB（调试板）</li>
+<li>[x] 制板焊接（调试板）</li>
+<li>[x] 绘制产品的PCB</li>
 </ul>
 <h4 id="软件"><a href="#软件" class="headerlink" title="软件"></a>软件</h4><ul>
-<li><input checked disabled type="checkbox"> 调试80*60红外模块</li>
-<li><input checked disabled type="checkbox"> 调试160*120红外模块</li>
-<li><input checked disabled type="checkbox"> 调试FPGA-OV2640部分</li>
-<li><input checked disabled type="checkbox"> 调试FPGA-MCU部分</li>
-<li><input checked disabled type="checkbox"> 调试24L01模块</li>
-<li><input checked disabled type="checkbox"> 调试电源管理部分</li>
-<li><input disabled type="checkbox"> 调试其他功能</li>
+<li>[x] 调试80*60红外模块</li>
+<li>[x] 调试160*120红外模块</li>
+<li>[x] 调试FPGA-OV2640部分</li>
+<li>[x] 调试FPGA-MCU部分</li>
+<li>[x] 调试24L01模块</li>
+<li>[x] 调试电源管理部分</li>
+<li>[ ] 调试其他功能</li>
 </ul>
 <h4 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h4><ul>
-<li><input checked disabled type="checkbox"> 红外模块板外形</li>
-<li><input disabled type="checkbox"> ……</li>
+<li>[x] 红外模块板外形</li>
+<li>[ ] ……</li>
 </ul>
 <h2 id="无线集抄器部分"><a href="#无线集抄器部分" class="headerlink" title="无线集抄器部分"></a>无线集抄器部分</h2><h3 id="需求分析-1"><a href="#需求分析-1" class="headerlink" title="需求分析"></a>需求分析</h3><ol>
 <li>可以支持500个从站</li>
@@ -701,7 +862,7 @@
 <li>与JFET一样，MOS管有三个工作区：可变电阻区、恒流区、夹断区，当U<sub>DS</sub>增大到U<sub>GS(th)</sub>（即U<sub>DS</sub>=U<sub>GS</sub>-U<sub>GS(th)</sub>）时，沟道在漏极一侧出现加断点，进入恒流区，U<sub>DS</sub>增大的部分几乎全部用于克服预夹断区对漏极电流的阻力</li>
 <li>U<sub>DS</sub>&gt;U<sub>GS</sub>-U<sub>GS(th)</sub>时，对应每一个U<sub>GS</sub>就有一个确定的I<sub>d</sub>，可将I<sub>d</sub>视为电压U<sub>GS</sub>控制的电流源</li>
 </ol>
-<h3 id="FET符号及特性"><a href="#FET符号及特性" class="headerlink" title="FET符号及特性"></a>FET符号及特性</h3><p><img src="/2021/05/06/210506-bjt%E5%92%8Cfet/210506-bjt%E5%92%8Cfet-1.jpg" alt="210506-bjt和fet-1.jpg"><img src="/2021/05/06/210506-bjt%E5%92%8Cfet/210506-bjt%E5%92%8Cfet-2.jpg" alt="210506-bjt和fet-2.jpg"></p>
+<h3 id="FET符号及特性"><a href="#FET符号及特性" class="headerlink" title="FET符号及特性"></a>FET符号及特性</h3><p><img src="/2021/05/06/210506-bjt%E5%92%8Cfet/210506-bjt和fet-1.jpg" alt="210506-bjt和fet-1.jpg"><img src="/2021/05/06/210506-bjt%E5%92%8Cfet/210506-bjt和fet-2.jpg" alt="210506-bjt和fet-2.jpg"></p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
     </div>
@@ -793,7 +954,7 @@
 <li><p>主机记录就是域名前缀，常见用法有：</p>
 <p>www：解析后的域名为 <code>www.ihcode.cn</code></p>
 <p>@：直接解析主域名ihcode.cn</p>
-<p>*：泛解析，匹配其他所有域名 *.ihcode.cn</p>
+<p><em>：泛解析，匹配其他所有域名 </em>.ihcode.cn</p>
 </li>
 <li><p>要指向空间商提供的 IP 地址，选择「类型 A」，要指向一个域名，选择「类型 CNAME」</p>
 </li>
@@ -816,7 +977,7 @@
 <p>设置显性URL转发后，当用户访问域名会自动转向访问指定值，址栏显示指定值</p>
 <p>设置隐性URL转发后，当用户访问域名会自动转向访问指定值，址栏仍旧显示之前域名</p>
 </li>
-<li><p>转发值：就是要跳转的域名链接http://，可以带端口号</p>
+<li><p>转发值：就是要跳转的域名链接<a target="_blank" rel="noopener" href="http://，可以带端口号">http://，可以带端口号</a></p>
 </li>
 </ul>
 </li>
@@ -926,10 +1087,8 @@
 </li>
 <li><p>接口：SCCB（类I2C）、DCMI（8bit并口）</p>
 </li>
-<li><p>传感器、传感器窗口、图像尺寸、图像窗口之间的关系如下图：<img src="/2021/05/03/210503-ov2640/210503-ov2640-3.jpg" alt="210503-ov2640-3.jpg"></p>
-</li>
-<li><p>程序开发按照正点原子给的库很容易进行，但部分功能库里没有需要查阅软件开发手册和数据手册，对寄存器进行读写。</p>
-</li>
+<li>传感器、传感器窗口、图像尺寸、图像窗口之间的关系如下图：<img src="/2021/05/03/210503-ov2640/210503-ov2640-3.jpg" alt="210503-ov2640-3.jpg"></li>
+<li>程序开发按照正点原子给的库很容易进行，但部分功能库里没有需要查阅软件开发手册和数据手册，对寄存器进行读写。</li>
 </ul>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
 <li><p>DOVDD是IO的电平，给了3.3V，因为和它通讯的单片机使用的电压也是3.3V，如果这里用2.8V可以也是可以，会产生电流倒灌，增加了产品不稳定的因素</p>
@@ -940,8 +1099,7 @@
 </li>
 <li><p>如果单片机没有DCMI接口，软件模拟速度跟不上，需要使用带FIFO的摄像头（ov7550），才可以由软件模拟读取并口数据，模拟的还没有尝试过，可以参考原子哥M3例程，F103使用0V7550</p>
 </li>
-<li><p>由于大多数低成本国产单片机不带DCMI接口，可以由高云FPGA驱动ov2640，通过SPI发送给单片机，这是本人五一节后要做的事情</p>
-</li>
+<li>由于大多数低成本国产单片机不带DCMI接口，可以由高云FPGA驱动ov2640，通过SPI发送给单片机，这是本人五一节后要做的事情</li>
 </ul>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
@@ -1040,7 +1198,6 @@
 <li>LCD用到了SPI和另外几个IO，写入命令过程中，要将DC拉低，0X2A、0X2B、0X2C是命令，但是DC拉低没有对上，通过程序加delay解决，当SPI速率上升后，可以不用delay就能使用LCD</li>
 </ul>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">LCD_WR_REG</span><span class="params">(<span class="type">uint8_t</span> dat)</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="comment">//  Delay_us(5);</span></span><br><span class="line">  <span class="keyword">while</span> (SPI_I2S_GetFlagStatus(SPI2, SPI_I2S_FLAG_TE) == RESET);</span><br><span class="line">  LCD_DC_Clr();<span class="comment">//写命令</span></span><br><span class="line">  LCD_Writ_Bus(dat);</span><br><span class="line">  <span class="keyword">while</span> (SPI_I2S_GetFlagStatus(SPI2, SPI_I2S_FLAG_TE) == RESET);</span><br><span class="line"><span class="comment">//  Delay_us(5);</span></span><br><span class="line">  LCD_DC_Set();<span class="comment">//写数据</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li>AT32在读写SPI前要等待上一次读写操作完成，否则会出现发送数据缺少，接收卡死</li>
 </ul>
@@ -1174,14 +1331,14 @@
 <li>2<sup>10</sup>Ω写法为：<code>2&lt;sup&gt;10&lt;/sup&gt;Ω</code></li>
 </ul>
 <h3 id="Hexo-Github部署"><a href="#Hexo-Github部署" class="headerlink" title="Hexo Github部署"></a>Hexo Github部署</h3><ol>
-<li>安装hexo-deployer-git插件 ‘cnpm install –save hexo-deployer-git’</li>
+<li>安装hexo-deployer-git插件 ‘cnpm install —save hexo-deployer-git’</li>
 <li>git添加SSHKey</li>
-<li>blog文件夹中_config.yml配置hexo-deployer-git插件<br> type: git<br> repo: <a href="mailto:&#x67;&#x69;&#x74;&#x40;&#x67;&#105;&#x74;&#x68;&#x75;&#x62;&#x2e;&#x63;&#111;&#109;">&#x67;&#x69;&#x74;&#x40;&#x67;&#105;&#x74;&#x68;&#x75;&#x62;&#x2e;&#x63;&#111;&#109;</a>:hao0527/hao0527.github.io.git<br> branch: main</li>
+<li>blog文件夹中_config.yml配置hexo-deployer-git插件<br> type: git<br> repo: git@github.com:hao0527/hao0527.github.io.git<br> branch: main</li>
 <li>hexo g 编译<br> hexo d 发布到Github</li>
 <li>每次发布会GithubPages的Custom domain都会被删除，在本地source文件夹中添加CNAME文件，内容写自定义域名就行</li>
 </ol>
 <h3 id="Hexo-增加搜索功能"><a href="#Hexo-增加搜索功能" class="headerlink" title="Hexo 增加搜索功能"></a>Hexo 增加搜索功能</h3><p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/xinyflove/article/details/108791970">Hexo博客添加搜索功能</a></p>
-<p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/Best_xiaogao/article/details/126471145">npm WARN config global –global, –local are deprecated. Use –location 的解决方法</a></p>
+<p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/Best_xiaogao/article/details/126471145">npm WARN config global —global, —local are deprecated. Use —location 的解决方法</a></p>
 <hr>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
       
@@ -1267,7 +1424,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-count">80</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1360,6 +1517,8 @@
 
 
 
+
+  
 
   
 

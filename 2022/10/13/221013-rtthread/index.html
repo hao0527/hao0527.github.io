@@ -250,8 +250,7 @@
 <li><code>SysTick_Handler()</code>有时进有时不进，检查方法查看SysTick结构体，发现CTRL中使能位0，原因：后面的代码使用了delay函数关闭SysTick的使能位。</li>
 </ol>
 <h3 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h3><h4 id="初始化静态线程"><a href="#初始化静态线程" class="headerlink" title="初始化静态线程"></a>初始化静态线程</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">rt_err_t</span> <span class="title function_">rt_thread_init</span><span class="params">(<span class="keyword">struct</span> rt_thread* thread,</span></span><br><span class="line"><span class="params">                        <span class="type">const</span> <span class="type">char</span>* name,</span></span><br><span class="line"><span class="params">                        <span class="type">void</span> (*entry)(<span class="type">void</span>* parameter), <span class="type">void</span>* parameter,</span></span><br><span class="line"><span class="params">                        <span class="type">void</span>* stack_start, <span class="type">rt_uint32_t</span> stack_size,</span></span><br><span class="line"><span class="params">                        <span class="type">rt_uint8_t</span> priority, <span class="type">rt_uint32_t</span> tick)</span>;</span><br></pre></td></tr></table></figure>
-
-<h4 id="启动线程"><a href="#启动线程" class="headerlink" title="启动线程"></a>启动线程</h4><p><code> rt_err_t rt_thread_startup(rt_thread_t thread);</code></p>
+<h4 id="启动线程"><a href="#启动线程" class="headerlink" title="启动线程"></a>启动线程</h4><p><code>rt_err_t rt_thread_startup(rt_thread_t thread);</code></p>
 <h4 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h4><ol>
 <li><p>遇到rt_thread_init()函数卡死，百度竟然啥都查不到（rt-thread用的人这么少的吗），后尝试将栈大小增加至256后成功初始化线程。虽然任务里没什么局部变量，但是一个简单的按键任务竟然占了500多字节内存，可能是因为栈中还保存了寄存器、TCB等信息，那我这单片机16K字节内存可能不够。</p>
 </li>
@@ -352,7 +351,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-count">80</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -445,6 +444,8 @@
 
 
 
+
+  
 
   
 

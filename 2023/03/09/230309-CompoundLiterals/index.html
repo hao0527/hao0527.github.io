@@ -245,9 +245,12 @@
 <h3 id="复合字面量介绍"><a href="#复合字面量介绍" class="headerlink" title="复合字面量介绍"></a>复合字面量介绍</h3><p>假设给带int类型的形参函数传递一个值，可以传递int类型的变量，也可以传递int类型常量，但是对于带数组形参的函数则不一样，可以传递数组，但是不支持传递数组常量，由此C99新增了复合字面量的用法，字面量是指除符号常量外的常量。</p>
 <p>例如：10是int的类型的字面量，10.24是double类型的字面量，”abc”是字符串的字面量等，如果有数组或者结构体的字面量，这样使用起来会更方便。</p>
 <h3 id="数组字面量"><a href="#数组字面量" class="headerlink" title="数组字面量"></a>数组字面量</h3><p>数组的复合字面量和数组初始化列表差不多，前面使用括号括起来的类型名。<br>例如，这是个数组定义：<code>int age[2] = [19, 20];</code><br>使用复合字面量创建一个匿名数组：<code>(int [2])&#123;19, 20&#125;;</code><br>可见去掉定义中的数组名，留下的int[2]就是复合字面量的类型名，整个就是数组字面量。<br>使用数组字面量时可以像定义数组一样省略数组大小，也可以应用于二维或多维数组。<br>还可构造一个字符串数组，将复合字面量强制转换为指向其第一个元素的指针，如：<code>char **foo = (char *[]) &#123; &quot;x&quot;, &quot;y&quot;, &quot;z&quot; &#125;;</code></p>
-<h3 id="结构体字面量"><a href="#结构体字面量" class="headerlink" title="结构体字面量"></a>结构体字面量</h3><p>结构体的复合字面量的指定类型是一个结构体。<br>假设，struct foo 和 structure 声明如：<code>struct foo &#123;int a; char b[2];&#125; structure;</code><br>使用复合字面量构造 struct foo 的示例：<code>structure = ((struct foo) &#123;x + y, &#39;a&#39;, 0&#125;);</code><br>这等效于：<code>&#123;   struct foo temp = &#123;x + y, &#39;a&#39;, 0&#125;;   structure = temp; &#125;</code></p>
+<h3 id="结构体字面量"><a href="#结构体字面量" class="headerlink" title="结构体字面量"></a>结构体字面量</h3><p>结构体的复合字面量的指定类型是一个结构体。<br>假设，struct foo 和 structure 声明如：<code>struct foo &#123;int a; char b[2];&#125; structure;</code><br>使用复合字面量构造 struct foo 的示例：<code>structure = ((struct foo) &#123;x + y, &#39;a&#39;, 0&#125;);</code><br>这等效于：<code>&#123;
+  struct foo temp = &#123;x + y, &#39;a&#39;, 0&#125;;
+  structure = temp;
+&#125;</code></p>
 <h3 id="复合字面量生命周期"><a href="#复合字面量生命周期" class="headerlink" title="复合字面量生命周期"></a>复合字面量生命周期</h3><p>在 C 语言中，复合字面量指定具有静态或自动存储持续时间的未命名对象。在 C++ 中，复合字面量指定一个临时对象，该对象仅在其完整表达式结束之前存在。因此，采用复合字面量的子对象地址的定义良好的 C 代码在 C++ 中可以是未定义的，因此 G++ 拒绝将临时数组转换为指针。例如，如果上面的数组复合字面量示例出现在函数内部，则在 C++ 中对 foo 的任何后续使用都会产生未定义的行为，因为数组的生命周期在 foo 的声明之后结束。</p>
-<p>作为一种优化，G++ 有时会为数组复合字面量提供更长的生命周期：当数组出现在函数外部或具有 const 限定类型时。如果 foo 及其初始值设定项具有 char *const 而不是 char * 类型的元素，或者如果 foo 是全局变量，则数组将具有静态存储持续时间。但是，避免在 C++ 代码中使用数组复合字面量可能是最安全的。</p>
+<p>作为一种优化，G++ 有时会为数组复合字面量提供更长的生命周期：当数组出现在函数外部或具有 const 限定类型时。如果 foo 及其初始值设定项具有 char <em>const 而不是 char </em> 类型的元素，或者如果 foo 是全局变量，则数组将具有静态存储持续时间。但是，避免在 C++ 代码中使用数组复合字面量可能是最安全的。</p>
 <h3 id="复合字面量应用"><a href="#复合字面量应用" class="headerlink" title="复合字面量应用"></a>复合字面量应用</h3><ol>
 <li>函数参数是结构体、数组，用复合字面量传参。</li>
 <li>程序运行中想给char数组赋字符串。</li>
@@ -346,7 +349,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-count">80</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -439,6 +442,8 @@
 
 
 
+
+  
 
   
 

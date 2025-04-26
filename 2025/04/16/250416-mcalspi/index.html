@@ -20,18 +20,18 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="Autosar 中 SPI 关键概念 Autosar 中的描述   Definition Description    Sequences Channel是使用相同标准定义的数据的软件交换介质：参数配置，具有相同大小和数据指针（源和目标）或位置的数据元素数量。   Job Job由具有相同片选的一个或多个Channel组成（在处理Job期间不会释放）。 一个Job被视为原子作业，因此不能被另一个J">
+  <meta name="description" content="Autosar 中 SPI 关键概念 Autosar 中的描述    Definition Description     Sequences Channel是使用相同标准定义的数据的软件交换介质：参数配置，具有相同大小和数据指针（源和目标）或位置的数据元素数量。   Job Job由具有相同片选的一个或多个Channel组成（在处理Job期间不会释放）。 一个Job被视为原子作业，因此不能被另一">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MCAL SPI 学习">
+<meta property="og:title" content="MCAL SPI 配置及调用">
 <meta property="og:url" content="http://example.com/2025/04/16/250416-mcalspi/index.html">
 <meta property="og:site_name" content="永恆博客网">
-<meta property="og:description" content="Autosar 中 SPI 关键概念 Autosar 中的描述   Definition Description    Sequences Channel是使用相同标准定义的数据的软件交换介质：参数配置，具有相同大小和数据指针（源和目标）或位置的数据元素数量。   Job Job由具有相同片选的一个或多个Channel组成（在处理Job期间不会释放）。 一个Job被视为原子作业，因此不能被另一个J">
+<meta property="og:description" content="Autosar 中 SPI 关键概念 Autosar 中的描述    Definition Description     Sequences Channel是使用相同标准定义的数据的软件交换介质：参数配置，具有相同大小和数据指针（源和目标）或位置的数据元素数量。   Job Job由具有相同片选的一个或多个Channel组成（在处理Job期间不会释放）。 一个Job被视为原子作业，因此不能被另一">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/2025/04/16/250416-mcalspi/250416-mcalspi-1.jpg">
 <meta property="og:image" content="http://example.com/2025/04/16/250416-mcalspi/250416-mcalspi-2.jpg">
 <meta property="og:image" content="http://example.com/2025/04/16/250416-mcalspi/250416-mcalspi-3.png">
 <meta property="article:published_time" content="2025-04-16T13:00:00.000Z">
-<meta property="article:modified_time" content="2025-04-17T13:07:48.916Z">
+<meta property="article:modified_time" content="2025-04-26T16:54:18.609Z">
 <meta property="article:author" content="Hao">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2025/04/16/250416-mcalspi/250416-mcalspi-1.jpg">
@@ -49,7 +49,7 @@
   };
 </script>
 
-  <title>MCAL SPI 学习 | 永恆博客网</title>
+  <title>MCAL SPI 配置及调用 | 永恆博客网</title>
   
 
 
@@ -205,7 +205,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          MCAL SPI 学习
+          MCAL SPI 配置及调用
         </h1>
 
         <div class="post-meta">
@@ -222,7 +222,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-04-17 21:07:48" itemprop="dateModified" datetime="2025-04-17T21:07:48+08:00">2025-04-17</time>
+                <time title="修改时间：2025-04-27 00:54:18" itemprop="dateModified" datetime="2025-04-27T00:54:18+08:00">2025-04-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -249,15 +249,17 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="Autosar-中-SPI-关键概念"><a href="#Autosar-中-SPI-关键概念" class="headerlink" title="Autosar 中 SPI 关键概念"></a>Autosar 中 SPI 关键概念</h2><p><img src="/2025/04/16/250416-mcalspi/250416-mcalspi-1.jpg"></p>
-<h3 id="Autosar-中的描述"><a href="#Autosar-中的描述" class="headerlink" title="Autosar 中的描述"></a>Autosar 中的描述</h3><table>
+        <h2 id="Autosar-中-SPI-关键概念"><a href="#Autosar-中-SPI-关键概念" class="headerlink" title="Autosar 中 SPI 关键概念"></a>Autosar 中 SPI 关键概念</h2><p><img src="/2025/04/16/250416-mcalspi/250416-mcalspi-1.jpg" alt></p>
+<h3 id="Autosar-中的描述"><a href="#Autosar-中的描述" class="headerlink" title="Autosar 中的描述"></a>Autosar 中的描述</h3><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>Definition</th>
 <th>Description</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>Sequences</td>
 <td>Channel是使用相同标准定义的数据的软件交换介质：参数配置，具有相同大小和数据指针（源和目标）或位置的数据元素数量。</td>
 </tr>
@@ -269,15 +271,19 @@
 <td>Channel</td>
 <td>Sequence是要传输的多个连续Job，但是可以使用优先级机制在Job之间重新安排Sequence。 Sequence传输是可中断的（通过另一Sequence传输）或不可中断，这取决于静态配置。</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h2 id="关键-API-使用"><a href="#关键-API-使用" class="headerlink" title="关键 API 使用"></a>关键 API 使用</h2><h3 id="读写-Channel-Buffer"><a href="#读写-Channel-Buffer" class="headerlink" title="读写 Channel Buffer"></a>读写 Channel Buffer</h3><p>在 SPI 通信中，<strong>在开始传输之前</strong> ，必须先准备好发送的数据；<strong>传输完成后</strong> ，则需要读取接收到的数据。这就涉及到对 <strong>读写缓冲区</strong>  的操作。</p>
 <ul>
-<li><strong>IB 模式</strong> 下，缓冲区由驱动内部维护，因此需要调用专用接口进行读写：<ul>
+<li><p><strong>IB 模式</strong> 下，缓冲区由驱动内部维护，因此需要调用专用接口进行读写：</p>
+<ul>
 <li>写入待发送数据：<code>Std_ReturnType Spi_WriteIB(Spi_ChannelType Channel, const Spi_DataBufferType* DataBufferPtr);</code></li>
 <li>读取接收到的数据：<code>Std_ReturnType Spi_ReadIB(Spi_ChannelType Channel, Spi_DataBufferType* DataBufferPointer);</code></li>
 </ul>
 </li>
-<li><strong>EB 模式</strong> 下，用户自行提供发送和接收缓冲区，在配置阶段通过以下接口设置发送数据地址、接收数据地址、数据长度：<ul>
+<li><p><strong>EB 模式</strong> 下，用户自行提供发送和接收缓冲区，在配置阶段通过以下接口设置发送数据地址、接收数据地址、数据长度：</p>
+<ul>
 <li>配置缓冲地址和长度：<code>Std_ReturnType Spi_SetupEB(Spi_ChannelType Channel, const Spi_DataBufferType* SrcDataBufferPtr, Spi_DataBufferType* DesDataBufferPtr, Spi_NumberOfDataType Length);</code></li>
 </ul>
 </li>
@@ -299,8 +305,9 @@
 <blockquote>
 <p><strong>使用场景</strong> ：当你有多个 <strong>Job</strong>  在同一个 <strong>Sequence</strong>  中异步执行，且突然需要优先传输其他重要的 <strong>Sequence</strong>  时，可以调用此接口取消当前的传输，然后立即启动新的传输。</p>
 </blockquote>
-<h2 id="调用时序图"><a href="#调用时序图" class="headerlink" title="调用时序图"></a>调用时序图</h2><h3 id="Write-AsyncTransmit-Read-IB-One-Channel-one-Job-then-one-Sequence"><a href="#Write-AsyncTransmit-Read-IB-One-Channel-one-Job-then-one-Sequence" class="headerlink" title="Write/AsyncTransmit/Read (IB), One Channel, one Job then one Sequence"></a>Write/AsyncTransmit/Read (IB), One Channel, one Job then one Sequence</h3><p><img src="/2025/04/16/250416-mcalspi/250416-mcalspi-2.jpg"></p>
-<h2 id="关键配置"><a href="#关键配置" class="headerlink" title="关键配置"></a>关键配置</h2><p><img src="/2025/04/16/250416-mcalspi/250416-mcalspi-3.png"></p>
+<h2 id="调用时序图"><a href="#调用时序图" class="headerlink" title="调用时序图"></a>调用时序图</h2><h3 id="Write-AsyncTransmit-Read-IB-One-Channel-one-Job-then-one-Sequence"><a href="#Write-AsyncTransmit-Read-IB-One-Channel-one-Job-then-one-Sequence" class="headerlink" title="Write/AsyncTransmit/Read (IB), One Channel, one Job then one Sequence"></a>Write/AsyncTransmit/Read (IB), One Channel, one Job then one Sequence</h3><p><img src="/2025/04/16/250416-mcalspi/250416-mcalspi-2.jpg" alt></p>
+<h2 id="关键配置"><a href="#关键配置" class="headerlink" title="关键配置"></a>关键配置</h2><p><img src="/2025/04/16/250416-mcalspi/250416-mcalspi-3.png" alt></p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -308,7 +315,8 @@
 <th>Description</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>SpiChannelBuffersAllowed</td>
 <td>指定支持的 Channel 缓冲区类型： <br> 0 - 仅允许内部缓冲（IB） <br> 1 - 仅允许外部缓冲（EB） <br> 2 - 同时支持内部（IB）和外部（EB）缓冲</td>
 </tr>
@@ -324,7 +332,9 @@
 <td>SpiSupportConcurrentSyncTransmit</td>
 <td>是否支持多个不同 Sequence 的 Spi_SyncTransmit() 同时并发调用（配置项是否允许并发） <br> <strong>注意</strong>：如果不勾选这项，即使不是同一路 SPI 的两个设备也不能同时传输</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://www.autosar.org/fileadmin/standards/R21-11/CP/AUTOSAR_SWS_SPIHandlerDriver.pdf">Spec­i­fi­ca­tion of SPI Handler/Driver</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.autosar.org/fileadmin/standards/R21-11/CP/AUTOSAR_SRS_SPIHandlerDriver.pdf">Require­ments on SPI Handler/Driver</a></li>
@@ -344,8 +354,8 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2024/08/20/240820-canfd/" rel="prev" title="云途单片机CAN FD调试记录">
-      <i class="fa fa-chevron-left"></i> 云途单片机CAN FD调试记录
+    <a href="/2025/04/08/250408-canfdbaud/" rel="prev" title="CAN FD 波特率配置">
+      <i class="fa fa-chevron-left"></i> CAN FD 波特率配置
     </a></div>
       <div class="post-nav-item"></div>
     </div>
@@ -420,7 +430,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-count">80</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -513,6 +523,8 @@
 
 
 
+
+  
 
   
 

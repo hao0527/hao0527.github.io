@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="参数解析argparse — 命令行选项、参数和子命令解析器 1234567891011121314import argparse# 创建一个解析器parser &#x3D; argparse.ArgumentParser(description&#x3D;&amp;#x27;use for Encrypting&#x2F;Decrypting.&amp;#x27;)# 添加参数parser.add_argument(&amp;#x27;-d&amp;#x2">
+  <meta name="description" content="参数解析argparse —- 命令行选项、参数和子命令解析器 1234567891011121314import argparse# 创建一个解析器parser &#x3D; argparse.ArgumentParser(description&#x3D;&amp;#x27;use for Encrypting&#x2F;Decrypting.&amp;#x27;)# 添加参数parser.add_argument(&amp;#x27;-d&amp;#x">
 <meta property="og:type" content="article">
 <meta property="og:title" content="用Python做文件加密解密">
 <meta property="og:url" content="http://example.com/2022/10/14/221014-pyEncrypt/index.html">
 <meta property="og:site_name" content="永恆博客网">
-<meta property="og:description" content="参数解析argparse — 命令行选项、参数和子命令解析器 1234567891011121314import argparse# 创建一个解析器parser &#x3D; argparse.ArgumentParser(description&#x3D;&amp;#x27;use for Encrypting&#x2F;Decrypting.&amp;#x27;)# 添加参数parser.add_argument(&amp;#x27;-d&amp;#x2">
+<meta property="og:description" content="参数解析argparse —- 命令行选项、参数和子命令解析器 1234567891011121314import argparse# 创建一个解析器parser &#x3D; argparse.ArgumentParser(description&#x3D;&amp;#x27;use for Encrypting&#x2F;Decrypting.&amp;#x27;)# 添加参数parser.add_argument(&amp;#x27;-d&amp;#x">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-10-14T12:00:00.000Z">
 <meta property="article:modified_time" content="2022-10-16T15:39:37.155Z">
@@ -245,34 +245,30 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="参数解析"><a href="#参数解析" class="headerlink" title="参数解析"></a>参数解析</h2><p><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/argparse.html#module-argparse">argparse</a> — 命令行选项、参数和子命令解析器</p>
+        <h2 id="参数解析"><a href="#参数解析" class="headerlink" title="参数解析"></a>参数解析</h2><p><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/argparse.html#module-argparse">argparse</a> —- 命令行选项、参数和子命令解析器</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个解析器</span></span><br><span class="line">parser = argparse.ArgumentParser(description=<span class="string">&#x27;use for Encrypting/Decrypting.&#x27;</span>)</span><br><span class="line"><span class="comment"># 添加参数</span></span><br><span class="line">parser.add_argument(<span class="string">&#x27;-d&#x27;</span>, action=<span class="string">&quot;store_true&quot;</span>, <span class="built_in">help</span>=<span class="string">&#x27;Decryption command&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;-e&#x27;</span>, action=<span class="string">&quot;store_true&quot;</span>, <span class="built_in">help</span>=<span class="string">&#x27;Encryption command&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;-r&#x27;</span>, action=<span class="string">&quot;store_true&quot;</span>, <span class="built_in">help</span>=<span class="string">&#x27;Rename command&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;-p&#x27;</span>, action=<span class="string">&quot;store&quot;</span>, required=<span class="literal">True</span>, <span class="built_in">help</span>=<span class="string">&#x27;file path or folder path&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    args = <span class="built_in">vars</span>(parser.parse_args())</span><br><span class="line">    <span class="built_in">print</span>(args)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
 <p>指令 -p 为必须，通过 -p 传入文件或文件夹路径参数，指令 -d -e -r 告知脚本要执行什么任务。</p>
 <p><strong><a target="_blank" rel="noopener" href="https://www.runoob.com/python/python-func-vars.html">Python vars() 函数</a></strong> 返回对象object的属性和属性值的字典对象。</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\decipherer&gt; python main.py <span class="literal">-p</span> .\test1.c</span><br><span class="line">&#123;<span class="string">&#x27;d&#x27;</span>: False, <span class="string">&#x27;e&#x27;</span>: False, <span class="string">&#x27;r&#x27;</span>: False, <span class="string">&#x27;p&#x27;</span>: <span class="string">&#x27;.\\test1.c&#x27;</span>&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="解析路径"><a href="#解析路径" class="headerlink" title="解析路径"></a>解析路径</h2><p><a target="_blank" rel="noopener" href="https://www.runoob.com/python/python-os-path.html">Python os.path() 模块</a> — 主要用于获取文件的属性</p>
+<h2 id="解析路径"><a href="#解析路径" class="headerlink" title="解析路径"></a>解析路径</h2><p><a target="_blank" rel="noopener" href="https://www.runoob.com/python/python-os-path.html">Python os.path() 模块</a> —- 主要用于获取文件的属性</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">main_file_path = os.path.dirname(os.path.realpath(__file__))</span><br><span class="line">file_name = os.path.basename(file_path)</span><br><span class="line">file_content = fp.read()</span><br><span class="line">file_name_md5 = hashlib.md5(file_name.encode(encoding=<span class="string">&#x27;UTF-8&#x27;</span>)).hexdigest()</span><br><span class="line">file_relative_path = os.path.realpath(file_path).replace(main_file_path, <span class="string">&#x27;&#x27;</span>)  <span class="comment"># 相对地址</span></span><br><span class="line">file_relative_dir = os.path.dirname(file_path).replace(main_file_path, <span class="string">&#x27;&#x27;</span>)  <span class="comment"># 相对地址不带文件名</span></span><br></pre></td></tr></table></figure>
-
-<p><a target="_blank" rel="noopener" href="https://www.runoob.com/python3/python3-os-walk.html">Python3 os.walk() 方法</a> — 用于遍历文件夹</p>
+<p><a target="_blank" rel="noopener" href="https://www.runoob.com/python3/python3-os-walk.html">Python3 os.walk() 方法</a> —- 用于遍历文件夹</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">rename_dir</span>(<span class="params">dir_path</span>):</span><br><span class="line">    <span class="keyword">for</span> root, dirs, files <span class="keyword">in</span> os.walk(dir_path, topdown=<span class="literal">False</span>):</span><br><span class="line">        <span class="keyword">for</span> name <span class="keyword">in</span> files:</span><br><span class="line">            rename_file(os.path.join(root, name))</span><br></pre></td></tr></table></figure>
-
-<p><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/shutil.html?highlight=shutil%20rmtree#shutil.rmtree">shutil.rmtree()</a> — 删除一个完整的目录树</p>
+<p><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/shutil.html?highlight=shutil%20rmtree#shutil.rmtree">shutil.rmtree()</a> —- 删除一个完整的目录树</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> os.path.exists(<span class="string">&#x27;./output_rename&#x27;</span>):</span><br><span class="line">    shutil.rmtree(<span class="string">&#x27;./output_rename&#x27;</span>)  <span class="comment"># 删除之前的目录</span></span><br></pre></td></tr></table></figure>
-
-<p><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/os.html?highlight=os%20makedirs#os.makedirs">makedirs()</a> — 递归目录创建函数</p>
+<p><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/os.html?highlight=os%20makedirs#os.makedirs">makedirs()</a> —- 递归目录创建函数</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> os.path.exists(<span class="string">&#x27;./output_rename&#x27;</span> + file_relative_dir) == <span class="number">0</span>:</span><br><span class="line">    os.makedirs(<span class="string">&#x27;./output_rename&#x27;</span> + file_relative_dir)  <span class="comment"># 如果目录不存在 创建新目录</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="MD5加解密"><a href="#MD5加解密" class="headerlink" title="MD5加解密"></a>MD5加解密</h2><p><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/hashlib.html?highlight=hashlib#hash-algorithms">hashlib</a> — 安全哈希与消息摘要</p>
-<h2 id="字符串编解码"><a href="#字符串编解码" class="headerlink" title="字符串编解码"></a>字符串编解码</h2><table>
+<h2 id="MD5加解密"><a href="#MD5加解密" class="headerlink" title="MD5加解密"></a>MD5加解密</h2><p><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/hashlib.html?highlight=hashlib#hash-algorithms">hashlib</a> —- 安全哈希与消息摘要</p>
+<h2 id="字符串编解码"><a href="#字符串编解码" class="headerlink" title="字符串编解码"></a>字符串编解码</h2><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>方法</th>
 <th>描述</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><a target="_blank" rel="noopener" href="https://www.runoob.com/python/att-string-decode.html">string.decode(encoding=’UTF-8’, errors=’strict’)</a></td>
 <td>以 encoding 指定的编码格式解码 string，如果出错默认报一个 ValueError 的 异 常 ， 除非 errors 指 定 的 是 ‘ignore’ 或 者’replace’</td>
 </tr>
@@ -280,7 +276,9 @@
 <td><a target="_blank" rel="noopener" href="https://www.runoob.com/python/att-string-encode.html">string.encode(encoding=’UTF-8’, errors=’strict’)</a></td>
 <td>以 encoding 指定的编码格式编码 string，如果出错默认报一个ValueError 的异常，除非 errors 指定的是’ignore’或者’replace’</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <p>保存文件名是用encode指定编码格式，再读取时用decode指定格式解码，否则遇到中文字读取会出问题。</p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
     </div>
@@ -376,7 +374,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-count">80</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -469,6 +467,8 @@
 
 
 
+
+  
 
   
 

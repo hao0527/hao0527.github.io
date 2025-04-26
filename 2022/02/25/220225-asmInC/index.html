@@ -255,9 +255,9 @@
 <p>__asm__ 是GCC关键字asm的宏定义，asm用于声明这行代码是一个内嵌汇编表达式，任何内嵌的汇编表达式都以此关键字作为开头。</p>
 <p>一个最简单的内嵌汇编：<code>__asm__(&quot;nop&quot;);</code> 括号里的是汇编指令，表示运行空指令，一个机器周期。Instruction List 是汇编指令序列，它可以是空的。可以有多条汇编指令，需要将所有指令放在多对引号中，两条指令必须用换行或分号分开。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">printk</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *fmt, ...)</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="comment">//    ……</span></span><br><span class="line">    __asm__(<span class="string">&quot;push %%fs\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;push %%ds\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;pop %%fs\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;pushl %0\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;pushl $buf\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;pushl $0\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;call tty_write\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;addl $8,%%esp\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;popl %0\n\t&quot;</span></span><br><span class="line">            <span class="string">&quot;pop %%fs&quot;</span></span><br><span class="line">            ::<span class="string">&quot;r&quot;</span> (i):<span class="string">&quot;ax&quot;</span>,<span class="string">&quot;cx&quot;</span>,<span class="string">&quot;dx&quot;</span>);</span><br><span class="line"><span class="comment">//    ……</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>可以看上面<code>printk()</code>的例子，首先<code>push %fs</code>保存这个指向用户段的寄存器，在最后<code>pop %fs</code>将其恢复，<code>printk()</code>的核心是调用<code>tty_write()</code>。</p>
 <p>Output Input 用来指定当前内联汇编语句的输出与输入，格式为形如“constraint”(variable)的列表（逗号分隔)，constraint是限制字符，下面表中列出几个常用限制字符作用，更多用法见：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_15974389/article/details/76416668">GCC内嵌汇编一些限制字符串</a>。</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -265,7 +265,8 @@
 <th>作用</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>a/b/c/d/s/d</td>
 <td>将输入变量放入eax/ebx/ecx/edx/esi/edi</td>
 </tr>
@@ -281,7 +282,9 @@
 <td>=/+</td>
 <td>操作数在指令中是只写/读写类型的（输出操作数）</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h2 id="volatile"><a href="#volatile" class="headerlink" title="__volatile__"></a>__volatile__</h2><p>__volatile__ 是GCC关键字volatile的宏定义，在内联汇编中，它是可选的。使用它会向GCC声明不允许对该内联汇编优化，否则当使用了优化选项(-O)进行编译时，GCC将会根据自己的判断决定是否将这个内联汇编表达式中的指令优化掉。</p>
 <p>编译器优化常用的方法有：将内存变量缓存到寄存器；调整指令顺序充分利用CPU指令流水线，常见的是重新排序读写指令。对常规内存进行优化的时候，这些优化是透明的，而且效率很好。由编译器优化或者硬件重新排序引起的问题的解决办法是在从硬件（或者其他处理器）的角度看必须以特定顺序执行的操作之间设置内存屏障（memory barrier），linux 提供了一个宏，<code>barrier()</code>，解决编译器的执行顺序问题，但对硬件无效。</p>
 <p>有一种硬件级别的优化：内存访问速度远不及CPU处理速度，为提高机器整体性能，在硬件上引入硬件高速缓存Cache，加速对内存的访问。在现代CPU中指令的执行并不一定严格按照顺序执行，没有相关性的指令可以乱序执行，以充分利用CPU的指令流水线，提高执行速度。</p>
@@ -291,7 +294,6 @@
 <p>如果一个内联汇编语句的Clobber/Modify域存在”memory”，那么GCC会保证在此内联汇编之前，如果某个内存的内容被装入了寄存器，那么在这个内联汇编之后，如果需要使用这个内存处的内容，就会直接到这个内存处重新读取，而不是使用被存放在寄存器中的拷贝。因为这个 时候寄存器中的拷贝已经很可能和内存处的内容不一致了。</p>
 <p>这只是使用”memory”时，GCC会保证做到的一点，但这并不是全部。因为使用”memory”是向GCC声明内存发生了变化，而内存发生变化带来的影响并不止这一点。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> __argc, <span class="type">char</span>* __argv[])</span> </span><br><span class="line">&#123; </span><br><span class="line">    <span class="type">int</span>* __p = (<span class="type">int</span>*)__argc; </span><br><span class="line">    (*__p) = <span class="number">9999</span>; </span><br><span class="line">    __asm__(<span class="string">&quot;&quot;</span>:::<span class="string">&quot;memory&quot;</span>); </span><br><span class="line">    <span class="keyword">if</span>((*__p) == <span class="number">9999</span>) </span><br><span class="line">        <span class="keyword">return</span> <span class="number">5</span>; </span><br><span class="line">    <span class="keyword">return</span> (*__p); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>上面例子中，如果没有那条内联汇编语句，那个if语句的判断条件就完全是一句废话。GCC在优化时会意识到这一点，而直接只生成return 5的汇编代码，而不会再生成if语句的相关代码，而不会生成return (*__p)的相关代码。但你加上了这条内联汇编语句，它除了声明内存变化之外，什么都没有做。但GCC此时就不能简单的认为它不需要判断都知道 (*__p)一定与9999相等，它只有老老实实生成这条if语句的汇编代码，一起相关的两个return语句相关代码。</p>
 <p>linux内核中内存屏障也是基于它实现，<code>#define barrier() _asm__volatile_(&quot;&quot; : : : &quot;memory&quot;)</code>，主要是保证程序的执行遵循顺序一致性。</p>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
@@ -388,7 +390,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-count">80</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -481,6 +483,8 @@
 
 
 
+
+  
 
   
 

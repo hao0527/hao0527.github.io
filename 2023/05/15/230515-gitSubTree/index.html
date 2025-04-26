@@ -251,7 +251,7 @@
 <h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
 <li><a target="_blank" rel="noopener" href="https://shantanoo-desai.github.io/posts/technology/git_subtree/">subtrees in Git: How to split Directories into individual standalone repositories</a></li>
 <li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/25559260/assertion-failed-errors-when-trying-to-git-subtree-split">assertion failed errors when trying to git subtree split</a></li>
-<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/74486167/git-clone-recurse-submodules-throws-error-on-macos-transmission-type-file-n">Git clone –recurse-submodules throws error on MacOs: Transmission type ‘file’ not allowed</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/74486167/git-clone-recurse-submodules-throws-error-on-macos-transmission-type-file-n">Git clone —recurse-submodules throws error on MacOs: Transmission type ‘file’ not allowed</a></li>
 <li><a target="_blank" rel="noopener" href="https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E5%AD%90%E6%A8%A1%E5%9D%97">Git 工具 - 子模块</a></li>
 </ul>
 <h3 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h3><ol>
@@ -267,8 +267,7 @@
 </li>
 <li><p>如果一个分支有子模块，另一个分支没有，直接 checkout 后会造成子模块的文件在另一个分支未被删除，可以在 checkout 前使用<code>git submodule deinit --all</code>命令来卸载当前分支已安装的所有子模块，在 checkout 后，如果另一个分支也有子模块，可以使用<code>git submodule init</code>命令注册子模块，再使用<code>git submodule update</code>从子模块库中取出文件。</p>
 </li>
-<li><p>我使用的子模块库是本地的Git仓库，在拉库的时候首次会报<code>Transmission type &#39;file&#39; not allowed</code>的错误，需通过<code>git config --global protocol.file.allow always</code>配置Git，参考：<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/74486167/git-clone-recurse-submodules-throws-error-on-macos-transmission-type-file-n">Git clone –recurse-submodules throws error on MacOs: Transmission type ‘file’ not allowed</a></p>
-</li>
+<li>我使用的子模块库是本地的Git仓库，在拉库的时候首次会报<code>Transmission type &#39;file&#39; not allowed</code>的错误，需通过<code>git config --global protocol.file.allow always</code>配置Git，参考：<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/74486167/git-clone-recurse-submodules-throws-error-on-macos-transmission-type-file-n">Git clone —recurse-submodules throws error on MacOs: Transmission type ‘file’ not allowed</a></li>
 </ol>
 <h3 id="Git子模块和子树区别"><a href="#Git子模块和子树区别" class="headerlink" title="Git子模块和子树区别"></a>Git子模块和子树区别</h3><p>Git子模块（submodule）和子树（subtree）都是Git中用于将外部仓库包含到自己的仓库中的机制。虽然它们的目的相似，但在功能和使用方式上有一些区别。</p>
 <h4 id="Git子模块："><a href="#Git子模块：" class="headerlink" title="Git子模块："></a>Git子模块：</h4><ul>
@@ -380,7 +379,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-count">80</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -473,6 +472,8 @@
 
 
 
+
+  
 
   
 
