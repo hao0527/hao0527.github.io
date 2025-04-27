@@ -32,7 +32,7 @@
 <meta property="og:image" content="http://example.com/2025/04/08/250408-canfdbaud/250408-canfdbaud-3.png">
 <meta property="og:image" content="http://example.com/2025/04/08/250408-canfdbaud/250408-canfdbaud-4.png">
 <meta property="article:published_time" content="2025-04-08T15:59:00.000Z">
-<meta property="article:modified_time" content="2025-04-26T17:39:41.693Z">
+<meta property="article:modified_time" content="2025-04-27T01:02:23.700Z">
 <meta property="article:author" content="Hao">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2025/04/08/250408-canfdbaud/250408-canfdbaud-1.png">
@@ -335,7 +335,7 @@ mjx-container[display="true"] + br {
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-04-27 01:39:41" itemprop="dateModified" datetime="2025-04-27T01:39:41+08:00">2025-04-27</time>
+                <time title="修改时间：2025-04-27 09:02:23" itemprop="dateModified" datetime="2025-04-27T09:02:23+08:00">2025-04-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -414,7 +414,7 @@ mjx-container[display="true"] + br {
  \text{Tq(total)} = \text{Sync_Seg} + \text{Prop_Seg} + \text{Phase_Seg1} + \text{Phase_Seg2}</script><h3 id="CAN-采样点"><a href="#CAN-采样点" class="headerlink" title="CAN 采样点"></a>CAN 采样点</h3><p>采样点是在每个位中对总线电平进行采样的时间点，采样点的位置在 Phase_Seg1 结束、Phase_Seg2开始。</p>
 <p>采样点位置计算公式： </p>
 <script type="math/tex; mode=display">
- \text{Sample Point (\%)} = \frac{\text{Sync_Seg} + \text{Prop_Seg} + \text{Phase_Seg1}}{\text{Tq(total)}} \times 100\%</script><h3 id="常见波特率和推荐采样点"><a href="#常见波特率和推荐采样点" class="headerlink" title="常见波特率和推荐采样点"></a>常见波特率和推荐采样点</h3><div class="table-container">
+ \text{Sample Point} = \frac{\text{Sync_Seg} + \text{Prop_Seg} + \text{Phase_Seg1}}{\text{Tq(total)}} \times 100\%</script><h3 id="常见波特率和推荐采样点"><a href="#常见波特率和推荐采样点" class="headerlink" title="常见波特率和推荐采样点"></a>常见波特率和推荐采样点</h3><div class="table-container">
 <table>
 <thead>
 <tr>
@@ -454,7 +454,7 @@ mjx-container[display="true"] + br {
 <h2 id="CAN-波特率配置参数"><a href="#CAN-波特率配置参数" class="headerlink" title="CAN 波特率配置参数"></a>CAN 波特率配置参数</h2><h3 id="确定-Tq"><a href="#确定-Tq" class="headerlink" title="确定 Tq"></a>确定 Tq</h3><script type="math/tex; mode=display">
  \text{Tq} = \frac{1}{f_{\text{CAN(分频后)}}}</script><h3 id="根据波特率确定-Tq-total"><a href="#根据波特率确定-Tq-total" class="headerlink" title="根据波特率确定 Tq(total)"></a>根据波特率确定 Tq(total)</h3><script type="math/tex; mode=display">
  \text{Tq(total)} = \frac{f_{\text{CAN(分频后)}}}{\text{Bit Rate}}</script><h3 id="根据采样点确定-Phase-Seg2"><a href="#根据采样点确定-Phase-Seg2" class="headerlink" title="根据采样点确定 Phase_Seg2"></a>根据采样点确定 Phase_Seg2</h3><script type="math/tex; mode=display">
- \text{Phase_Seg2} = \text{Tq(total)} \times (1 - \text{Sample Point (\%)})</script><h3 id="根据传输延时确定-Prop-Seg"><a href="#根据传输延时确定-Prop-Seg" class="headerlink" title="根据传输延时确定 Prop_Seg"></a>根据传输延时确定 Prop_Seg</h3><p>假设总线长 10 米，每米线路传输延时大概 5ns，收发器延迟约 200ns<br>总传播延迟 ≈ 10m × 5ns + 200ns = 250ns<br>最后向上取整，计算PropSeg的长度。</p>
+ \text{Phase_Seg2} = \text{Tq(total)} \times (1 - \text{Sample Point})</script><h3 id="根据传输延时确定-Prop-Seg"><a href="#根据传输延时确定-Prop-Seg" class="headerlink" title="根据传输延时确定 Prop_Seg"></a>根据传输延时确定 Prop_Seg</h3><p>假设总线长 10 米，每米线路传输延时大概 5ns，收发器延迟约 200ns<br>总传播延迟 ≈ 10m × 5ns + 200ns = 250ns<br>最后向上取整，计算PropSeg的长度。</p>
 <script type="math/tex; mode=display">
  \text{Prop_Seg} = \frac{T_{\text{收发器延时}} + T_{\text{线路传输延时}}}{\text{Tq}}</script><h3 id="计算-Phase-Seg1"><a href="#计算-Phase-Seg1" class="headerlink" title="计算 Phase_Seg1"></a>计算 Phase_Seg1</h3><p>通常同步段长度为 1，CAN 模块无法配置同步段长度。</p>
 <script type="math/tex; mode=display">
